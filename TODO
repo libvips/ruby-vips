@@ -1,0 +1,13 @@
+TODO
+* Verify that all memory gets released when vips ops return errors. Namely,
+  make sure that the allocated IMAGEs get released via ruby's free callbacks.
+* Allow for injecting ruby code into an image transformation pipeline (may be
+  slow to call out to ruby with every read, but may be worthwhile for fun custom
+  image processors).
+* Tap into VIPS callback system to allow progress updates, etc.
+* Allow for creating a ruby endpoint to the pipeline could be useful for
+  streaming.
+* Image#to_a
+* look into other.h, audit all libvips methods and make sure they are all implemented
+* More API cleanups -- especially methods that take more than 5 named args.
+* JRuby support
