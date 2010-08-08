@@ -54,7 +54,7 @@ img_add_dep(vipsImg *im, VALUE dep)
 }
 
 VALUE
-img_init_partial()
+img_init_partial_anyclass(VALUE klass)
 {
     vipsImg *im;
     VipsImage *out;
@@ -63,11 +63,17 @@ img_init_partial()
     if (!(out = im_open("img_init_partial", "p")))
         vips_lib_error();
 
-    new = img_alloc(cVIPSImage);
+    new = img_alloc(klass);
     Data_Get_Struct(new, vipsImg, im);
     im->in = out;
 
     return new;
+}
+
+VALUE
+img_init_partial()
+{
+    return img_init_partial_anyclass(cVIPSImage);
 }
 
 VALUE

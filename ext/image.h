@@ -18,6 +18,7 @@ VALUE img_spawn2(VALUE, VALUE);
 VALUE img_spawn3(VALUE, VALUE, VALUE);
 VALUE img_alloc(VALUE);
 VALUE img_init_partial();
+VALUE img_init_partial_anyclass(VALUE);
 VipsBandFmt img_id_to_band_fmt(VALUE);
 
 #define GetImg(obj, data, im) \

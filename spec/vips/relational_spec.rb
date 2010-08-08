@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe VIPS::Image do
   before :all do
-    @image = VIPS::Image.new sample_join('wagon.v')
-    im = VIPS::Image.new(sample_join('huge.jpg'))
+    @image = simg 'wagon.v'
+    im = simg 'huge.jpg'
     @image2 = im.extract_area(100, 100, @image.x_size, @image.y_size)
   end
 

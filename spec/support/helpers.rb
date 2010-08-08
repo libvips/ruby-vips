@@ -15,7 +15,7 @@ module Spec
       view_path = tmp dir, 'vips_rspec_view.jpg'
       html_path = tmp dir, 'vips_rspec_view.html'
 
-      im.write view_path.to_s
+      im.to_jpeg.write view_path.to_s
       sha1 = Digest::SHA1.hexdigest im.data
 
       title = "Vips Rspec #{test_name}"

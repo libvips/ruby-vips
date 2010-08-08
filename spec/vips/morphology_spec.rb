@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe VIPS::Image do
   before :all do
-    @image = VIPS::Image.new sample_join('wagon.v')
+    @image = simg 'wagon.v'
   end
 
   # TODO: "these methods operate on 1-channel binary images (b/w)" 
@@ -20,13 +20,13 @@ describe VIPS::Image do
   end
 
   it "should rank pixels from multiple images and create a new image with the index-th pixel" do
-    im = VIPS::Image.new(sample_join('huge.jpg'))
+    im = simg 'huge.jpg'
     im = im.extract_area(0, 0, @image.x_size, @image.y_size)
     im2 = im.rank_image(1, @image.scale)
   end
 
   it "should generate an image with the max value from all given images" do
-    im = VIPS::Image.new(sample_join('huge.jpg'))
+    im = simg 'huge.jpg'
     im = im.extract_area(0, 0, @image.x_size, @image.y_size)
     im.maxvalue(@image.scale).should match_image(im.rank_image(0, @image.scale))
   end

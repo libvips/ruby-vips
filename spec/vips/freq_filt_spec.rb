@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe VIPS::Image do
   before :all do
-    @image = VIPS::Image.new(sample('wagon.v').to_s)
+    @image = simg('wagon.v')
   end
 
   it "should perform a fast fourier transform on an image", :vips_lib_version => "> 7.23" do

@@ -49,7 +49,7 @@ gem install ruby-vips
 
     # Shrink the jpeg by a factor of three when loading -- huge speed and CPU
     # improvements on large images.
-    im_shrink_on_load = VIPS::Image.new('mypic.jpg:3')
+    im_shrink_on_load = VIPS::Image.new('mypic.jpg:4')
 
     # Add a shrink by a factor of two to the pipeline. This will not actually be
     # executed yet.
@@ -59,7 +59,7 @@ gem install ruby-vips
     # actually loaded and resized. With images that allow for random access from
     # the hard drive (VIPS native format and certain TIFF images) the entire
     # image does not even have to be read into memory.
-    im_shrink_by_two.write('out.png')
+    im_shrink_by_two.to_png.write('out.png')
 
 ## Why use ruby-vips?
 

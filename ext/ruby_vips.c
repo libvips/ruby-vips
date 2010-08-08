@@ -56,9 +56,9 @@ Init_vips_ext()
     init_colour();
     init_freq_filt();
 	init_histograms_lut();
-    init_header();
     init_morphology();
     init_mosaicing();
 	init_relational();
+    init_writer();
 }
 

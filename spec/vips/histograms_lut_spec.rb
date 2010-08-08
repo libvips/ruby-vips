@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe VIPS::Image do
   before :all do
-    @image = VIPS::Image.new(sample_join('wagon.v'))
+    @image = simg 'wagon.v'
   end
 
   it "should generate the histogram for all bands in an image" do
@@ -131,7 +131,7 @@ describe VIPS::Image do
   end
 
   it "should create a histogram that can make probability distribution functions identical between images" do
-    image2 = VIPS::Image.from_jpeg sample('huge.jpg').to_s
+    image2 = simg 'huge.jpg'
     lut = @image.histgr.histspec(image2.histgr)
   end
 
@@ -145,7 +145,7 @@ describe VIPS::Image do
   end
 
   it "should make probability distribution functions identical between images" do
-    image2 = VIPS::Image.from_jpeg sample('huge.jpg').to_s
+    image2 = simg 'huge.jpg'
     pdf_hist = @image.histgr.histspec(image2.histgr)
 
     @image.hsp(image2).should match_image(@image.maplut(pdf_hist))

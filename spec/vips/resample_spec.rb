@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe VIPS::Image do
   before :all do
-    @image = VIPS::Image.new(sample_join('wagon.v'))
+    @image = simg 'wagon.v'
   end
 
   it "should perform a partial affine transformation with interpolator " do
