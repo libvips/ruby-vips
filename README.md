@@ -7,7 +7,8 @@ to be loaded into memory.
 ruby-vips allows you to set up pipelines that don't get executed until you
 output the image to disk or to a string. This means you can create,
 manipulate, and pass around Image objects without incurring any memory or CPU
-costs. The image is not actually processed until you call e.g. Image#write.
+costs. The image is not actually processed until you write the image to memory
+or to disk.
 
 ## Requirements
 
@@ -37,19 +38,20 @@ TODO: Describe & test with macports.
 
 ### Installing the gem.
 
-gem install ruby-vips
+    $ gem install ruby-vips
 
 ## Example.
 
     require 'rubygems'
     require 'vips'
+    include VIPS
 
     # Create an image object. It will not actually load the image until needed.
-    im = VIPS::Image.new('mypic.jpg')
+    im = Image.jpeg('mypic.jpg')
 
-    # Shrink the jpeg by a factor of three when loading -- huge speed and CPU
+    # Shrink the jpeg by a factor of four when loading -- huge speed and CPU
     # improvements on large images.
-    im_shrink_on_load = VIPS::Image.new('mypic.jpg:4')
+    im = Image.jpeg('mypic.jpg', :shrink_factor => 4)
 
     # Add a shrink by a factor of two to the pipeline. This will not actually be
     # executed yet.
@@ -59,7 +61,14 @@ gem install ruby-vips
     # actually loaded and resized. With images that allow for random access from
     # the hard drive (VIPS native format and certain TIFF images) the entire
     # image does not even have to be read into memory.
-    im_shrink_by_two.to_png.write('out.png')
+    im_shrink_by_two.png('out.png', :interlace => true)
+
+    # All ruby-vips image commands can be chained, so the above sequence could
+    # be written as:
+    Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2, 2).png('out.png')
+
+    # The statement above will load the jpeg (pre-shrunk by a factor of four),
+    # shrink the image again by a factor of two, and then save as a png image.
 
 ## Why use ruby-vips?
 

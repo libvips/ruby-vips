@@ -3,14 +3,14 @@ require "spec_helper"
 describe VIPS::PNGWriter do
   before :all do
     @image = simg 'wagon.v'
-    @writer = @image.to_png
+    @writer = VIPS::PNGWriter.new @image
     @path = tmp('wagon.png').to_s
   end
 
   it "should write to a png file" do
     @writer.write @path
 
-    im = VIPS::Image.read_png @path
+    im = VIPS::Image.png @path
     im.x_size.should == @image.x_size
     im.y_size.should == @image.y_size
   end
@@ -22,7 +22,7 @@ describe VIPS::PNGWriter do
 
   it "should write a tiny png file to memory", :vips_lib_version => "> 7.22" do
     im = VIPS::Image.black(10, 10, 1)
-    s = im.to_png.to_memory
+    s = im.png.to_memory
     s.size.should == 411
   end
 
@@ -63,7 +63,7 @@ describe VIPS::PNGWriter do
     @writer.interlace = true
     @writer.write @path
 
-    im = VIPS::Image.read_png(@path)
+    im = VIPS::Image.png(@path)
     im.should match_image(@image)
   end
 
@@ -73,13 +73,12 @@ describe VIPS::PNGWriter do
   end
 
   it "should create a png writer" do
-    writer = @image.to_png
-    writer.class.should == VIPS::PNGWriter
-    writer.image.should == @image
+    @writer.class.should == VIPS::PNGWriter
+    @writer.image.should == @image
   end
 
   it "should accept options on creation from an image" do
-    writer = @image.to_png(:compression => 3, :interlace => true)
+    writer = @image.png(nil, :compression => 3, :interlace => true)
     writer.compression.should == 3
     writer.interlace.should be_true
   end

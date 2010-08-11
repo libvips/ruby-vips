@@ -1,7 +1,6 @@
 #include "ruby_vips.h"
 #include "image.h"
-
-static VALUE cVIPSWriter;
+#include "header.h"
 
 static VALUE
 writer_initialize(VALUE obj, VALUE image)
@@ -28,31 +27,6 @@ writer_image(VALUE obj)
 }
 
 static VALUE
-writer_meta_get(VALUE obj, const char* name)
-{
-    GetImg(obj, data, im);
-
-    void *buf;
-	size_t len;
-
-	if (im_meta_get_blob(im, name, &buf, &len))
-		return Qnil;
-
-	return rb_tainted_str_new((char *)buf, len);
-}
-
-static VALUE
-writer_meta_p(VALUE obj, const char* name)
-{
-    GetImg(obj, data, im);
-
-	if (im_header_get_typeof(im, name))
-		return Qtrue;
-
-    return Qfalse;
-}
-
-static VALUE
 writer_meta_set(VALUE obj, const char* name, VALUE str)
 {
     GetImg(obj, data, im);
@@ -73,23 +47,11 @@ static VALUE
 writer_meta_remove(VALUE obj, const char* name)
 {
     GetImg(obj, data, im);
-
+#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 22
 	if (im_meta_remove(im, name))
 		return Qfalse;
-
+#endif
     return Qtrue;
-}
-
-static VALUE
-writer_exif(VALUE obj)
-{
-    return writer_meta_get(obj, IM_META_EXIF_NAME);
-}
-
-static VALUE
-writer_exif_p(VALUE obj)
-{
-    return writer_meta_p(obj, IM_META_EXIF_NAME);
 }
 
 static VALUE
@@ -105,18 +67,6 @@ writer_remove_exif(VALUE obj)
 }
 
 static VALUE
-writer_icc(VALUE obj)
-{
-    return writer_meta_get(obj, IM_META_ICC_NAME);
-}
-
-static VALUE
-writer_icc_p(VALUE obj)
-{
-    return writer_meta_p(obj, IM_META_ICC_NAME);
-}
-
-static VALUE
 writer_icc_set(VALUE obj, VALUE str)
 {
     return writer_meta_set(obj, IM_META_ICC_NAME, str);
@@ -129,7 +79,7 @@ writer_remove_icc(VALUE obj)
 }
 
 static VALUE
-writer_jpeg_buf(VALUE obj, VALUE quality)
+jpeg_buf_internal(VALUE obj, VALUE quality)
 {
     VipsImage *im_out;
     char *buf = NULL;
@@ -150,7 +100,7 @@ writer_jpeg_buf(VALUE obj, VALUE quality)
 }
 
 static VALUE
-writer_jpeg_write(VALUE obj, VALUE path)
+jpeg_write_internal(VALUE obj, VALUE path)
 {
     GetImg(obj, data, im);
 
@@ -161,7 +111,7 @@ writer_jpeg_write(VALUE obj, VALUE path)
 }
 
 static VALUE
-writer_tiff_write(VALUE obj, VALUE path)
+tiff_write_internal(VALUE obj, VALUE path)
 {
     GetImg(obj, data, im);
 
@@ -172,7 +122,7 @@ writer_tiff_write(VALUE obj, VALUE path)
 }
 
 static VALUE
-writer_ppm_write(VALUE obj, VALUE path)
+ppm_write_internal(VALUE obj, VALUE path)
 {
     GetImg(obj, data, im);
 
@@ -185,7 +135,7 @@ writer_ppm_write(VALUE obj, VALUE path)
 #if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
 
 static VALUE
-writer_png_buf(VALUE obj, VALUE compression, VALUE interlace)
+png_buf_internal(VALUE obj, VALUE compression, VALUE interlace)
 {
     VipsImage *im_out;
     char *buf;
@@ -209,7 +159,7 @@ writer_png_buf(VALUE obj, VALUE compression, VALUE interlace)
 #endif
 
 static VALUE
-writer_png_write(VALUE obj, VALUE path)
+png_write_internal(VALUE obj, VALUE path)
 {
     GetImg(obj, data, im);
 
@@ -220,7 +170,7 @@ writer_png_write(VALUE obj, VALUE path)
 }
 
 static VALUE
-writer_csv_write(VALUE obj, VALUE path)
+csv_write_internal(VALUE obj, VALUE path)
 {
     GetImg(obj, data, im);
 
@@ -230,29 +180,53 @@ writer_csv_write(VALUE obj, VALUE path)
     return obj;
 }
 
+static VALUE
+vips_write_internal(VALUE obj, VALUE path)
+{
+    GetImg(obj, data, im);
+    OutPartial(new, data_new, im_new);
+
+    if (!(im_new = (VipsImage *)im_openout(RSTRING_PTR(path))))
+        vips_lib_error();
+
+    if (im_copy(im, im_new))
+        vips_lib_error();
+
+    return obj;
+}
+
 void
 init_writer()
 {
-    cVIPSWriter = rb_define_class_under(mVIPS, "Writer", rb_cObject);
-    rb_define_alloc_func(cVIPSWriter, img_init_partial_anyclass);
-    rb_define_method(cVIPSWriter, "initialize", writer_initialize, 1);
-    rb_define_method(cVIPSWriter, "image", writer_image, 0);
-    rb_define_method(cVIPSWriter, "exif", writer_exif, 0);
-    rb_define_method(cVIPSWriter, "exif?", writer_exif_p, 0);
-    rb_define_method(cVIPSWriter, "exif=", writer_exif_set, 1);
-    rb_define_method(cVIPSWriter, "remove_exif", writer_remove_exif, 0);
-    rb_define_method(cVIPSWriter, "icc", writer_icc, 0);
-    rb_define_method(cVIPSWriter, "icc?", writer_icc_p, 0);
-    rb_define_method(cVIPSWriter, "icc=", writer_icc_set, 1);
-    rb_define_method(cVIPSWriter, "remove_icc", writer_remove_icc, 0);
+    VALUE writer = rb_define_class_under(mVIPS, "Writer", rb_cObject);
+    rb_include_module(writer, mVIPSHeader);
+    rb_define_alloc_func(writer, img_init_partial_anyclass);
+    rb_define_method(writer, "initialize", writer_initialize, 1);
+    rb_define_method(writer, "image", writer_image, 0);
+    rb_define_method(writer, "exif=", writer_exif_set, 1);
+    rb_define_method(writer, "remove_exif", writer_remove_exif, 0);
+    rb_define_method(writer, "icc=", writer_icc_set, 1);
+    rb_define_method(writer, "remove_icc", writer_remove_icc, 0);
 
-    rb_define_private_method(cVIPSWriter, "jpeg_buf", writer_jpeg_buf, 1);
+    VALUE jpeg_writer = rb_define_class_under(mVIPS, "JPEGWriter", writer);
+    rb_define_private_method(jpeg_writer, "buf_internal", jpeg_buf_internal, 1);
+    rb_define_private_method(jpeg_writer, "write_internal", jpeg_write_internal, 1);
+
+    VALUE tiff_writer = rb_define_class_under(mVIPS, "TIFFWriter", writer);
+    rb_define_private_method(tiff_writer, "write_internal", tiff_write_internal, 1);
+
+    VALUE ppm_writer = rb_define_class_under(mVIPS, "PPMWriter", writer);
+    rb_define_private_method(ppm_writer, "write_internal", ppm_write_internal, 1);
+
+    VALUE png_writer = rb_define_class_under(mVIPS, "PNGWriter", writer);
+    rb_define_private_method(png_writer, "write_internal", png_write_internal, 1);
 #if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
-    rb_define_private_method(cVIPSWriter, "png_buf", writer_png_buf, 2);
+    rb_define_private_method(png_writer, "buf_internal", png_buf_internal, 2);
 #endif
-    rb_define_private_method(cVIPSWriter, "jpeg_write", writer_jpeg_write, 1);
-    rb_define_private_method(cVIPSWriter, "tiff_write", writer_tiff_write, 1);
-    rb_define_private_method(cVIPSWriter, "ppm_write", writer_ppm_write, 1);
-    rb_define_private_method(cVIPSWriter, "png_write", writer_png_write, 1);
-    rb_define_private_method(cVIPSWriter, "csv_write", writer_csv_write, 1);
+
+    VALUE csv_writer = rb_define_class_under(mVIPS, "CSVWriter", writer);
+    rb_define_private_method(csv_writer, "write_internal", csv_write_internal, 1);
+
+    VALUE vips_writer = rb_define_class_under(mVIPS, "VIPSWriter", writer);
+    rb_define_private_method(vips_writer, "write_internal", vips_write_internal, 1);
 }

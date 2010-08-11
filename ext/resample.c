@@ -1,6 +1,7 @@
 #include "ruby_vips.h"
 #include "image.h"
 #include "interpolator.h"
+#include "header.h"
 
 static VALUE
 img_affinei(VALUE obj, VALUE interpolator, VALUE a, VALUE b, VALUE c, VALUE d,
@@ -68,7 +69,7 @@ img_rightshift_size(VALUE obj, VALUE xshift, VALUE yshift, VALUE fmt)
 	OutImg(obj, new, data_new, im_new);
 
     if(im_rightshift_size(im, im_new, NUM2DBL(xshift), NUM2DBL(yshift),
-		img_id_to_band_fmt(SYM2ID(fmt))))
+		header_id_to_band_fmt(SYM2ID(fmt))))
         vips_lib_error();
 
     return new;

@@ -1,6 +1,7 @@
 #include "ruby_vips.h"
 #include "image.h"
 #include "mask.h"
+#include "header.h"
 
 static VALUE
 img_to_mask(VALUE obj)
@@ -100,7 +101,7 @@ img_clip2fmt(VALUE obj, VALUE fmt)
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
-    if (im_clip2fmt(im, im_new, img_id_to_band_fmt(SYM2ID(fmt))))
+    if (im_clip2fmt(im, im_new, header_id_to_band_fmt(SYM2ID(fmt))))
         vips_lib_error();
 
     return new;

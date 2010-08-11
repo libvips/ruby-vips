@@ -3,14 +3,14 @@ require "spec_helper"
 describe VIPS::TIFFWriter do
   before :all do
     @image = simg 'wagon.v'
-    @writer = @image.to_tiff
+    @writer = VIPS::TIFFWriter.new @image
     @path = tmp('wagon.tiff').to_s
   end
 
   it "should write a tiff file" do
     @writer.write(@path)
 
-    im = VIPS::Image.read_tiff @path
+    im = VIPS::Image.tiff @path
     im.x_size.should == @image.x_size
     im.y_size.should == @image.y_size
   end
@@ -20,7 +20,7 @@ describe VIPS::TIFFWriter do
       @writer.format = f
       @writer.write(@path)
 
-      im = VIPS::Image.read_tiff @path
+      im = VIPS::Image.tiff @path
       im.x_size.should == @image.x_size
       im.y_size.should == @image.y_size
     end
@@ -30,7 +30,7 @@ describe VIPS::TIFFWriter do
     @writer.compression = :none
     @writer.write @path
 
-    im = VIPS::Image.read_tiff @path
+    im = VIPS::Image.tiff @path
     im.should match_image(@image)
   end
 
@@ -53,8 +53,8 @@ describe VIPS::TIFFWriter do
     x_res = im.x_res
     y_res = im.y_res
 
-    im.to_tiff.write @path
-    im2 = VIPS::Image.read_tiff @path
+    im.tiff @path
+    im2 = VIPS::Image.tiff @path
     
     im2.x_res.should == x_res
     im2.y_res.should == y_res
@@ -64,7 +64,7 @@ describe VIPS::TIFFWriter do
     @writer.resolution = [0.123, 0.456]
     @writer.write @path
 
-    im = VIPS::Image.read_tiff @path
+    im = VIPS::Image.tiff @path
 
     # tiff images are stored at a resolution at 1/10 of vips resolution
     im.x_res.should approximate(0.123 / 10)
@@ -72,18 +72,15 @@ describe VIPS::TIFFWriter do
   end
 
   it "should create a tiff writer from an image" do
-    writer = @image.to_tiff
-    writer.class.should == VIPS::TIFFWriter
-    writer.image.should == @image
+    @writer.class.should == VIPS::TIFFWriter
+    @writer.image.should == @image
   end
 
   it "should accept options as a has when creating from an image" do
-    writer = @image.to_tiff(:compression => :lzw, :layout => :tile,
+    writer = @image.tiff(nil, :compression => :lzw, :layout => :tile,
       :tile_size => [37, 55])
     writer.compression.should == :lzw
     writer.layout.should == :tile
     writer.tile_size.should == [37, 55]
   end
-
-
 end

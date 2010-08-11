@@ -1,8 +1,9 @@
 $:.unshift File.expand_path('../../ext', __FILE__)
 
-require "rspec/core"
+require "rubygems"
 require "vips"
 require 'tempfile'
+require "rspec"
 
 Dir["#{File.expand_path('../support', __FILE__)}/*.rb"].each do |file|
   require file
@@ -17,8 +18,13 @@ Rspec.configure do |config|
   config.include Spec::Path
   config.include Spec::Helpers
 
+  config.before :all do
+    reset_formats!
+    reset_working!
+  end
+
   config.before :each do
-    reset!
+    reset_working!
   end
 
   config.filter_run_excluding :vips_lib_version => lambda{ |ver|

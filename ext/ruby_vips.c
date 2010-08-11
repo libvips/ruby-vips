@@ -43,8 +43,8 @@ Init_vips_ext()
 
     rb_define_const(mVIPS, "LIB_VERSION", vips_s_version_string());
     rb_define_const(mVIPS, "LIB_VERSION_ARRAY", vips_s_version_array());
+    init_header();
     init_image();
-    init_format();
     init_mask();
     init_interpolator();
 
@@ -60,5 +60,6 @@ Init_vips_ext()
     init_mosaicing();
 	init_relational();
     init_writer();
+    init_reader();
 }
 

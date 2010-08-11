@@ -1,4 +1,110 @@
 module VIPS
+  class Writer
+    def write(path)
+      write_internal path
+    end
+  end
+
+  class CSVWriter < Writer
+    attr_accessor :separator
+
+    def initialize(image, options={})
+      super image
+      @separator = "\t"
+
+      self.separator = options[:separator] if options.has_key?(:separator)
+    end
+
+    def write(path)
+      write_internal "#{path}:sep:#{@separator}"
+    end
+  end
+
+    class JPEGWriter < Writer
+    attr_reader :quality
+
+    def initialize(image, options={})
+      super image
+
+      @quality = 75
+
+      self.quality = options[:quality] if options.has_key?(:quality)
+    end
+
+    def write(path)
+      write_internal "#{path}:#{@quality}"
+    end
+
+    def to_memory
+      buf_internal @quality
+    end
+
+    def quality=(quality_v)
+      unless (0..100).include?(quality_v)
+        raise ArgumentError, 'quality must be a numeric value between 0 and 100'
+      end
+
+      @quality = quality_v
+    end
+  end
+
+  class PNGWriter < Writer
+    attr_reader :compression
+    attr_accessor :interlace
+
+    def initialize(image, options={})
+      super image
+
+      @compression = 6
+      @interlace = false
+
+      self.compression = options[:compression] if options.has_key?(:compression)
+      self.interlace = options[:interlace] if options.has_key?(:interlace)
+    end
+
+    def write(path)
+      write_internal "#{path}:#{@compression},#{@interlace ? 1 : 0}"
+    end
+
+    def to_memory
+      buf_internal @compression, (@interlace ? 1 : 0)
+    end
+
+    def compression=(compression_v)
+      unless (0..9).include?(compression_v)
+        raise ArgumentError, 'compression must be a numeric value between 0 and 9'
+      end
+
+      @compression = compression_v
+    end
+  end
+
+  class PPMWriter < Writer
+    attr_reader :format
+
+    FORMAT = [:binary, :ascii]
+
+    def initialize(image, options={})
+      super image
+
+      @format = :binary
+
+      self.format = options[:format] if options.has_key?(:format)
+    end
+
+    def write(path)
+      write_internal "#{path}:#{@format}"
+    end
+
+    def format=(format_v)
+      unless FORMAT.include?(format_v)
+        raise ArgumentError, "format must be one of #{FORMAT.join(', ')}"
+      end
+
+      @format = format_v
+    end
+  end
+
   class TIFFWriter < Writer
     attr_reader :compression, :layout, :multi_res, :format, :resolution_units,
       :resolution, :predictor, :quality, :tile_size
@@ -10,25 +116,27 @@ module VIPS
     FORMAT = [:manybit, :onebit]
     RESOLUTION_UNITS = [:cm, :inch]
 
-    def initialize(*args)
+    def initialize(image, options={})
+      super image
+
       @compression = :none
       @quality = 75
       @predictor = :none
-
       @layout = :strip
       @tile_size = [128, 128]
-
       @multi_res = :flat
-
       @format = :manybit
-
       @resolution_units = :cm
-      super *args
+
+      [ :compression, :layout, :multi_res, :format, :resolution_units,
+        :resolution, :predictor, :quality, :tile_size ].each do |att|
+        self.send "#{att}=".to_sym, options[att] if options.has_key?(att)
+      end
     end
 
     def write(path)
       opts = [compression_str, layout_str, @multi_res, @format, resolution_str].join ','
-      tiff_write "#{path}:#{opts}"
+      write_internal "#{path}:#{opts}"
     end
 
     def compression_str
@@ -125,16 +233,39 @@ module VIPS
   end
 
   class Image
-    def to_tiff(options = {})
-      writer = TIFFWriter.new self
+    def csv(*args)
+      invoke_writer CSVWriter, *args
+    end
 
-      [ :compression, :layout, :multi_res, :format, :resolution_units,
-        :resolution, :predictor, :quality, :tile_size ].each do |att|
+    def jpeg(*args)
+      invoke_writer JPEGWriter, *args
+    end
 
-        writer.send "#{att}=".to_sym, options[att] if options.has_key?(att)
+    def png(*args)
+      invoke_writer PNGWriter, *args
+    end
 
+    def ppm(*args)
+      invoke_writer PPMWriter, *args
+    end
+
+    def tiff(*args)
+      invoke_writer TIFFWriter, *args
+    end
+
+    def vips(*args)
+      invoke_writer VIPSWriter, *args
+    end
+
+    private
+
+    def invoke_writer(writer_class, path=nil, options={})
+      w = writer_class.new self, options
+      if path
+        w.write path
+      else
+        w
       end
-      writer
     end
   end
 end

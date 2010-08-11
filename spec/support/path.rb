@@ -5,7 +5,11 @@ module Spec
     end
 
     def tmp(*path)
-      root.join 'tmp', *path
+      root.join 'tmp', 'working', *path
+    end
+
+    def formats(*path)
+      root.join 'tmp', 'formats', *path
     end
 
     def sample(*path)

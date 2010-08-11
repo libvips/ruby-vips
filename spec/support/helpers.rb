@@ -3,9 +3,14 @@ require 'tempfile'
 
 module Spec
   module Helpers
-    def reset!
-      FileUtils.rm Dir[File.join(tmp, '*.*')]
+    def reset_working!
+      FileUtils.rm Dir[tmp.join('*.*')]
       FileUtils.mkdir_p(tmp)
+    end
+
+    def reset_formats!
+      FileUtils.rm Dir[formats.join('*.*')]
+      FileUtils.mkdir_p(formats)
     end
 
     def show_image(im, test_name = nil)
@@ -15,7 +20,7 @@ module Spec
       view_path = tmp dir, 'vips_rspec_view.jpg'
       html_path = tmp dir, 'vips_rspec_view.html'
 
-      im.to_jpeg.write view_path.to_s
+      im.jpeg view_path.to_s
       sha1 = Digest::SHA1.hexdigest im.data
 
       title = "Vips Rspec #{test_name}"

@@ -19,5 +19,10 @@ void vips_lib_error();
 #ifndef RARRAY_LENINT
 #define RARRAY_LENINT(ary) RARRAY_LEN(ary)
 #endif
+
+#ifndef rb_str_new_cstr
+#define rb_str_new_cstr(str) rb_str_new(str, (long)strlen(str))
+#endif
+
 #endif
 
