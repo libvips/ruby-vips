@@ -33,7 +33,7 @@ module VIPS
       self.separator = options[:separator] if options.has_key?(:separator)
       self.line_limit = options[:line_limit] if options.has_key?(:line_limit)
 
-      super path, options={}
+      super path, options
     end
 
     def read
@@ -75,7 +75,7 @@ module VIPS
       self.shrink_factor = options[:shrink_factor] if options.has_key?(:shrink_factor)
       self.fail_on_warn = options[:fail_on_warn] if options.has_key?(:fail_on_warn)
 
-      super path, options={}
+      super path, options
     end
 
     def read
@@ -99,7 +99,7 @@ module VIPS
 
     def initialize(path, options={})
       self.page_number = options[:page_number] if options.has_key?(:page_number)
-      super path, options={}
+      super path, options
     end
 
     def read
