@@ -10,7 +10,7 @@ manipulate, and pass around Image objects without incurring any memory or CPU
 costs. The image is not actually processed until you write the image to memory
 or to disk.
 
-## Requirements
+## Requirements.
 
   * OS X or Linux
   * MRI 1.8.6, 1.8.7, 1.9.2 or Rubinius 1.0.1
@@ -26,8 +26,6 @@ The above installs libvips 7.20.x in Ubuntu 10.04 and 7.12.x in Ubuntu 8.04.
 Though ruby-vips will work with libvips 7.12.x, many features are disabled, and
 there are a few caveats.
 
-TODO: I hope to provide updated debs. Describe issues with 7.12.x.
-
 ### OS X Prerequisites.
 
     $ brew install vips -HEAD
@@ -39,6 +37,14 @@ TODO: Describe & test with macports.
 ### Installing the gem.
 
     $ gem install ruby-vips
+
+The gem has not been submitted yet. Please see building from source instructions
+below.
+
+### Building and installing from source
+
+    $ rake build
+    $ gem install ruby-vips-0.1.0.gem
 
 ## Example.
 
@@ -59,13 +65,17 @@ TODO: Describe & test with macports.
 
     # Write out the shrunk image to a PNG file. This is where the image is
     # actually loaded and resized. With images that allow for random access from
-    # the hard drive (VIPS native format and certain TIFF images) the entire
-    # image does not even have to be read into memory.
+    # the hard drive (VIPS native format, OpenEXR, ppm/pbm/pgm/pfm, tiff, and
+    # RAW images), the entire image is never read into memory.
     im_shrink_by_two.png('out.png', :interlace => true)
 
     # All ruby-vips image commands can be chained, so the above sequence could
     # be written as:
     Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2, 2).png('out.png')
+
+    # If you want to let vips determine file formats, you can use the generic
+    # reader and writer:
+    Image.new('mypic.jpg').shrink(2, 2).write('out.png')
 
     # The statement above will load the jpeg (pre-shrunk by a factor of four),
     # shrink the image again by a factor of two, and then save as a png image.
@@ -75,5 +85,5 @@ TODO: Describe & test with macports.
   - It supports over 250 low-level image and color manipulation operations.
   - Operations are chainable, and do not get executed until the image is sent to
     an output.
-  - Fastest ruby library for resizing images (TODO: prove it).
-
+  - Fastest ruby library for resizing large images. See benchmarks at
+    http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use
