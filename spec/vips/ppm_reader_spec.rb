@@ -11,4 +11,12 @@ describe VIPS::PPMReader do
     im = VIPS::PPMReader.new(@path).read
     im.should match_image @image
   end
+
+  it "should recognize a ppm image" do
+    vips_res = VIPS::PPMReader.recognized? sample('wagon.v').to_s
+    vips_res.should be_false
+
+    res = VIPS::PPMReader.recognized? @path
+    res.should be_true
+  end
 end

@@ -102,12 +102,6 @@ module VIPS
       super path, options={}
     end
 
-    def self.file_signature?(path)
-      f = File.new path
-      s = f.read 2
-      s == 'MM' || s == 'II'
-    end
-
     def read
       str = @path
       str << ":#{@page_number}" if @page_number
@@ -155,6 +149,10 @@ module VIPS
 
     def self.vips(*args)
       VIPSReader.read *args
+    end
+
+    def self.new(*args)
+      Reader.read *args
     end
   end
 end

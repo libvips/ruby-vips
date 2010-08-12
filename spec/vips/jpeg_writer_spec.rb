@@ -22,6 +22,12 @@ describe VIPS::JPEGWriter do
     s.size.should == 411
   end
 
+  it "should write a large jpeg file to memory" do
+    im = VIPS::Image.black(1000, 1000, 3)
+    s = im.jpeg.to_memory
+    s.size.should == 16579
+  end
+
   it "should detect icc headers and preserve the input image icc header" do
     im = simg 'icc.jpg'
     im2 = im.shrink 5, 5

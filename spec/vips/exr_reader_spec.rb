@@ -12,4 +12,12 @@ describe VIPS::EXRReader do
     im.x_size.should == 610
     im.should match_sha1('3bea5ddaa343315c817ffae770f9bad4aa5e6e21')
   end
+
+  it "should recognize an exr image" do
+    vips_res = VIPS::EXRReader.recognized? sample('wagon.v').to_s
+    vips_res.should be_false
+
+    res = VIPS::EXRReader.recognized? @path
+    res.should be_true
+  end
 end

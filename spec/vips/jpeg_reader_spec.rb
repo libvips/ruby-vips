@@ -24,4 +24,12 @@ describe VIPS::JPEGReader do
     im = reader.read
     im.x_size.should == @image.x_size / 4
   end
+
+  it "should recognize a jpeg image" do
+    vips_res = VIPS::JPEGReader.recognized? sample('wagon.v').to_s
+    vips_res.should be_false
+
+    res = VIPS::JPEGReader.recognized? @path
+    res.should be_true
+  end
 end

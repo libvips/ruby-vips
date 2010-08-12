@@ -20,7 +20,7 @@ module VIPS
     end
   end
 
-    class JPEGWriter < Writer
+  class JPEGWriter < Writer
     attr_reader :quality
 
     def initialize(image, options={})
@@ -255,6 +255,10 @@ module VIPS
 
     def vips(*args)
       invoke_writer VIPSWriter, *args
+    end
+
+    def write(*args)
+      invoke_writer Writer, *args
     end
 
     private

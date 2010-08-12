@@ -13,10 +13,10 @@ describe VIPS::TIFFReader do
   end
 
   it "should recognize a tiff image" do
-    vips_res = VIPS::TIFFReader.file_signature? sample('wagon.v').to_s
+    vips_res = VIPS::TIFFReader.recognized? sample('wagon.v').to_s
     vips_res.should be_false
 
-    tiff_res = VIPS::TIFFReader.file_signature? @path
+    tiff_res = VIPS::TIFFReader.recognized? @path
     tiff_res.should be_true
   end
 

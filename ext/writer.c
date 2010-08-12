@@ -3,8 +3,10 @@
 #include "header.h"
 
 static VALUE
-writer_initialize(VALUE obj, VALUE image)
+writer_initialize(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE image, opts;
+	rb_scan_args(argc, argv, "11", &image, &opts);
     GetImg(image, data, im);
     GetImg(obj, data_new, im_new);
 
@@ -79,11 +81,25 @@ writer_remove_icc(VALUE obj)
 }
 
 static VALUE
+writer_write_internal(VALUE obj, VALUE path)
+{
+    VipsImage *out;
+    GetImg(obj, data, im);
+
+    if (!(out = im_open(StringValuePtr(path), "w")) || im_copy(im, out))
+        vips_lib_error();
+
+    return obj;
+}
+
+static VALUE
 jpeg_buf_internal(VALUE obj, VALUE quality)
 {
     VipsImage *im_out;
     char *buf = NULL;
     int length;
+    VALUE str;
+
     GetImg(obj, data, im);
 
     if (!(im_out = im_open("writer_jpeg_buf", "p")))
@@ -94,9 +110,10 @@ jpeg_buf_internal(VALUE obj, VALUE quality)
         vips_lib_error();
 	}
 
+    str = rb_tainted_str_new(buf, length);
     im_close(im_out);
 
-    return rb_tainted_str_new(buf, length);
+    return str;
 }
 
 static VALUE
@@ -201,12 +218,13 @@ init_writer()
     VALUE writer = rb_define_class_under(mVIPS, "Writer", rb_cObject);
     rb_include_module(writer, mVIPSHeader);
     rb_define_alloc_func(writer, img_init_partial_anyclass);
-    rb_define_method(writer, "initialize", writer_initialize, 1);
+    rb_define_method(writer, "initialize", writer_initialize, -1);
     rb_define_method(writer, "image", writer_image, 0);
     rb_define_method(writer, "exif=", writer_exif_set, 1);
     rb_define_method(writer, "remove_exif", writer_remove_exif, 0);
     rb_define_method(writer, "icc=", writer_icc_set, 1);
     rb_define_method(writer, "remove_icc", writer_remove_icc, 0);
+    rb_define_private_method(writer, "write_internal", writer_write_internal, 1);
 
     VALUE jpeg_writer = rb_define_class_under(mVIPS, "JPEGWriter", writer);
     rb_define_private_method(jpeg_writer, "buf_internal", jpeg_buf_internal, 1);
