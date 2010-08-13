@@ -89,6 +89,8 @@ writer_write_internal(VALUE obj, VALUE path)
     if (!(out = im_open(StringValuePtr(path), "w")) || im_copy(im, out))
         vips_lib_error();
 
+    im_close(out);
+
     return obj;
 }
 

@@ -19,23 +19,23 @@ describe VIPS::Mask do
   it "should create and recognize int and double masks" do
     mask = VIPS::Mask.new @coeff_i, 1, 2
     mask.int?.should be_true
-    mask.double?.should be_false
+    mask.double?.should be_true
 
     mask = VIPS::Mask.new @coeff_i, 1, 2.1
     mask.int?.should be_false
     mask.double?.should be_true
 
-    mask = VIPS::Mask.new @coeff_d, 3, 0
+    mask = VIPS::Mask.new @coeff_d, 3
     mask.int?.should be_false
     mask.double?.should be_true
   end
 
   it "should recognize the size" do
-    mask = VIPS::Mask.new @coeff_i, 0, 0
+    mask = VIPS::Mask.new @coeff_i
     mask.xsize.should == 3
     mask.ysize.should == 4
 
-    mask = VIPS::Mask.new @coeff_d, 0, 0
+    mask = VIPS::Mask.new @coeff_d
     mask.xsize.should == 4
     mask.ysize.should == 3
   end
@@ -47,7 +47,7 @@ describe VIPS::Mask do
   end
 
   it "should allow setting and getting of the coefficient" do
-    mask = VIPS::Mask.new @coeff_i, 0, 0
+    mask = VIPS::Mask.new @coeff_i
     mask.coeff[0][0].should == 1
     mask.coeff[3][1].should == 11
     mask.coeff[1][2].should == 6
@@ -57,5 +57,20 @@ describe VIPS::Mask do
     mask.coeff[2][1].should == 8.7
     mask.coeff[2][3].should == 10.1
   end
-end
 
+  it "should default the offset to zero" do
+    mask = VIPS::Mask.new @coeff_i
+    mask.offset.should == 0
+
+    mask = VIPS::Mask.new @coeff_d
+    mask.offset.should == 0.0
+  end
+
+  it "should default the scale to one" do
+    mask = VIPS::Mask.new @coeff_i
+    mask.scale.should == 1
+
+    mask = VIPS::Mask.new @coeff_d
+    mask.scale.should == 1.0
+  end
+end

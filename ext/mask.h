@@ -12,6 +12,6 @@ typedef struct _vipsMask vipsMask;
 VALUE mask_alloc(VALUE);
 VALUE imask2rb(INTMASK*);
 VALUE dmask2rb(DOUBLEMASK*);
-DOUBLEMASK* mask_ary2dmask(VALUE);
+void mask_arg2mask(VALUE, INTMASK**, DOUBLEMASK**);
 
 #endif

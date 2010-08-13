@@ -123,13 +123,13 @@ describe VIPS::Image do
   it "should apply frequency filter image masks" do
     im = @image.extract_area(30, 10, 128, 128)
 
-	mask_lo = VIPS::Image.create_fmask_ideal_highpass 128, 128, 0.1
-	image_lo = im.freqflt(mask_lo)
+    mask_lo = VIPS::Image.create_fmask_ideal_highpass 128, 128, 0.1
+    image_lo = im.freqflt(mask_lo)
 
-	mask_hi = VIPS::Image.create_fmask_ideal_lowpass 128, 128, 0.1
-	image_hi = im.freqflt(mask_hi)
+    mask_hi = VIPS::Image.create_fmask_ideal_lowpass 128, 128, 0.1
+    image_hi = im.freqflt(mask_hi)
 
-	combined = image_lo.add(image_hi).lintra(0.5, 0)
+    combined = image_lo.add(image_hi).lintra(0.5, 0)
     combined.should match_sha1('8800da7d7ca039c6b7121858741a535e90ceacfb')
   end
 

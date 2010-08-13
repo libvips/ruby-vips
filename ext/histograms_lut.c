@@ -62,10 +62,12 @@ img_s_identity_ushort(VALUE obj, VALUE bands, VALUE sz)
 static VALUE
 img_s_invertlut(VALUE obj, VALUE input, VALUE lut_size)
 {
+    DOUBLEMASK *dmask;
 	OutPartial(new, data, im);
-	DOUBLEMASK *mask = mask_ary2dmask(input);
 
-    if (im_invertlut(mask, im, NUM2INT(lut_size)))
+    mask_arg2mask(input, NULL, &dmask);
+
+    if (im_invertlut(dmask, im, NUM2INT(lut_size)))
         vips_lib_error();
 
     return new;
@@ -75,9 +77,12 @@ img_s_invertlut(VALUE obj, VALUE input, VALUE lut_size)
 static VALUE
 img_s_buildlut(VALUE obj, VALUE input)
 {
+    DOUBLEMASK *dmask;
 	OutPartial(new, data, im);
 
-    if (im_buildlut(mask_ary2dmask(input), im))
+    mask_arg2mask(input, NULL, &dmask);
+
+    if (im_buildlut(dmask, im))
         vips_lib_error();
 
     return new;

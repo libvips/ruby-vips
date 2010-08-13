@@ -11,7 +11,7 @@ describe VIPS::Image do
       [4,  5, -6],
       [7, -8, -9]
     ]
-    m = VIPS::Mask.new mask, 2, 0
+    m = VIPS::Mask.new mask, 2
     im = @image.conv(m)
     # TODO: some kind of validation of the generated image
   end
@@ -22,19 +22,19 @@ describe VIPS::Image do
       [4, -0.2,   -6],
       [7,   -8, -0.9]
     ]
-    m = VIPS::Mask.new mask, 2, 0
+    m = VIPS::Mask.new mask, 2
     im = @image.conv(m)
     # TODO: some kind of validation of the generated image
   end
 
   it "should perform a seperable convolution with an int mask" do
-    m = VIPS::Mask.new [[1, -2, 3]], 3, 0
+    m = VIPS::Mask.new [[1, -2, 3]], 3
     im = @image.convsep m
     im.should match_sha1('1389e7d7fb3f1646e774ac69d6a8802c26652aa5')
   end
 
   it "should perform a seperable convolution with a float mask" do
-    m = VIPS::Mask.new [[1.2, -2.1, 3.0]], 3.4, 0
+    m = VIPS::Mask.new [[1.2, -2.1, 3.0]], 3.4
     im = @image.convsep m
     im.should match_sha1('e6c79ddd45c93b31a77c830c925561c6d2139529')
   end
@@ -45,7 +45,7 @@ describe VIPS::Image do
       [ 2,-3, 2 ],
       [ -1, -2, 5]
     ]
-    m = VIPS::Mask.new mask, 3, 0
+    m = VIPS::Mask.new mask, 3
     im = @image.compass m
     im.should match_sha1('e37d7c4a0b2f8863c1ee0760b2de1d47e8359b60')
   end
@@ -56,7 +56,7 @@ describe VIPS::Image do
       [ 2,-3, 2 ],
       [ -1, 1, -2]
     ]
-    m = VIPS::Mask.new mask, 3, 0
+    m = VIPS::Mask.new mask, 3
     im = @image.gradient m
     im.should match_sha1('a6e3e83f58c7599d616722e98f7c586e4b1a8c21')
   end
@@ -67,7 +67,7 @@ describe VIPS::Image do
       [ 2,-3, 2 ],
       [ -1, -2, 5]
     ]
-    m = VIPS::Mask.new mask, 3, 0
+    m = VIPS::Mask.new mask, 3
     im = @image.lindetect m
     im.should match_sha1('78580ff728cca4722c73f610406ac8eba0604ba9')
   end

@@ -36,10 +36,14 @@ describe VIPS::Image do
     @image.bandmean.cntlines_v.should approximate(4.503)
   end
 
-  it "should detect the +ve and -ve edges of zero crossings of an image" do
-    im = @image.zerox(1)
-    im2 = @image.zerox(-1)
-    pending "need validation of Image#zerox"
+  it "should detect the +ve edges of zero crossings of an image" do
+    im = @image.zerox_pos
+    pending "need validation of Image#zerox_pos"
+  end
+
+  it "should detect the -ve edges of zero crossings of an image" do
+    im = @image.zerox_neg
+    pending "need validation of Image#zerox_neg"
   end
 
   it "should find the position of the first non-zero pixel from the top and from the left" do

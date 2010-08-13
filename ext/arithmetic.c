@@ -195,7 +195,7 @@ static VALUE
 img_minpos(int argc, VALUE *argv, VALUE obj) {
 	VALUE v_num;
 
-	rb_scan_args(argc, argv, "01", &v_num);
+    rb_scan_args(argc, argv, "01", &v_num);
 	if (NIL_P(v_num))
 		return img_minpos_single(obj);
 	else
@@ -336,21 +336,17 @@ img_divide(VALUE obj, VALUE obj2)
 	RUBY_VIPS_BINARY(im_divide);
 }
 
-/* TODO: the recomb parameter isn't really a mask -- it's a matrix.
- */
 static VALUE
 img_recomb(VALUE obj, VALUE recomb)
 {
-    vipsMask *msk;
-	GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
-    
-    Data_Get_Struct(recomb, vipsMask, msk);
+    DOUBLEMASK *dmask;
 
-    /* TODO: Add functionality so that an int mask can also serve as a double
-     * mask.
-     */
-    if (im_recomb(im, im_new, msk->dmask))
+    GetImg(obj, data, im);
+    OutImg(obj, new, data_new, im_new);
+
+    mask_arg2mask(recomb, NULL, &dmask);
+
+    if (im_recomb(im, im_new, dmask))
         vips_lib_error();
 
     return new;

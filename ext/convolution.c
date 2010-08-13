@@ -5,16 +5,18 @@
 static VALUE
 img_conv(VALUE obj, VALUE m)
 {
-    vipsMask *msk;
-	GetImg(obj, data, im);
+    DOUBLEMASK *dmask;
+    INTMASK *imask;
+
+    GetImg(obj, data, im);
 	OutImg2(obj, m, new, data_new, im_new);
 
-    Data_Get_Struct(m, vipsMask, msk);
+    mask_arg2mask(m, &imask, &dmask);
 
-    if (msk->imask) {
-        if (im_conv(im, im_new, msk->imask))
+    if (imask) {
+        if (im_conv(im, im_new, imask))
             vips_lib_error();
-    } else if (im_conv_f(im, im_new, msk->dmask))
+    } else if (im_conv_f(im, im_new, dmask))
         vips_lib_error();
 
     return new;
@@ -23,16 +25,18 @@ img_conv(VALUE obj, VALUE m)
 static VALUE
 img_convsep(VALUE obj, VALUE mask)
 {
-    vipsMask *msk;
+    DOUBLEMASK *dmask;
+    INTMASK *imask;
+
 	GetImg(obj, data, im);
 	OutImg2(obj, mask, new, data_new, im_new);
 
-    Data_Get_Struct(mask, vipsMask, msk);
+    mask_arg2mask(mask, &imask, &dmask);
 
-    if(msk->imask) {
-        if (im_convsep(im, im_new, msk->imask))
+    if(imask) {
+        if (im_convsep(im, im_new, imask))
             vips_lib_error();
-    } else if (im_convsep_f(im, im_new, msk->dmask))
+    } else if (im_convsep_f(im, im_new, dmask))
         vips_lib_error();
 
     return new;
@@ -41,13 +45,13 @@ img_convsep(VALUE obj, VALUE mask)
 static VALUE
 img_compass(VALUE obj, VALUE mask)
 {
-    vipsMask *msk;
+    INTMASK *imask;
 	GetImg(obj, data, im);
 	OutImg2(obj, mask, new, data_new, im_new);
 
-    Data_Get_Struct(mask, vipsMask, msk);
+    mask_arg2mask(mask, &imask, NULL);
 
-    if (im_compass(im, im_new, msk->imask))
+    if (im_compass(im, im_new, imask))
         vips_lib_error();
 
     return new;
@@ -56,13 +60,14 @@ img_compass(VALUE obj, VALUE mask)
 static VALUE
 img_gradient(VALUE obj, VALUE mask)
 {
-    vipsMask *msk;
-	GetImg(obj, data, im);
+    INTMASK *imask;
+
+    GetImg(obj, data, im);
 	OutImg2(obj, mask, new, data_new, im_new);
 
-    Data_Get_Struct(mask, vipsMask, msk);
+    mask_arg2mask(mask, &imask, NULL);
 
-    if (im_gradient(im, im_new, msk->imask) )
+    if (im_gradient(im, im_new, imask) )
         vips_lib_error();
 
     return new;
@@ -71,13 +76,14 @@ img_gradient(VALUE obj, VALUE mask)
 static VALUE
 img_lindetect(VALUE obj, VALUE mask)
 {
-    vipsMask *msk;
-	GetImg(obj, data, im);
+    INTMASK *imask;
+
+    GetImg(obj, data, im);
 	OutImg2(obj, mask, new, data_new, im_new);
 
-    Data_Get_Struct(mask, vipsMask, msk);
+    mask_arg2mask(mask, &imask, NULL);
 
-    if (im_lindetect(im, im_new, msk->imask))
+    if (im_lindetect(im, im_new, imask))
         vips_lib_error();
 
     return new;
@@ -169,4 +175,3 @@ init_convolution()
     rb_define_method(cVIPSImage, "contrast_surface", img_contrast_surface, 2);
     rb_define_method(cVIPSImage, "addgnoise", img_addgnoise, 1);
 }
-

@@ -61,7 +61,7 @@ below.
 
     # Add a shrink by a factor of two to the pipeline. This will not actually be
     # executed yet.
-    im_shrink_by_two = im.shrink(2, 2)
+    im_shrink_by_two = im.shrink(2)
 
     # Write out the shrunk image to a PNG file. This is where the image is
     # actually loaded and resized. With images that allow for random access from
@@ -71,14 +71,14 @@ below.
 
     # All ruby-vips image commands can be chained, so the above sequence could
     # be written as:
-    Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2, 2).png('out.png')
-
-    # If you want to let vips determine file formats, you can use the generic
-    # reader and writer:
-    Image.new('mypic.jpg').shrink(2, 2).write('out.png')
+    Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2).png('out.png')
 
     # The statement above will load the jpeg (pre-shrunk by a factor of four),
     # shrink the image again by a factor of two, and then save as a png image.
+
+    # If you want to let vips determine file formats, you can use the generic
+    # reader and writer:
+    Image.new('mypic.jpg').shrink(2).write('out.png')
 
 ## Why use ruby-vips?
 

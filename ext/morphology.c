@@ -5,13 +5,14 @@
 static VALUE
 img_dilate(VALUE obj, VALUE mask)
 {
-    vipsMask *msk;
+    INTMASK *imask;
+
 	GetImg(obj, data, im);
 	OutImg2(obj, mask, new, data_new, im_new);
 
-    Data_Get_Struct(mask, vipsMask, msk);
+    mask_arg2mask(mask, &imask, NULL);
 
-    if (im_dilate(im, im_new, msk->imask))
+    if (im_dilate(im, im_new, imask))
         vips_lib_error();
 
     return new;
@@ -20,13 +21,14 @@ img_dilate(VALUE obj, VALUE mask)
 static VALUE
 img_erode(VALUE obj, VALUE mask)
 {
-    vipsMask *msk;
+    INTMASK *imask;
+
 	GetImg(obj, data, im);
 	OutImg2(obj, mask, new, data_new, im_new);
 
-    Data_Get_Struct(mask, vipsMask, msk);
+    mask_arg2mask(mask, &imask, NULL);
 
-    if (im_erode(im, im_new, msk->imask))
+    if (im_erode(im, im_new, imask))
         vips_lib_error();
 
     return new;
@@ -109,15 +111,27 @@ img_cntlines_v(VALUE obj) {
 }
 
 static VALUE
-img_zerox(VALUE obj, VALUE flag)
+img_zerox(VALUE obj, int flag)
 {
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
-    if (im_zerox(im, im_new, NUM2INT(flag)))
+    if (im_zerox(im, im_new, flag))
         vips_lib_error();
 
     return new;
+}
+
+static VALUE
+img_zerox_pos(VALUE obj)
+{
+    return img_zerox(obj, 1);
+}
+
+static VALUE
+img_zerox_neg(VALUE obj)
+{
+    return img_zerox(obj, -1);
 }
 
 static VALUE
@@ -167,7 +181,8 @@ init_morphology(void)
 	rb_define_method(cVIPSImage, "maxvalue", img_maxvalue, -1);
 	rb_define_method(cVIPSImage, "cntlines_h", img_cntlines_h, 0);
 	rb_define_method(cVIPSImage, "cntlines_v", img_cntlines_v, 0);
-	rb_define_method(cVIPSImage, "zerox", img_zerox, 1);
+	rb_define_method(cVIPSImage, "zerox_pos", img_zerox_pos, 0);
+	rb_define_method(cVIPSImage, "zerox_neg", img_zerox_neg, 0);
 	rb_define_method(cVIPSImage, "profile_h", img_profile_h, 0);
 	rb_define_method(cVIPSImage, "profile_v", img_profile_v, 0);
 	rb_define_method(cVIPSImage, "label_regions", img_label_regions, 0);

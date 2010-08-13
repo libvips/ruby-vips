@@ -47,7 +47,7 @@ ary_is_int_2d(VALUE ary)
 
 /* initialize an INTMASK from a ruby array */
 
-INTMASK*
+static INTMASK*
 mask_ary2imask(VALUE coeffs)
 {
     INTMASK *msk;
@@ -67,7 +67,7 @@ mask_ary2imask(VALUE coeffs)
     return msk;
 }
 
-DOUBLEMASK*
+static DOUBLEMASK*
 mask_ary2dmask(VALUE coeffs)
 {
     DOUBLEMASK *msk;
@@ -88,21 +88,30 @@ mask_ary2dmask(VALUE coeffs)
 }
 
 static VALUE
-mask_initialize(VALUE obj, VALUE coeffs, VALUE scale, VALUE offset)
+mask_initialize(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE coeffs, scale, offset;
     vipsMask *msk;
     Data_Get_Struct(obj, vipsMask, msk);
+
+	rb_scan_args(argc, argv, "12", &coeffs, &scale, &offset);
+
+    if (NIL_P(scale))
+        scale = INT2NUM(1);
+
+    if (NIL_P(offset))
+        offset = INT2NUM(0);
 
     if(TYPE(scale) == T_FIXNUM && TYPE(offset) == T_FIXNUM &&
         ary_is_int_2d(coeffs)) {
         msk->imask = mask_ary2imask(coeffs);
         msk->imask->scale = NUM2INT(scale);
         msk->imask->offset = NUM2INT(offset);
-    } else {
-        msk->dmask = mask_ary2dmask(coeffs);
-        msk->dmask->scale = NUM2DBL(scale);
-        msk->dmask->offset = NUM2DBL(offset);
     }
+
+    msk->dmask = mask_ary2dmask(coeffs);
+    msk->dmask->scale = NUM2DBL(scale);
+    msk->dmask->offset = NUM2DBL(offset);
 
     return obj;
 }
@@ -112,7 +121,7 @@ mask_xsize(VALUE obj)
 {
     vipsMask *msk;
     Data_Get_Struct(obj, vipsMask, msk);
-    return msk->imask ? INT2FIX(msk->imask->xsize) : INT2FIX(msk->dmask->xsize);
+    return INT2FIX(msk->dmask->xsize);
 }
 
 static VALUE
@@ -120,7 +129,7 @@ mask_ysize(VALUE obj)
 {
     vipsMask *msk;
     Data_Get_Struct(obj, vipsMask, msk);
-    return msk->imask ? INT2FIX(msk->imask->ysize) : INT2FIX(msk->dmask->ysize);
+    return INT2FIX(msk->dmask->ysize);
 }
 
 static VALUE
@@ -207,11 +216,49 @@ mask_double_p(VALUE obj)
 }
 
 void
+mask_arg2mask(VALUE arg, INTMASK **imask, DOUBLEMASK **dmask)
+{
+    INTMASK *imask_t = NULL;
+    DOUBLEMASK *dmask_t = NULL;
+    vipsMask *data;
+    const char *errstr;
+
+    if (TYPE(arg) == T_ARRAY) {
+        if (imask && ary_is_int_2d(arg))
+            imask_t = mask_ary2imask(arg);
+        else if (dmask)
+            dmask_t = mask_ary2dmask(arg);
+    } else if (CLASS_OF(arg) == cVIPSMask) {
+        Data_Get_Struct(arg, vipsMask, data);
+
+        if (imask)
+            imask_t = data->imask;
+        if (dmask)
+            dmask_t = data->dmask;
+    }
+
+    if (!imask_t && !dmask_t) {
+        if (imask && dmask)
+            errstr = "Expected an array or a Mask";
+        else
+            errstr = "Expected an int array or an int Mask";
+
+        rb_raise(rb_eArgError, errstr);
+    }
+
+    if (imask)
+        *imask = imask_t;
+
+    if (dmask)
+        *dmask = dmask_t;
+}
+
+void
 init_mask()
 {
     cVIPSMask = rb_define_class_under(mVIPS, "Mask", rb_cObject);
     rb_define_alloc_func(cVIPSMask, mask_alloc);
-    rb_define_method(cVIPSMask, "initialize", mask_initialize, 3);
+    rb_define_method(cVIPSMask, "initialize", mask_initialize, -1);
     rb_define_method(cVIPSMask, "xsize", mask_xsize, 0);
     rb_define_method(cVIPSMask, "ysize", mask_ysize, 0);
     rb_define_method(cVIPSMask, "scale", mask_scale, 0);

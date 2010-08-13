@@ -12,11 +12,17 @@ describe VIPS::Image do
   end
 
   it "should perform a full affine transformation with interpolator " do
-    im_resized = @image.affinei_all :bilinear, 0.2, 0, 0, 0.2, 0, 0
+    im_resized = @image.affinei :bilinear, 0.2, 0, 0, 0.2, 0, 0
     im_resized.x_size.should == (@image.x_size / 5.to_f).round
 
-    im_resized2 = @image.affinei_all :nearest, 4, 0, 0, 4, 0, 0
+    im_resized2 = @image.affinei :nearest, 4, 0, 0, 4, 0, 0
     im_resized2.x_size.should == @image.x_size * 4
+  end
+
+  it "should perform a resizing-only affine transformation" do
+    im_resized = @image.affinei_resize(:bilinear, 1/3.to_f)
+    im_resized.x_size.should == @image.x_size / 3
+    im_resized.y_size.should == @image.y_size / 3
   end
 
   it "should stretch an image by 3%" do
@@ -34,6 +40,8 @@ describe VIPS::Image do
     im = @image.shrink 2, 3
     im.x_size.should == @image.x_size / 2
     im.y_size.should == @image.y_size / 3
+
+    @image.shrink(3).should match_image(@image.shrink(3, 3))
   end
 
   it "should shrink images via right shift operations and convert to band format" do

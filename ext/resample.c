@@ -4,43 +4,69 @@
 #include "header.h"
 
 static VALUE
-img_affinei(VALUE obj, VALUE interpolator, VALUE a, VALUE b, VALUE c, VALUE d,
-	VALUE dx, VALUE dy, VALUE ox, VALUE oy, VALUE ow, VALUE oh)
+img_affinei(int argc, VALUE *argv, VALUE obj)
 {
-    VALUE itrp_obj;
-    VipsInterpolate *itrp_vips = interp_lookup(interpolator);
-	GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
+    VALUE interpolator, a, b, c, d, dx, dy, ox, oy, ow, oh;
+    VipsInterpolate *itrp_vips;
 
-    if (im_affinei(im, im_new, itrp_vips,
-        NUM2DBL(a), NUM2DBL(b), NUM2DBL(c), NUM2DBL(d),
-        NUM2DBL(dx), NUM2DBL(dy),
-        NUM2INT(ox), NUM2INT(oy), NUM2INT(ow), NUM2INT(oh)) )
+    rb_scan_args(argc, argv, "74", &interpolator, &a, &b, &c, &d, &dx, &dy, &ox,
+        &oy, &ow, &oh);
+
+    itrp_vips = interp_lookup(interpolator);
+    GetImg(obj, data, im);
+    OutImg(obj, new, data_new, im_new);
+
+    if (NIL_P(ox)) {
+        if (im_affinei_all(im, im_new, itrp_vips,
+            NUM2DBL(a), NUM2DBL(b), NUM2DBL(c), NUM2DBL(d),
+            NUM2DBL(dx), NUM2DBL(dy)))
+            vips_lib_error();
+    } else {
+        if (NIL_P(oh))
+            rb_raise(rb_eArgError, "If you supply any output parameters, you have to supply them all");
+
+        if (im_affinei(im, im_new, itrp_vips,
+            NUM2DBL(a), NUM2DBL(b), NUM2DBL(c), NUM2DBL(d),
+            NUM2DBL(dx), NUM2DBL(dy),
+            NUM2INT(ox), NUM2INT(oy), NUM2INT(ow), NUM2INT(oh)))
+        vips_lib_error();
+    }
+
+    return new;
+}
+
+static VALUE
+img_affinei_resize(int argc, VALUE *argv, VALUE obj)
+{
+    VALUE interpolator, x_scale, y_scale;
+    VipsInterpolate *itrp_vips;
+
+    rb_scan_args(argc, argv, "21", &interpolator, &x_scale, &y_scale);
+
+    GetImg(obj, data, im);
+    OutImg(obj, new, data_new, im_new);
+
+    itrp_vips = interp_lookup(interpolator);
+
+    if (NIL_P(y_scale))
+        y_scale = x_scale;
+
+    if (im_affinei_all(im, im_new, itrp_vips, NUM2DBL(x_scale), 0, 0,
+        NUM2DBL(y_scale), 0, 0))
         vips_lib_error();
 
     return new;
 }
 
 static VALUE
-img_affinei_all(VALUE obj, VALUE interpolator, VALUE a, VALUE b, VALUE c,
-	VALUE d, VALUE dx, VALUE dy)
+img_stretch3(int argc, VALUE *argv, VALUE obj)
 {
-    VALUE itrp_obj;
-    VipsInterpolate *itrp_vips = interp_lookup(interpolator);
-	GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
+    VALUE dx, dy;
 
-    if( im_affinei_all(im, im_new, itrp_vips,
-        NUM2DBL(a), NUM2DBL(b), NUM2DBL(c), NUM2DBL(d),
-        NUM2DBL(dx), NUM2DBL(dy)) )
-        vips_lib_error();
+    rb_scan_args(argc, argv, "11", &dx, &dy);
+    if (NIL_P(dy))
+        dy = dx;
 
-    return new;
-}
-
-static VALUE
-img_stretch3(VALUE obj, VALUE dx, VALUE dy)
-{
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
@@ -51,9 +77,15 @@ img_stretch3(VALUE obj, VALUE dx, VALUE dy)
 }
 
 static VALUE
-img_shrink(VALUE obj, VALUE width_ratio, VALUE height_ratio)
+img_shrink(int argc, VALUE *argv, VALUE obj)
 {
-	GetImg(obj, data, im);
+    VALUE width_ratio, height_ratio;
+
+    rb_scan_args(argc, argv, "11", &width_ratio, &height_ratio);
+    if (NIL_P(height_ratio))
+        height_ratio = width_ratio;
+
+    GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
     if (im_shrink(im, im_new, NUM2DBL(width_ratio), NUM2DBL(height_ratio)))
@@ -114,10 +146,10 @@ img_match_linear_search(VALUE obj, VALUE obj2,
 void
 init_resample()
 {
-    rb_define_method(cVIPSImage, "affinei", img_affinei, 11);
-    rb_define_method(cVIPSImage, "affinei_all", img_affinei_all, 7);
-    rb_define_method(cVIPSImage, "stretch3", img_stretch3, 2);
-    rb_define_method(cVIPSImage, "shrink", img_shrink, 2);
+    rb_define_method(cVIPSImage, "affinei", img_affinei, -1);
+    rb_define_method(cVIPSImage, "affinei_resize", img_affinei_resize, -1);
+    rb_define_method(cVIPSImage, "stretch3", img_stretch3, -1);
+    rb_define_method(cVIPSImage, "shrink", img_shrink, -1);
     rb_define_method(cVIPSImage, "rightshift_size", img_rightshift_size, 3);
     rb_define_method(cVIPSImage, "match_linear", img_match_linear, 9);
     rb_define_method(cVIPSImage, "match_linear_search", img_match_linear_search, 11);

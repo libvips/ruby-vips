@@ -147,11 +147,14 @@ describe VIPS::Image do
   end
 
   it "should perform a linear transformations on each band of an image" do
-    im = @image.lintra [0.2, 10], [0.1, 10], [0.3, 50]
+    transformations = [ [0.2, 10], [0.1, 10], [0.3, 50] ]
+    im = @image.lintra *transformations
 
-    im[81, 21][0].should approximate(@image[81, 21][0] * 0.2 + 10)
-    im[81, 21][1].should approximate(@image[81, 21][1] * 0.1 + 10)
-    im[81, 21][2].should approximate(@image[81, 21][2] * 0.3 + 50)
+    im.bands.times do |i|
+      m = transformations[i - 1][0]
+      c = transformations[i - 1][1]
+      im[81, 21][i - 1].should approximate(m * @image[81, 21][i - 1] + c)
+    end
   end
 
   it "should multiply two images" do
@@ -201,8 +204,7 @@ describe VIPS::Image do
       [0.2, 3.2, 0.1],
       [1.1, 0.0, 2.1]
     ]
-    mask = VIPS::Mask.new coeff, 0, 0
-    im = @image.recomb(mask)
+    im = @image.recomb(coeff)
     im.avg.should approximate(370.8604)
   end
 

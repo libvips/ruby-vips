@@ -195,13 +195,14 @@ static VALUE
 img_lab_morph(VALUE obj, VALUE mask, VALUE l_offset, VALUE l_scale,
 	VALUE a_scale, VALUE b_scale)
 {
-    vipsMask *msk;
+    DOUBLEMASK *dmask;
+
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
-    Data_Get_Struct(mask, vipsMask, msk);
+    mask_arg2mask(mask, NULL, &dmask);
 
-	if( im_lab_morph(im, im_new, msk->dmask, NUM2DBL(l_offset),
+	if( im_lab_morph(im, im_new, dmask, NUM2DBL(l_offset),
 		NUM2DBL(l_scale), NUM2DBL(a_scale), NUM2DBL(b_scale)) )
 		vips_lib_error();
 

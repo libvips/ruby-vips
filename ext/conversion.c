@@ -18,8 +18,6 @@ img_to_mask(VALUE obj)
     return mask;
 }
 
-/* FIXME: im_mask2vips segfaults. Leaving out for now.
-
 static VALUE
 mask_to_image(VALUE obj)
 {
@@ -34,8 +32,7 @@ mask_to_image(VALUE obj)
         vips_lib_error();
 
     return img;
-}   
-*/
+}
 
 /* TODO - Find out if there is a better way to do this. A long-running
  * server may expect to be able to call Image#dup indefinately, the current
@@ -77,7 +74,6 @@ img_copy_native(VALUE obj, VALUE input_msb_first)
 }
  */
 
-/* TODO: Getting errors on im_copy_file. Leaving out for now.
 static VALUE
 img_copy_file(VALUE obj)
 {
@@ -93,7 +89,6 @@ img_copy_file(VALUE obj)
 
     return new;
 }
- */
 
 static VALUE
 img_clip2fmt(VALUE obj, VALUE fmt)
@@ -446,11 +441,16 @@ img_rot270(VALUE obj)
 }
 
 static VALUE
-img_subsample(VALUE obj, VALUE x, VALUE y)
+img_subsample(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE x, y;
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
+	rb_scan_args(argc, argv, "11", &x, &y);
+    if (NIL_P(y))
+        y = x;
+    
     if (im_subsample(im, im_new, NUM2INT(x), NUM2INT(y)))
         vips_lib_error();
 
@@ -458,10 +458,15 @@ img_subsample(VALUE obj, VALUE x, VALUE y)
 }
 
 static VALUE
-img_zoom(VALUE obj, VALUE x, VALUE y)
+img_zoom(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE x, y;
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
+
+	rb_scan_args(argc, argv, "11", &x, &y);
+    if (NIL_P(y))
+        y = x;
 
     if (im_zoom(im, im_new, NUM2INT(x), NUM2INT(y)))
         vips_lib_error();
@@ -512,7 +517,7 @@ init_conversion()
     rb_define_method(cVIPSImage, "rot90", img_rot90, 0);
     rb_define_method(cVIPSImage, "rot180", img_rot180, 0);
     rb_define_method(cVIPSImage, "rot270", img_rot270, 0);
-    rb_define_method(cVIPSImage, "subsample", img_subsample, 2);
-    rb_define_method(cVIPSImage, "zoom", img_zoom, 2);
+    rb_define_method(cVIPSImage, "subsample", img_subsample, -1);
+    rb_define_method(cVIPSImage, "zoom", img_zoom, -1);
 }
 

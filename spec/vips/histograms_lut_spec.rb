@@ -13,7 +13,7 @@ describe VIPS::Image do
     hist.x_size.should == 256
     hist.y_size.should == 1
 
-	hist[120, 0].should == [167, 265, 153]
+    hist[120, 0].should == [167, 265, 153]
   end
 
   it "should generate the histogram for an image band" do
@@ -96,23 +96,23 @@ describe VIPS::Image do
   it "should calculate row sums and column sums for an image" do
     im1, im2 = @image.project
 
-	expected_row_sum = [0, 0, 0]
-	@image.x_size.times do |i|
+    expected_row_sum = [0, 0, 0]
+    @image.x_size.times do |i|
       @image[i, 55].each_with_index{ |v, i| expected_row_sum[i] += v }
     end
-	im1[0, 55].should == expected_row_sum
+    im1[0, 55].should == expected_row_sum
 
-	expected_col_sum = [0, 0, 0]
-	@image.y_size.times do |i|
+    expected_col_sum = [0, 0, 0]
+    @image.y_size.times do |i|
       @image[99, i].each_with_index{ |v, i| expected_col_sum[i] += v }
     end
 
-	im2[99, 0].should == expected_col_sum
+    im2[99, 0].should == expected_col_sum
   end
 
   it "should normalize a histogram to make it square" do
     im = @image.histgr
-	im2 = im.histnorm
+    im2 = im.histnorm
 
     im2.x_size.should == im2.max + 1
     im2.histplot.should match_sha1('c0791a82d08fa8bd529f33ab0e3e5b07a4b377e1')
@@ -120,9 +120,9 @@ describe VIPS::Image do
 
   it "should turn a regular histogram into a cumulative histogram" do
     im = @image.histgr
-	im2 = im.histcum
+    im2 = im.histcum
 
-	im2[20, 0][0].should == im2[19, 0][0] + im[20, 0][0]
+    im2[20, 0][0].should == im2[19, 0][0] + im[20, 0][0]
   end
 
   it "should equalize a histogram by normalizing and making it cumulative", :vips_lib_version => "> 7.20" do
@@ -202,7 +202,7 @@ describe VIPS::Image do
     lut = VIPS::Image.identity(3).lintra(0.2, 30)
     im = @image.maplut(lut)
 
-	im.should match_sha1('0825bc97cf86f8c36d31c22d36f6bec7f373383c')
+    im.should match_sha1('0825bc97cf86f8c36d31c22d36f6bec7f373383c')
   end
 end
 

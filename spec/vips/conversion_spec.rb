@@ -16,14 +16,14 @@ describe VIPS::Image do
   end
 
   it "should convert a double mask to an image" do
-    pending "calling im_mask2vips segfaults. This is on Ubuntu 10.04, vips 7.20.4-1"
+    pending "calling im_mask2vips segfaults."
 
     coeffs = [
       [2.3, 3.3, 4.3],
       [1.2, 3.4, 5.6],
       [6.7, 7.7, 7.7]
     ]
-    mask = VIPS::Mask.new coeffs, 0, 0
+    mask = VIPS::Mask.new coeffs
     im = mask.to_image
     im.y_size.should == mask.ysize
   end
@@ -116,7 +116,7 @@ describe VIPS::Image do
     im = VIPS::Image.gaussnoise 400, 200, 128.0, 30.2
     im.x_size.should == 400
     im.y_size.should == 200
-    (im.avg - 128).abs.should < 5
+    im.avg.should approximate(128)
   end
 
   it "should generate a black image" do
@@ -289,6 +289,11 @@ describe VIPS::Image do
     im[new_x, new_y].should == @image[old_x, old_y]
   end
 
+  it "should shrink an image with a single shrink factor" do
+    im = @image.subsample 3
+    im.should match_image(@image.subsample(3, 3))
+  end
+
   it "should zoom an image via nearest neighbor" do
     im = @image.zoom(4, 3)
 
@@ -298,6 +303,11 @@ describe VIPS::Image do
     x = 23
     y = 42
     im[x * 4, y * 3].should == @image[x, y]
+  end
+
+  it "should zoom an image with a single zoom factor" do
+    im = @image.zoom 3
+    im.should match_image(@image.zoom(3, 3))
   end
 end
 
