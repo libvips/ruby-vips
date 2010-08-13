@@ -17,13 +17,13 @@ describe VIPS::PNGWriter do
 
   it "should write a png to memory", :vips_lib_version => "> 7.22" do
     str = @writer.to_memory
-    str.size.should == 1234
+    str.size.should == 54804
   end
 
   it "should write a tiny png file to memory", :vips_lib_version => "> 7.22" do
     im = VIPS::Image.black(10, 10, 1)
     s = im.png.to_memory
-    s.size.should == 411
+    s.size.should == 69
   end
 
   it "should allow setting of the png compression" do
@@ -41,10 +41,10 @@ describe VIPS::PNGWriter do
     @writer.compression = 0
     mempng = @writer.to_memory
 
-    @writer.quality = 9
-    mempng = @writer.to_memory
+    @writer.compression = 9
+    mempng2 = @writer.to_memory
 
-    mempng.size.should < mempng2.size / 2
+    mempng2.size.should < mempng.size / 2
   end
 
   it "should write smaller images with lower quality settings" do
