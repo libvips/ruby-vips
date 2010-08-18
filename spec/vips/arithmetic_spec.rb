@@ -138,7 +138,7 @@ describe VIPS::Image do
   end
 
   it "should perform a linear transformation on an image" do
-    im = @image.lintra(0.2, 100)
+    im = @image.lin(0.2, 100)
 
     expect = @image[81, 21].map{ |v| v * 0.2 + 100 }
     im[81, 21].each_with_index{ |v, i| v.should approximate(expect[i]) }
@@ -147,12 +147,12 @@ describe VIPS::Image do
   end
 
   it "should perform a linear transformations on each band of an image" do
-    transformations = [ [0.2, 10], [0.1, 10], [0.3, 50] ]
-    im = @image.lintra *transformations
+    transformations = [ [0.2, 0.1, 0.3], [10, 10, 50] ]
+    im = @image.lin *transformations
 
     im.bands.times do |i|
-      m = transformations[i - 1][0]
-      c = transformations[i - 1][1]
+      m = transformations[0][i - 1]
+      c = transformations[1][i - 1]
       im[81, 21][i - 1].should approximate(m * @image[81, 21][i - 1] + c)
     end
   end
@@ -214,7 +214,7 @@ describe VIPS::Image do
   end
 
   it "should find the absolute value of an image" do
-    im = @image.lintra(-1, 0)
+    im = @image.lin(-1, 0)
     im2 = im.abs
 
     im2[45, 23][1].should == im[45, 23][1] * -1
@@ -263,10 +263,10 @@ describe VIPS::Image do
   end
 
   it "should raise pixel band values in an image to the given power" do
-    im = @image.powtra(2.3)
-    im.avg.ceil.should == @image.multiply(@image).multiply(@image.powtra(0.3)).avg.ceil
+    im = @image.pow(2.3)
+    im.avg.ceil.should == @image.multiply(@image).multiply(@image.pow(0.3)).avg.ceil
 
-    im = @image.powtra(1.2, 3.1, 0.4);
+    im = @image.pow(1.2, 3.1, 0.4);
     exp = @image[32, 11]
     got = im[32, 11]
     got[0].should approximate(exp[0] ** 1.2)
@@ -275,14 +275,14 @@ describe VIPS::Image do
   end
 
   it "should raise the given base to the power of image pixel band values" do
-    im = @image.expntra(1.0002)
+    im = @image.expn(1.0002)
     exp = @image[45, 2]
 
     im[45, 2].each_with_index do |v, i|
       v.should approximate(1.0002 ** exp[i])
     end
 
-    im = @image.expntra(1.0002, 1.00000031, 1.00000002)
+    im = @image.expn(1.0002, 1.00000031, 1.00000002)
 
     got = im[45, 2]
     got[0].should approximate(1.0002     ** exp[0])
@@ -291,7 +291,7 @@ describe VIPS::Image do
   end
 
   it "should calculate the natural logarithm of pixel band values" do
-    im = @image.logtra
+    im = @image.log
 
     exp = @image[3, 3]
     im[3, 3].each_with_index do |v, i|
@@ -300,7 +300,7 @@ describe VIPS::Image do
   end
 
   it "should calculate the logarithm to the base 10 of pixel band values" do
-    im = @image.log10tra
+    im = @image.log10
 
     exp = @image[66, 3]
     im[66, 3].each_with_index do |v, i|
@@ -317,7 +317,7 @@ describe VIPS::Image do
   end
 
   it "should compute sine on pixel band values" do
-    im = @image.sintra
+    im = @image.sin
 
     exp = @image[66, 3]
     im[66, 3].each_with_index do |v, i|
@@ -326,7 +326,7 @@ describe VIPS::Image do
   end
 
   it "should compute cosine on pixel band values" do
-    im = @image.costra
+    im = @image.cos
 
     exp = @image[66, 3]
     im[66, 3].each_with_index do |v, i|
@@ -335,7 +335,7 @@ describe VIPS::Image do
   end
 
   it "should compute tangent on pixel band values" do
-    im = @image.tantra
+    im = @image.tan
 
     exp = @image[66, 3]
     im[66, 3].each_with_index do |v, i|
@@ -345,8 +345,8 @@ describe VIPS::Image do
 
   it "should compute arc sine on pixel band values" do
     # need pixel values between -1 and 1
-    im = @image.clip2fmt(:FLOAT).lintra(0.001, 0)
-    im2 = im.asintra
+    im = @image.clip2fmt(:FLOAT).lin(0.001, 0)
+    im2 = im.asin
 
     exp = im[66, 3]
     im2[66, 3].each_with_index do |v, i|
@@ -356,8 +356,8 @@ describe VIPS::Image do
 
   it "should compute arc cosine on pixel band values" do
     # need pixel values between -1 and 1
-    im = @image.clip2fmt(:FLOAT).lintra(0.001, 0)
-    im2 = im.acostra
+    im = @image.clip2fmt(:FLOAT).lin(0.001, 0)
+    im2 = im.acos
 
     exp = im[66, 3]
     im2[66, 3].each_with_index do |v, i|
@@ -366,7 +366,7 @@ describe VIPS::Image do
   end
 
   it "should compute arc tangent on pixel band values" do
-    im = @image.atantra
+    im = @image.atan
 
     exp = @image[66, 3]
     im[66, 3].each_with_index do |v, i|

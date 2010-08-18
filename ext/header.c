@@ -1,4 +1,3 @@
-/* C constant & enum conversion */
 #include "ruby_vips.h"
 #include "image.h"
 #include "header.h"
@@ -45,6 +44,13 @@ header_id_to_band_fmt(ID rb)
     return (VipsBandFmt)NULL;
 }
 
+/*
+ *  call-seq:
+ *     im.x_size -> number
+ *
+ *  Get the width in pixels of the image.
+ */
+
 static VALUE
 header_x_size(VALUE obj)
 {
@@ -55,6 +61,13 @@ header_x_size(VALUE obj)
 
     return Qnil;
 }
+
+/*
+ *  call-seq:
+ *    im.y_size -> number
+ *
+ *  Get the height in pixels of the image.
+ */
 
 static VALUE
 header_y_size(VALUE obj)
@@ -67,6 +80,13 @@ header_y_size(VALUE obj)
     return Qnil;
 }
 
+/*
+ *  call-seq:
+ *    im.bands -> number
+ *
+ *  Get the number of bands in the image.
+ */
+
 static VALUE
 header_bands(VALUE obj)
 {
@@ -77,6 +97,13 @@ header_bands(VALUE obj)
 
     return Qnil;
 }
+
+/*
+ *  call-seq:
+ *    im.band_fmt -> band_format_sym
+ *
+ *  Get the band format of the image.
+ */
 
 static VALUE
 header_band_fmt(VALUE obj)
@@ -89,6 +116,13 @@ header_band_fmt(VALUE obj)
     return Qnil;
 }
 
+/*
+ *  call-seq:
+ *    im.x_res -> number
+ *
+ *  Get the x-resolution of the image.
+ */
+
 static VALUE
 header_x_res(VALUE obj)
 {
@@ -99,6 +133,13 @@ header_x_res(VALUE obj)
 
     return Qnil;
 }
+
+/*
+ *  call-seq:
+ *    im.y_res -> number
+ *
+ *  Get the y-resolution of the image.
+ */
 
 static VALUE
 header_y_res(VALUE obj)
@@ -111,6 +152,13 @@ header_y_res(VALUE obj)
     return Qnil;
 }
 
+/*
+ *  call-seq:
+ *    im.x_offset -> number
+ *
+ *  Get the x-offset of the image.
+ */
+
 static VALUE
 header_x_offset(VALUE obj)
 {
@@ -121,6 +169,13 @@ header_x_offset(VALUE obj)
 
     return Qnil;
 }
+
+/*
+ *  call-seq:
+ *     im.y_offset -> number
+ *
+ *  Get the y-offset of the image.
+ */
 
 static VALUE
 header_y_offset(VALUE obj)
@@ -135,6 +190,13 @@ header_y_offset(VALUE obj)
 
 /* VipsImage macros with useful information */
 
+/*
+ *  call-seq:
+ *     im.sizeof_element -> number
+ *
+ *  Returns the size of a single image band item, in bytes.
+ */
+
 static VALUE
 header_sizeof_element(VALUE obj)
 {
@@ -145,6 +207,13 @@ header_sizeof_element(VALUE obj)
 
     return Qnil;
 }
+
+/*
+ *  call-seq:
+ *     im.sizeof_pel -> number
+ *
+ *  Returns the size of a pixel in the image, in bytes.
+ */
 
 static VALUE
 header_sizeof_pel(VALUE obj)
@@ -157,6 +226,14 @@ header_sizeof_pel(VALUE obj)
     return Qnil;
 }
 
+/*
+ *  call-seq:
+ *    im.sizeof_line -> number
+ *
+ *  Returns the size of all pixels in the row of the image, uncompressed, in
+ *  bytes.
+ */
+
 static VALUE
 header_sizeof_line(VALUE obj)
 {
@@ -167,6 +244,13 @@ header_sizeof_line(VALUE obj)
 
     return Qnil;
 }
+
+/*
+ *  call-seq:
+ *     im.n_elements -> number
+ *
+ *  Returns the number of elements in an image row, i.e. bands * x_size.
+ */
 
 static VALUE
 header_n_elements(VALUE obj)
@@ -204,11 +288,25 @@ header_meta_p(VALUE obj, const char* name)
     return Qfalse;
 }
 
+/*
+ *  call-seq:
+ *     im.exif -> string
+ *
+ *  Returns a binary string containing the raw exif header data.
+ */
+
 static VALUE
 header_exif(VALUE obj)
 {
     return header_meta_get(obj, IM_META_EXIF_NAME);
 }
+
+/*
+ *  call-seq:
+ *    im.exif? -> true or false
+ *
+ *  Indicates whether the image has an exif header attached to it.
+ */
 
 static VALUE
 header_exif_p(VALUE obj)
@@ -216,11 +314,25 @@ header_exif_p(VALUE obj)
     return header_meta_p(obj, IM_META_EXIF_NAME);
 }
 
+/*
+ *  call-seq:
+ *     im.icc -> string
+ *
+ *  Returns a binary string containing the raw icc header data.
+ */
+
 static VALUE
 header_icc(VALUE obj)
 {
     return header_meta_get(obj, IM_META_ICC_NAME);
 }
+
+/*
+ *  call-seq:
+ *     im.icc? -> true or false
+ *
+ *  Indicates whether the image has an icc header attached to it.
+ */
 
 static VALUE
 header_icc_p(VALUE obj)
@@ -228,10 +340,15 @@ header_icc_p(VALUE obj)
     return header_meta_p(obj, IM_META_ICC_NAME);
 }
 
+/*
+ * The header module holds image header operations that are common to readers,
+ * writers and image objects.
+ */
+
 void
-init_header()
+init_Header()
 {
-    mVIPSHeader = rb_define_module_under(mVIPS, "header");
+    mVIPSHeader = rb_define_module_under(mVIPS, "Header");
 
     rb_define_method(mVIPSHeader, "x_size", header_x_size, 0);
     rb_define_method(mVIPSHeader, "y_size", header_y_size, 0);
@@ -261,4 +378,8 @@ init_header()
 	id_complex = rb_intern("COMPLEX");
 	id_double = rb_intern("DOUBLE");
 	id_dbcomplex = rb_intern("DBCOMPLEX");
+
+#if 0
+    VALUE mVIPS = rb_define_module("VIPS");
+#endif
 }

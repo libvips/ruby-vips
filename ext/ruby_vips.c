@@ -1,7 +1,6 @@
 #include "ruby_vips.h"
 
-VALUE mVIPS;
-VALUE eVIPSError;
+VALUE mVIPS, eVIPSError;
 
 void
 vips_lib_error()
@@ -29,6 +28,10 @@ vips_s_version_array()
     return arr;
 }
 
+/*
+ * The VIPS module namespaces all ruby-vips objects.
+ */
+
 void
 Init_vips_ext()
 {
@@ -41,25 +44,16 @@ Init_vips_ext()
     mVIPS = rb_define_module("VIPS");
     eVIPSError = rb_define_class_under(mVIPS, "Error", rb_eStandardError);
 
+    /* Vips Library version string */
     rb_define_const(mVIPS, "LIB_VERSION", vips_s_version_string());
+
+    /* Vips Library version as a 3-element array */
     rb_define_const(mVIPS, "LIB_VERSION_ARRAY", vips_s_version_array());
-    init_header();
-    init_image();
-    init_mask();
-    init_interpolator();
 
-    init_arithmetic();
-    init_resample();
-    init_convolution();
-    init_conversion();
-    init_boolean();
-    init_colour();
-    init_freq_filt();
-	init_histograms_lut();
-    init_morphology();
-    init_mosaicing();
-	init_relational();
-    init_writer();
-    init_reader();
+    init_Header();
+    init_Image();
+    init_Mask();
+    init_Interpolator();
+    init_Writer();
+    init_Reader();
 }
-

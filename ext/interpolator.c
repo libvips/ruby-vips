@@ -36,6 +36,10 @@ static void
 interp_register_builtin()
 {
 	VALUE hVIPSInterpolators = rb_hash_new();
+
+    /* Hash of available interpolators. Keys are the symbols, and values are
+     * interpolator objects.
+     */
     rb_define_const(cVIPSInterpolator, "INTERPOLATORS", hVIPSInterpolators);
 
 	vips_class_map_concrete_all(
@@ -45,7 +49,13 @@ interp_register_builtin()
     );
 }
 
-/* Data accessors. */
+
+/*
+ *  call-seq:
+ *     interp.nickname -> string
+ *
+ *  Retrieve the internally used nickname of the interpolator.
+ */
 
 static VALUE
 interp_nickname(VALUE obj)
@@ -55,6 +65,13 @@ interp_nickname(VALUE obj)
     return rb_str_new2(v_obj->nickname);
 }
 
+/*
+ *  call-seq:
+ *     interp.description -> string
+ *
+ *  Retrieve the description of the interpolator.
+ */
+
 static VALUE
 interp_description(VALUE obj)
 {
@@ -63,15 +80,27 @@ interp_description(VALUE obj)
     return rb_str_new2(v_obj->description);
 }
 
+/*
+ *  VIPS Interpolators determine how color values will be estimated when an
+ *  image is modified.
+ *
+ *  This class provides information on which interpolators are available to
+ *  VIPS.
+ */
+
 void
-init_interpolator()
+init_Interpolator()
 {
-	cVIPSInterpolator = rb_define_class_under(mVIPS, "Interpolator",
-		rb_cObject);
+    cVIPSInterpolator = rb_define_class_under(mVIPS, "Interpolator", rb_cObject);
+
     rb_define_method(cVIPSInterpolator, "nickname", interp_nickname, 0);
     rb_define_method(cVIPSInterpolator, "description", interp_description, 0);
 
 	id_INTERPOLATORS = rb_intern("INTERPOLATORS");
 	
 	interp_register_builtin();
+
+#if 0
+    VALUE mVIPS = rb_define_module("VIPS");
+#endif
 }

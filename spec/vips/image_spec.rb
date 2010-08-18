@@ -70,13 +70,13 @@ describe VIPS::Image do
   end
 
   it "should return negative signed char pixels" do
-    im = @image.clip2fmt(:CHAR).lintra(-1, 0)
+    im = @image.clip2fmt(:CHAR).lin(-1, 0)
     im[40, 131].should == [-127, -127, -113]
     im[0, 0].should == [-29, -51, -20]
   end
 
   it "should return pixels when they have huge numbers" do
-    im = @image.powtra(9)
+    im = @image.pow(9)
 
     expected = @image[23, 45].map{|v| v**9}
     got = im[23, 45]

@@ -19,15 +19,12 @@ describe VIPS::Mask do
   it "should create and recognize int and double masks" do
     mask = VIPS::Mask.new @coeff_i, 1, 2
     mask.int?.should be_true
-    mask.double?.should be_true
 
     mask = VIPS::Mask.new @coeff_i, 1, 2.1
     mask.int?.should be_false
-    mask.double?.should be_true
 
     mask = VIPS::Mask.new @coeff_d, 3
     mask.int?.should be_false
-    mask.double?.should be_true
   end
 
   it "should recognize the size" do

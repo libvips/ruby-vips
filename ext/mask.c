@@ -1,5 +1,6 @@
 #include "ruby_vips.h"
 #include "mask.h"
+#include "image.h"
 
 VALUE cVIPSMask;
 
@@ -87,6 +88,14 @@ mask_ary2dmask(VALUE coeffs)
     return msk;
 }
 
+/*
+ *  call-seq:
+ *     Mask.new(coeffs, scale=1, offset=0) -> mask
+ *
+ *  Create a new Mask object. <i>coeffs</i> is a two-dimensional array where
+ *  every row must have the same length. Note that some methods require a mask
+ *  where all values in <i>coeffs</i> are whole integers.
+ */
 static VALUE
 mask_initialize(int argc, VALUE *argv, VALUE obj)
 {
@@ -116,6 +125,13 @@ mask_initialize(int argc, VALUE *argv, VALUE obj)
     return obj;
 }
 
+/*
+ *  call-seq:
+ *     msk.xsize -> number
+ *
+ *  Retrieve the number of columns in the mask.
+ */
+
 static VALUE
 mask_xsize(VALUE obj)
 {
@@ -123,6 +139,13 @@ mask_xsize(VALUE obj)
     Data_Get_Struct(obj, vipsMask, msk);
     return INT2FIX(msk->dmask->xsize);
 }
+
+/*
+ *  call-seq:
+ *     msk.ysize -> number
+ *
+ *  Retrieve the number of rows in the mask.
+ */
 
 static VALUE
 mask_ysize(VALUE obj)
@@ -132,6 +155,13 @@ mask_ysize(VALUE obj)
     return INT2FIX(msk->dmask->ysize);
 }
 
+/*
+ *  call-seq:
+ *     msk.scale -> number
+ *
+ *  Retrieve the scale of the mask.
+ */
+
 static VALUE
 mask_scale(VALUE obj)
 {
@@ -139,6 +169,13 @@ mask_scale(VALUE obj)
     Data_Get_Struct(obj, vipsMask, msk);
     return msk->imask ? INT2FIX(msk->imask->scale) : DBL2NUM(msk->dmask->scale);
 }
+
+/*
+ *  call-seq:
+ *     msk.offset -> number
+ *
+ *  Retrieve the offset of the mask.
+ */
 
 static VALUE
 mask_offset(VALUE obj)
@@ -182,6 +219,13 @@ dmask2rb(DOUBLEMASK *msk)
     return rows;
 }
 
+/*
+ *  call-seq:
+ *     msk.coeff -> array
+ *
+ *  Retrieve the two-dimensional array of coefficients for the mask.
+ */
+
 static VALUE
 mask_coeff(VALUE obj)
 {
@@ -193,23 +237,20 @@ mask_coeff(VALUE obj)
         return dmask2rb(msk->dmask);
 }
 
+/*
+ *  call-seq:
+ *     msk.int? -> true or false
+ *
+ *  Indicate whether all coefficients, the scale and the offset in the mask are
+ *  integers. Some methods require an all-integer mask.
+ */
+
 static VALUE
 mask_int_p(VALUE obj)
 {
     vipsMask *msk;
     Data_Get_Struct(obj, vipsMask, msk);
     if(msk->imask)
-        return Qtrue;
-
-    return Qfalse;
-}
-
-static VALUE
-mask_double_p(VALUE obj)
-{
-    vipsMask *msk;
-    Data_Get_Struct(obj, vipsMask, msk);
-    if(msk->dmask)
         return Qtrue;
 
     return Qfalse;
@@ -253,10 +294,44 @@ mask_arg2mask(VALUE arg, INTMASK **imask, DOUBLEMASK **dmask)
         *dmask = dmask_t;
 }
 
+/*
+ *  call-seq:
+ *     msk.int? -> true or false
+ *
+ *  Create  a one-band, band format :DOUBLE image based on mask *self*.
+ */
+
+static VALUE
+mask_to_image(VALUE obj)
+{
+    vipsMask *msk;
+
+    OutImg(obj, new, data, im);
+    Data_Get_Struct(obj, vipsMask, msk);
+
+    if (im_mask2vips(msk->dmask, im))
+        vips_lib_error();
+
+    return new;
+}
+
+/*
+ *  VIPS uses masks for various operations. A vips mask is a two-dimensional
+ *  array with a scale and an offset.
+ *
+ *  All operations that accept a Mask object also accept an array, in which case
+ *  scale defaults to 1 and offset to zero.
+ *
+ *  Some vips operations require that all values in the mask are integer values.
+ *  These operations will raise an exception if given a mask that contains
+ *  any float values.
+ */
+
 void
-init_mask()
+init_Mask()
 {
     cVIPSMask = rb_define_class_under(mVIPS, "Mask", rb_cObject);
+
     rb_define_alloc_func(cVIPSMask, mask_alloc);
     rb_define_method(cVIPSMask, "initialize", mask_initialize, -1);
     rb_define_method(cVIPSMask, "xsize", mask_xsize, 0);
@@ -265,6 +340,10 @@ init_mask()
     rb_define_method(cVIPSMask, "offset", mask_offset, 0);
     rb_define_method(cVIPSMask, "coeff", mask_coeff, 0);
     rb_define_method(cVIPSMask, "int?", mask_int_p, 0);
-    rb_define_method(cVIPSMask, "double?", mask_double_p, 0);
+    rb_define_method(cVIPSMask, "to_image", mask_to_image, 0);
+
+#if 0
+    VALUE mVIPS = rb_define_module("VIPS");
+#endif
 }
 

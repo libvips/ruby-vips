@@ -56,7 +56,7 @@ describe VIPS::JPEGWriter do
     jpeg2.icc?.should be_false
   end
 
-  it "should allow attaching an external icc profile to the header" do
+  it "should allow attaching an external icc profile to the header", :vips_lib_version => ">= 7.22" do
     im = simg 'icc.jpg'
     im2 = im.shrink 5, 5
     jpeg = im2.jpeg

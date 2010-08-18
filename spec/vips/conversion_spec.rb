@@ -164,7 +164,7 @@ describe VIPS::Image do
   end
 
   it "should embed an image inside a larger generated image" do
-    im = @image.embed 3, 100, 150, 500, 600
+    im = @image.embed :mirror, 100, 150, 500, 600
     im.avg.should approximate(111.19658)
   end
 

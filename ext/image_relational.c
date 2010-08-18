@@ -1,5 +1,6 @@
 #include "ruby_vips.h"
 #include "image.h"
+#include "image_relational.h"
 
 static VALUE
 img_equal_const(int argc, VALUE *argv, VALUE obj)
@@ -26,7 +27,21 @@ img_equal_img(VALUE obj, VALUE obj2)
 	RUBY_VIPS_BINARY(im_equal);
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.equal(other_image)   -> image
+ *     im.equal(constant, ...) -> image
+ * 
+ *  In the first form, this operation calculates *self* == <i>other_image</i>
+ *  (image element equals image element) and writes the result to the output
+ *  image.
+ *
+ *  In the second form, this operation calculates *self* == <i>constant</i>
+ *  (image element equals constant array) and writes the result to the output
+ *  image.
+ */
+
+VALUE
 img_equal(int argc, VALUE *argv, VALUE obj)
 {
 	if (argc < 1)
@@ -65,7 +80,21 @@ img_notequal_img(VALUE obj, VALUE obj2)
 	RUBY_VIPS_BINARY(im_notequal);
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.notequal(other_image)   -> image
+ *     im.notequal(constant, ...) -> image
+ *
+ *  In the first form, this operation calculates *self* != <i>other_image</i>
+ *  (image element equals image element) and writes the result to the output
+ *  image.
+ *
+ *  In the second form, this operation calculates *self* != <i>constant</i>
+ *  (image element equals constant array) and writes the result to the output
+ *  image.
+ */
+
+VALUE
 img_notequal(int argc, VALUE *argv, VALUE obj)
 {
 	if (argc < 1)
@@ -104,7 +133,21 @@ img_less_img(VALUE obj, VALUE obj2)
 	RUBY_VIPS_BINARY(im_less);
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.less(other_image)   -> image
+ *     im.less(constant, ...) -> image
+ *
+ *  In the first form, this operation calculates *self* < <i>other_image</i>
+ *  (image element equals image element) and writes the result to the output
+ *  image.
+ *
+ *  In the second form, this operation calculates *self* < <i>constant</i>
+ *  (image element equals constant array) and writes the result to the output
+ *  image.
+ */
+
+VALUE
 img_less(int argc, VALUE *argv, VALUE obj)
 {
 	if (argc < 1)
@@ -143,7 +186,21 @@ img_lesseq_img(VALUE obj, VALUE obj2)
 	RUBY_VIPS_BINARY(im_lesseq);
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.lesseq(other_image)   -> image
+ *     im.lesseq(constant, ...) -> image
+ *
+ *  In the first form, this operation calculates *self* <= <i>other_image</i>
+ *  (image element equals image element) and writes the result to the output
+ *  image.
+ *
+ *  In the second form, this operation calculates *self* <= <i>constant</i>
+ *  (image element equals constant array) and writes the result to the output
+ *  image.
+ */
+
+VALUE
 img_lesseq(int argc, VALUE *argv, VALUE obj)
 {
 	if (argc < 1)
@@ -182,7 +239,21 @@ img_more_img(VALUE obj, VALUE obj2)
 	RUBY_VIPS_BINARY(im_more);
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.more(other_image)   -> image
+ *     im.more(constant, ...) -> image
+ *
+ *  In the first form, this operation calculates *self* > <i>other_image</i>
+ *  (image element equals image element) and writes the result to the output
+ *  image.
+ *
+ *  In the second form, this operation calculates *self* > <i>constant</i>
+ *  (image element equals constant array) and writes the result to the output
+ *  image.
+ */
+
+VALUE
 img_more(int argc, VALUE *argv, VALUE obj)
 {
 	if (argc < 1)
@@ -221,7 +292,21 @@ img_moreeq_img(VALUE obj, VALUE obj2)
 	RUBY_VIPS_BINARY(im_moreeq);
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.moreeq(other_image)   -> image
+ *     im.moreeq(constant, ...) -> image
+ *
+ *  In the first form, this operation calculates *self* >= <i>other_image</i>
+ *  (image element equals image element) and writes the result to the output
+ *  image.
+ *
+ *  In the second form, this operation calculates *self* >= <i>constant</i>
+ *  (image element equals constant array) and writes the result to the output
+ *  image.
+ */
+
+VALUE
 img_moreeq(int argc, VALUE *argv, VALUE obj)
 {
 	if (argc < 1)
@@ -235,7 +320,25 @@ img_moreeq(int argc, VALUE *argv, VALUE obj)
 	return img_moreeq_img(obj, argv[0]);
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.ifthenelse(a_image, b_image) -> image
+ *
+ *  This operation scans the condition image *self* and uses it to select pixels
+ *  from either the then image <i>a_image</i> or the else image <i>b_image</i>.
+ *  Non-zero means <i>a_image</i>, 0 means <i>b_image</i>.
+ *
+ *  Any image can have either 1 band or n bands, where n is the same for all
+ *  the non-1-band images. Single band images are then effectively copied to
+ *  make n-band images.
+ *
+ *  Images <i>a_image</i> and <i>b_image</i> are cast up to the smallest common
+ *  format.
+ *
+ *  Images <i>a_image</i> and <i>b_image</i> must match exactly in size.
+ */
+
+VALUE
 img_ifthenelse(VALUE obj, VALUE obj2, VALUE obj3)
 {
 	GetImg(obj, data, im);
@@ -249,7 +352,26 @@ img_ifthenelse(VALUE obj, VALUE obj2, VALUE obj3)
     return new;
 }
 
-static VALUE
+/*
+ *  call-seq:
+ *     im.blend(a_image, b_image) -> image
+ *
+ *  This operation scans the condition image *self* (which must be unsigned
+ *  char) and uses it to blend pixels from either the then image <i>a_image</i>
+ *  or the else image <i>b_image</i>. 255 means <i>a_image</i> only, 0 means
+ *  <i>b_image</i> only, and intermediate values are a mixture.
+ *
+ *  Any image can have either 1 band or n bands, where n is the same for all
+ *  the non-1-band images. Single band images are then effectively copied to
+ *  make n-band images.
+ *
+ *  Images <i>a_image</i> and <i>b_image</i> are cast up to the smallest common
+ *  format.
+ *
+ *  Images <i>a_image</i> and <i>b_image</i> must match exactly in size.
+ */
+
+VALUE
 img_blend(VALUE obj, VALUE obj2, VALUE obj3)
 {
 	GetImg(obj, data, im);
@@ -262,17 +384,3 @@ img_blend(VALUE obj, VALUE obj2, VALUE obj3)
 
     return new;
 }
-
-void
-init_relational(void)
-{
-    rb_define_method(cVIPSImage, "equal", img_equal, -1);
-    rb_define_method(cVIPSImage, "notequal", img_notequal, -1);
-    rb_define_method(cVIPSImage, "less", img_less, -1);
-    rb_define_method(cVIPSImage, "lesseq", img_lesseq, -1);
-    rb_define_method(cVIPSImage, "more", img_more, -1);
-    rb_define_method(cVIPSImage, "moreeq", img_moreeq, -1);
-    rb_define_method(cVIPSImage, "ifthenelse", img_ifthenelse, 2);
-    rb_define_method(cVIPSImage, "blend", img_blend, 2);
-}
-

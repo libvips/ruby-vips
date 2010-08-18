@@ -4,8 +4,7 @@
 #include "ruby.h"
 #include "vips/vips.h"
 
-extern VALUE mVIPS;
-extern VALUE eVIPSError;
+extern VALUE mVIPS, eVIPSError;
 
 void vips_lib_error();
 
@@ -25,4 +24,3 @@ void vips_lib_error();
 #endif
 
 #endif
-

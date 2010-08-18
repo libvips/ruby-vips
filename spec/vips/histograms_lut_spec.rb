@@ -157,7 +157,7 @@ describe VIPS::Image do
     # calculate gamma corrected image manually
     ident = VIPS::Image.identity(1)
     a = ident.max**(1 - power)
-    lut = ident.powtra(power).lintra(a, 0).clip2fmt(@image.band_fmt)
+    lut = ident.pow(power).lin(a, 0).clip2fmt(@image.band_fmt)
     im = @image.maplut(lut)
 
     @image.gammacorrect(power).should match_image(im)
@@ -199,7 +199,7 @@ describe VIPS::Image do
   end
 
   it "should map a lookup table to an image" do
-    lut = VIPS::Image.identity(3).lintra(0.2, 30)
+    lut = VIPS::Image.identity(3).lin(0.2, 30)
     im = @image.maplut(lut)
 
     im.should match_sha1('0825bc97cf86f8c36d31c22d36f6bec7f373383c')
