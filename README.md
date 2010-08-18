@@ -43,8 +43,13 @@ below.
 
 ### Building and installing from source
 
+    $ gem install rspec --prerelease # this requirement should go away soon.
     $ rake build
     $ gem install ruby-vips-0.1.0.gem
+
+## Documentation.
+
+ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com).
 
 ## Example.
 
@@ -85,5 +90,5 @@ below.
   - It supports over 250 low-level image and color manipulation operations.
   - Operations are chainable, and do not get executed until the image is sent to
     an output.
-  - Fastest ruby library for resizing large images. See benchmarks at
-    http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use
+  - Fastest ruby library for resizing large images. See [benchmarks at the
+    official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).

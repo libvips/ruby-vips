@@ -10,5 +10,3 @@ TODO
 * Image#to_a
 * look into other.h, audit all libvips methods and make sure they are all implemented
 * JRuby support
-* Don't entirely #ifdef out any ruby methods, even when not supported by the
-  library version. Instead #ifdef in a ruby exception.
