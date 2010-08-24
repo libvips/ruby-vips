@@ -1,6 +1,6 @@
 ## ruby-vips : A fast image processing extension for Ruby.
 
-ruby-vips is a ruby extension for vips (http://www.vips.ecs.soton.ac.uk). It is
+ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). It is
 extremely fast and it can process huge images without requiring the entire image
 to be loaded into memory.
 
@@ -43,7 +43,7 @@ below.
 
 ### Building and installing from source
 
-    $ gem install rspec --prerelease # this requirement should go away soon.
+    $ gem install rspec
     $ rake build
     $ gem install ruby-vips-0.1.0.gem
 

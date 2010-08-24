@@ -72,9 +72,11 @@ describe VIPS::Image do
     im.should match_sha1('78580ff728cca4722c73f610406ac8eba0604ba9')
   end
 
-  it "should sharpen an image coded in LABS or LABQ format", :vips_lib_version => "> 7.23" do
+  it "should sharpen an image coded in LABS or LABQ format" do
     im = @image.srgb_to_xyz.xyz_to_lab.lab_to_labs.sharpen(7, 1.5, 20, 50, 1, 2)
-    im.should match_sha1('f46d4ba8b0c16e19af95fcd3518caae0a7c2170d')
+    if Spec::Helpers.match_vips_version("> 7.23")
+      im.should match_sha1('f46d4ba8b0c16e19af95fcd3518caae0a7c2170d')
+    end
   end
 
   it "should find horizontal differences between adjacent pixels" do

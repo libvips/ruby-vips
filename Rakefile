@@ -8,8 +8,8 @@ def gemspec
 end
 
 begin
-  require "rspec"
-  require "rspec/core/rake_task"
+  require "spec"
+  require "spec/rake/spectask"
 rescue LoadError
   raise 'Run `gem install rspec` to be able to run specs.'
 else
@@ -17,7 +17,7 @@ else
     FileUtils.rm_rf(File.expand_path("../tmp", __FILE__))
   end
 
-  Rspec::Core::RakeTask.new(:spec)
+  Spec::Rake::SpecTask.new
 end
 
 desc "Build the gem"

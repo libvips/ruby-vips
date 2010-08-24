@@ -173,9 +173,13 @@ describe VIPS::Image do
     im.avg.should == @image.avg
   end
 
-  it "should divide by a black (zero) image and return a zero image", :vips_lib_version => "> 7.22" do
-    im = @image.divide(VIPS::Image.black(@image.x_size, @image.y_size, 3))
-    im.avg.should == 0
+  it "should divide by a black (zero) image and return a zero image" do
+    if Spec::Helpers.match_vips_version("> 7.22")
+      im = @image.divide(VIPS::Image.black(@image.x_size, @image.y_size, 3))
+      im.avg.should == 0
+    else
+      pending "your version of VIPS will segfault when dividing by a zero image"
+    end
   end
 
   it "should calculate the remainders for two images" do
@@ -375,6 +379,6 @@ describe VIPS::Image do
   end
 
   # TODO: Need a complex image to test this
-  it "should calculate cross phases between pixel values of two images"
+  # it "should calculate cross phases between pixel values of two images"
 end
 

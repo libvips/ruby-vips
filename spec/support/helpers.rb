@@ -47,17 +47,14 @@ module Spec
       gt = tests[0] == 1 || tests[0..1] == [0, 1] || tests == [0, 0, 1]
       lt = tests[0] == -1 || tests[0..1] == [0, -1] || tests == [0, 0, -1]
 
-      match = case op
+      case op
       when NilClass, '=' then eq
       when '!=', '=!'    then !eq
       when '>'           then gt
       when '<'           then lt
       when '>=', '=>'    then ( gt || eq )
       when '<=', '=<'    then ( lt || eq )
-      else false
       end
-
-      return match
     end
 
     def self.parse_version_requirement(version)

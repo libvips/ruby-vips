@@ -38,15 +38,15 @@ describe VIPS::Image do
     pending "there appears to be a bug in the *merge methods where the value black is not ignored"
   end
 
-  it "should mosaic two image top to bottom (Image#tbmosaic)"
-  it "should mosaic two images left to right (Image#lrmosaic)"
-  it "should mosaic two image top to bottom, doing an affeine transformation to align two points on each image (Image#tbmosaic1)"
-  it "should mosaic two images left to right, doing an affeine transformation to align two points on each image (Image#lrmosaic1)"
-  it "should correleate two images (Image#correlate)"
-  it "should adjust the balance of an image put together with mosaic or merge (Image#global_balance)"
-  it "should adjust the balance of an image put together with mosaic or merge (Image#global_balancef)"
-  it "should substitute images in a mosaic based on filenames (Image#remosaic)"
-  it "should align the bands of an image (Image#align_bands)"
-  it "should do something complicated-looking (Image#maxpos_subpel)"
+  # it "should mosaic two image top to bottom (Image#tbmosaic)"
+  # it "should mosaic two images left to right (Image#lrmosaic)"
+#  it "should mosaic two image top to bottom, doing an affeine transformation to align two points on each image (Image#tbmosaic1)"
+#  it "should mosaic two images left to right, doing an affeine transformation to align two points on each image (Image#lrmosaic1)"
+#  it "should correleate two images (Image#correlate)"
+#  it "should adjust the balance of an image put together with mosaic or merge (Image#global_balance)"
+#  it "should adjust the balance of an image put together with mosaic or merge (Image#global_balancef)"
+#  it "should substitute images in a mosaic based on filenames (Image#remosaic)"
+#  it "should align the bands of an image (Image#align_bands)"
+#  it "should do something complicated-looking (Image#maxpos_subpel)"
 end
 

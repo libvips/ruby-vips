@@ -46,14 +46,16 @@ describe VIPS::Image do
     end
   end
 
-  it "should convert various formats to LCh", :vips_lib_version => "> 7.22" do
+  it "should convert various formats to LCh" do
     im = @image.srgb_to_xyz
 
     lab = im.xyz_to_lab.lab_to_lch
     ucs = im.xyz_to_ucs.ucs_to_lch
 
     [lab, ucs].each do |i|
-      i.vtype.should == :LCH
+      if Spec::Helpers.match_vips_version("> 7.22")
+        i.vtype.should == :LCH
+      end
       i.coding.should == :NONE
       i.band_fmt.should == :FLOAT
       i.bands.should == 3
@@ -75,14 +77,16 @@ describe VIPS::Image do
     end
   end
 
-  it "should convert various formats to LabQ", :vips_lib_version => "> 7.23" do
+  it "should convert various formats to LabQ" do
     im = @image.srgb_to_xyz.xyz_to_lab
 
     lab = im.lab_to_labq
     labs = im.lab_to_labs.labs_to_labq
 
     [lab, labs].each do |i|
-      i.vtype.should == :LABQ
+      if Spec::Helpers.match_vips_version("> 7.23")
+        i.vtype.should == :LABQ
+      end
       i.coding.should == :LABQ
       i.band_fmt.should == :UCHAR
       i.bands.should == 4
@@ -131,25 +135,31 @@ describe VIPS::Image do
     im.band_fmt.should == :FLOAT
   end
 
-  it "should calculate a CMC color difference image between two lab images", :vips_lib_version => "> 7.23" do
+  it "should calculate a CMC color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.decmc_from_lab(im2)
-    diff.should match_sha1('30d9850f3414d9931d4d90a156a57f1202ba692b')
+    if Spec::Helpers.match_vips_version("> 7.23")
+      diff.should match_sha1('30d9850f3414d9931d4d90a156a57f1202ba692b')
+    end
  end
 
-  it "should calculate a CIE76 color difference image between two lab images", :vips_lib_version => "> 7.23" do
+  it "should calculate a CIE76 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de_from_lab(im2)
-    diff.should match_sha1('f7c261b5d8532c2c34f77039af8754fffe23dcc6')
+    if Spec::Helpers.match_vips_version("> 7.23")
+      diff.should match_sha1('f7c261b5d8532c2c34f77039af8754fffe23dcc6')
+    end
  end
 
-  it "should calculate a CIEDE2000 color difference image between two lab images", :vips_lib_version => "> 7.23" do
+  it "should calculate a CIEDE2000 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de00_from_lab(im2)
-    diff.should match_sha1('66d4869acf57df855ced1d38ed308612f6a198f4')
+    if Spec::Helpers.match_vips_version("> 7.23")
+      diff.should match_sha1('66d4869acf57df855ced1d38ed308612f6a198f4')
+    end
  end
 
   it "should import an embedded icc profile" do
@@ -165,8 +175,8 @@ describe VIPS::Image do
     im3.should match_sha1('aecb1abc6ed6cdb84acc8b64a53ef24b9191c8b0')
   end
 
-  it "should transform an image using an import and an export icc profile (Image#icc_transform)"
-  it "should import an external icc profile (Image#icc_import)"
-  it "should convert in image to media relative colorimetry using an icc profile (Image#icc_ac2rc)"
+  #it "should transform an image using an import and an export icc profile (Image#icc_transform)"
+  #it "should import an external icc profile (Image#icc_import)"
+  #it "should convert in image to media relative colorimetry using an icc profile (Image#icc_ac2rc)"
 end
 

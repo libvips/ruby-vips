@@ -15,15 +15,21 @@ describe VIPS::PNGWriter do
     im.y_size.should == @image.y_size
   end
 
-  it "should write a png to memory", :vips_lib_version => "> 7.22" do
-    str = @writer.to_memory
-    str.size.should == 54804
+  it "should write a png to memory" do
+    if Spec::Helpers.match_vips_version("> 7.22")
+      str = @writer.to_memory
+      str.size.should == 54804
+    else
+      lambda{ @writer.to_memory }.should raise_error(VIPS::Error)
+    end
   end
 
-  it "should write a tiny png file to memory", :vips_lib_version => "> 7.22" do
-    im = VIPS::Image.black(10, 10, 1)
-    s = im.png.to_memory
-    s.size.should == 69
+  it "should write a tiny png file to memory" do
+    if Spec::Helpers.match_vips_version("> 7.22")
+      im = VIPS::Image.black(10, 10, 1)
+      s = im.png.to_memory
+      s.size.should == 69
+    end
   end
 
   it "should allow setting of the png compression" do
@@ -37,14 +43,16 @@ describe VIPS::PNGWriter do
     lambda{ @writer.compression = 3333 }.should raise_error(ArgumentError)
   end
 
-  it "should generate smaller memory images with higher compression settings", :vips_lib_version => "> 7.22" do
-    @writer.compression = 0
-    mempng = @writer.to_memory
+  it "should generate smaller memory images with higher compression settings" do
+    if Spec::Helpers.match_vips_version("> 7.22")
+      @writer.compression = 0
+      mempng = @writer.to_memory
 
-    @writer.compression = 9
-    mempng2 = @writer.to_memory
+      @writer.compression = 9
+      mempng2 = @writer.to_memory
 
-    mempng2.size.should < mempng.size / 2
+      mempng2.size.should < mempng.size / 2
+    end
   end
 
   it "should write smaller images with lower quality settings" do
@@ -67,9 +75,11 @@ describe VIPS::PNGWriter do
     im.should match_image(@image)
   end
 
-  it "should write an interlaced png to memory", :vips_lib_version => "> 7.22" do
-    @writer.interlace = true
-    str = @writer.to_memory
+  it "should write an interlaced png to memory" do
+    if Spec::Helpers.match_vips_version("> 7.22")
+      @writer.interlace = true
+      str = @writer.to_memory
+    end
   end
 
   it "should create a png writer" do
