@@ -29,20 +29,83 @@ vips_s_version_array()
 }
 
 /*
+ *  call-seq:
+ *     VIPS.debug_info -> string
+ *
+ *  This will print internal debugging information from VIPS, including memory
+ *  allocation information.
+ */
+static VALUE
+vips_s_debug_info(VALUE obj)
+{
+    im__print_all();
+    return Qnil;
+}
+
+/*
+ * This method will kill the ruby interpreter and then invokes im__print_all()
+ * to hunt for dangling Vips allocations.
+ */
+static VALUE
+vips_exit_info(VALUE obj)
+{
+    ruby_finalize();
+    im__print_all();
+    exit(0);
+    return Qnil;
+}
+
+/*
+ * Build a call to im_init_world() and pass command line options to vips. This
+ * sets some library wide options.
+ */
+
+static void
+init_vips_library()
+{
+    GOptionContext *context;
+    GError *error = NULL;
+    int i, argc;
+    char **argv;
+
+    VALUE argv_v = rb_const_get(rb_mKernel, rb_intern("ARGV"));
+
+    if(NIL_P(argv_v) || RARRAY_LEN(argv_v) == 0)
+		im_init_world("");
+	else {
+        argc = RARRAY_LEN(argv_v);
+        argv = ALLOC_N(char*, argc);
+
+        for (i=0; i < argc; i++)
+            argv[i] = RSTRING_PTR(RARRAY_PTR(argv_v)[i]);
+
+		im_init_world(argv[0]);
+
+        context = g_option_context_new(_("- ruby-vips"));
+        g_option_context_set_ignore_unknown_options (context, TRUE);
+
+        g_option_context_add_group(context, im_get_option_group());
+
+        g_option_context_parse(context, &argc, &argv, &error);
+        g_option_context_free(context);
+
+        xfree(argv);
+    }
+}
+
+/*
  * The VIPS module namespaces all ruby-vips objects.
  */
 
 void
 Init_vips_ext()
 {
-	VALUE argv = rb_const_get(rb_mKernel, rb_intern("ARGV"));
-	if(NIL_P(argv) || RARRAY_LEN(argv) == 0)
-		im_init_world("");
-	else
-		im_init_world(RSTRING_PTR(RARRAY_PTR(argv)[0]));
+    init_vips_library();
 
     mVIPS = rb_define_module("VIPS");
     eVIPSError = rb_define_class_under(mVIPS, "Error", rb_eStandardError);
+
+    rb_define_singleton_method(mVIPS, "debug_info", vips_s_debug_info, 0);
 
     /* Vips Library version string */
     rb_define_const(mVIPS, "LIB_VERSION", vips_s_version_string());
