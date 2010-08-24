@@ -263,14 +263,16 @@ csv_write_internal(VALUE obj, VALUE path)
 static VALUE
 vips_write_internal(VALUE obj, VALUE path)
 {
+    VipsImage *im_new;
     GetImg(obj, data, im);
-    OutPartial(new, data_new, im_new);
 
     if (!(im_new = (VipsImage *)im_openout(RSTRING_PTR(path))))
         vips_lib_error();
 
     if (im_copy(im, im_new))
         vips_lib_error();
+
+    im_close(im_new);
 
     return obj;
 }
