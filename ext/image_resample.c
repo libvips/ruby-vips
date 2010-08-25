@@ -16,8 +16,8 @@
  *  <i>dx</i>, <i>dy</i>. The point (x,y) in
  *  the input is mapped onto point (X,Y) in the output by
  *
- *    X = <i>a</i> * x + <i>b</i> * y + <i>dx</i>
- *    Y = <i>c</i> * x + <i>d</i> * y + <i>dy</i>
+ *    X = a * x + b * y + dx
+ *    Y = c * x + d * y + dy
  *
  *  In the first form, the entire image is transformed. In the second form, the
  *  area of the output image given by <i>ow</i>, <i>oh</i>, <i>ox</i>, <i>oy</i>

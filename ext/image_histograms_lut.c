@@ -529,8 +529,8 @@ img_lhisteq(VALUE obj, VALUE xwin, VALUE ywin)
  *
  *  At point (i,j) the output is given by the equation:
  *
- *    vout(i,j) = <i>a</i> * <i>m0</i> + (1 - <i>a</i>) * meanv +
- *        (vin(i,j) - meanv) * (<i>b</i> * <i>s0</i>) / (<i>s0</i> + <i>b</i> * stdv)
+ *    vout(i,j) = a * m0 + (1 - a) * meanv +
+ *        (vin(i,j) - meanv) * (b * s0) / (s0 + b * stdv)
  *
  *  Values <i>a</i>, <i>m0</i>, <i>b</i> and <i>s0</i> are entered, while meanv
  *  and stdv are the values calculated over a moving window of size <i>xwin</i>,

@@ -127,7 +127,7 @@ img_lab_to_xyz(VALUE obj)
  *  call-seq:
  *     im.lab_to_xyz_temp(x0, y0, z0) -> image
  *
- *  Turn Lab to XYZ. <i>x0</i>, <i>y0</i>, </i>z0</i> give the Lab colour
+ *  Turn Lab to XYZ. <i>x0</i>, <i>y0</i>, <i>z0</i> give the Lab colour
  *  temperature.
  */
 
@@ -264,7 +264,7 @@ img_xyz_to_lab(VALUE obj)
  *  call-seq:
  *     im.xyz_to_lab_temp(x0, y0, z0) -> image
  *
- *  Turn XYZ to LAB. <i>x0</i>, <i>y0</i>, </i>z0</i> give the Lab colour
+ *  Turn XYZ to LAB. <i>x0</i>, <i>y0</i>, <i>z0</i> give the Lab colour
  *  temperature.
  */
 
