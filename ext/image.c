@@ -131,26 +131,6 @@ img_spawn3(VALUE parent1, VALUE parent2, VALUE parent3)
     return new;
 }
 
-/*
- *  call-seq:
- *     Image.new(path) -> image
- *
- *  Reads the image at <i>path</i> from disk. Vips will try to determine the
- *  file format first based on the file extension and second based on looking at
- *  the file signature.
- */
-
-static VALUE
-img_initialize(VALUE obj, VALUE path)
-{
-	GetImg(obj, data, im);
-
-    if (!(data->in = im_open(StringValuePtr(path), "r")))
-        vips_lib_error();
-
-    return obj;
-}
-
 ID
 img_vtype_to_id(VipsType vtype)
 {
@@ -423,7 +403,6 @@ init_Image(void)
     rb_define_singleton_method(cVIPSImage, "tone_build_range", img_s_tone_build_range, 10); // in image_histograms_lut.c
     rb_define_singleton_method(cVIPSImage, "tone_build", img_s_tone_build, 8); // in image_histograms_lut.c
 
-    rb_define_method(cVIPSImage, "initialize", img_initialize, 1);
     rb_define_method(cVIPSImage, "[]", img_aref, 2);
     rb_define_method(cVIPSImage, "each_pixel", img_each_pixel, 0);
     rb_define_method(cVIPSImage, "data", img_data, 0);
