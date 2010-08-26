@@ -70,8 +70,8 @@ ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com).
 
     # Write out the shrunk image to a PNG file. This is where the image is
     # actually loaded and resized. With images that allow for random access from
-    # the hard drive (VIPS native format, OpenEXR, ppm/pbm/pgm/pfm, tiff, and
-    # RAW images), the entire image is never read into memory.
+    # the hard drive (VIPS native format, tiled OpenEXR, ppm/pbm/pgm/pfm, tiled
+    # tiff, and RAW images), the entire image is never read into memory.
     im_shrink_by_two.png('out.png', :interlace => true)
 
     # All ruby-vips image commands can be chained, so the above sequence could
