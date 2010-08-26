@@ -451,9 +451,12 @@ init_Image(void)
 	rb_define_method(cVIPSImage, "acos", img_acos, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "atan", img_atan, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "cross_phase", img_cross_phase, 1); // in image_arithmetic.c
-    rb_define_method(cVIPSImage, "&", img_and, 1); // in image_boolean.c
-    rb_define_method(cVIPSImage, "|", img_or, 1); // in image_boolean.c
-    rb_define_method(cVIPSImage, "^", img_xor, 1); // in image_boolean.c
+    rb_define_method(cVIPSImage, "and", img_and, -1); // in image_boolean.c
+    rb_define_method(cVIPSImage, "&", img_and_binop, 1);
+    rb_define_method(cVIPSImage, "or", img_or, -1); // in image_boolean.c
+    rb_define_method(cVIPSImage, "|", img_or_binop, 1);
+    rb_define_method(cVIPSImage, "xor", img_xor, -1); // in image_boolean.c
+    rb_define_method(cVIPSImage, "^", img_xor_binop, 1);
     rb_define_method(cVIPSImage, "<<", img_shiftleft, 1); // in image_boolean.c
     rb_define_method(cVIPSImage, ">>", img_shiftright, 1); // in image_boolean.c
     rb_define_method(cVIPSImage, "lab_to_lch", img_lab_to_lch, 0); // in image_colour.c

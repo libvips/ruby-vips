@@ -172,13 +172,12 @@ img_maxpos_single(VALUE obj) {
 }
 
 static VALUE
-img_maxpos_n(VALUE obj, VALUE n) {
+img_maxpos_n(VALUE obj, int len) {
 	double *out;
-	int im_return, i, *x, *y, len;
+	int im_return, i, *x, *y;
 	VALUE t, ary;
 	GetImg(obj, data, im);
 
-	len = NUM2INT(n);
 	ary = rb_ary_new2(len);
 
 	x = ALLOC_N(int, len);
@@ -221,7 +220,7 @@ img_maxpos(int argc, VALUE *argv, VALUE obj) {
 	if (NIL_P(v_num))
 		return img_maxpos_single(obj);
 	else
-		return img_maxpos_n(obj, v_num);
+		return img_maxpos_n(obj, NUM2INT(v_num));
 }
 
 static VALUE
@@ -237,13 +236,12 @@ img_minpos_single(VALUE obj) {
 }
 
 static VALUE
-img_minpos_n(VALUE obj, VALUE n) {
+img_minpos_n(VALUE obj, int len) {
 	double *out;
-	int im_return, i, *x, *y, len;
+	int im_return, i, *x, *y;
 	VALUE t, ary;
 	GetImg(obj, data, im);
 
-	len = NUM2INT(n);
 	ary = rb_ary_new2(len);
 
 	x = ALLOC_N(int, len);
@@ -286,7 +284,7 @@ img_minpos(int argc, VALUE *argv, VALUE obj) {
 	if (NIL_P(v_num))
 		return img_minpos_single(obj);
 	else
-		return img_minpos_n(obj, v_num);
+		return img_minpos_n(obj, NUM2INT(v_num));
 }
 
 /*
@@ -366,42 +364,23 @@ img_invert(VALUE obj)
 }
 
 static VALUE
-img_lin_single(VALUE obj, VALUE a, VALUE b)
-{
-    double da, db;
-	GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
-
-	da = NUM2DBL(a);
-	db = NUM2DBL(b);
-
-	if (im_lintra_vec(1, &da, im, &db, im_new))
-		vips_lib_error();
-
-    return new;
-}
-
-static VALUE
-img_lin_mult(VALUE obj, VALUE a_v, VALUE b_v)
+img_lin_mult(int argc, VALUE *argv_a, VALUE *argv_b, VALUE obj)
 {
     double *a, *b;
-    int i, len = RARRAY_LEN(a_v);
-
-    if (RARRAY_LEN(b_v) != len)
-        rb_raise(rb_eArgError, "Both arrays must be of the same length");
+    int i;
 
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
-	a = IM_ARRAY(im_new, len, double);
-	b = IM_ARRAY(im_new, len, double);
+	a = IM_ARRAY(im_new, argc, double);
+	b = IM_ARRAY(im_new, argc, double);
 
-	for (i = 0; i < len; i++) {
-	    a[i] = NUM2DBL(RARRAY_PTR(a_v)[i]);
-	    b[i] = NUM2DBL(RARRAY_PTR(b_v)[i]);
+	for (i = 0; i < argc; i++) {
+	    a[i] = NUM2DBL(argv_a[i]);
+	    b[i] = NUM2DBL(argv_b[i]);
 	}
 
-	if (im_lintra_vec(len, a, im, b, im_new))
+	if (im_lintra_vec(argc, a, im, b, im_new))
 	    vips_lib_error();
 
     return new;
@@ -426,10 +405,21 @@ img_lin_mult(VALUE obj, VALUE a_v, VALUE b_v)
 VALUE
 img_lin(VALUE obj, VALUE a, VALUE b)
 {
-    if (TYPE(a) == T_ARRAY)
-        return img_lin_mult(obj, a, b);
-    else
-        return img_lin_single(obj, a, b);
+    int len = 1;
+    VALUE *a_v = &a;
+    VALUE *b_v = &b;
+
+    if (TYPE(a) == T_ARRAY) {
+        len = RARRAY_LEN(a);
+
+        if (len < 1 || len != RARRAY_LEN(b))
+            rb_raise(rb_eArgError, "argument arrays must be of equal length with at least one element");
+
+        a_v = RARRAY_PTR(a);
+        b_v = RARRAY_PTR(b);
+    }
+
+    return img_lin_mult(len, a_v, b_v, obj);
 }
 
 /*
@@ -464,20 +454,14 @@ static VALUE
 img_remainder_const(int argc, VALUE *argv, VALUE obj)
 {
     int i;
-    double c_one;
-    double *c = &c_one;
+    double *c;
 
     GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
-    
-    if (argc == 1)
-        c_one = NUM2DBL(argv[0]);
-    else if (argc > 1) {
-        c = IM_ARRAY(im_new, argc, double);
-        for (i = 0; i < argc; i++)
-            c[i] = NUM2DBL(argv[i]);
-    } else
-        rb_raise(eVIPSError, "Expected at least one constant");
+
+    c = IM_ARRAY(im_new, argc, double);
+    for (i = 0; i < argc; i++)
+        c[i] = NUM2DBL(argv[i]);
 
     if (im_remainder_vec(im, im_new, argc, c))
         vips_lib_error();
@@ -520,7 +504,9 @@ img_remainder_const(int argc, VALUE *argv, VALUE obj)
 VALUE
 img_remainder(int argc, VALUE *argv, VALUE obj)
 {
-    if (argc == 1 && CLASS_OF(argv[0]) == cVIPSImage)
+    if (argc < 1)
+        rb_raise(rb_eArgError, "Expected at least one constant");
+    else if (argc == 1 && CLASS_OF(argv[0]) == cVIPSImage)
       return img_remainder_img(obj, argv[0]);
     else
       return img_remainder_const(argc, argv, obj);
@@ -529,12 +515,15 @@ img_remainder(int argc, VALUE *argv, VALUE obj)
 VALUE
 img_remainder_binop(VALUE obj, VALUE arg)
 {
-    if (CLASS_OF(arg) == cVIPSImage)
-        return img_remainder_img(obj, arg);
-    else if (TYPE(arg) == T_ARRAY)
-        return img_remainder_const(RARRAY_LEN(arg), RARRAY_PTR(arg), obj);
-    else
-        return img_remainder_const(1, &arg, obj);
+    int argc = 1;
+    VALUE *argv = &arg;
+
+    if (TYPE(arg) == T_ARRAY) {
+        argc = RARRAY_LEN(arg);
+        argv = RARRAY_PTR(arg);
+    }
+
+    return img_remainder(argc, argv, obj);
 }
 
 /*
@@ -749,29 +738,38 @@ img_point(VALUE obj, VALUE itrp_sym, VALUE x, VALUE y, VALUE band)
 VALUE
 img_pow(int argc, VALUE *argv, VALUE obj)
 {
-	double *c;
-	int i;
-	GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
+    double *c;
+    int i;
 
-	c = IM_ARRAY(im_new, argc, double);
+    if (argc < 1)
+        rb_raise(rb_eArgError, "Expected at least one constant");
 
-	for (i = 0; i < argc; i++)
-		c[i] = NUM2DBL(argv[i]);
+    GetImg(obj, data, im);
+    OutImg(obj, new, data_new, im_new);
 
-	if (im_powtra_vec(im, im_new, argc, c))
-		vips_lib_error();
+    c = IM_ARRAY(im_new, argc, double);
 
-	return new;
+    for (i = 0; i < argc; i++)
+        c[i] = NUM2DBL(argv[i]);
+
+    if (im_powtra_vec(im, im_new, argc, c))
+        vips_lib_error();
+
+    return new;
 }
 
 VALUE
 img_pow_binop(VALUE obj, VALUE arg)
 {
-    if (TYPE(arg) == T_ARRAY)
-        return img_pow(RARRAY_LEN(arg), RARRAY_PTR(arg), obj);
-    else
-        return img_pow(1, &arg, obj);
+    int argc = 1;
+    VALUE *argv = &arg;
+
+    if (TYPE(arg) == T_ARRAY) {
+        argc = RARRAY_LEN(arg);
+        argv = RARRAY_PTR(arg);
+    }
+
+    return img_pow(argc, argv, obj);
 }
 
 /*

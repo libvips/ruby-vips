@@ -7,6 +7,25 @@ img_and_img(VALUE obj, VALUE obj2)
     RUBY_VIPS_BINARY(im_andimage);
 }
 
+static VALUE
+img_and_const(int argc, VALUE *argv, VALUE obj)
+{
+    int i;
+    double *c;
+
+    GetImg(obj, data, im);
+	OutImg(obj, new, data_new, im_new);
+
+    c = IM_ARRAY(im_new, argc, double);
+    for (i = 0; i < argc; i++)
+        c[i] = NUM2DBL(argv[i]);
+
+    if (im_andimage_vec(im, im_new, argc, c))
+        vips_lib_error();
+
+    return new;
+}
+
 /*
  *  call-seq:
  *     im & other_image -> image
@@ -27,43 +46,59 @@ img_and_img(VALUE obj, VALUE obj2)
  *  all bands.
  *
  *  In the third form, it calculates the bitwise and of image pixels with an
- *  array of constants. The number of constants must match the number of bands
- *  in the image.
+ *  array of constants. If the image has one band, then the output will have as
+ *  many bands as constants. Otherwise, the number of constants must match the
+ *  number of bands in the image.
  */
 
 VALUE
-img_and(VALUE obj, VALUE arg)
+img_and(int argc, VALUE *argv, VALUE obj)
 {
-    double c_one;
-    double *c = &c_one;
-    int i, len = 1;
-    VALUE *argv;
+    if (argc < 1)
+        rb_raise(rb_eArgError, "Expected at least one argument");
+    else if (argc == 1 && CLASS_OF(argv[0]) == cVIPSImage)
+      return img_and_img(obj, argv[0]);
+    else
+      return img_and_const(argc, argv, obj);
+}
 
-    GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
+VALUE
+img_and_binop(VALUE obj, VALUE arg)
+{
+    int argc = 1;
+    VALUE *argv = &arg;
 
-    if (CLASS_OF(arg) == cVIPSImage)
-        return img_and_img(obj, arg);
-    
     if (TYPE(arg) == T_ARRAY) {
-        len = RARRAY_LEN(arg);
+        argc = RARRAY_LEN(arg);
         argv = RARRAY_PTR(arg);
-        c = IM_ARRAY(im_new, len, double);
-        for (i = 0; i < len; i++)
-            c[i] = NUM2DBL(argv[i]);
-    } else
-        c_one = NUM2DBL(arg);
+    }
 
-    if (im_andimage_vec(im, im_new, len, c))
-        vips_lib_error();
-
-    return new;
+    return img_and(argc, argv, obj);
 }
 
 static VALUE
 img_or_img(VALUE obj, VALUE obj2)
 {
 	RUBY_VIPS_BINARY(im_orimage);
+}
+
+static VALUE
+img_or_const(int argc, VALUE *argv, VALUE obj)
+{
+    int i;
+    double *c;
+
+    GetImg(obj, data, im);
+	OutImg(obj, new, data_new, im_new);
+
+    c = IM_ARRAY(im_new, argc, double);
+    for (i = 0; i < argc; i++)
+        c[i] = NUM2DBL(argv[i]);
+
+    if (im_orimage_vec(im, im_new, argc, c))
+        vips_lib_error();
+
+    return new;
 }
 
 /*
@@ -86,43 +121,59 @@ img_or_img(VALUE obj, VALUE obj2)
  *  all bands.
  *
  *  In the third form, it calculates the bitwise or of image pixels with an
- *  array of constants. The number of constants must match the number of bands
- *  in the image.
+ *  array of constants. If the image has one band, then the output will have as
+ *  many bands as constants. Otherwise, the number of constants must match the
+ *  number of bands in the image.
  */
 
 VALUE
-img_or(VALUE obj, VALUE arg)
+img_or(int argc, VALUE *argv, VALUE obj)
 {
-    double c_one;
-    double *c = &c_one;
-    int i, len = 1;
-    VALUE *argv;
+    if (argc < 1)
+        rb_raise(rb_eArgError, "Expected at least one argument");
+    else if (argc == 1 && CLASS_OF(argv[0]) == cVIPSImage)
+      return img_or_img(obj, argv[0]);
+    else
+      return img_or_const(argc, argv, obj);
+}
 
-    GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
-
-    if (CLASS_OF(arg) == cVIPSImage)
-        return img_or_img(obj, arg);
+VALUE
+img_or_binop(VALUE obj, VALUE arg)
+{
+    int argc = 1;
+    VALUE *argv = &arg;
 
     if (TYPE(arg) == T_ARRAY) {
-        len = RARRAY_LEN(arg);
+        argc = RARRAY_LEN(arg);
         argv = RARRAY_PTR(arg);
-        c = IM_ARRAY(im_new, len, double);
-        for (i = 0; i < len; i++)
-            c[i] = NUM2DBL(argv[i]);
-    } else
-        c_one = NUM2DBL(arg);
+    }
 
-    if (im_orimage_vec(im, im_new, len, c))
-        vips_lib_error();
-
-    return new;
+    return img_or(argc, argv, obj);
 }
 
 static VALUE
 img_xor_img(VALUE obj, VALUE obj2)
 {
 	RUBY_VIPS_BINARY(im_eorimage);
+}
+
+static VALUE
+img_xor_const(int argc, VALUE *argv, VALUE obj)
+{
+    int i;
+    double *c;
+
+    GetImg(obj, data, im);
+	OutImg(obj, new, data_new, im_new);
+
+    c = IM_ARRAY(im_new, argc, double);
+    for (i = 0; i < argc; i++)
+        c[i] = NUM2DBL(argv[i]);
+
+    if (im_eorimage_vec(im, im_new, argc, c))
+        vips_lib_error();
+
+    return new;
 }
 
 /*
@@ -145,37 +196,35 @@ img_xor_img(VALUE obj, VALUE obj2)
  *  all bands.
  *
  *  In the third form, it calculates the bitwise xor of image pixels with an
- *  array of constants. The number of constants must match the number of bands
- *  in the image.
+ *  array of constants. If the image has one band, then the output will have as
+ *  many bands as constants. Otherwise, the number of constants must match the
+ *  number of bands in the image.
  */
 
+
 VALUE
-img_xor(VALUE obj, VALUE arg)
+img_xor(int argc, VALUE *argv, VALUE obj)
 {
-    double c_one;
-    double *c = &c_one;
-    int i, len = 1;
-    VALUE *argv;
+    if (argc < 1)
+        rb_raise(rb_eArgError, "Expected at least one argument");
+    else if (argc == 1 && CLASS_OF(argv[0]) == cVIPSImage)
+      return img_xor_img(obj, argv[0]);
+    else
+      return img_xor_const(argc, argv, obj);
+}
 
-    GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
-
-    if (CLASS_OF(arg) == cVIPSImage)
-        return img_xor_img(obj, arg);
+VALUE
+img_xor_binop(VALUE obj, VALUE arg)
+{
+    int argc = 1;
+    VALUE *argv = &arg;
 
     if (TYPE(arg) == T_ARRAY) {
-        len = RARRAY_LEN(arg);
+        argc = RARRAY_LEN(arg);
         argv = RARRAY_PTR(arg);
-        c = IM_ARRAY(im_new, len, double);
-        for (i = 0; i < len; i++)
-            c[i] = NUM2DBL(argv[i]);
-    } else
-        c_one = NUM2DBL(arg);
+    }
 
-    if (im_eorimage_vec(im, im_new, len, c))
-        vips_lib_error();
-
-    return new;
+    return img_xor(argc, argv, obj);
 }
 
 /*
@@ -193,10 +242,9 @@ img_xor(VALUE obj, VALUE arg)
 VALUE
 img_shiftleft(VALUE obj, VALUE arg)
 {
-    double c_one;
-    double *c = &c_one;
+    double *c;
     int i, len = 1;
-    VALUE *argv;
+    VALUE *argv = &arg;
 
     GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
@@ -204,11 +252,11 @@ img_shiftleft(VALUE obj, VALUE arg)
     if (TYPE(arg) == T_ARRAY) {
         len = RARRAY_LEN(arg);
         argv = RARRAY_PTR(arg);
-        c = IM_ARRAY(im_new, len, double);
-        for (i = 0; i < len; i++)
-            c[i] = NUM2DBL(argv[i]);
-    } else
-        c_one = NUM2DBL(arg);
+    }
+
+    c = IM_ARRAY(im_new, len, double);
+    for (i = 0; i < len; i++)
+        c[i] = NUM2DBL(argv[i]);
 
     if (im_shiftleft_vec(im, im_new, len, c))
         vips_lib_error();
@@ -231,10 +279,9 @@ img_shiftleft(VALUE obj, VALUE arg)
 VALUE
 img_shiftright(VALUE obj, VALUE arg)
 {
-    double c_one;
-    double *c = &c_one;
+    double *c;
     int i, len = 1;
-    VALUE *argv;
+    VALUE *argv = &arg;
 
     GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
@@ -242,11 +289,11 @@ img_shiftright(VALUE obj, VALUE arg)
     if (TYPE(arg) == T_ARRAY) {
         len = RARRAY_LEN(arg);
         argv = RARRAY_PTR(arg);
-        c = IM_ARRAY(im_new, len, double);
-        for (i = 0; i < len; i++)
-            c[i] = NUM2DBL(argv[i]);
-    } else
-        c_one = NUM2DBL(arg);
+    }
+
+    c = IM_ARRAY(im_new, len, double);
+    for (i = 0; i < len; i++)
+        c[i] = NUM2DBL(argv[i]);
 
     if (im_shiftright_vec(im, im_new, len, c))
         vips_lib_error();
