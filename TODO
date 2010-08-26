@@ -8,5 +8,11 @@ TODO
 * Allow for creating a ruby endpoint to the pipeline could be useful for
   streaming.
 * Image#to_a
-* look into other.h, audit all libvips methods and make sure they are all implemented
+* look into other.h, audit all libvips methods and make sure they are all
+  implemented
 * JRuby support
+* Optional extensions to core Ruby classes, allowing operations such as
+  [1, 2, 3] & im . This could be optionally enabled by requiring e.g.
+  vips/core_ext
+* Put groups of image operations into modules, breaking docs into themes and
+  possibly allowing for selective loading of image ops.
