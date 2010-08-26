@@ -90,7 +90,7 @@ init_vips_library()
 
 		im_init_world(argv[0]);
 
-        context = g_option_context_new(_("- ruby-vips"));
+        context = g_option_context_new("- ruby-vips");
         g_option_context_set_ignore_unknown_options(context, TRUE);
 
         g_option_context_add_group(context, im_get_option_group());

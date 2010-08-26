@@ -630,7 +630,7 @@ VALUE
 img_tone_analyze(VALUE obj,
 	VALUE ps, VALUE pm, VALUE ph, VALUE s, VALUE m, VALUE h)
 {
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 22
+#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
