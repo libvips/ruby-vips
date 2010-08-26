@@ -308,6 +308,7 @@ img_bandmean(VALUE obj)
 /*
  *  call-seq:
  *     im.add(other_image) -> image
+ *     im + other_image    -> image
  *
  *  This operation calculates im + <i>other_image</i> and writes the result to
  *  a new image. The images must be the same size. They may have any format.
@@ -329,6 +330,7 @@ img_add(VALUE obj, VALUE obj2)
 /*
  *  call-seq:
  *     im.subtract(other_image) -> image
+ *     im - other_image         -> image
  *
  *  This operation calculates im - <i>image</i> and writes the result to a new
  *  image. The images must be the same size. They may have any format.
@@ -433,6 +435,7 @@ img_lin(VALUE obj, VALUE a, VALUE b)
 /*
  *  call-seq:
  *     im.multiply(other_image) -> image
+ *     im * other_image         -> image
  *
  *  This operation calculates im * <i>other_image</i>. The images must be the
  *  same size. They may have any format.
@@ -458,40 +461,38 @@ img_remainder_img(VALUE obj, VALUE obj2)
 }
 
 static VALUE
-img_remainder_single(VALUE obj, VALUE cnst)
+img_remainder_const(int argc, VALUE *argv, VALUE obj)
 {
-	double c = NUM2DBL(cnst);
-	GetImg(obj, data, im);
+    int i;
+    double c_one;
+    double *c = &c_one;
+
+    GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
+    
+    if (argc == 1)
+        c_one = NUM2DBL(argv[0]);
+    else if (argc > 1) {
+        c = IM_ARRAY(im_new, argc, double);
+        for (i = 0; i < argc; i++)
+            c[i] = NUM2DBL(argv[i]);
+    } else
+        rb_raise(eVIPSError, "Expected at least one constant");
 
-	if (im_remainder_vec(im, im_new, 1, &c))
-	    vips_lib_error();
+    if (im_remainder_vec(im, im_new, argc, c))
+        vips_lib_error();
 
-	return new;
-}
-
-static VALUE
-img_remainder_mult(int argc, VALUE *argv, VALUE obj)
-{
-	double *c;
-	int i;
-	GetImg(obj, data, im);
-	OutImg(obj, new, data_new, im_new);
-
-	c = IM_ARRAY(im_new, argc, double);
-
-	for (i = 0; i < argc; i++)
-	    c[i] = NUM2DBL(argv[i]);
-
-	if (im_remainder_vec(im, im_new, argc, c))
-	    vips_lib_error();
-
-	return new;
+    return new;
 }
 
 /*
  *  call-seq:
+ *     im % other_image -> image
+ *     im % c           -> image
+ *     im % [c, ...]    -> image
+ *
  *     im.remainder(other_image) -> image
+ *     im.remainder(c)           -> image
  *     im.remainder(c, ...)      -> image
  *
  *  The first form calculates im % <i>other_image</i> (remainder after
@@ -506,10 +507,10 @@ img_remainder_mult(int argc, VALUE *argv, VALUE obj)
  *
  *  The two input images are cast up to the smallest common type.
  * 
- *  The second form calculates im % <i>c</i> (remainder after division by
- *  constant). The image may have any non-complex format. For float formats,
+ *  The second and third form calculates im % <i>c</i> (remainder after division
+ *  by constant). The image may have any non-complex format. For float formats,
  *  calculates im - <i>c</i> * floor (im / <i>c</i>).
- *
+ * 
  *  If the number of image bands and constants differs, then the image must have
  *  one band or there must only one constant. Either the image is up-banded by
  *  joining n copies of the one-band image together, or the same constant is
@@ -519,19 +520,27 @@ img_remainder_mult(int argc, VALUE *argv, VALUE obj)
 VALUE
 img_remainder(int argc, VALUE *argv, VALUE obj)
 {
-    if (argc == 1) {
-		if (CLASS_OF(argv[0]) == cVIPSImage)
-			return img_remainder_img(obj, argv[0]);
-		else
-			return img_remainder_single(obj, argv[0]);
-	}
+    if (argc == 1 && CLASS_OF(argv[0]) == cVIPSImage)
+      return img_remainder_img(obj, argv[0]);
+    else
+      return img_remainder_const(argc, argv, obj);
+}
 
-	return img_remainder_mult(argc, argv, obj);
+VALUE
+img_remainder_binop(VALUE obj, VALUE arg)
+{
+    if (CLASS_OF(arg) == cVIPSImage)
+        return img_remainder_img(obj, arg);
+    else if (TYPE(arg) == T_ARRAY)
+        return img_remainder_const(RARRAY_LEN(arg), RARRAY_PTR(arg), obj);
+    else
+        return img_remainder_const(1, &arg, obj);
 }
 
 /*
  *  call-seq:
  *     im.divide(other_image) -> image
+ *     im / other_image       -> image
  *
  *  This operation calculates im / <i>other_image</i>. The images must be the
  *  same size. They may have any format.
@@ -724,6 +733,9 @@ img_point(VALUE obj, VALUE itrp_sym, VALUE x, VALUE y, VALUE band)
  *  call-seq:
  *     im.pow(c, ...) -> image
  *
+ *     im ** c        -> image
+ *     im ** [c, ...] -> image
+ *
  *  Tansforms each pixel value in the input image to value ** <i>c</i> in the
  *  output image. It detects division by zero, setting those pixels to zero in
  *  the output. Beware: it does this silently!
@@ -751,6 +763,15 @@ img_pow(int argc, VALUE *argv, VALUE obj)
 		vips_lib_error();
 
 	return new;
+}
+
+VALUE
+img_pow_binop(VALUE obj, VALUE arg)
+{
+    if (TYPE(arg) == T_ARRAY)
+        return img_pow(RARRAY_LEN(arg), RARRAY_PTR(arg), obj);
+    else
+        return img_pow(1, &arg, obj);
 }
 
 /*

@@ -421,12 +421,17 @@ init_Image(void)
 	rb_define_method(cVIPSImage, "maxpos_avg", img_maxpos_avg, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "bandmean", img_bandmean, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "add", img_add, 1); // in image_arithmetic.c
+	rb_define_alias(cVIPSImage, "+", "add");
 	rb_define_method(cVIPSImage, "subtract", img_subtract, 1); // in image_arithmetic.c
+	rb_define_alias(cVIPSImage, "-", "subtract");
 	rb_define_method(cVIPSImage, "invert", img_invert, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "lin", img_lin, 2); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "multiply", img_multiply, 1); // in image_arithmetic.c
+	rb_define_alias(cVIPSImage, "*", "multiply");
 	rb_define_method(cVIPSImage, "divide", img_divide, 1); // in image_arithmetic.c
+	rb_define_alias(cVIPSImage, "/", "divide");
 	rb_define_method(cVIPSImage, "remainder", img_remainder, -1); // in image_arithmetic.c
+	rb_define_method(cVIPSImage, "%", img_remainder_binop, 1);
 	rb_define_method(cVIPSImage, "recomb", img_recomb, 1); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "sign", img_sign, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "abs", img_abs, 0); // in image_arithmetic.c
@@ -435,6 +440,7 @@ init_Image(void)
 	rb_define_method(cVIPSImage, "ceil", img_ceil, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "point", img_point, 4); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "pow", img_pow, -1); // in image_arithmetic.c
+	rb_define_method(cVIPSImage, "**", img_pow_binop, 1); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "expn", img_expn, -1); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "log", img_log, 0); // in image_arithmetic.c
 	rb_define_method(cVIPSImage, "log10", img_log10, 0); // in image_arithmetic.c
