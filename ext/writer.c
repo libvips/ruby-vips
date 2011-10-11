@@ -212,7 +212,7 @@ png_buf_internal(VALUE obj, VALUE compression, VALUE interlace)
 #if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
     VipsImage *im_out;
     char *buf;
-    int length;
+    size_t length;
     GetImg(obj, data, im);
 
     if (!(im_out = im_open("writer_png_buf", "p")))
@@ -220,7 +220,7 @@ png_buf_internal(VALUE obj, VALUE compression, VALUE interlace)
 
     if (im_vips2bufpng(im, im_out, NUM2INT(compression), NUM2INT(interlace),
         &buf, &length)) {
-		im_close(im_out);
+        im_close(im_out);
         vips_lib_error();
 	}
 

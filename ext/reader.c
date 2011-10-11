@@ -200,7 +200,7 @@ vips_read_internal(VALUE obj, VALUE path)
 {
     VipsImage *im;
 
-    if (!(im = (VipsImage *)im_open_vips(StringValuePtr(path))))
+    if (!(im = (VipsImage *)im_open(StringValuePtr(path),"r")))
         vips_lib_error();
 
     return img_init(cVIPSImage, im);

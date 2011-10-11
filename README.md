@@ -1,5 +1,8 @@
 ## ruby-vips : A fast image processing extension for Ruby.
 
+note: this fork aims to track the latest stable vips. There are no plans to
+add more features, just to keep it working.
+
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). It is
 extremely fast and it can process huge images without requiring the entire image
 to be loaded into memory.
