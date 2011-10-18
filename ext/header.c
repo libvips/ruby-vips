@@ -200,7 +200,7 @@ header_y_offset(VALUE obj)
 static VALUE
 header_sizeof_element(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
     if (im)
         return INT2FIX(IM_IMAGE_SIZEOF_ELEMENT(im));
@@ -218,7 +218,7 @@ header_sizeof_element(VALUE obj)
 static VALUE
 header_sizeof_pel(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
     if (im)
         return INT2FIX(IM_IMAGE_SIZEOF_PEL(im));
@@ -237,7 +237,7 @@ header_sizeof_pel(VALUE obj)
 static VALUE
 header_sizeof_line(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
     if (im)
         return INT2FIX(IM_IMAGE_SIZEOF_LINE(im));
@@ -255,7 +255,7 @@ header_sizeof_line(VALUE obj)
 static VALUE
 header_n_elements(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
     if (im)
         return INT2FIX(IM_IMAGE_N_ELEMENTS(im));
@@ -269,12 +269,37 @@ header_meta_get(VALUE obj, const char* name)
     GetImg(obj, data, im);
 
     void *buf;
-	size_t len;
+    size_t len;
 
-	if (im_meta_get_blob(im, name, &buf, &len))
-		return Qnil;
+    if (im_meta_get_blob(im, name, &buf, &len))
+        return Qnil;
 
-	return rb_tainted_str_new((char *)buf, len);
+    return rb_tainted_str_new((char *)buf, len);
+}
+
+static VALUE
+header_meta_get_string(VALUE obj, const char* name)
+{
+    GetImg(obj, data, im);
+
+    char *str;
+    VALUE result;
+
+    if (vips_image_get_as_string(im, name, &str))
+        vips_lib_error();
+    result = rb_tainted_str_new(str, strlen(str));
+    g_free(str);
+
+    return result;
+}
+
+static void
+header_meta_set_string(VALUE obj, const char* name, const char* value)
+{
+    GetImg(obj, data, im);
+
+    if (vips_image_set_string(im, name, value))
+        vips_lib_error();
 }
 
 static VALUE
@@ -282,8 +307,8 @@ header_meta_p(VALUE obj, const char* name)
 {
     GetImg(obj, data, im);
 
-	if (im_header_get_typeof(im, name))
-		return Qtrue;
+    if (im_header_get_typeof(im, name))
+        return Qtrue;
 
     return Qfalse;
 }
@@ -341,6 +366,35 @@ header_icc_p(VALUE obj)
 }
 
 /*
+ *  call-seq:
+ *     im.get(name) -> string
+ *
+ *  Return metadata item 'name' as a string.
+ */
+
+static VALUE
+header_get(VALUE obj, VALUE name)
+{
+    return header_meta_get_string(obj, StringValuePtr(name));
+}
+
+/*
+ *  call-seq:
+ *     im.set(name, value)
+ *
+ *  Set metadata item 'name' to value.
+ */
+
+static VALUE
+header_set(VALUE obj, VALUE name, VALUE value)
+{
+    header_meta_set_string(obj, 
+                StringValuePtr(name), StringValuePtr(value));
+
+    return Qnil;
+}
+
+/*
  * The header module holds image header operations that are common to readers,
  * writers and image objects.
  */
@@ -366,6 +420,8 @@ init_Header()
     rb_define_method(mVIPSHeader, "exif?", header_exif_p, 0);
     rb_define_method(mVIPSHeader, "icc", header_icc, 0);
     rb_define_method(mVIPSHeader, "icc?", header_icc_p, 0);
+    rb_define_method(mVIPSHeader, "get", header_get, 1);
+    rb_define_method(mVIPSHeader, "set", header_set, 2);
 
 	id_notset = rb_intern("NOTSET");
 	id_uchar = rb_intern("UCHAR");
