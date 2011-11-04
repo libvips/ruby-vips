@@ -298,8 +298,7 @@ header_meta_set_string(VALUE obj, const char* name, const char* value)
 {
     GetImg(obj, data, im);
 
-    if (vips_image_set_string(im, name, value))
-        vips_lib_error();
+    vips_image_set_string(im, name, value);
 }
 
 static VALUE
