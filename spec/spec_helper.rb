@@ -1,14 +1,13 @@
 $:.unshift File.expand_path('../../ext', __FILE__)
 
-require "rubygems"
 require "vips"
-require "spec"
+require "rspec"
 
 Dir["#{File.expand_path('../support', __FILE__)}/*.rb"].each do |file|
   require file
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.include Spec::Path
   config.include Spec::Helpers
 
@@ -28,7 +27,7 @@ Spec::Runner.configure do |config|
   # end
 
 
-  # save this for RSpec2
+  #  save this for RSpec2
   #  config.filter_run_excluding :vips_lib_version => lambda{ |ver|
   #    return !Spec::Helpers.match_vips_version(ver)
   #  }
