@@ -1,12 +1,12 @@
 require 'digest/sha1'
 
-Spec::Matchers.define :match_sha1 do |sha1|
+RSpec::Matchers.define :match_sha1 do |sha1|
   match do |image|
     Digest::SHA1.hexdigest(image.data) == sha1
   end
 end
 
-Spec::Matchers.define :match_image do |target|
+RSpec::Matchers.define :match_image do |target|
   match do |image|
     sha_ones = [image, target].map do |i|
       Digest::SHA1.hexdigest i.data
@@ -15,14 +15,14 @@ Spec::Matchers.define :match_image do |target|
   end
 end
 
-Spec::Matchers.define :approximate do |target|
+RSpec::Matchers.define :approximate do |target|
   match do |approximation|
     difference = (target - approximation).abs
     difference == 0 || (difference / approximation) < 0.01
   end
 end
 
-Spec::Matchers.define :be_in_array do |array|
+RSpec::Matchers.define :be_in_array do |array|
   match do |value|
     array.include?(value)
   end
