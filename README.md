@@ -39,16 +39,15 @@ TODO: Describe & test with macports.
 
 ### Installing the gem.
 
-    $ gem install ruby-vips
+```bash
+$ gem install ruby-vips
+```
 
-The gem has not been submitted yet. Please see building from source instructions
-below.
+or include it in Gemfile:
 
-### Building and installing from source
-
-    $ gem install rspec
-    $ rake build
-    $ gem install ruby-vips-0.1.0.gem
+```ruby
+gem 'ruby-vips'
+```
 
 ## Documentation.
 
