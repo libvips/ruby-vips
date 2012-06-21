@@ -1,4 +1,6 @@
-# master
+# Version 0.1.1
+
+Release date: 2012-06-22
 
 ### Changed
 
