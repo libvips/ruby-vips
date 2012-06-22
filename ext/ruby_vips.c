@@ -72,8 +72,8 @@ init_vips_library()
     argv_0 = rb_gv_get("0");
 
     if (NIL_P(argv_0))
-		im_init_world("");
-	else
+        im_init_world("");
+    else
         im_init_world(RSTRING_PTR(argv_0));
 
     argv_v = rb_const_get(rb_mKernel, rb_intern("ARGV"));
@@ -88,8 +88,6 @@ init_vips_library()
         for (i=0; i < argc - 1; i++)
             argv[i+1] = RSTRING_PTR(RARRAY_PTR(argv_v)[i]);
 
-		im_init_world(argv[0]);
-
         context = g_option_context_new("- ruby-vips");
         g_option_context_set_ignore_unknown_options(context, TRUE);
 
@@ -100,6 +98,11 @@ init_vips_library()
 
         xfree(argv);
     }
+
+    /* We use the vips7 interface, so the vips8 cache will not help us.
+     * Disable it and save 100mb or so of memory.
+     */
+    vips_cache_set_max_mem( 0 );
 }
 
 /*

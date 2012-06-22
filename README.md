@@ -119,11 +119,8 @@ include VIPS
 #
 # where wtc.jpg is a 10,000 x 10,000 pixel RGB image
 #
-# with ruby-vips 0.1.1 and vips-7.28.7 I see a steady ~180mb of memuse as 
+# with ruby-vips 0.1.1 and vips-7.28.7 I see a steady ~50mb of memuse as 
 # this program runs (watching RES in top)
-#
-# 100mb of this is the vips operation cache, we could disable this to get 
-# memuse down further if necessary
 #
 # on my laptop (2009 macbook running ubuntu 12.04):
 #

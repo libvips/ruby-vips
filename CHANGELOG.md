@@ -1,3 +1,9 @@
+# Version 0.1.2-dev
+
+### Changed
+
+* Disable the vips8 operation cache to save some memory [John Cupitt]
+
 # Version 0.1.1
 
 Release date: 2012-06-22
