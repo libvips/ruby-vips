@@ -1,4 +1,4 @@
-## ruby-vips : A fast image processing extension for Ruby.
+# ruby-vips : A fast image processing extension for Ruby.
 
 note: this fork aims to track the latest stable vips. There are no plans to
 add more features, just to keep it working.
@@ -60,7 +60,7 @@ gem 'ruby-vips'
 ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com). Also
 see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 
-## Example.
+## Examples
 
 ```ruby
 require 'rubygems'
@@ -96,7 +96,7 @@ Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2).png('out.png')
 Image.new('mypic.jpg').shrink(2).write('out.png')
 ```
 
-## Longer example
+### Longer example
 
 ```ruby
 
@@ -257,6 +257,23 @@ ARGV.each do |filename|
   GC.start
 end
 ```
+
+## Gotchas
+
+### Contain memuse
+ruby-vips only finalises vips images on GC. In other words:
+
+a = Image.new(filename)
+a = nil
+
+will not release the resources associated with the image, you have to
+either request a GC explicitly, or wait for Ruby to GC for you. This can
+be a problem if you're processing many images.
+
+ruby-vips uses a simple mark system to link images together. Instead, we
+should rely on vips8 to link images for us, then dropping 
+
+... finish
 
 ## Why use ruby-vips?
 
