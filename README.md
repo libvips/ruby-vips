@@ -258,19 +258,30 @@ end
 ## Gotchas
 
 ### Contain memuse
+
 ruby-vips only finalises vips images on GC. In other words:
 
+```ruby
 a = Image.new(filename)
 a = nil
+```
 
-will not release the resources associated with the image, you have to
-either request a GC explicitly, or wait for Ruby to GC for you. This can
+will not release the resources associated with a, you have to
+either request a GC explicitly or wait for Ruby to GC for you. This can
 be a problem if you're processing many images.
 
-ruby-vips uses a simple mark system to link images together. Instead, we
-should rely on vips8 to link images for us, then dropping 
+We need a better solution for this. 
 
-... finish
+### Support sequential mode
+
+ruby-vips will open large non-random-access images via a temporary disc file.
+This can generate large amounts of disc traffic and slow things down.
+
+libvips supports sequential mode access, where large images in formats like
+PNG can be processed directly from the source file, provided you stick to
+operations which only need sequential access (liek shrinking).
+
+We should support this mode.
 
 ## Why use ruby-vips?
 

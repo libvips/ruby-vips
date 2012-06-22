@@ -27,8 +27,8 @@ img_free(vipsImg *im)
     if(im->in)
         im_close(im->in);
 
-	if(im->deps)
-		free(im->deps);
+    if(im->deps)
+        free(im->deps);
 
     xfree(im);
 }
@@ -36,10 +36,10 @@ img_free(vipsImg *im)
 static void
 img_mark(vipsImg *im)
 {
-	int i;
+    int i;
 
-	for (i = 0; i < im->deps_len; i++)
-		rb_gc_mark(im->deps[i]);
+    for (i = 0; i < im->deps_len; i++)
+        rb_gc_mark(im->deps[i]);
 }
 
 VALUE
@@ -49,7 +49,7 @@ img_alloc(VALUE klass)
     VALUE new = Data_Make_Struct(klass, vipsImg, img_mark, img_free, im);
     im->in = NULL;
     im->deps = NULL;
-	im->deps_len = 0;
+    im->deps_len = 0;
 
     return new;
 }
@@ -57,15 +57,15 @@ img_alloc(VALUE klass)
 void
 img_add_dep(vipsImg *im, VALUE dep)
 {
-	int i;
-	
-	for (i = 0; i < im->deps_len; i++)
-		if (im->deps[i] == dep)
-			return;
+    int i;
+    
+    for (i = 0; i < im->deps_len; i++)
+        if (im->deps[i] == dep)
+            return;
 
-	im->deps_len++;
-	im->deps = (VALUE*)realloc(im->deps, im->deps_len * sizeof(VALUE));
-	im->deps[im->deps_len - 1] = dep;
+    im->deps_len++;
+    im->deps = (VALUE*)realloc(im->deps, im->deps_len * sizeof(VALUE));
+    im->deps[im->deps_len - 1] = dep;
 }
 
 VALUE
@@ -112,7 +112,7 @@ img_spawn(VALUE parent)
 VALUE
 img_spawn2(VALUE parent1, VALUE parent2)
 {
-	VALUE new = img_spawn(parent1);
+    VALUE new = img_spawn(parent1);
     vipsImg *im;
     Data_Get_Struct(new, vipsImg, im);
 
@@ -123,7 +123,7 @@ img_spawn2(VALUE parent1, VALUE parent2)
 VALUE
 img_spawn3(VALUE parent1, VALUE parent2, VALUE parent3)
 {
-	VALUE new = img_spawn2(parent1, parent2);
+    VALUE new = img_spawn2(parent1, parent2);
     vipsImg *im;
     Data_Get_Struct(new, vipsImg, im);
 
@@ -179,10 +179,10 @@ img_coding_to_id(VipsCoding coding)
 static VALUE
 img_vtype(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
     if (im)
-    	return ID2SYM(img_vtype_to_id(im->Type));
+        return ID2SYM(img_vtype_to_id(im->Type));
 
     return Qnil;
 }
@@ -198,7 +198,7 @@ img_vtype(VALUE obj)
 static VALUE
 img_coding(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
     if (im)
         return ID2SYM(img_coding_to_id(im->Coding));
@@ -216,7 +216,7 @@ img_coding(VALUE obj)
 static VALUE
 img_kill(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
     return INT2FIX(im->kill);
 }
 
@@ -230,7 +230,7 @@ img_kill(VALUE obj)
 static VALUE
 img_filename(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
     if (im)
         return rb_tainted_str_new2(im->filename);
@@ -240,50 +240,50 @@ img_filename(VALUE obj)
 
 
 #define GETPIX( TYPE, CONVERSION ) { \
-	TYPE *p = (TYPE *) IM_IMAGE_ADDR(im, x, y); \
+    TYPE *p = (TYPE *) IM_IMAGE_ADDR(im, x, y); \
 \
-	if (sz == 1) \
-		return CONVERSION(*p); \
+    if (sz == 1) \
+        return CONVERSION(*p); \
 \
-	ary = rb_ary_new2(sz); \
-	for (i = 0; i < sz; i++) \
-		rb_ary_push(ary, CONVERSION(p[i])); \
+    ary = rb_ary_new2(sz); \
+    for (i = 0; i < sz; i++) \
+        rb_ary_push(ary, CONVERSION(p[i])); \
 \
-	return ary; \
+    return ary; \
 }
 
 #define CGETPIX( TYPE, CONVERSION ) { \
-	TYPE *p = (TYPE *) IM_IMAGE_ADDR(im, x, y); \
+    TYPE *p = (TYPE *) IM_IMAGE_ADDR(im, x, y); \
 \
-	ary = rb_ary_new2(sz); \
-	for (i = 0; i < sz; i++) { \
-		rb_ary_push(ary, rb_ary_new3(2, CONVERSION(p[0]), CONVERSION(p[1]))); \
-		p += 2; \
-	} \
+    ary = rb_ary_new2(sz); \
+    for (i = 0; i < sz; i++) { \
+        rb_ary_push(ary, rb_ary_new3(2, CONVERSION(p[0]), CONVERSION(p[1]))); \
+        p += 2; \
+    } \
 \
-	return ary; \
+    return ary; \
 }
 
 static VALUE
 img_pixel_to_rb(VipsImage *im, int x, int y)
 {
-	const int sz = im->Bands;
-	int i;
-	VALUE ary;
+    const int sz = im->Bands;
+    int i;
+    VALUE ary;
 
-	switch( im->BandFmt ) {
-	case IM_BANDFMT_UCHAR:     GETPIX( unsigned char, UINT2NUM ); break;
-	case IM_BANDFMT_CHAR:      GETPIX( signed char, INT2NUM ); break;
-	case IM_BANDFMT_USHORT:    GETPIX( unsigned short, UINT2NUM ); break;
-	case IM_BANDFMT_SHORT:     GETPIX( signed short, INT2NUM ); break;
-	case IM_BANDFMT_UINT:      GETPIX( unsigned int, UINT2NUM ); break;
-	case IM_BANDFMT_INT:       GETPIX( signed int, INT2FIX ); break;
-	case IM_BANDFMT_FLOAT:     GETPIX( float, rb_float_new ); break;
+    switch( im->BandFmt ) {
+    case IM_BANDFMT_UCHAR:     GETPIX( unsigned char, UINT2NUM ); break;
+    case IM_BANDFMT_CHAR:      GETPIX( signed char, INT2NUM ); break;
+    case IM_BANDFMT_USHORT:    GETPIX( unsigned short, UINT2NUM ); break;
+    case IM_BANDFMT_SHORT:     GETPIX( signed short, INT2NUM ); break;
+    case IM_BANDFMT_UINT:      GETPIX( unsigned int, UINT2NUM ); break;
+    case IM_BANDFMT_INT:       GETPIX( signed int, INT2FIX ); break;
+    case IM_BANDFMT_FLOAT:     GETPIX( float, rb_float_new ); break;
 
-	case IM_BANDFMT_DOUBLE:    GETPIX( double, rb_float_new ); break;
-	case IM_BANDFMT_COMPLEX:   CGETPIX( float, rb_float_new ); break; 
-	case IM_BANDFMT_DPCOMPLEX: CGETPIX( double, rb_float_new ); break; 
-	}
+    case IM_BANDFMT_DOUBLE:    GETPIX( double, rb_float_new ); break;
+    case IM_BANDFMT_COMPLEX:   CGETPIX( float, rb_float_new ); break; 
+    case IM_BANDFMT_DPCOMPLEX: CGETPIX( double, rb_float_new ); break; 
+    }
 }
 
 /*
@@ -301,17 +301,17 @@ img_pixel_to_rb(VipsImage *im, int x, int y)
 static VALUE
 img_aref(VALUE obj, VALUE v_x, VALUE v_y)
 {
-	int x = NUM2INT(v_x);
-	int y = NUM2INT(v_y);
-	GetImg(obj, data, im);
+    int x = NUM2INT(v_x);
+    int y = NUM2INT(v_y);
+    GetImg(obj, data, im);
 
-	if (im_incheck(im) || im_check_uncoded("img_aref", im))
-		vips_lib_error();
+    if (im_incheck(im) || im_check_uncoded("img_aref", im))
+        vips_lib_error();
 
-	if (x >= im->Xsize || x < 0 || y >= im->Ysize || y < 0)
-		rb_raise(rb_eIndexError, "Index out of bounds");
+    if (x >= im->Xsize || x < 0 || y >= im->Ysize || y < 0)
+        rb_raise(rb_eIndexError, "Index out of bounds");
 
-	return img_pixel_to_rb(im, x, y);
+    return img_pixel_to_rb(im, x, y);
 }
 
 /*
@@ -324,21 +324,21 @@ img_aref(VALUE obj, VALUE v_x, VALUE v_y)
 static VALUE
 img_each_pixel(VALUE obj)
 {
-	int x, y;
-	VALUE pixel;
-	GetImg(obj, data, im);
+    int x, y;
+    VALUE pixel;
+    GetImg(obj, data, im);
 
-	if (im_incheck(im) || im_check_uncoded("img_each_pixel", im))
-		return( Qnil );
+    if (im_incheck(im) || im_check_uncoded("img_each_pixel", im))
+        return( Qnil );
 
     for(y = 0; y < im->Ysize; y++) {
-		for(x = 0; x < im->Xsize; x++) {
-			pixel = img_pixel_to_rb(im, x, y);
-			rb_yield(rb_ary_new3(3, pixel, INT2FIX(x), INT2FIX(y)));
-		}
-	}
+        for(x = 0; x < im->Xsize; x++) {
+            pixel = img_pixel_to_rb(im, x, y);
+            rb_yield(rb_ary_new3(3, pixel, INT2FIX(x), INT2FIX(y)));
+        }
+    }
 
-	return obj;
+    return obj;
 }
 
 /*
@@ -351,12 +351,12 @@ img_each_pixel(VALUE obj)
 static VALUE
 img_data(VALUE obj)
 {
-	GetImg(obj, data, im);
+    GetImg(obj, data, im);
 
-	if (im_incheck(im) || im_check_uncoded("img_aref", im))
-		return( Qnil );
+    if (im_incheck(im) || im_check_uncoded("img_aref", im))
+        return( Qnil );
 
-	return rb_tainted_str_new(im->data, IM_IMAGE_SIZEOF_LINE(im) * im->Ysize);
+    return rb_tainted_str_new(im->data, IM_IMAGE_SIZEOF_LINE(im) * im->Ysize);
 }
 
 /*
@@ -398,8 +398,8 @@ init_Image(void)
     rb_define_singleton_method(cVIPSImage, "fractsurf", img_s_fractsurf, 2); // in image_freq_filt.c
     rb_define_singleton_method(cVIPSImage, "identity", img_s_identity, 1); // in image_histograms_lut.c
     rb_define_singleton_method(cVIPSImage, "identity_ushort", img_s_identity_ushort, 2); // in image_histograms_lut.c
-	rb_define_singleton_method(cVIPSImage, "invertlut", img_s_invertlut, 2); // in image_histograms_lut.c
-	rb_define_singleton_method(cVIPSImage, "buildlut", img_s_buildlut, 1); // in image_histograms_lut.c
+    rb_define_singleton_method(cVIPSImage, "invertlut", img_s_invertlut, 2); // in image_histograms_lut.c
+    rb_define_singleton_method(cVIPSImage, "buildlut", img_s_buildlut, 1); // in image_histograms_lut.c
     rb_define_singleton_method(cVIPSImage, "tone_build_range", img_s_tone_build_range, 10); // in image_histograms_lut.c
     rb_define_singleton_method(cVIPSImage, "tone_build", img_s_tone_build, 8); // in image_histograms_lut.c
 
@@ -410,47 +410,47 @@ init_Image(void)
     rb_define_method(cVIPSImage, "coding", img_coding, 0);
     rb_define_method(cVIPSImage, "filename", img_filename, 0);
     rb_define_method(cVIPSImage, "kill", img_kill, 0);
-	rb_define_method(cVIPSImage, "measure_area", img_measure_area, 7); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "stats", img_stats, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "max", img_max, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "min", img_min, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "avg", img_avg, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "deviate", img_deviate, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "maxpos", img_maxpos, -1); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "minpos", img_minpos, -1); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "maxpos_avg", img_maxpos_avg, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "bandmean", img_bandmean, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "add", img_add, 1); // in image_arithmetic.c
-	rb_define_alias(cVIPSImage, "+", "add");
-	rb_define_method(cVIPSImage, "subtract", img_subtract, 1); // in image_arithmetic.c
-	rb_define_alias(cVIPSImage, "-", "subtract");
-	rb_define_method(cVIPSImage, "invert", img_invert, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "lin", img_lin, 2); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "multiply", img_multiply, 1); // in image_arithmetic.c
-	rb_define_alias(cVIPSImage, "*", "multiply");
-	rb_define_method(cVIPSImage, "divide", img_divide, 1); // in image_arithmetic.c
-	rb_define_alias(cVIPSImage, "/", "divide");
-	rb_define_method(cVIPSImage, "remainder", img_remainder, -1); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "%", img_remainder_binop, 1);
-	rb_define_method(cVIPSImage, "recomb", img_recomb, 1); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "sign", img_sign, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "abs", img_abs, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "floor", img_floor, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "rint", img_rint, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "ceil", img_ceil, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "point", img_point, 4); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "pow", img_pow, -1); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "**", img_pow_binop, 1); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "expn", img_expn, -1); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "log", img_log, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "log10", img_log10, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "sin", img_sin, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "cos", img_cos, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "tan", img_tan, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "asin", img_asin, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "acos", img_acos, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "atan", img_atan, 0); // in image_arithmetic.c
-	rb_define_method(cVIPSImage, "cross_phase", img_cross_phase, 1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "measure_area", img_measure_area, 7); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "stats", img_stats, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "max", img_max, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "min", img_min, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "avg", img_avg, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "deviate", img_deviate, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "maxpos", img_maxpos, -1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "minpos", img_minpos, -1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "maxpos_avg", img_maxpos_avg, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "bandmean", img_bandmean, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "add", img_add, 1); // in image_arithmetic.c
+    rb_define_alias(cVIPSImage, "+", "add");
+    rb_define_method(cVIPSImage, "subtract", img_subtract, 1); // in image_arithmetic.c
+    rb_define_alias(cVIPSImage, "-", "subtract");
+    rb_define_method(cVIPSImage, "invert", img_invert, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "lin", img_lin, 2); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "multiply", img_multiply, 1); // in image_arithmetic.c
+    rb_define_alias(cVIPSImage, "*", "multiply");
+    rb_define_method(cVIPSImage, "divide", img_divide, 1); // in image_arithmetic.c
+    rb_define_alias(cVIPSImage, "/", "divide");
+    rb_define_method(cVIPSImage, "remainder", img_remainder, -1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "%", img_remainder_binop, 1);
+    rb_define_method(cVIPSImage, "recomb", img_recomb, 1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "sign", img_sign, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "abs", img_abs, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "floor", img_floor, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "rint", img_rint, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "ceil", img_ceil, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "point", img_point, 4); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "pow", img_pow, -1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "**", img_pow_binop, 1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "expn", img_expn, -1); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "log", img_log, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "log10", img_log10, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "sin", img_sin, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "cos", img_cos, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "tan", img_tan, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "asin", img_asin, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "acos", img_acos, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "atan", img_atan, 0); // in image_arithmetic.c
+    rb_define_method(cVIPSImage, "cross_phase", img_cross_phase, 1); // in image_arithmetic.c
     rb_define_method(cVIPSImage, "and", img_and, -1); // in image_boolean.c
     rb_define_method(cVIPSImage, "&", img_and_binop, 1);
     rb_define_method(cVIPSImage, "or", img_or, -1); // in image_boolean.c
@@ -488,12 +488,12 @@ init_Image(void)
     rb_define_method(cVIPSImage, "de00_from_lab", img_de00_from_lab, 1); // in image_colour.c
     rb_define_method(cVIPSImage, "de_from_xyz", img_de_from_xyz, 1); // in image_colour.c
     rb_define_method(cVIPSImage, "de_from_lab", img_de_from_lab, 1); // in image_colour.c
-	rb_define_method(cVIPSImage, "im_lab_morph", img_lab_morph, 5); // in image_colour.c
-	rb_define_method(cVIPSImage, "icc_transform", img_icc_transform, 3); // in image_colour.c
-	rb_define_method(cVIPSImage, "icc_import", img_icc_import, 2); // in image_colour.c
-	rb_define_method(cVIPSImage, "icc_import_embedded", img_icc_import_embedded, 1); // in image_colour.c
-	rb_define_method(cVIPSImage, "icc_export_depth", img_icc_export_depth, 3); // in image_colour.c
-	rb_define_method(cVIPSImage, "icc_ac2rc", img_icc_ac2rc, 1); // in image_colour.c
+    rb_define_method(cVIPSImage, "im_lab_morph", img_lab_morph, 5); // in image_colour.c
+    rb_define_method(cVIPSImage, "icc_transform", img_icc_transform, 3); // in image_colour.c
+    rb_define_method(cVIPSImage, "icc_import", img_icc_import, 2); // in image_colour.c
+    rb_define_method(cVIPSImage, "icc_import_embedded", img_icc_import_embedded, 1); // in image_colour.c
+    rb_define_method(cVIPSImage, "icc_export_depth", img_icc_export_depth, 3); // in image_colour.c
+    rb_define_method(cVIPSImage, "icc_ac2rc", img_icc_ac2rc, 1); // in image_colour.c
     rb_define_method(cVIPSImage, "to_mask", img_to_mask, 0); // in image_conversion.c
     rb_define_method(cVIPSImage, "copy_file", img_copy_file, 0);  // in image_conversion.c
     rb_define_method(cVIPSImage, "dup", img_dup, 0); // in image_conversion.c
@@ -542,7 +542,7 @@ init_Image(void)
     rb_define_method(cVIPSImage, "addgnoise", img_addgnoise, 1); // in image_convolution.c
     rb_define_method(cVIPSImage, "fwfft", img_fwfft, 0); // in image_freq_filt.c
     rb_define_method(cVIPSImage, "invfft", img_invfft, 0); // in image_freq_filt.c
-	rb_define_method(cVIPSImage, "rotquad", img_rotquad, 0); // in image_freq_filt.c
+    rb_define_method(cVIPSImage, "rotquad", img_rotquad, 0); // in image_freq_filt.c
     rb_define_method(cVIPSImage, "invfftr", img_invfftr, 0); // in image_freq_filt.c
     rb_define_method(cVIPSImage, "freqflt", img_freqflt, 1); // in image_freq_filt.c
     rb_define_method(cVIPSImage, "disp_ps", img_disp_ps, 0); // in image_freq_filt.c
@@ -565,20 +565,20 @@ init_Image(void)
     rb_define_method(cVIPSImage, "lhisteq", img_lhisteq, 2); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "stdif", img_stdif, 6); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "tone_analyze", img_tone_analyze, 6); // in image_histograms_lut.c
-	rb_define_method(cVIPSImage, "maplut", img_maplut, 1); // in image_histograms_lut.c
-	rb_define_method(cVIPSImage, "histplot", img_histplot, 0); // in image_histograms_lut.c
+    rb_define_method(cVIPSImage, "maplut", img_maplut, 1); // in image_histograms_lut.c
+    rb_define_method(cVIPSImage, "histplot", img_histplot, 0); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "dilate", img_dilate, 1); // in image_morphology.c
     rb_define_method(cVIPSImage, "erode", img_erode, 1); // in image_morphology.c
     rb_define_method(cVIPSImage, "rank", img_rank, 3); // in image_morphology.c
-	rb_define_method(cVIPSImage, "rank_image", img_rank_image, -1); // in image_morphology.c
-	rb_define_method(cVIPSImage, "maxvalue", img_maxvalue, -1); // in image_morphology.c
-	rb_define_method(cVIPSImage, "cntlines_h", img_cntlines_h, 0); // in image_morphology.c
-	rb_define_method(cVIPSImage, "cntlines_v", img_cntlines_v, 0); // in image_morphology.c
-	rb_define_method(cVIPSImage, "zerox_pos", img_zerox_pos, 0); // in image_morphology.c
-	rb_define_method(cVIPSImage, "zerox_neg", img_zerox_neg, 0); // in image_morphology.c
-	rb_define_method(cVIPSImage, "profile_h", img_profile_h, 0); // in image_morphology.c
-	rb_define_method(cVIPSImage, "profile_v", img_profile_v, 0); // in image_morphology.c
-	rb_define_method(cVIPSImage, "label_regions", img_label_regions, 0); // in image_morphology.c
+    rb_define_method(cVIPSImage, "rank_image", img_rank_image, -1); // in image_morphology.c
+    rb_define_method(cVIPSImage, "maxvalue", img_maxvalue, -1); // in image_morphology.c
+    rb_define_method(cVIPSImage, "cntlines_h", img_cntlines_h, 0); // in image_morphology.c
+    rb_define_method(cVIPSImage, "cntlines_v", img_cntlines_v, 0); // in image_morphology.c
+    rb_define_method(cVIPSImage, "zerox_pos", img_zerox_pos, 0); // in image_morphology.c
+    rb_define_method(cVIPSImage, "zerox_neg", img_zerox_neg, 0); // in image_morphology.c
+    rb_define_method(cVIPSImage, "profile_h", img_profile_h, 0); // in image_morphology.c
+    rb_define_method(cVIPSImage, "profile_v", img_profile_v, 0); // in image_morphology.c
+    rb_define_method(cVIPSImage, "label_regions", img_label_regions, 0); // in image_morphology.c
     rb_define_method(cVIPSImage, "lrmerge", img_lrmerge, -1); // in image_mosaicing.c
     rb_define_method(cVIPSImage, "tbmerge", img_tbmerge, -1); // in image_mosaicing.c
     rb_define_method(cVIPSImage, "lrmerge1", img_lrmerge1, -1); // in image_mosaicing.c
@@ -590,8 +590,8 @@ init_Image(void)
     rb_define_method(cVIPSImage, "global_balance", img_global_balance, 1); // in image_mosaicing.c
     rb_define_method(cVIPSImage, "global_balancef", img_global_balancef, 1); // in image_mosaicing.c
     rb_define_method(cVIPSImage, "correl", img_correl, 7); // in image_mosaicing.c
-	rb_define_method(cVIPSImage, "align_bands", img_align_bands, 0); // in image_mosaicing.c
-	rb_define_method(cVIPSImage, "maxpos_subpel", img_maxpos_subpel, 0); // in image_mosaicing.c
+    rb_define_method(cVIPSImage, "align_bands", img_align_bands, 0); // in image_mosaicing.c
+    rb_define_method(cVIPSImage, "maxpos_subpel", img_maxpos_subpel, 0); // in image_mosaicing.c
     rb_define_method(cVIPSImage, "equal", img_equal, -1); // in image_relational.c
     rb_define_method(cVIPSImage, "notequal", img_notequal, -1); // in image_relational.c
     rb_define_method(cVIPSImage, "less", img_less, -1); // in image_relational.c
@@ -608,24 +608,24 @@ init_Image(void)
     rb_define_method(cVIPSImage, "match_linear", img_match_linear, 9); // in image_resample.c
     rb_define_method(cVIPSImage, "match_linear_search", img_match_linear_search, 11); // in image_resample.c
 
-	id_b_w = rb_intern("B_W");
-	id_histogram = rb_intern("HISTOGRAM");
-	id_fourier = rb_intern("FOURIER");
-	id_xyz = rb_intern("XYZ");
-	id_lab = rb_intern("LAB");
-	id_cmyk = rb_intern("CMYK");
-	id_labq = rb_intern("LABQ");
-	id_rgb = rb_intern("RGB");
-	id_ucs = rb_intern("UCS");
-	id_lch = rb_intern("LCH");
-	id_labs = rb_intern("LABS");
-	id_srgb = rb_intern("sRGB");
-	id_yxy = rb_intern("YXY");
-	id_rgb16 = rb_intern("RGB16");
-	id_grey16 = rb_intern("GREY16");
+    id_b_w = rb_intern("B_W");
+    id_histogram = rb_intern("HISTOGRAM");
+    id_fourier = rb_intern("FOURIER");
+    id_xyz = rb_intern("XYZ");
+    id_lab = rb_intern("LAB");
+    id_cmyk = rb_intern("CMYK");
+    id_labq = rb_intern("LABQ");
+    id_rgb = rb_intern("RGB");
+    id_ucs = rb_intern("UCS");
+    id_lch = rb_intern("LCH");
+    id_labs = rb_intern("LABS");
+    id_srgb = rb_intern("sRGB");
+    id_yxy = rb_intern("YXY");
+    id_rgb16 = rb_intern("RGB16");
+    id_grey16 = rb_intern("GREY16");
 
-	id_none = rb_intern("NONE");
-	id_rad = rb_intern("RAD");
+    id_none = rb_intern("NONE");
+    id_rad = rb_intern("RAD");
 
     init_Image_colour();
     init_Image_conversion();
