@@ -23,7 +23,9 @@ or to disk.
 
 ### Ubuntu Prerequisites.
 
-    $ apt-get install libvips-dev
+```bash
+$ apt-get install libvips-dev
+```
 
 The above installs libvips 7.20.x in Ubuntu 10.04 and 7.12.x in Ubuntu 8.04.
 Though ruby-vips will work with libvips 7.12.x, many features are disabled, and
@@ -36,6 +38,10 @@ there are a few caveats.
 The above installs libvips 7.22.x
 
 TODO: Describe & test with macports.
+
+### Other platforms
+
+See [Installiation on various platforms](https://github.com/jcupitt/ruby-vips/wiki/installiation-on-various-platforms).
 
 ### Installing the gem.
 
@@ -51,7 +57,8 @@ gem 'ruby-vips'
 
 ## Documentation.
 
-ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com).
+ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com). Also
+see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 
 ## Example.
 
