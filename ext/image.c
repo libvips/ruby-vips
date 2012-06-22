@@ -28,7 +28,7 @@ img_free(vipsImg *im)
         im_close(im->in);
 
 	if(im->deps)
-		xfree(im->deps);
+		free(im->deps);
 
     xfree(im);
 }
@@ -64,7 +64,7 @@ img_add_dep(vipsImg *im, VALUE dep)
 			return;
 
 	im->deps_len++;
-	im->deps = realloc(im->deps, im->deps_len * sizeof(VALUE*));
+	im->deps = (VALUE*)realloc(im->deps, im->deps_len * sizeof(VALUE));
 	im->deps[im->deps_len - 1] = dep;
 }
 
