@@ -1,4 +1,4 @@
-## ruby-vips : A fast image processing extension for Ruby.
+# ruby-vips : A fast image processing extension for Ruby.
 
 note: this fork aims to track the latest stable vips. There are no plans to
 add more features, just to keep it working.
@@ -23,7 +23,9 @@ or to disk.
 
 ### Ubuntu Prerequisites.
 
-    $ apt-get install libvips-dev
+```bash
+$ apt-get install libvips-dev
+```
 
 The above installs libvips 7.20.x in Ubuntu 10.04 and 7.12.x in Ubuntu 8.04.
 Though ruby-vips will work with libvips 7.12.x, many features are disabled, and
@@ -36,6 +38,10 @@ there are a few caveats.
 The above installs libvips 7.22.x
 
 TODO: Describe & test with macports.
+
+### Other platforms
+
+See [Installiation on various platforms](https://github.com/jcupitt/ruby-vips/wiki/installiation-on-various-platforms).
 
 ### Installing the gem.
 
@@ -51,9 +57,10 @@ gem 'ruby-vips'
 
 ## Documentation.
 
-ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com).
+ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com). Also
+see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 
-## Example.
+## Examples
 
 ```ruby
 require 'rubygems'
@@ -89,7 +96,7 @@ Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2).png('out.png')
 Image.new('mypic.jpg').shrink(2).write('out.png')
 ```
 
-## Longer example
+### Longer example
 
 ```ruby
 
@@ -247,6 +254,23 @@ ARGV.each do |filename|
   GC.start
 end
 ```
+
+## Gotchas
+
+### Contain memuse
+ruby-vips only finalises vips images on GC. In other words:
+
+a = Image.new(filename)
+a = nil
+
+will not release the resources associated with the image, you have to
+either request a GC explicitly, or wait for Ruby to GC for you. This can
+be a problem if you're processing many images.
+
+ruby-vips uses a simple mark system to link images together. Instead, we
+should rely on vips8 to link images for us, then dropping 
+
+... finish
 
 ## Why use ruby-vips?
 
