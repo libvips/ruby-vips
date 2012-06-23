@@ -1,8 +1,12 @@
-# Version 0.1.2-dev
+# master 
 
 ### Changed
 
 * Disable the vips8 operation cache to save some memory [John Cupitt]
+
+### Fixed
+
+* #8: Memory allocation-free issues [Grigoriy Chudnov]
 
 # Version 0.1.1
 
