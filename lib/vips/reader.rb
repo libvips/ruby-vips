@@ -69,6 +69,7 @@ module VIPS
   class JPEGReader < Reader
     attr_reader :shrink_factor
     attr_accessor :fail_on_warn
+    attr_accessor :sequential
 
     SHRINK_FACTOR = [1, 2, 4, 8]
 
@@ -76,9 +77,11 @@ module VIPS
     def initialize(path, options={})
       @shrink_factor = 1
       @fail_on_warn = false
+      @sequential = false
 
       self.shrink_factor = options[:shrink_factor] if options.has_key?(:shrink_factor)
       self.fail_on_warn = options[:fail_on_warn] if options.has_key?(:fail_on_warn)
+      self.sequential = options[:sequential] if options.has_key?(:sequential)
 
       super path, options
     end
@@ -86,7 +89,10 @@ module VIPS
     # Read the jpeg file from disk and return a VIPS Image object.
     def read
       str = "#{@path}:#{shrink_factor}"
-      str << ",fail" if @fail_on_warn
+      str << "," 
+      str << "fail" if @fail_on_warn
+      str << "," 
+      str << "sequential" if @sequential
 
       read_internal str
     end
@@ -105,17 +111,24 @@ module VIPS
 
   class TIFFReader < Reader
     attr_reader :page_number
+    attr_accessor :sequential
 
     # Create a tiff image file reader.
     def initialize(path, options={})
+      @page_number = nil
+      @sequential = false
+
       self.page_number = options[:page_number] if options.has_key?(:page_number)
+      self.sequential = options[:sequential] if options.has_key?(:sequential)
       super path, options
     end
 
     # Read the tiff file from disk and return a VIPS Image object.
     def read
-      str = @path
-      str << ":#{@page_number}" if @page_number
+      str = "#{@path}:"
+      str << "#{@page_number}" if @page_number
+      str << ","
+      str << "sequential" if @sequential
 
       read_internal str
     end
@@ -128,6 +141,27 @@ module VIPS
       end
 
       @page_number = page_number_v
+    end
+  end
+
+  class PNGReader < Reader
+    attr_accessor :sequential
+
+    # Create a png image file reader.
+    def initialize(path, options={})
+      @sequential = false
+
+      self.sequential = options[:sequential] if options.has_key?(:sequential)
+      super path, options
+    end
+
+    # Read the png file from disk and return a VIPS Image object.
+    def read
+      str = @path
+      str << ":"
+      str << "sequential" if @sequential
+
+      read_internal str
     end
   end
 
