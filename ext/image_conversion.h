@@ -19,6 +19,7 @@ VALUE img_s_text(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 VALUE img_extract_band(int, VALUE*, VALUE);
 VALUE img_extract_area(int, VALUE*, VALUE);
 VALUE img_embed(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+VALUE img_tile_cache(VALUE, VALUE, VALUE, VALUE);
 VALUE img_bandjoin(int, VALUE *argv, VALUE);
 VALUE img_insert_noexpand(VALUE, VALUE, VALUE, VALUE);
 VALUE img_insert(int, VALUE *argv, VALUE);

@@ -512,6 +512,7 @@ init_Image(void)
     rb_define_method(cVIPSImage, "extract_band", img_extract_band, -1); // in image_conversion.c
     rb_define_method(cVIPSImage, "extract_area", img_extract_area, -1); // in image_conversion.c
     rb_define_method(cVIPSImage, "embed", img_embed, 5); // in image_conversion.c
+    rb_define_method(cVIPSImage, "tile_cache", img_tile_cache, 3); // in image_conversion.c
     rb_define_method(cVIPSImage, "bandjoin", img_bandjoin, -1); // in image_conversion.c
     rb_define_method(cVIPSImage, "insert", img_insert, -1); // in image_conversion.c
     rb_define_method(cVIPSImage, "insert_noexpand", img_insert_noexpand, 3); // in image_conversion.c

@@ -475,6 +475,30 @@ img_embed(VALUE obj, VALUE type_v, VALUE x, VALUE y, VALUE width, VALUE height)
 
 /*
  *  call-seq:
+ *     im.tile_cache(tile_width, tile_height, max_tiles) -> image
+ *
+ * This operation behaves rather like copy between images, 
+ * except that it keeps a cache of computed pixels. 
+ * This cache is made of up to max_tiles tiles (a value of -1 for
+ * means any number of tiles), and each tile is of size tile_width
+ * by tile_height pixels. 
+ */
+
+VALUE
+img_tile_cache(VALUE obj, VALUE tile_width, VALUE tile_height, VALUE max_tiles)
+{
+    GetImg(obj, data, im);
+    OutImg(obj, new, data_new, im_new);
+
+    if (im_tile_cache(im, im_new,
+	NUM2INT(tile_width), NUM2INT(tile_height), NUM2INT(max_tiles)))
+        vips_lib_error();
+
+    return new;  
+}
+
+/*
+ *  call-seq:
  *     im.bandjoin(other_image, ...) -> image
  *
  *  Join a set of images together, bandwise. If the images have n and m bands,
