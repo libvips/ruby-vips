@@ -1,11 +1,12 @@
 # ruby-vips : A fast image processing extension for Ruby.
 
-note: this fork aims to track the latest stable vips. There are no plans to
-add more features, just to keep it working.
+Note: ruby-vips git master is the development version and requires git master 
+of libvips (the unreleased 7.29) as well. Use the 0.1 branch of ruby-vips 
+for the stable version that works with released libvips 7.28 and earlier.
 
-ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). It is
-extremely fast and it can process huge images without requiring the entire image
-to be loaded into memory.
+ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
+It is extremely fast and it can process huge images without requiring the 
+entire image to be loaded into memory.
 
 ruby-vips allows you to set up pipelines that don't get executed until you
 output the image to disk or to a string. This means you can create,
@@ -17,7 +18,8 @@ or to disk.
 
   * OS X or Linux
   * MRI 1.8.6, 1.8.7, 1.9.2 or Rubinius 1.0.1
-  * libvips 7.12.x, 7.20.x, 7.22.x, or 7.23.x
+  * libvips 7.19 and later (use the stable 0.1 branch of ruby-vips for earlier
+    versions of libvips)
 
 ## Installation.
 
@@ -65,6 +67,7 @@ see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 ```ruby
 require 'rubygems'
 require 'vips'
+
 include VIPS
 
 # Create an image object. It will not actually load the image until needed.
