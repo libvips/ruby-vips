@@ -1,10 +1,15 @@
 # master 
 
+### Added
+
+* Add tile_cache [John Cupitt]
+* Add :sequential option to tiff, jpeg and png readers [John Cupitt]
+* Add raise if suitable pkg_config for libvips is not found, thanks to Pierre
+  Chapuis [Stanislaw Pankevich]
+
 ### Changed
 
 * Disable the vips8 operation cache to save some memory [John Cupitt]
-* Add tile_cache [John Cupitt]
-* Add :sequential option to tiff, jpeg and png readers [John Cupitt]
 * Update example shrinker [John Cupitt]
 
 ### Fixed
