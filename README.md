@@ -57,6 +57,10 @@ or include it in Gemfile:
 gem 'ruby-vips'
 ```
 
+## Performance
+
+  See [benchmarks at the official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks)
+
 ## Documentation.
 
 ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com). Also
@@ -301,7 +305,5 @@ Scheduling a GC every 100 images processed would be enough.
 ## Why use ruby-vips?
 
   - It supports over 250 low-level image and color manipulation operations.
-  - Operations are chainable, and do not get executed until the image is sent to
-    an output.
-  - Fastest ruby library for resizing large images. See [benchmarks at the
-    official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
+  - Operations are chainable, and do not get executed until the image is sent to an output.
+  - Fastest ruby library for resizing large images. See [benchmarks at the official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks)
