@@ -59,7 +59,25 @@ gem 'ruby-vips'
 
 ## Performance
 
-  See [benchmarks at the official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks)
+See [benchmarks at the official libvips
+website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use)
+and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks).
+
+<pre>
+real time in seconds, fastest of three runs
+benchmark       tiff    jpeg
+ruby-vips.rb    0.45    0.56    
+rmagick.rb      1.69    1.90    
+netpbm.sh       1.74    1.63    
+image-magick    2.87    3.02    
+image_sci.rb    3.19    2.90    
+
+peak memory use in kilobytes
+benchmark       peak RSS
+ruby-vips.rb    160400
+image_sci.rb    546992
+rmagick.rb      1370064
+</pre>
 
 ## Documentation.
 
