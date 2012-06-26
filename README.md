@@ -6,7 +6,27 @@ for the stable version that works with released libvips 7.28 and earlier.
 
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
 It is extremely fast and it can process huge images without requiring the 
-entire image to be loaded into memory.
+entire image to be loaded into memory. For example, the benchmarks at 
+[vips-benchmarks](https://github.com/stanislaw/vips-benchmarks):
+
+<pre>
+real time in seconds, fastest of three runs
+benchmark       tiff    jpeg
+ruby-vips.rb    0.45    0.56    
+rmagick.rb      1.69    1.90    
+netpbm.sh       1.74    1.63    
+image-magick    2.87    3.02    
+image_sci.rb    3.19    2.90    
+
+peak memory use in kilobytes
+benchmark       peak RSS
+ruby-vips.rb    160400
+image_sci.rb    546992
+rmagick.rb      1370064
+</pre>
+
+See also [benchmarks at the official libvips
+website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
 
 ruby-vips allows you to set up pipelines that don't get executed until you
 output the image to disk or to a string. This means you can create,
@@ -18,7 +38,7 @@ or to disk.
 
   * OS X or Linux
   * MRI 1.8.6, 1.8.7, 1.9.2 or Rubinius 1.0.1
-  * libvips 7.19 and later (use the stable 0.1 branch of ruby-vips for earlier
+  * libvips 7.29 and later (use the stable 0.1 branch of ruby-vips for earlier
     versions of libvips)
 
 ## Installation.
@@ -29,15 +49,9 @@ or to disk.
 $ apt-get install libvips-dev
 ```
 
-The above installs libvips 7.20.x in Ubuntu 10.04 and 7.12.x in Ubuntu 8.04.
-Though ruby-vips will work with libvips 7.12.x, many features are disabled, and
-there are a few caveats.
-
 ### OS X Prerequisites.
 
     $ brew install vips -HEAD
-
-The above installs libvips 7.22.x
 
 TODO: Describe & test with macports.
 
@@ -57,31 +71,10 @@ or include it in Gemfile:
 gem 'ruby-vips'
 ```
 
-## Performance
-
-See [benchmarks at the official libvips
-website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use)
-and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks).
-
-<pre>
-real time in seconds, fastest of three runs
-benchmark       tiff    jpeg
-ruby-vips.rb    0.45    0.56    
-rmagick.rb      1.69    1.90    
-netpbm.sh       1.74    1.63    
-image-magick    2.87    3.02    
-image_sci.rb    3.19    2.90    
-
-peak memory use in kilobytes
-benchmark       peak RSS
-ruby-vips.rb    160400
-image_sci.rb    546992
-rmagick.rb      1370064
-</pre>
-
 ## Documentation.
 
-ruby-vips has [rdoc documentation](http://rubyvips.holymonkey.com). Also
+ruby-vips has [rdoc
+documentation](http://rubydoc.info/gems/ruby-vips/0.1.1/frames). Also
 see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 
 ## Examples
@@ -324,4 +317,5 @@ Scheduling a GC every 100 images processed would be enough.
 
   - It supports over 250 low-level image and color manipulation operations.
   - Operations are chainable, and do not get executed until the image is sent to an output.
+  - Memory use is low, even for very, very large images.
   - Fastest ruby library for resizing large images. See [benchmarks at the official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks)
