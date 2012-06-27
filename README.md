@@ -6,8 +6,9 @@ for the stable version that works with released libvips 7.28 and earlier.
 
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
 It is extremely fast and it can process huge images without requiring the 
-entire image to be loaded into memory. For example, the benchmarks at 
-[vips-benchmarks](https://github.com/stanislaw/vips-benchmarks):
+entire image to be loaded into memory. For example, the benchmark at 
+[vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
+image, crops, shrinks, sharpens and saves again:
 
 <pre>
 real time in seconds, fastest of three runs
@@ -51,7 +52,9 @@ $ apt-get install libvips-dev
 
 ### OS X Prerequisites.
 
-    $ brew install vips -HEAD
+```bash
+$ brew install vips -HEAD
+```
 
 TODO: Describe & test with macports.
 
@@ -143,11 +146,8 @@ include VIPS
 #
 # where wtc.jpg is a 10,000 x 10,000 pixel RGB image
 #
-# with ruby-vips 0.1.1 and vips-7.28.7 I see a steady ~180mb of memuse as this
+# with ruby-vips 0.1.1 and vips-7.28.7 I see a steady ~50mb of memuse as this
 # program runs (watching RES in top)
-#
-# 100mb of this is the vips operation cache, we could disable this to get memuse
-# down further if necessary
 #
 # on my laptop (2009 macbook running ubuntu 12.04):
 #
@@ -164,7 +164,7 @@ size = 128
 # we apply a slight sharpen to thumbnails to make then "pop" a bit
 mask = [
     [-1, -1,  -1],
-    [-1,  32, -1,],
+    [-1,  32, -1],
     [-1, -1,  -1]
 ]
 m = Mask.new mask, 24, 0 
@@ -175,10 +175,11 @@ verbose = true
 
 # repeat everything this many times for a serious soak test
 # 48mb after 1 iteration
-# 74mb after 2 iteration
-# 72mb after 3 iteration
-# 76mb after 4 iteration
-# 98mb after 5 iteration
+# 74mb after 2 iterations
+# 72mb after 3 iterations
+# 76mb after 4 iterations
+# 98mb after 5 iterations
+# add a GC.start to clear out garbage: the above numbers are without the GC
 repeat = 1
 
 # we want to open tiff, png and jpg images in sequential mode -- see
@@ -307,7 +308,8 @@ will not release the resources associated with a, you have to
 either request a GC explicitly or wait for Ruby to GC for you. This can
 be a problem if you're processing many images.
 
-The growth in memory consumption is rather slow, about 200kb per iteration for
+The growth in memory consumption is rather slow, about 200kb per 
+iteration for
 the longer example above. It's more of a problem that file descriptors are not
 released until GC. 
 
