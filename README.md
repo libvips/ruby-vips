@@ -38,7 +38,7 @@ or to disk.
 ## Requirements.
 
   * OS X or Linux
-  * MRI 1.8.6, 1.8.7, 1.9.2 or Rubinius 1.0.1
+  * MRI 1.8.7, 1.9.2
   * libvips 7.29 and later (use the stable 0.1 branch of ruby-vips for earlier
     versions of libvips)
 
