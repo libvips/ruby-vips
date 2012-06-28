@@ -140,10 +140,11 @@ describe VIPS::Image do
     im.should match_sha1('72ea6aa0808097376a8d58a18d43220a683c6f1f')
   end
 
-  it "should calculate the phase correlation between two images" do
+  pending "should calculate the phase correlation between two images" do
     im1 = @image.extract_area(30, 10, 128, 128)
     im2 = @image.extract_area(40, 25, 128, 128)
 
+    # [BUG] Segmentation fault
     phasecor = im1.phasecor_fft(im2)
     maxpos = phasecor.maxpos
     maxpos[0].should == 10
