@@ -6,6 +6,7 @@ script: "rake"
 gemfile:
   - Gemfile
 before_install:
+  - uname -a
   - sudo apt-get install libvips-dev
 before_script:
   - ./compile
