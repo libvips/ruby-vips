@@ -11,6 +11,7 @@ entire image to be loaded into memory. For example, the benchmark at
 image, crops, shrinks, sharpens and saves again:
 
 [![Build Status](https://secure.travis-ci.org/stanislaw/ruby-vips.png?branch=master)](http://travis-ci.org/stanislaw/ruby-vips)
+
 <pre>
 real time in seconds, fastest of three runs
 benchmark       tiff    jpeg
