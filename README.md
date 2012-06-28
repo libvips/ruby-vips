@@ -10,7 +10,7 @@ entire image to be loaded into memory. For example, the benchmark at
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
 image, crops, shrinks, sharpens and saves again:
 
-[![Build Status](https://secure.travis-ci.org/stanislaw/ruby-vips.png?branch=master)](http://travis-ci.org/stanislaw/ruby-vips)
+[![Build Status](https://secure.travis-ci.org/stanislaw/ruby-vips.png)](http://travis-ci.org/stanislaw/ruby-vips)
 
 <pre>
 real time in seconds, fastest of three runs
