@@ -7,6 +7,7 @@ gemfile:
   - Gemfile
 before_install:
   - uname -a
+  - ./python26_hook
   - sudo apt-get install libvips-dev
 before_script:
   - ./compile
