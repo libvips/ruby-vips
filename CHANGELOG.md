@@ -6,6 +6,8 @@
 * Add :sequential option to tiff, jpeg and png readers [John Cupitt]
 * Add raise if suitable pkg_config for libvips is not found, thanks to Pierre
   Chapuis [Stanislaw Pankevich]
+* Add backward compatibility of 0.1.x ruby-vips with libvips versions less than 7.28 [John Cupitt]
+* Add Travis. ruby-vips now is being tested on travis-ci.org. [Stanislaw Pankevich]
 
 ### Changed
 
