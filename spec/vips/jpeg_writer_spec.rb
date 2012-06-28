@@ -16,13 +16,13 @@ describe VIPS::JPEGWriter do
     im.y_size.should == @image.y_size
   end
 
-  it "should write a tiny jpeg file to memory", :vips_lib_version => "> 7.20" do
+  pending "should write a tiny jpeg file to memory", :vips_lib_version => "> 7.20" do
     im = VIPS::Image.black(10, 10, 1)
     s = im.jpeg.to_memory
     s.size.should == 411
   end
 
-  it "should write a large jpeg file to memory" do
+  pending "should write a large jpeg file to memory" do
     im = VIPS::Image.black(1000, 1000, 3)
     s = im.jpeg.to_memory
     s.size.should == 16579
@@ -91,7 +91,7 @@ describe VIPS::JPEGWriter do
     jpeg2.exif?.should be_true
   end
 
-  it "should remove the exif header", :vips_lib_version => ">= 7.22" do
+  pending "should remove the exif header", :vips_lib_version => ">= 7.22" do
     im = simg 'huge.jpg'
     im2 = im.shrink 5, 5
     jpeg = im2.jpeg

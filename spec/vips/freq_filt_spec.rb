@@ -5,16 +5,16 @@ describe VIPS::Image do
     @image = simg('wagon.v')
   end
 
-  it "should perform a fast fourier transform on an image", :vips_lib_version => "> 7.23" do
+  pending "should perform a fast fourier transform on an image", :vips_lib_version => "> 7.23" do
     im = @image.fwfft
     im.abs.scaleps.rotquad.should match_sha1('72ea6aa0808097376a8d58a18d43220a683c6f1f')
   end
 
-  it "should perform an inverted fast fourier transform" do
+  pending "should perform an inverted fast fourier transform" do
     im = @image.fwfft.invfft
   end
 
-  it "should perform a fast inverted fast fourier transform" do
+  pending "should perform a fast inverted fast fourier transform" do
     im = @image.fwfft.invfftr
   end
 
@@ -120,7 +120,7 @@ describe VIPS::Image do
     im.scaleps.rotquad.should match_sha1('ee2e68593a0407c938b139634e4208eea7c38140')
   end
 
-  it "should apply frequency filter image masks" do
+  pending "should apply frequency filter image masks" do
     im = @image.extract_area(30, 10, 128, 128)
 
     mask_lo = VIPS::Image.fmask_ideal_highpass 128, 128, 0.1
@@ -135,7 +135,7 @@ describe VIPS::Image do
 
   end # vips version check
 
-  it "should display a power spectrum of an image", :vips_lib_version => "> 7.23" do
+  pending "should display a power spectrum of an image", :vips_lib_version => "> 7.23" do
     im = @image.disp_ps
     im.should match_sha1('72ea6aa0808097376a8d58a18d43220a683c6f1f')
   end

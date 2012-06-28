@@ -64,7 +64,7 @@ describe VIPS::Image do
 	ident[1102, 0].should == [1102, 1102, 1102]
   end
   
-  it "should create an inverted lookup table" do
+  pending "should create an inverted lookup table" do
     mask = [
       [0.1, 0.2, 0.3, 0.1],
       [0.2, 0.4, 0.4, 0.2],
@@ -76,7 +76,7 @@ describe VIPS::Image do
     im.histplot.should match_sha1('c3e791834af4f1c7edc0b1d48f7b5f7bd3acf9f4')
   end
   
-  it "should build a lookup table from a set of points", :vips_lib_version => "> 7.20" do
+  pending "should build a lookup table from a set of points", :vips_lib_version => "> 7.20" do
     mask = [
       [12, 100],
       [14, 110],

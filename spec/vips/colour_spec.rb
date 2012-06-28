@@ -135,7 +135,7 @@ describe VIPS::Image do
     im.band_fmt.should == :FLOAT
   end
 
-  it "should calculate a CMC color difference image between two lab images" do
+  pending "should calculate a CMC color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.decmc_from_lab(im2)
@@ -144,7 +144,7 @@ describe VIPS::Image do
     end
  end
 
-  it "should calculate a CIE76 color difference image between two lab images" do
+  pending "should calculate a CIE76 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de_from_lab(im2)
@@ -153,7 +153,7 @@ describe VIPS::Image do
     end
  end
 
-  it "should calculate a CIEDE2000 color difference image between two lab images" do
+  pending "should calculate a CIEDE2000 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de00_from_lab(im2)
@@ -162,13 +162,13 @@ describe VIPS::Image do
     end
  end
 
-  it "should import an embedded icc profile" do
+  pending "should import an embedded icc profile" do
     im = VIPS::Image.new(sample('icc.jpg').to_s)
     im2 = im.icc_import_embedded(:RELATIVE_COLORIMETRIC)
     pending "need to validate that an icc profile has been imported into vips"
   end
 
-  it "should import an embedded icc profile and then export using an external icc profile" do
+  pending "should import an embedded icc profile and then export using an external icc profile" do
     im = VIPS::Image.new(sample('icc.jpg').to_s)
     im2 = im.icc_import_embedded(:RELATIVE_COLORIMETRIC)
     im3 = im2.icc_export_depth(8, sample('lcd.icc').to_s, :RELATIVE_COLORIMETRIC)

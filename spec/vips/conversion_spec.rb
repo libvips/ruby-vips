@@ -127,7 +127,7 @@ describe VIPS::Image do
     im.max.should == 0.0
   end
 
-  it "should generate text to a new image" do
+  pending "should generate text to a new image" do
     im = VIPS::Image.text "Hello VIPS!", "sans 12", 300, 0, 72
     im.x_size.should == 65
   end
@@ -209,7 +209,7 @@ describe VIPS::Image do
     im.avg.should approximate(108.583)
   end
 
-  it "should place two image adjacent to each other" do
+  pending "should place two image adjacent to each other" do
     text = VIPS::Image.text "Hello VIPS!", "sans 12", 300, 0, 72
     text_3band = text.bandjoin text, text
     im = @image.lrjoin(text_3band)

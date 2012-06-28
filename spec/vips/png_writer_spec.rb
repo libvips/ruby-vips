@@ -7,7 +7,7 @@ describe VIPS::PNGWriter do
     @path = tmp('wagon.png').to_s
   end
 
-  it "should write to a png file" do
+  pending "should write to a png file" do
     @writer.write @path
 
     im = VIPS::Image.png @path
@@ -15,7 +15,7 @@ describe VIPS::PNGWriter do
     im.y_size.should == @image.y_size
   end
 
-  it "should write a png to memory" do
+  pending "should write a png to memory" do
     if Spec::Helpers.match_vips_version("> 7.22")
       str = @writer.to_memory
       str.size.should == 54804
@@ -24,7 +24,7 @@ describe VIPS::PNGWriter do
     end
   end
 
-  it "should write a tiny png file to memory" do
+  pending "should write a tiny png file to memory" do
     if Spec::Helpers.match_vips_version("> 7.22")
       im = VIPS::Image.black(10, 10, 1)
       s = im.png.to_memory
@@ -67,7 +67,7 @@ describe VIPS::PNGWriter do
     size1.should < size2 / 2
   end
 
-  it "should write an interlaced png" do
+  pending "should write an interlaced png" do
     @writer.interlace = true
     @writer.write @path
 
