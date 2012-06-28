@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 1.8.7
+  - 1.9.3
+script: "rake"
+gemfile:
+  - Gemfile
+before_install:
+  - sudo apt-get install libvips-dev
+before_script:
+  - ./compile
