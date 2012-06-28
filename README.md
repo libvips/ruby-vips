@@ -1,8 +1,8 @@
 # ruby-vips : A fast image processing extension for Ruby.
 
-Note: ruby-vips git master is the development version and requires git master 
-of libvips (the unreleased 7.29) as well. Use the 0.1 branch of ruby-vips 
-for the stable version that works with released libvips 7.28 and earlier.
+Note: ruby-vips git master is the development version and uses features from
+git master of libvips (the unreleased 7.29) as well. You may prefer the stable 
+0.1 branch of ruby-vips.
 
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
 It is extremely fast and it can process huge images without requiring the 
@@ -174,12 +174,6 @@ verbose = true
 # verbose = false
 
 # repeat everything this many times for a serious soak test
-# 48mb after 1 iteration
-# 74mb after 2 iterations
-# 72mb after 3 iterations
-# 76mb after 4 iterations
-# 98mb after 5 iterations
-# add a GC.start to clear out garbage: the above numbers are without the GC
 repeat = 1
 
 # we want to open tiff, png and jpg images in sequential mode -- see
@@ -188,8 +182,9 @@ repeat = 1
 # this is very ugly! vips8 has a better way to give options to generic loaders,
 # this chunk of ruby-vips should get better in the next version
 #
-# formats other than tif/png/jpg will be opened with the default loader -- this
-# will decompress small images to memory, large images via a temporary disc file
+# formats other than tif/png/jpg will be opened with the default loader -- 
+# this will decompress small images to memory, large images via a temporary 
+# disc file
 def thumb_open(filename, shrink = 1)
     if filename.end_with? ".jpg"
         return Image.jpeg filename, 
@@ -308,10 +303,9 @@ will not release the resources associated with a, you have to
 either request a GC explicitly or wait for Ruby to GC for you. This can
 be a problem if you're processing many images.
 
-The growth in memory consumption is rather slow, about 200kb per 
-iteration for
-the longer example above. It's more of a problem that file descriptors are not
-released until GC. 
+The growth in memory consumption is rather slow, about 200kb per iteration
+for the longer example above. It's more of a problem that file descriptors
+are not released until GC.
 
 Scheduling a GC every 100 images processed would be enough.
 
