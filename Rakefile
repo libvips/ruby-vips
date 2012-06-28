@@ -7,22 +7,6 @@ require 'bundler'
 
 require 'vips/version'
 
-# Obsolete task. It should be removed later. Now Jeweler does this.
-#
-# def gemspec
-#   @gemspec ||= begin
-#     file = File.expand_path('../ruby-vips.gemspec', __FILE__)
-#     eval(File.read(file), binding, file)
-#   end
-# end
-
-# desc "Build the gem"
-# task :build => "#{gemspec.full_name}.gem"
-
-# file "#{gemspec.full_name}.gem" => gemspec.files + ["ruby-vips.gemspec"] do
-#   system "gem build ruby-vips.gemspec"
-# end
-
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -61,27 +45,16 @@ Jeweler::Tasks.new do |gem|
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-# Adapt to it rspec later
-#
-# require 'rake/testtask'
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = FileList['spec/**/*_spec.rb']
+end
 
-# Rake::TestTask.new(:test) do |test|
-#   test.libs << 'lib' << 'test'
-#   test.pattern = 'test/**/test_*.rb'
-#   test.verbose = true
-# end
-
-# require 'rcov/rcovtask'
-# Rcov::RcovTask.new do |test|
-#   test.libs << 'test'
-#   test.pattern = 'test/**/test_*.rb'
-#   test.verbose = true
-#   test.rcov_opts << '--exclude "gems/*"'
-# end
-
-task :default => :test
+task :default => :spec
 
 require 'rdoc/task'
+
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
