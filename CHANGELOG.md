@@ -1,4 +1,9 @@
 # master 
+...
+
+# Version 0.2.0
+
+Release date: 2012-06-29
 
 ### Added
 

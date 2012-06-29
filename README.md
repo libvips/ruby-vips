@@ -2,7 +2,7 @@
 
 *Note*: ruby-vips git master is the development version and uses features
 from git master of libvips (the unreleased 7.29) as well. You may prefer
-the stable 0.1 branch of ruby-vips.
+the stable 0.2 branch of ruby-vips.
 
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
 It is extremely fast and it can process huge images without requiring the 
