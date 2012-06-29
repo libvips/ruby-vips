@@ -145,8 +145,8 @@ repeat.times do
         # :bicubic is well-known and mostly good enough
         a = a.shrink(ishrink).affinei_resize(:bicubic, rscale)
 
-	# the convolution will break sequential access: we need to cache a few
-	# scanlines
+        # the convolution will break sequential access: we need to cache a few
+        # scanlines
         a = a.tile_cache(a.x_size, 1, 30)
 
         # this will look a little "soft", apply a gentle sharpen

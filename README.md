@@ -84,6 +84,8 @@ see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 
 ## Small example
 
+See also the [examples](examples/) directory. 
+
 ```ruby
 require 'rubygems'
 require 'vips'
