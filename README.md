@@ -4,13 +4,13 @@
 from git master of libvips (the unreleased 7.29) as well. You may prefer
 the stable 0.2 branch of ruby-vips.
 
+[![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
+
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
 It is extremely fast and it can process huge images without requiring the 
 entire image to be loaded into memory. For example, the benchmark at 
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
 image, crops, shrinks, sharpens and saves again:
-
-[![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
 
 <pre>
 real time in seconds, fastest of three runs
@@ -30,6 +30,9 @@ rmagick.rb      1370064
 
 See also [benchmarks at the official libvips
 website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
+There's a handy blog post explaining [how libvips opens
+files](http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html)
+which gives some more background.
 
 ruby-vips allows you to set up pipelines that don't get executed until you
 output the image to disk or to a string. This means you can create,
