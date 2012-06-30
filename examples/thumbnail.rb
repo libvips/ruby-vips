@@ -55,7 +55,12 @@ verbose = true
 repeat = 1
 
 # we want to open tiff, png and jpg images in sequential mode -- see
+#
 # http://libvips.blogspot.co.uk/2012/02/sequential-mode-read.html
+#
+# for more background, see also
+#
+# http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html
 #
 # this is very ugly! vips8 has a better way to give options to generic loaders,
 # this chunk of ruby-vips should get better in the next version
