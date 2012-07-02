@@ -1,5 +1,8 @@
 # master 
-...
+
+### Changed
+
+* Don't use :sequential option for older libvipses [John Cupitt]
 
 # Version 0.2.0
 

@@ -91,8 +91,11 @@ module VIPS
       str = "#{@path}:#{shrink_factor}"
       str << "," 
       str << "fail" if @fail_on_warn
-      str << "," 
-      str << "sequential" if @sequential
+
+      if LIB_VERSION_ARRAY[0] >= 7 and LIB_VERSION_ARRAY[1] >= 29
+        str << "," 
+        str << "sequential" if @sequential
+      end
 
       read_internal str
     end
@@ -127,8 +130,11 @@ module VIPS
     def read
       str = "#{@path}:"
       str << "#{@page_number}" if @page_number
-      str << ","
-      str << "sequential" if @sequential
+
+      if LIB_VERSION_ARRAY[0] >= 7 and LIB_VERSION_ARRAY[1] >= 29
+        str << ","
+        str << "sequential" if @sequential
+      end
 
       read_internal str
     end
@@ -158,8 +164,10 @@ module VIPS
     # Read the png file from disk and return a VIPS Image object.
     def read
       str = @path
-      str << ":"
-      str << "sequential" if @sequential
+      if LIB_VERSION_ARRAY[0] >= 7 and LIB_VERSION_ARRAY[1] >= 28
+        str << ":"
+        str << "sequential" if @sequential
+      end
 
       read_internal str
     end
