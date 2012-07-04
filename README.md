@@ -1,9 +1,5 @@
 # ruby-vips : A fast image processing extension for Ruby.
 
-*Note*: ruby-vips git master is the development version and uses features
-from git master of libvips (the unreleased 7.29) as well. You may prefer
-the stable 0.2 branch of ruby-vips.
-
 [![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
 
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
@@ -12,13 +8,13 @@ entire image to be loaded into memory. For example, the benchmark at
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
 image, crops, shrinks, sharpens and saves again:
 
-<pre>
+```text
 real time in seconds, fastest of three runs
 benchmark       tiff    jpeg
 ruby-vips.rb    0.45    0.56    
 rmagick.rb      1.69    1.90    
 netpbm.sh       1.74    1.63    
-image-magick    2.87    3.02    
+image-magick.sh 2.87    3.02    
 image_sci.rb    3.19    2.90    
 
 peak memory use in kilobytes
@@ -26,7 +22,7 @@ benchmark       peak RSS
 ruby-vips.rb    160400
 image_sci.rb    546992
 rmagick.rb      1370064
-</pre>
+```
 
 See also [benchmarks at the official libvips
 website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
@@ -45,7 +41,7 @@ or to disk.
   * OS X or Linux
   * MRI 1.8.7, 1.9.2
   * libvips 7.29 and later (it will work with earlier libvips, but some
-    features may not be functional -- you may prefer the stable 0.1 branch)
+    features may not be functional)
 
 ## Installation.
 
@@ -65,7 +61,8 @@ TODO: Describe & test with macports.
 
 ### Other platforms
 
-See [Installiation on various platforms](https://github.com/jcupitt/ruby-vips/wiki/installiation-on-various-platforms).
+See [Installation on various
+platforms](https://github.com/jcupitt/ruby-vips/wiki/installation-on-various-platforms).
 
 ### Installing the gem.
 
@@ -82,7 +79,7 @@ gem 'ruby-vips'
 ## Documentation.
 
 ruby-vips has [rdoc
-documentation](http://rubydoc.info/gems/ruby-vips/0.1.1/frames). Also
+documentation](http://rubydoc.info/gems/ruby-vips/0.2.0/frames). Also
 see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 
 ## Small example
@@ -97,12 +94,17 @@ require 'vips'
 
 include VIPS
 
-# Create an image object. It will not actually load the image until needed.
+# Create an image object. It will not actually load the pixel data until 
+# needed. 
 im = Image.jpeg('mypic.jpg')
+
+# You can read all the header fields without triggering a pixel load.
+puts "it's #{im.x_size} pixels across!"
 
 # Shrink the jpeg by a factor of four when loading -- huge speed and CPU
 # improvements on large images.
 im = Image.jpeg('mypic.jpg', :shrink_factor => 4)
+puts "but only #{im.x_size} pixels when we shrink on load"
 
 # Add a shrink by a factor of two to the pipeline. This will not actually be
 # executed yet.
@@ -112,6 +114,9 @@ im_shrink_by_two = im.shrink(2)
 # actually loaded and resized. With images that allow for random access from
 # the hard drive (VIPS native format, tiled OpenEXR, ppm/pbm/pgm/pfm, tiled
 # tiff, and RAW images), the entire image is never read into memory.
+# For other formats, the image is either decompressed to a temporary disc 
+# file and then processed from there, or, if you give the :sequential hint, 
+# streamed directly from the file.
 im_shrink_by_two.png('out.png', :interlace => true)
 
 # All ruby-vips image commands can be chained, so the above sequence could
@@ -126,18 +131,16 @@ Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2).png('out.png')
 Image.new('mypic.jpg').shrink(2).write('out.png')
 ```
 
-## Gotchas
+## Garbage collection
 
-### Contain memuse
-
-ruby-vips only finalises vips images on GC. In other words:
+ruby-vips only frees images on GC. In other words:
 
 ```ruby
 a = Image.new(filename)
 a = nil
 ```
 
-will not release the resources associated with a, you have to
+will not release the resources associated with `a`, you have to
 either request a GC explicitly or wait for Ruby to GC for you. This can
 be a problem if you're processing many images.
 
