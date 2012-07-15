@@ -24,15 +24,10 @@ module VIPS
 
     # Creates a CSV reader.
     def initialize(path, options={})
-      @line_skip = 0
-      @whitespace = ' "'
-      @separator = ";,\t"
-      @line_limit = 0
-
-      self.line_skip = options[:line_skip] if options.has_key?(:line_skip)
-      self.whitespace = options[:whitespace] if options.has_key?(:whitespace)
-      self.separator = options[:separator] if options.has_key?(:separator)
-      self.line_limit = options[:line_limit] if options.has_key?(:line_limit)
+      @line_skip = options[:line_skip] || 0
+      @whitespace = options[:whitespace] || ' "'
+      @separator = options[:separator] || ";,\t"
+      @line_limit = options[:line_limit] || 0
 
       super path, options
     end
@@ -75,13 +70,9 @@ module VIPS
 
     # Creates a jpeg image file reader.
     def initialize(path, options={})
-      @shrink_factor = 1
-      @fail_on_warn = false
-      @sequential = false
-
-      self.shrink_factor = options[:shrink_factor] if options.has_key?(:shrink_factor)
-      self.fail_on_warn = options[:fail_on_warn] if options.has_key?(:fail_on_warn)
-      self.sequential = options[:sequential] if options.has_key?(:sequential)
+      @shrink_factor = options[:shrink_factor] || 1
+      @fail_on_warn = options[:fail_on_warn] || false
+      @sequential = options[:sequential] || false
 
       super path, options
     end
@@ -119,10 +110,9 @@ module VIPS
     # Create a tiff image file reader.
     def initialize(path, options={})
       @page_number = nil
-      @sequential = false
+      @sequential = options[:sequential] || false
 
       self.page_number = options[:page_number] if options.has_key?(:page_number)
-      self.sequential = options[:sequential] if options.has_key?(:sequential)
       super path, options
     end
 
@@ -155,9 +145,8 @@ module VIPS
 
     # Create a png image file reader.
     def initialize(path, options={})
-      @sequential = false
+      @sequential = options[:sequential] || false
 
-      self.sequential = options[:sequential] if options.has_key?(:sequential)
       super path, options
     end
 
