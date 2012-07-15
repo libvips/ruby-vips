@@ -11,16 +11,23 @@ describe VIPS do
   end
 
   describe ".sequential_mode_supported?" do
-    it "should return false for older libvips versions" do
+    it "should return false for < 7.28 libvips versions" do
       original_version = VIPS::LIB_VERSION_ARRAY
-      VIPS::LIB_VERSION_ARRAY = [7, 26, 7]
+      VIPS::LIB_VERSION_ARRAY = [7, 27, 7]
       Vips.sequential_mode_supported?.should == false
       VIPS::LIB_VERSION_ARRAY = original_version
     end
 
-    it "should return true for >= 7.29 libvips versions" do
+    it "should return true for >= 7.28 libvips versions" do
       original_version = VIPS::LIB_VERSION_ARRAY
-      VIPS::LIB_VERSION_ARRAY = [7, 29, 0]
+      VIPS::LIB_VERSION_ARRAY = [7, 28, 0]
+      Vips.sequential_mode_supported?.should == true
+      VIPS::LIB_VERSION_ARRAY = original_version
+    end
+
+    it "should return true for >= 8 libvips versions" do
+      original_version = VIPS::LIB_VERSION_ARRAY
+      VIPS::LIB_VERSION_ARRAY = [8, 0, 0]
       Vips.sequential_mode_supported?.should == true
       VIPS::LIB_VERSION_ARRAY = original_version
     end

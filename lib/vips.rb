@@ -9,7 +9,8 @@ require 'vips/writer'
 module Vips
   class << self
     def sequential_mode_supported?
-      VIPS::LIB_VERSION_ARRAY[0] >= 7 and VIPS::LIB_VERSION_ARRAY[1] >= 29
+      comp = VIPS::LIB_VERSION_ARRAY <=> [7,28,0]
+      comp >= 0
     end
   end
 end
