@@ -4,6 +4,10 @@
 
 * Don't use :sequential option for older libvipses [John Cupitt]
 
+### Fixed
+
+* Fixed check of sequential mode support [Stanislaw Pankevich]
+
 # Version 0.2.0
 
 Release date: 2012-06-29
