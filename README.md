@@ -73,6 +73,16 @@ See [Installiation on various platforms](https://github.com/jcupitt/ruby-vips/wi
 $ gem install ruby-vips
 ```
 
+Alternatively, for a debug build:
+
+```bash
+$ gem install ruby-vips -- --enable-debug
+```
+
+```bash
+$ gem install ruby-vips
+```
+
 or include it in Gemfile:
 
 ```ruby

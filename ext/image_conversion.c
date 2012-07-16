@@ -591,8 +591,8 @@ img_insertset(int argc, VALUE *argv, VALUE obj, VALUE obj2)
     y = IM_ARRAY(im_new, argc - 1, int);
 
     for(i = 1; i < argc; i++) {
-        x[i] = NUM2INT(RARRAY_PTR(argv[i])[0]);
-        y[i] = NUM2INT(RARRAY_PTR(argv[i])[1]);
+        x[i - 1] = NUM2INT(RARRAY_PTR(argv[i])[0]);
+        y[i - 1] = NUM2INT(RARRAY_PTR(argv[i])[1]);
     }
 
     if( im_insertset(im, im2, im_new, argc - 1, x, y) )
