@@ -32,19 +32,13 @@ reader_read_header(VALUE obj, VALUE path)
     VipsFormatClass *fmt_class = reader_get_fmt_class(CLASS_OF(obj));
     GetImg(obj, data, im);
 
-    if (!fmt_class)
+    if (!fmt_class || !fmt_class->header)
 	return Qfalse;
 
     if (!(im_new = (VipsImage*)im_open("reader_read_header", "p")))
         vips_lib_error();
 
-    if (fmt_class->header && 
-    	fmt_class->header(StringValuePtr(path), im_new)) {
-        im_close(im_new);
-        vips_lib_error();
-    }
-    else if (fmt_class->load && 
-    	fmt_class->load(StringValuePtr(path), im_new)) {
+    if (fmt_class->header(StringValuePtr(path), im_new)) {
         im_close(im_new);
         vips_lib_error();
     }
