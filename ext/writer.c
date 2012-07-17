@@ -144,25 +144,15 @@ writer_write_internal(VALUE obj, VALUE path)
 static VALUE
 jpeg_buf_internal(VALUE obj, VALUE quality)
 {
-    VipsImage *im_out;
     char *buf = NULL;
     int length;
-    VALUE str;
 
     GetImg(obj, data, im);
 
-    if (!(im_out = im_open("writer_jpeg_buf", "p")))
+    if (im_vips2bufjpeg(im, NULL, NUM2INT(quality), &buf, &length)) 
         vips_lib_error();
 
-    if (im_vips2bufjpeg(im, im_out, NUM2INT(quality), &buf, &length)) {
-		im_close(im_out);
-        vips_lib_error();
-	}
-
-    str = rb_tainted_str_new(buf, length);
-    im_close(im_out);
-
-    return str;
+    return rb_tainted_str_new(buf, length);
 }
 
 /* :nodoc: */
@@ -210,21 +200,13 @@ static VALUE
 png_buf_internal(VALUE obj, VALUE compression, VALUE interlace)
 {
 #if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
-    VipsImage *im_out;
     char *buf;
     size_t length;
     GetImg(obj, data, im);
 
-    if (!(im_out = im_open("writer_png_buf", "p")))
+    if (im_vips2bufpng(im, NULL, NUM2INT(compression), NUM2INT(interlace),
+        &buf, &length)) 
         vips_lib_error();
-
-    if (im_vips2bufpng(im, im_out, NUM2INT(compression), NUM2INT(interlace),
-        &buf, &length)) {
-        im_close(im_out);
-        vips_lib_error();
-	}
-
-    im_close(im_out);
 
     return rb_tainted_str_new(buf, length);
 #else

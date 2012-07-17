@@ -70,6 +70,16 @@ platforms](https://github.com/jcupitt/ruby-vips/wiki/installation-on-various-pla
 $ gem install ruby-vips
 ```
 
+Alternatively, for a debug build:
+
+```bash
+$ gem install ruby-vips -- --enable-debug
+```
+
+```bash
+$ gem install ruby-vips
+```
+
 or include it in Gemfile:
 
 ```ruby

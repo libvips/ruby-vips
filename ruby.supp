@@ -1,0 +1,194 @@
+# valgrind suppressions file for ubuntu 12.04
+# with this set of suppressions I can run 
+#   valgrind --db-attach=yes ruby -S rspec spec/vips/vips_reader_spec.rb ..
+# successfully
+
+{
+	cond1
+	Memcheck:Cond
+	...
+	fun:rb_newobj
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_str_buf_new
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_yyparse
+}
+
+{
+	val1
+	Memcheck:Value8
+	...
+	fun:rb_newobj
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_str_buf_new
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_yyparse
+}
+
+{
+	cond2
+	Memcheck:Cond
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_str_new3
+}
+
+{
+	val2
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_str_new3
+}
+
+{
+	cond3
+	Memcheck:Cond
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	fun:rb_node_newnode
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_yyparse
+}
+
+{
+	val3
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	fun:rb_node_newnode
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_yyparse
+}
+
+{
+	val4
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	fun:rb_node_newnode
+	fun:ruby_yyparse
+}
+
+{
+	cond4
+	Memcheck:Cond
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+}
+
+{
+	val5
+	Memcheck:Value8
+	fun:st_lookup
+	fun:rb_mark_generic_ivar
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+}
+
+{
+	val6
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:img_each_pixel
+}
+
+{
+	val6a
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	fun:rb_float_new
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+}
+
+{
+	val7
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_ary_each
+}
+
+{
+	val7a
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_newobj
+	fun:rb_node_newnode
+	fun:rb_iterate
+	...
+}
+
+{
+	cond5
+	Memcheck:Cond
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_xmalloc
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_reg_new
+}
+
+{
+	val8
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_xmalloc
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:rb_reg_new
+}
+
+{
+	cond6
+	Memcheck:Cond
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_xmalloc
+	fun:st_add_direct
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:st_foreach
+}
+
+{
+	val9
+	Memcheck:Value8
+	...
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:ruby_xmalloc
+	fun:st_add_direct
+	obj:/usr/lib/libruby1.8.so.1.8.7
+	fun:st_foreach
+}
+
+
+

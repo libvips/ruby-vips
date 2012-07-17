@@ -17,8 +17,8 @@ reader_get_fmt_class(VALUE klass)
 
     nickname = StringValuePtr(nickname_v);
 
-	if (!(fmt_class = (VipsFormatClass*)vips_class_find("VipsFormat", nickname)))
-		return NULL;
+    if (!(fmt_class = (VipsFormatClass*)vips_class_find("VipsFormat", nickname)))
+	return NULL;
 
     return fmt_class;
 }
@@ -32,8 +32,8 @@ reader_read_header(VALUE obj, VALUE path)
     VipsFormatClass *fmt_class = reader_get_fmt_class(CLASS_OF(obj));
     GetImg(obj, data, im);
 
-	if (!fmt_class)
-		return Qfalse;
+    if (!fmt_class || !fmt_class->header)
+	return Qfalse;
 
     if (!(im_new = (VipsImage*)im_open("reader_read_header", "p")))
         vips_lib_error();
@@ -42,6 +42,8 @@ reader_read_header(VALUE obj, VALUE path)
         im_close(im_new);
         vips_lib_error();
     }
+    else
+	return Qfalse;
 
     data->in = im_new;
 

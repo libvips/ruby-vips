@@ -5,3 +5,12 @@ require 'vips_ext'
 require 'vips/version'
 require 'vips/reader'
 require 'vips/writer'
+
+module Vips
+  class << self
+    def sequential_mode_supported?
+      comp = VIPS::LIB_VERSION_ARRAY <=> [7,28,0]
+      comp >= 0
+    end
+  end
+end

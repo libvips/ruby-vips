@@ -164,7 +164,7 @@ describe VIPS::Image do
 
   it "should divide two images" do
     im = @image.fliphor
-    im2 = @image.divide(im)
+    im2 = @image.divide(im).floor
 
     im2[41, 1].each_with_index do |v, i|
       v.should == @image[41, 1][i] / im[41, 1][i]
