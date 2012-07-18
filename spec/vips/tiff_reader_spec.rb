@@ -27,6 +27,6 @@ describe VIPS::TIFFReader do
 
   it "should read the width from the header" do
     tiff = VIPS::TIFFReader.new @path
-    tiff.x_size.should == @image.x_size
+    tiff.read.x_size.should == @image.x_size
   end
 end
