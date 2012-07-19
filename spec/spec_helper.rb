@@ -1,6 +1,10 @@
 $:.unshift File.expand_path('../../ext', __FILE__)
 
 require "vips"
+
+puts "testing ruby-vips #{VIPS::VERSION}"
+puts "linked against libvips #{VIPS::LIB_VERSION}"
+
 require "rspec"
 
 Dir["#{File.expand_path('../support', __FILE__)}/*.rb"].each do |file|
