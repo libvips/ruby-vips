@@ -112,7 +112,7 @@ repeat.times do
             elsif shrink >= 4
                 load_shrink = 4
             elsif shrink >= 2
-                load_shrink = 4
+                load_shrink = 2
             end
 
             puts "jpeg shrink on load of #{load_shrink}" if verbose

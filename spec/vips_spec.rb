@@ -1,5 +1,8 @@
 require "spec_helper"
 
+puts "testing ruby-vips #{VIPS::VERSION}"
+puts "linked against libvips #{VIPS::LIB_VERSION}"
+
 describe VIPS do
   it "has a library version" do
     a = VIPS::LIB_VERSION_ARRAY
