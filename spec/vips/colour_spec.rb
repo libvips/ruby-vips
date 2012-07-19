@@ -1,5 +1,9 @@
 require "spec_helper"
 
+# use this to get hex digets for tests
+# require 'digest/sha1'
+# puts "im3.sha1 == #{Digest::SHA1.hexdigest(im3.data)}"
+
 describe VIPS::Image do
   before :all do
     @image = simg 'wagon.v'
@@ -135,7 +139,7 @@ describe VIPS::Image do
     im.band_fmt.should == :FLOAT
   end
 
-  pending "should calculate a CMC color difference image between two lab images" do
+  it "should calculate a CMC color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.decmc_from_lab(im2)
@@ -144,7 +148,7 @@ describe VIPS::Image do
     end
  end
 
-  pending "should calculate a CIE76 color difference image between two lab images" do
+  it "should calculate a CIE76 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de_from_lab(im2)
@@ -153,7 +157,7 @@ describe VIPS::Image do
     end
  end
 
-  pending "should calculate a CIEDE2000 color difference image between two lab images" do
+  it "should calculate a CIEDE2000 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de00_from_lab(im2)
@@ -162,18 +166,32 @@ describe VIPS::Image do
     end
  end
 
-  pending "should import an embedded icc profile" do
+  it "should import an embedded icc profile" do
     im = VIPS::Image.new(sample('icc.jpg').to_s)
     im2 = im.icc_import_embedded(:RELATIVE_COLORIMETRIC)
-    pending "need to validate that an icc profile has been imported into vips"
+
+    im2.should match_sha1('4017b60f563e66aa659c0265b7ba44398fd0fbb0')
   end
 
-  pending "should import an embedded icc profile and then export using an external icc profile" do
+  it "should import an embedded icc profile and then export using an external icc profile" do
     im = VIPS::Image.new(sample('icc.jpg').to_s)
     im2 = im.icc_import_embedded(:RELATIVE_COLORIMETRIC)
     im3 = im2.icc_export_depth(8, sample('lcd.icc').to_s, :RELATIVE_COLORIMETRIC)
     im3.should match_sha1('aecb1abc6ed6cdb84acc8b64a53ef24b9191c8b0')
   end
+
+  it "should transform an image using an import and an export icc profile (Image#icc_transform)" do
+    im = @image.icc_import(sample('lcd.icc').to_s, :RELATIVE_COLORIMETRIC)
+    im2 = im.icc_export_depth(8, sample('lcd.icc').to_s, :RELATIVE_COLORIMETRIC)
+
+    a = @image.srgb_to_xyz.xyz_to_lab
+    b = im2.srgb_to_xyz.xyz_to_lab
+    diff = a.de_from_lab(b).max
+
+    diff.should < 1
+  end
+
+
 
   #it "should transform an image using an import and an export icc profile (Image#icc_transform)"
   #it "should import an external icc profile (Image#icc_import)"
