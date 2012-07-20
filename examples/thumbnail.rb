@@ -144,15 +144,17 @@ repeat.times do
         puts "block shrink by #{ishrink}" if verbose
         puts "residual scale by #{rscale}" if verbose
 
-        # vips has other interpolators, eg. :nohalo ... see the output of 
-        # "vips list classes" at the command-line
-        #
-        # :bicubic is well-known and mostly good enough
-        a = a.shrink(ishrink).affinei_resize(:bicubic, rscale)
+        a = a.shrink(ishrink)
 
         # the convolution will break sequential access: we need to cache a few
         # scanlines
         a = a.tile_cache(a.x_size, 1, 30)
+
+        # vips has other interpolators, eg. :nohalo ... see the output of 
+        # "vips list classes" at the command-line
+        #
+        # :bicubic is well-known and mostly good enough
+        a = a.affinei_resize(:bicubic, rscale)
 
         # this will look a little "soft", apply a gentle sharpen
         a = a.conv(m)
