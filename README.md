@@ -36,11 +36,15 @@ manipulate, and pass around Image objects without incurring any memory or CPU
 costs. The image is not actually processed until you write the image to memory
 or to disk.
 
+*note*: ruby-vips will work with versions of libvips as far back as 7.12, but
+with missing features and with reduced performance. For best results, use the 
+latest libvips you can.
+
 ## Requirements.
 
   * OS X or Linux
   * MRI 1.8.7, 1.9.2
-  * libvips 7.29 and later (it will work with earlier libvips, but some
+  * libvips 7.24 and later (it will work with earlier libvips, but some
     features may not be functional)
 
 ## Installation.
