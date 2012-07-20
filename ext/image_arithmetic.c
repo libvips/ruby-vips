@@ -1,7 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "mask.h"
-#include "interpolator.h"
 
 /*
  *  call-seq:
@@ -21,7 +18,6 @@ img_measure_area(VALUE obj, VALUE left, VALUE top, VALUE width, VALUE height,
 	VALUE h, VALUE v, VALUE sel)
 {
     DOUBLEMASK *ret;
-    VALUE results;
     int *a, i, len = RARRAY_LENINT(sel);
 	GetImg(obj, data, im);
 

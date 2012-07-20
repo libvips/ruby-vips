@@ -12,3 +12,4 @@ VALUE img_correl(VALUE, VALUE, VALUE, VALUE, VALUE,	VALUE, VALUE, VALUE);
 VALUE img_remosaic(VALUE, VALUE, VALUE);
 VALUE img_align_bands(VALUE);
 VALUE img_maxpos_subpel(VALUE);
+void init_Image_mosaicing(void);

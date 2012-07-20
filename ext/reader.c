@@ -1,6 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "header.h"
 
 ID id_iv__vips_fmt;
 
@@ -83,7 +81,7 @@ reader_fmt_set(VALUE klass, const char* val)
  */
 
 void
-init_Reader()
+init_Reader(void)
 {
     id_iv__vips_fmt = rb_intern("@_vips_fmt");
 

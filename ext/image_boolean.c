@@ -1,5 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
 
 static VALUE
 img_and_img(VALUE obj, VALUE obj2)

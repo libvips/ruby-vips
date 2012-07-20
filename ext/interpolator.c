@@ -89,7 +89,7 @@ interp_description(VALUE obj)
  */
 
 void
-init_Interpolator()
+init_Interpolator(void)
 {
     cVIPSInterpolator = rb_define_class_under(mVIPS, "Interpolator", rb_cObject);
 

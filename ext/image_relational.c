@@ -1,6 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "image_relational.h"
 
 static VALUE
 img_equal_const(int argc, VALUE *argv, VALUE obj)

@@ -1,6 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "header.h"
 
 VALUE mVIPSHeader;
 
@@ -22,8 +20,8 @@ header_band_fmt_to_id(VipsBandFmt band_fmt)
         case IM_BANDFMT_COMPLEX:   return id_complex; // two floats
         case IM_BANDFMT_DOUBLE:    return id_double;
         case IM_BANDFMT_DPCOMPLEX: return id_dbcomplex; // two doubles
+    	default:		return id_notset;
     }
-    return id_notset;
 }
 
 VipsBandFmt
@@ -399,7 +397,7 @@ header_set(VALUE obj, VALUE name, VALUE value)
  */
 
 void
-init_Header()
+init_Header( void )
 {
     mVIPSHeader = rb_define_module_under(mVIPS, "Header");
 

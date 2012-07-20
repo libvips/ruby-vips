@@ -1,7 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "mask.h"
-#include "image_colour.h"
 
 static ID id_perceptual, id_relative_colorimetric, id_saturation,
 	id_absolute_colorimetric;

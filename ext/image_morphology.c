@@ -1,7 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "mask.h"
-#include "image_morphology.h"
 
 /*
  *  call-seq:

@@ -21,10 +21,11 @@ VALUE img_init(VALUE, VipsImage*);
 VALUE img_init_partial();
 VALUE img_init_partial_anyclass(VALUE);
 VipsBandFmt img_id_to_band_fmt(VALUE);
+void init_Image(void);
 
 #define GetImg(obj, data, im) \
     vipsImg *data; \
-    VipsImage *im; \
+    VipsImage *im __attribute__ ((unused)); \
     Data_Get_Struct(obj, vipsImg, data); \
     im = data->in;
 

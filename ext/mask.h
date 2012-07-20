@@ -13,5 +13,6 @@ VALUE mask_alloc(VALUE);
 VALUE imask2rb(INTMASK*);
 VALUE dmask2rb(DOUBLEMASK*);
 void mask_arg2mask(VALUE, INTMASK**, DOUBLEMASK**);
+void init_Mask( void );
 
 #endif

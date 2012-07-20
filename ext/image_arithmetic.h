@@ -25,7 +25,7 @@ VALUE img_ceil(VALUE);
 VALUE img_s_linreg(int, VALUE*, VALUE);
 VALUE img_point(VALUE, VALUE, VALUE, VALUE, VALUE);
 VALUE img_pow(int, VALUE*, VALUE);
-VALUE img_pow_binop(int, VALUE*, VALUE);
+VALUE img_pow_binop(VALUE obj, VALUE arg);
 VALUE img_expn(int, VALUE*, VALUE);
 VALUE img_log(VALUE);
 VALUE img_log10(VALUE);

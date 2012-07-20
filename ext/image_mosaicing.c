@@ -1,6 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "image_mosaicing.h"
 
 ID id_match_left, id_match_right, id_match_both, id_match_none;
 

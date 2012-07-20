@@ -43,19 +43,6 @@ vips_s_debug_info(VALUE obj)
 }
 
 /*
- * This method will kill the ruby interpreter and then invokes im__print_all()
- * to hunt for dangling Vips allocations.
- */
-static VALUE
-vips_exit_info(VALUE obj)
-{
-    ruby_finalize();
-    im__print_all();
-    exit(0);
-    return Qnil;
-}
-
-/*
  * Build a call to im_init_world() and pass command line options to vips. This
  * sets some library wide options.
  */

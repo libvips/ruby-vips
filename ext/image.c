@@ -1,18 +1,4 @@
 #include "ruby_vips.h"
-#include "header.h"
-
-#include "image.h"
-#include "image_arithmetic.h"
-#include "image_boolean.h"
-#include "image_colour.h"
-#include "image_conversion.h"
-#include "image_convolution.h"
-#include "image_freq_filt.h"
-#include "image_histograms_lut.h"
-#include "image_morphology.h"
-#include "image_mosaicing.h"
-#include "image_relational.h"
-#include "image_resample.h"
 
 VALUE cVIPSImage;
 
@@ -150,8 +136,8 @@ img_vtype_to_id(VipsType vtype)
         case IM_TYPE_YXY:       return id_yxy;
         case IM_TYPE_RGB16:     return id_rgb16;
         case IM_TYPE_GREY16:    return id_grey16;
+	default:		return id_b_w;
     }
-    return id_b_w;
 }
 
 ID
@@ -161,8 +147,8 @@ img_coding_to_id(VipsCoding coding)
         case IM_CODING_NONE: return id_none;
         case IM_CODING_LABQ: return id_labq;
         case IM_CODING_RAD:  return id_rad;
+    	default:	     return id_none;
     }
-    return id_none;
 }
 
 /*
@@ -283,6 +269,8 @@ img_pixel_to_rb(VipsImage *im, int x, int y)
     case IM_BANDFMT_DOUBLE:    GETPIX( double, rb_float_new ); break;
     case IM_BANDFMT_COMPLEX:   CGETPIX( float, rb_float_new ); break; 
     case IM_BANDFMT_DPCOMPLEX: CGETPIX( double, rb_float_new ); break; 
+
+    default: 			GETPIX( unsigned char, UINT2NUM ); break;
     }
 }
 
@@ -356,7 +344,8 @@ img_data(VALUE obj)
     if (im_incheck(im) || im_check_uncoded("img_aref", im))
         return( Qnil );
 
-    return rb_tainted_str_new(im->data, IM_IMAGE_SIZEOF_LINE(im) * im->Ysize);
+    return rb_tainted_str_new((const char *) im->data, 
+		    IM_IMAGE_SIZEOF_LINE(im) * im->Ysize);
 }
 
 /*

@@ -1,6 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "header.h"
 
 /* :nodoc: */
 
@@ -264,7 +262,7 @@ vips_write_internal(VALUE obj, VALUE path)
  */
 
 void
-init_Writer()
+init_Writer(void)
 {
     VALUE writer = rb_define_class_under(mVIPS, "Writer", rb_cObject);
 

@@ -1,8 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "interpolator.h"
-#include "header.h"
-#include "image_resample.h"
 
 /*
  *  call-seq:

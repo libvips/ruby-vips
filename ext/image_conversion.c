@@ -1,7 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "mask.h"
-#include "header.h"
 
 static ID id_black, id_extend, id_repeat, id_mirror, id_white;
 

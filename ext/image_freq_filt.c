@@ -1,6 +1,4 @@
 #include "ruby_vips.h"
-#include "image.h"
-#include "image_freq_filt.h"
 
 /*
  *  call-seq:

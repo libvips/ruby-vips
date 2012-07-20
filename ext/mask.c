@@ -1,6 +1,4 @@
 #include "ruby_vips.h"
-#include "mask.h"
-#include "image.h"
 
 VALUE cVIPSMask;
 
@@ -328,7 +326,7 @@ mask_to_image(VALUE obj)
  */
 
 void
-init_Mask()
+init_Mask( void )
 {
     cVIPSMask = rb_define_class_under(mVIPS, "Mask", rb_cObject);
 
