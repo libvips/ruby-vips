@@ -190,7 +190,7 @@ describe VIPS::Image do
   end
 
   it "should build a tone curve for the adjustment of color levels" do
-    pending "find a way to test tone_build_range, tone_build & tone_analyze"
+    pending "find a way to test tone_build_range, tone_build & tone_analyse"
   end
 
   it "should plot a histogram" do

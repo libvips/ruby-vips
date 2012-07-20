@@ -554,7 +554,7 @@ init_Image(void)
     rb_define_method(cVIPSImage, "heq", img_heq, -1); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "lhisteq", img_lhisteq, 2); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "stdif", img_stdif, 6); // in image_histograms_lut.c
-    rb_define_method(cVIPSImage, "tone_analyze", img_tone_analyze, 6); // in image_histograms_lut.c
+    rb_define_method(cVIPSImage, "tone_analyse", img_tone_analyse, 6); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "maplut", img_maplut, 1); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "histplot", img_histplot, 0); // in image_histograms_lut.c
     rb_define_method(cVIPSImage, "dilate", img_dilate, 1); // in image_morphology.c
