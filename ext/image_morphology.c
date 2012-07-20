@@ -170,7 +170,7 @@ img_rank_image(int argc, VALUE *argv, VALUE obj)
 VALUE
 img_maxvalue(int argc, VALUE *argv, VALUE obj)
 {
-	img_rank_image_internal(argc, argv, obj, argc - 1);
+	return img_rank_image_internal(argc, argv, obj, argc - 1);
 }
 
 static VALUE

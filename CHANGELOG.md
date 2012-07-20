@@ -14,6 +14,8 @@ Release date: 2012-07-20
 * Reworked Reader class offers better performance and compatibility [John
   Cupitt]
 * Don't use :sequential option for older libvipses [John Cupitt]
+* Rename "tone_analyze" as "tone_analyse" for consistency with the rest of
+  vips [John  CUpitt]
 
 ### Fixed
 

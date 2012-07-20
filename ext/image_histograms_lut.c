@@ -620,21 +620,21 @@ img_s_tone_build(VALUE obj,
 
 /*
  *  call-seq:
- *     im.tone_analyze(ps, pm, ph, s, m, h) -> image
+ *     im.tone_analyse(ps, pm, ph, s, m, h) -> image
  *
  *  As Image#tone_build, but analyse the histogram of *self* and use it to pick
  *  the 0.1% and 99.9% points for <i>lb</i> and <i>lw</i>.
  */
 
 VALUE
-img_tone_analyze(VALUE obj,
+img_tone_analyse(VALUE obj,
 	VALUE ps, VALUE pm, VALUE ph, VALUE s, VALUE m, VALUE h)
 {
 #if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 
-    if (im_tone_analyze(im, im_new,
+    if (im_tone_analyse(im, im_new,
 		NUM2DBL(ps), NUM2DBL(pm), NUM2DBL(ph),
 		NUM2DBL(s), NUM2DBL(m), NUM2DBL(h)) )
         vips_lib_error();
