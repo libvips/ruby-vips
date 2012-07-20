@@ -39,11 +39,15 @@ reader_s_recognized_p(VALUE klass, VALUE path)
 /* :nodoc: */
 
 static VALUE
-reader_read_internal(VALUE obj, VALUE path)
+reader_read_internal(VALUE obj, VALUE path, VALUE flags)
 {
 	VipsImage *im_new;
 
-    if (!(im_new = im_open(StringValuePtr(path), "rd")))
+	/* flags bit 1 means "sequential mode requested".
+	 */
+	char *mode = NUM2INT(flags) & 1 ? "rs" : "rd";
+
+    if (!(im_new = im_open(StringValuePtr(path), mode)))
         vips_lib_error();
 
 	return img_init(cVIPSImage, im_new);
@@ -88,7 +92,7 @@ init_Reader()
     rb_define_alloc_func(reader, img_alloc);
 
     rb_define_singleton_method(reader, "recognized?", reader_s_recognized_p, 1);
-    rb_define_private_method(reader, "read_internal", reader_read_internal, 1);
+    rb_define_private_method(reader, "read_internal", reader_read_internal, 2);
 
     /*
      * Read JPEG images.

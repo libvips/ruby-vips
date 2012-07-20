@@ -10,7 +10,7 @@ module VIPS
     def read
       # in case the sub-class has not read it
       if not @_im 
-          @_im = read_internal @path
+          @_im = read_internal @path, 0
       end
       @_im
     end
@@ -46,12 +46,14 @@ module VIPS
       str << "," 
       str << "fail" if @fail_on_warn
 
+      seq = 0
       if Vips.sequential_mode_supported?
         str << "," 
         str << "sequential" if @sequential
+        seq = 1
       end
 
-      @_im = read_internal str
+      @_im = read_internal str, seq
     end
 
     # Shrink the jpeg while reading from disk. This means that the entire image
@@ -87,7 +89,7 @@ module VIPS
       # VIPS magic open path limitation/bug -- we cannot specify the comma char
       str << ",sep:#{@separator}" unless @separator[/,/]
 
-      @_im = read_internal str
+      @_im = read_internal str, 0
     end
 
     # Set the number of lines to skip at the beginning of the file.
@@ -126,12 +128,14 @@ module VIPS
       str = "#{@path}:"
       str << "#{@page_number}" if @page_number
 
+      seq = 0
       if Vips.sequential_mode_supported?
         str << ","
         str << "sequential" if @sequential
+        seq = 1
       end
 
-      @_im = read_internal str
+      @_im = read_internal str, seq
     end
 
     # Select which page in a multiple-page tiff to read. When set to nil, all
@@ -158,12 +162,14 @@ module VIPS
     def read
       str = @path
 
+      seq = 0
       if Vips.sequential_mode_supported?
         str << ":"
         str << "sequential" if @sequential
+        seq = 1
       end
 
-      @_im = read_internal str
+      @_im = read_internal str, seq
     end
   end
 

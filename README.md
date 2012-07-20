@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
 
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
-It is extremely fast and it can process huge images without requiring the 
+It is fast and it can process images without requiring the 
 entire image to be loaded into memory. For example, the benchmark at 
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
 image, crops, shrinks, sharpens and saves again:

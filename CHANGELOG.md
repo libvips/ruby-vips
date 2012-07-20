@@ -1,11 +1,23 @@
 # master 
 
+# Version 0.3.0
+
+Release date: 2012-07-20
+
+### Added
+
+* More rspec tests [John Cupitt]
+* Updated to libvips-7.30 [John Cupitt]
+
 ### Changed
 
+* Reworked Reader class offers better performance and compatibility [John
+  Cupitt]
 * Don't use :sequential option for older libvipses [John Cupitt]
 
 ### Fixed
 
+* Now passes rspec test suite cleanly in valgrind [John Cupitt]
 * Fixed check of sequential mode support [Stanislaw Pankevich]
 
 # Version 0.2.0
