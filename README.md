@@ -58,7 +58,7 @@ $ apt-get install libvips-dev
 ### OS X Prerequisites.
 
 ```bash
-$ brew install vips -HEAD
+$ brew install --use-llvm vips
 ```
 
 TODO: Describe & test with macports.
@@ -163,6 +163,6 @@ We suggest you schedule a GC every 100 images processed.
 ## Why use ruby-vips?
 
   - It supports over 250 low-level image and color manipulation operations.
-  - Operations are chainable, and do not get executed until the image is sent to an output.
+  - Operations are chainable and do not get executed until the image is sent to an output.
   - Memory use is low, even for very, very large images.
   - Fastest ruby library for resizing large images. See [benchmarks at the official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks)
