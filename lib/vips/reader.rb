@@ -160,11 +160,10 @@ module VIPS
     end
 
     def read
-      str = @path
+      str = "#{@path}:"
 
       seq = 0
       if Vips.sequential_mode_supported?
-        str << ":"
         str << "sequential" if @sequential
         seq = 1
       end
