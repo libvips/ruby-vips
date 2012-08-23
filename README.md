@@ -61,6 +61,16 @@ $ apt-get install libvips-dev
 $ brew install --use-llvm vips
 ```
 
+You may need to set your PKG_CONFIG_PATH before vips can see your libpng. Try
+something like:
+
+```bash
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib/pkgconfig:/usr/X11/lib/pkgconfig
+```
+
+See the Mac OS X Lion section in [Installation on various
+platforms](https://github.com/jcupitt/ruby-vips/wiki/installation-on-various-platforms).
+
 TODO: Describe & test with macports.
 
 ### Other platforms
