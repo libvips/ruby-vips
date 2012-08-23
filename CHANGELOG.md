@@ -1,5 +1,12 @@
 # master 
 
+# Version 0.3.1
+
+### Fixed
+
+* PNG writer no longer changes the filename argument [John Cupitt]
+* Workaround helps ruby-vips compile against 7.26.3 [John Cupitt]
+
 # Version 0.3.0
 
 Release date: 2012-07-20

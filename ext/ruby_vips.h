@@ -28,6 +28,14 @@ void vips_lib_error();
 #define rb_str_new_cstr(str) rb_str_new(str, (long)strlen(str))
 #endif
 
+/* vips-7.26.3 and earlier 7.26 (used on Ubuntu 12.04) has a broken compat
+ * macro for im_openout(). Make sure we have the correct one defined.
+ */
+#ifdef im_openout
+#undef im_openout
+#define im_openout( F ) vips_image_new_mode( F, "w" )
+#endif /*im_openout*/
+
 #include "header.h"
 #include "image_arithmetic.h"
 #include "image_boolean.h"
