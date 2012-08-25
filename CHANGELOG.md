@@ -6,6 +6,7 @@
 
 * PNG writer no longer changes the filename argument [John Cupitt]
 * Workaround helps ruby-vips compile against 7.26.3 [John Cupitt]
+* Image read now runs GC and retries on fail [John Cupitt]
 
 # Version 0.3.0
 

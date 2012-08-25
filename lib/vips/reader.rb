@@ -10,7 +10,7 @@ module VIPS
     def read
       # in case the sub-class has not read it
       if not @_im 
-          @_im = read_internal @path, 0
+          @_im = read_retry @path, 0
       end
       @_im
     end
@@ -22,6 +22,21 @@ module VIPS
 
     def y_size
         @_im.y_size
+    end
+
+    private
+
+    # read can fail due to no file descriptors ... if we fail, do a GC and try
+    # again a second time
+    def read_retry(path, seq)
+      im = nil
+      begin
+        im = read_internal path, seq
+      rescue
+        GC.start
+        im = read_internal path, seq
+      end
+      im
     end
   end
 
@@ -53,7 +68,7 @@ module VIPS
         seq = 1
       end
 
-      @_im = read_internal str, seq
+      @_im = read_retry str, seq
     end
 
     # Shrink the jpeg while reading from disk. This means that the entire image
@@ -89,7 +104,7 @@ module VIPS
       # VIPS magic open path limitation/bug -- we cannot specify the comma char
       str << ",sep:#{@separator}" unless @separator[/,/]
 
-      @_im = read_internal str, 0
+      @_im = read_retry str, 0
     end
 
     # Set the number of lines to skip at the beginning of the file.
@@ -135,7 +150,7 @@ module VIPS
         seq = 1
       end
 
-      @_im = read_internal str, seq
+      @_im = read_retry str, seq
     end
 
     # Select which page in a multiple-page tiff to read. When set to nil, all
@@ -168,7 +183,7 @@ module VIPS
         seq = 1
       end
 
-      @_im = read_internal str, seq
+      @_im = read_retry str, seq
     end
   end
 
