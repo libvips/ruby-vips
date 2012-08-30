@@ -1,6 +1,29 @@
 module VIPS
   class Writer
     def write(path)
+      write_gc path
+    end
+
+    private
+
+    # write can fail due to no file descriptors 
+    #
+    # we can't try a write and GC and retry on fail, since the write may take a
+    # long time 
+    #
+    # GCing before every write would have a horrible effect on performance, so
+    # as a compromise we GC every @@gc_interval writes
+
+    @@gc_interval = 100
+    @@gc_countdown = @@gc_interval
+
+    def write_gc(path)
+      @@gc_countdown -= 1
+      if @@gc_countdown < 0 
+        @@gc_countdown = @@gc_interval
+        GC.start
+      end
+
       write_internal path
     end
   end
@@ -16,7 +39,7 @@ module VIPS
     end
 
     def write(path)
-      write_internal "#{path}:sep:#{@separator}"
+      write_gc "#{path}:sep:#{@separator}"
     end
   end
 
@@ -32,7 +55,7 @@ module VIPS
     end
 
     def write(path)
-      write_internal "#{path}:#{@quality}"
+      write_gc "#{path}:#{@quality}"
     end
 
     def to_memory
@@ -63,7 +86,7 @@ module VIPS
     end
 
     def write(path)
-      write_internal "#{path}:#{@compression},#{@interlace ? 1 : 0}"
+      write_gc "#{path}:#{@compression},#{@interlace ? 1 : 0}"
     end
 
     def to_memory
@@ -93,7 +116,7 @@ module VIPS
     end
 
     def write(path)
-      write_internal "#{path}:#{@format}"
+      write_gc "#{path}:#{@format}"
     end
 
     def format=(format_v)
@@ -136,7 +159,7 @@ module VIPS
 
     def write(path)
       opts = [compression_str, layout_str, @multi_res, @format, resolution_str].join ','
-      write_internal "#{path}:#{opts}"
+      write_gc "#{path}:#{opts}"
     end
 
     def compression_str
