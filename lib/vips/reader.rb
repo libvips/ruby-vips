@@ -62,7 +62,7 @@ module VIPS
       str << "fail" if @fail_on_warn
 
       seq = 0
-      if Vips.sequential_mode_supported?
+      if VIPS.sequential_mode_supported?
         str << "," 
         str << "sequential" if @sequential
         seq = 1
@@ -144,7 +144,7 @@ module VIPS
       str << "#{@page_number}" if @page_number
 
       seq = 0
-      if Vips.sequential_mode_supported?
+      if VIPS.sequential_mode_supported?
         str << ","
         str << "sequential" if @sequential
         seq = 1
@@ -178,7 +178,7 @@ module VIPS
       str = "#{@path}:"
 
       seq = 0
-      if Vips.sequential_mode_supported?
+      if VIPS.sequential_mode_supported?
         str << "sequential" if @sequential
         seq = 1
       end
