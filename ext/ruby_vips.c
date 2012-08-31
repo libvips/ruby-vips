@@ -34,7 +34,7 @@ ruby_vips_class_map_all( GType type, VipsClassMap fn, void *a )
 	}
 
 	if( (result = vips_type_map( type, 
-		(VipsTypeMap2) vips_class_map_all, fn, a )) )
+		(VipsTypeMap2) ruby_vips_class_map_all, fn, a )) )
 		return( result );
 
 	return( NULL );

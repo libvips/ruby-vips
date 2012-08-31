@@ -1,5 +1,9 @@
 # master 
 
+# Version 0.3.3
+
+* Typo in workaround in 0.3.2 [John Cupitt]
+
 # Version 0.3.2
 
 ### Fixed
