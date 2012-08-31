@@ -36,6 +36,15 @@ void vips_lib_error();
 #define im_openout( F ) vips_image_new_mode( F, "w" )
 #endif /*im_openout*/
 
+/* vips-7.26.3 and earlier 7.26 (used on Ubuntu 12.04) was missing a compat
+ * macro for vips_class_map_concrete_all(). Additionally, the
+ * vips_class_map_all() in libvips was broken .. turn on our own definition.
+ */
+#ifndef vips_class_map_concrete_all
+#define vips_class_map_concrete_all ruby_vips_class_map_all
+#define NEED_ruby_vips_class_map_all
+#endif
+
 #include "header.h"
 #include "image_arithmetic.h"
 #include "image_boolean.h"

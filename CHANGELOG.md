@@ -1,5 +1,12 @@
 # master 
 
+# Version 0.3.2
+
+### Fixed
+
+* Workaround helps ruby-vips compile (and run) against 7.26.3 [John Cupitt and 
+James Harrison]
+
 # Version 0.3.1
 
 ### Fixed

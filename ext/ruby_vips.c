@@ -1,5 +1,46 @@
 #include "ruby_vips.h"
 
+/* vips-7.26.3 and earlier 7.26 (used on Ubuntu 12.04) had a broken
+ * vips_class_map_all(). ruby_vips.h turns on NEED_ruby_vips_class_map_all if
+ * we need to define our own, working version. 
+ */
+#ifdef NEED_ruby_vips_class_map_all
+static void *
+ruby_vips_type_map( GType base, VipsTypeMap2 fn, void *a, void *b )
+{
+	GType *child;
+	guint n_children;
+	unsigned int i;
+	void *result;
+
+	child = g_type_children( base, &n_children );
+	result = NULL;
+	for( i = 0; i < n_children && !result; i++ )
+		result = fn( child[i], a, b );
+	g_free( child );
+
+	return( result );
+}
+
+void *
+ruby_vips_class_map_all( GType type, VipsClassMap fn, void *a )
+{
+	void *result;
+
+	if( !G_TYPE_IS_ABSTRACT( type ) ) {
+		if( (result = fn( 
+			VIPS_OBJECT_CLASS( g_type_class_ref( type ) ), a )) )
+			return( result );
+	}
+
+	if( (result = vips_type_map( type, 
+		(VipsTypeMap2) vips_class_map_all, fn, a )) )
+		return( result );
+
+	return( NULL );
+}
+#endif /*NEED_ruby_vips_class_map_all*/
+
 VALUE mVIPS, eVIPSError;
 
 void
