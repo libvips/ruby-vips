@@ -170,14 +170,14 @@ describe VIPS::Image do
     im = VIPS::Image.new(sample('icc.jpg').to_s)
     im2 = im.icc_import_embedded(:RELATIVE_COLORIMETRIC)
 
-    im2.should match_sha1('4017b60f563e66aa659c0265b7ba44398fd0fbb0')
+    im2.should match_sha1('274ab0412caf3f578ff5633c357206168e7aae84')
   end
 
   it "should import an embedded icc profile and then export using an external icc profile" do
     im = VIPS::Image.new(sample('icc.jpg').to_s)
     im2 = im.icc_import_embedded(:RELATIVE_COLORIMETRIC)
     im3 = im2.icc_export_depth(8, sample('lcd.icc').to_s, :RELATIVE_COLORIMETRIC)
-    im3.should match_sha1('aecb1abc6ed6cdb84acc8b64a53ef24b9191c8b0')
+    im3.should match_sha1('cf1d8ff608231a13b70d938f00e88dd924e83bc8')
   end
 
   it "should transform an image using an import and an export icc profile (Image#icc_transform)" do
@@ -188,7 +188,7 @@ describe VIPS::Image do
     b = im2.srgb_to_xyz.xyz_to_lab
     diff = a.de_from_lab(b).max
 
-    diff.should < 1
+    diff.should < 2
   end
 
   #it "should transform an image using an import and an export icc profile (Image#icc_transform)"
