@@ -90,10 +90,6 @@ Alternatively, for a debug build:
 $ gem install ruby-vips -- --enable-debug
 ```
 
-```bash
-$ gem install ruby-vips
-```
-
 or include it in Gemfile:
 
 ```ruby
@@ -147,6 +143,10 @@ im_shrink_by_two.png('out.png', :interlace => true)
 # be written as:
 Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2).png('out.png')
 
+# You hint sequential mode in the loader, so this will stream directly from
+# the source image:
+Image.jpeg('large.png', :sequential => true).shrink(2).png('out.png')
+
 # The statement above will load the jpeg (pre-shrunk by a factor of four),
 # shrink the image again by a factor of two, and then save as a png image.
 
@@ -154,21 +154,6 @@ Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2).png('out.png')
 # reader and writer:
 Image.new('mypic.jpg').shrink(2).write('out.png')
 ```
-
-## Garbage collection
-
-ruby-vips only frees images on GC. In other words:
-
-```ruby
-a = Image.new(filename)
-a = nil
-```
-
-will not release the resources associated with `a`, you have to
-either request a GC explicitly or wait for Ruby to GC for you. This can
-be a problem if you're processing many images.
-
-We suggest you schedule a GC every 100 images processed.
 
 ## Why use ruby-vips?
 
