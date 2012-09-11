@@ -86,7 +86,13 @@ init_Reader(void)
     id_iv__vips_fmt = rb_intern("@_vips_fmt");
 
     VALUE reader = rb_define_class_under(mVIPS, "Reader", rb_cObject);
+
+    /* We used to allow header methods on VIPS::Reader, we don't any more
+     *
+     * lib/vips/reader.rb includes a few header methods for back compat
+     *
     rb_include_module(reader, mVIPSHeader);
+     */
     rb_define_alloc_func(reader, img_alloc);
 
     rb_define_singleton_method(reader, "recognized?", reader_s_recognized_p, 1);
