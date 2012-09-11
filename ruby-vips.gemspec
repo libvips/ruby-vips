@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "ruby-vips"
-  s.version = "0.3.3"
+  s.version = "0.3.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Timothy Elliott", "John Cupitt"]
-  s.date = "2012-08-31"
+  s.date = "2012-09-11"
   s.description = "Ruby extension for the vips image processing library."
   s.email = "jcupitt@gmail.com"
   s.extensions = ["ext/extconf.rb"]
