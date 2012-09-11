@@ -17,11 +17,19 @@ module VIPS
 
     # support these two for compat with older ruby-vips
     def x_size
-        @_im.x_size
+        read.x_size
     end
 
     def y_size
-        @_im.y_size
+        read.y_size
+    end
+
+    def exif
+        read.exif
+    end
+
+    def exif?
+        read.exif?
     end
 
     private

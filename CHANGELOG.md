@@ -2,7 +2,9 @@
 
 # Version 0.3.4
 
-* Update specs for lcms changes [John Cupitt]
+* Update specs for lcms changes, thanks Stanislaw [John Cupitt]
+* VIPS::Reader supports .exif / .exif? methods for better back compat, thanks Jeremy [John Cupitt]
+* VIPS::Reader fallbacks load the image if it's not been loaded [John Cupitt]
 
 # Version 0.3.3
 
