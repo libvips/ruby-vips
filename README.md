@@ -99,7 +99,7 @@ gem 'ruby-vips'
 ## Documentation.
 
 ruby-vips has [rdoc
-documentation](http://rubydoc.info/gems/ruby-vips/0.2.0/frames). Also
+documentation](http://rubydoc.info/gems/ruby-vips/frames). Also
 see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
 
 ## Small example

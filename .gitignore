@@ -1,3 +1,4 @@
 ruby-vips-*.gem
+.yardoc
 .*.swp
 tags
