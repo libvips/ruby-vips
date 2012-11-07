@@ -2,3 +2,9 @@ ruby-vips-*.gem
 .yardoc
 .*.swp
 tags
+
+# Ignore compiler-generated files
+*.so
+*.o
+/Makefile
+/mkmf.log
