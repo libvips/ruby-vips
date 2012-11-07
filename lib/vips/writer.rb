@@ -171,7 +171,7 @@ module VIPS
     end
 
     def layout_str
-      s = @layout
+      s = @layout.to_s
       s << ":#{@tile_size.join 'x'}" if @layout == :tile
       s
     end
