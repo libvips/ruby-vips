@@ -31,4 +31,10 @@ describe VIPS::Writer do
     @writer.class.should == VIPS::Writer
     @writer.image.should == @image
   end
+
+  it "should write a tiled TIFF" do
+    @tiff_out = tmp('temp.tiff').to_s
+    File.unlink(@tiff_out) if File.exists?(@tiff_out)
+    @image.tiff(@tiff_out, :layout => :tile)
+  end
 end
