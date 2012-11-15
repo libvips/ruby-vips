@@ -1,5 +1,9 @@
 # master 
 
+# Version 0.3.5
+
+* rb_raise() in mask.c no longer passes a string pointer as the fmt arg, stopping gcc bailing out on some platforms [John Cupitt]
+
 # Version 0.3.4
 
 * Update specs for lcms changes, thanks Stanislaw [John Cupitt]

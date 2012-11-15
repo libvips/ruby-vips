@@ -282,7 +282,7 @@ mask_arg2mask(VALUE arg, INTMASK **imask, DOUBLEMASK **dmask)
         else
             errstr = "Expected an int array or an int Mask";
 
-        rb_raise(rb_eArgError, errstr);
+        rb_raise(rb_eArgError, "%s", errstr);
     }
 
     if (imask)
