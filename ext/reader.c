@@ -39,16 +39,16 @@ reader_s_recognized_p(VALUE klass, VALUE path)
 static VALUE
 reader_read_internal(VALUE obj, VALUE path, VALUE flags)
 {
-	VipsImage *im_new;
+    VipsImage *im_new;
 
-	/* flags bit 1 means "sequential mode requested".
-	 */
-	char *mode = NUM2INT(flags) & 1 ? "rs" : "rd";
+    /* flags bit 1 means "sequential mode requested".
+     */
+    char *mode = NUM2INT(flags) & 1 ? "rs" : "rd";
 
     if (!(im_new = im_open(StringValuePtr(path), mode)))
         vips_lib_error();
 
-	return img_init(cVIPSImage, im_new);
+    return img_init(cVIPSImage, im_new);
 }
 
 /* :nodoc: */
@@ -68,6 +68,21 @@ raw_read_internal(VALUE obj, VALUE path, VALUE width, VALUE height, VALUE bpp,
 	}
 
 	return img_init(cVIPSImage, im_new);
+}
+
+static VALUE
+magick_read_internal(VALUE obj, VALUE path, VALUE flags)
+{
+    VipsImage *im_new;
+
+    if (!(im_new = im_open(StringValuePtr(path), "p")))
+        vips_lib_error();
+    if (im_magick2vips(StringValuePtr(path), im_new)) {
+        im_close(im_new);
+        vips_lib_error();
+    }
+
+    return img_init(cVIPSImage, im_new);
 }
 
 static void
@@ -152,6 +167,7 @@ init_Reader(void)
      */
 
     VALUE magick_reader = rb_define_class_under(mVIPS, "MagickReader", reader);
+    rb_define_private_method(magick_reader, "read_internal", magick_read_internal, 2);
     reader_fmt_set(magick_reader, "magick");
 
     /*

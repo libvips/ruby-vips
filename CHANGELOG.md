@@ -3,6 +3,7 @@
 # Version 0.3.5
 
 * rb_raise() in mask.c no longer passes a string pointer as the fmt arg, stopping gcc bailing out on some platforms [John Cupitt]
+* Image.magick() now calls im_magick2vips() directly rather than relying on libvips file type sniffing [John Cupitt]
 
 # Version 0.3.4
 
