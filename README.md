@@ -43,7 +43,7 @@ latest libvips you can.
 ## Requirements.
 
   * OS X or Linux
-  * MRI 1.8.7, 1.9.2
+  * MRI 1.8.7, 1.9.3
   * libvips 7.24 and later (it will work with earlier libvips, but some
     features may not be functional)
 
