@@ -151,8 +151,8 @@ describe VIPS::Image do
     maxpos[1].should == 15
   end
 
-  it "should create a random fractal image" do
+  # when not marked as pending - produces Segmentation fault bug on Travis (issue #32)
+  pending "should create a random fractal image" do
     im = VIPS::Image.fractsurf 512, 2.5
   end
 end
-
