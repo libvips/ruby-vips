@@ -58,6 +58,7 @@ $ apt-get install libvips-dev
 ### OS X Prerequisites.
 
 ```bash
+$ brew tap homebrew/science
 $ brew install --use-llvm vips
 ```
 
