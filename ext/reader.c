@@ -51,6 +51,22 @@ reader_read_internal(VALUE obj, VALUE path, VALUE flags)
     return img_init(cVIPSImage, im_new);
 }
 
+static VALUE
+jpeg_buf_internal(VALUE obj, VALUE buf, VALUE shrink, VALUE fail)
+{
+    VipsImage *im_new;
+
+    buf = StringValue(buf);
+
+    if (vips_jpegload_buffer(RSTRING_PTR(buf), RSTRING_LEN(buf), &im_new, 
+        "shrink", NUM2INT(shrink),
+        "fail", NUM2INT(fail),
+	NULL))
+        vips_lib_error();
+
+    return img_init(cVIPSImage, im_new);
+}
+
 /* :nodoc: */
 
 static VALUE
@@ -118,6 +134,7 @@ init_Reader(void)
      */
 
     VALUE jpeg_reader = rb_define_class_under(mVIPS, "JPEGReader", reader);
+    rb_define_private_method(jpeg_reader, "buf_internal", jpeg_buf_internal, 3);
     reader_fmt_set(jpeg_reader, "jpeg");
 
     /*

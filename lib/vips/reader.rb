@@ -79,6 +79,18 @@ module VIPS
       @_im = read_retry str, seq
     end
 
+    def b_to_i(b)
+      if b
+        1
+      else
+        0
+      end
+    end
+
+    def read_buffer
+      @_im = buf_internal @path, @shrink_factor, b_to_i(@fail_on_warn)
+    end
+
     # Shrink the jpeg while reading from disk. This means that the entire image
     # never has to be loaded in memory. Shrink factor can be 1 (no shrink), 2,
     # 4, or 8.

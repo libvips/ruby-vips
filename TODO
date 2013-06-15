@@ -1,3 +1,13 @@
+btw, there's a method called to_memory in JPEGWriter and PNGWriter, that works
+cool to retrieve the VIPS::Image as a memory buffer, will be cool if this
+method is moved up to Writer and then it handles the correct to_memory method
+using the image headers.
+
+add from_memory? or should the open method accept a blob in place of a path?
+
+
+
+
 TODO
 * Verify that all memory gets released when vips ops return errors. Namely,
   make sure that the allocated IMAGEs get released via ruby's free callbacks.
