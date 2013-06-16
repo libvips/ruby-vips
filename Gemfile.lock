@@ -8,7 +8,7 @@ GEM
       git (>= 1.2.5)
       rake
       rdoc
-    json (1.7.7)
+    json (1.8.0)
     rake (10.0.4)
     rdoc (3.12.2)
       json (~> 1.4)

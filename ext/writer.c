@@ -147,7 +147,7 @@ jpeg_buf_internal(VALUE obj, VALUE quality)
 
     GetImg(obj, data, im);
 
-#if IM_MAJOR_VERSION >= 7 || IM_MINOR_VERSION >= 28
+#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 28
 {
     size_t len;
 

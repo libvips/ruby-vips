@@ -58,7 +58,7 @@ jpeg_buf_internal(VALUE obj, VALUE buf, VALUE shrink, VALUE fail)
 
     im_new = NULL; 
 
-#if IM_MAJOR_VERSION >= 7 || IM_MINOR_VERSION >= 28
+#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 28
     buf = StringValue(buf);
 
     if (vips_jpegload_buffer(RSTRING_PTR(buf), RSTRING_LEN(buf), &im_new, 
