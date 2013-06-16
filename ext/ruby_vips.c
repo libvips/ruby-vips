@@ -130,7 +130,7 @@ init_vips_library()
     /* We use the vips7 interface, so the vips8 cache will not help us.
      * Disable it and save 100mb or so of memory in vips-7.28 and later.
      */
-#if IM_MAJOR_VERSION >= 7 && IM_MINOR_VERSION >= 28
+#if IM_MAJOR_VERSION >= 7 || IM_MINOR_VERSION >= 28
     vips_cache_set_max_mem( 0 );
 #endif
 }

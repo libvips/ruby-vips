@@ -56,6 +56,9 @@ jpeg_buf_internal(VALUE obj, VALUE buf, VALUE shrink, VALUE fail)
 {
     VipsImage *im_new;
 
+    im_new = NULL; 
+
+#if IM_MAJOR_VERSION >= 7 || IM_MINOR_VERSION >= 28
     buf = StringValue(buf);
 
     if (vips_jpegload_buffer(RSTRING_PTR(buf), RSTRING_LEN(buf), &im_new, 
@@ -63,6 +66,9 @@ jpeg_buf_internal(VALUE obj, VALUE buf, VALUE shrink, VALUE fail)
         "fail", NUM2INT(fail),
 	NULL))
         vips_lib_error();
+#else
+    rb_raise(eVIPSError, "This method is not implemented in your version of VIPS");
+#endif
 
     return img_init(cVIPSImage, im_new);
 }
