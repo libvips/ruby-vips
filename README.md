@@ -199,7 +199,7 @@ im = im.lin(1.5, 0)
 # is called, and then will only decompress the section being processed. 
 # You will need to have all of the compressed data in memory at once though. 
 
-writer = JPEGWriter.new(im, :compression => 2, :interlace => false)
+writer = PNGWriter.new(im, :compression => 2, :interlace => false)
 png_data = writer.to_memory
 IO.write('out.png', png_data)
 
