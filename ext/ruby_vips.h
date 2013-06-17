@@ -13,6 +13,12 @@ void vips_lib_error();
 #  define  __attribute__(x)  /*NOTHING*/
 #endif
 
+/* Vips lib version testing. This will not work if MINOR gets over 100,
+ * obviously.
+ */
+#define ATLEAST_VIPS( MAJOR, MINOR ) \
+	(IM_MAJOR_VERSION * 100 + IM_MINOR_VERSION >= MAJOR * 100 + MINOR)
+
 /* Backports from ruby 1.9.2 for ruby 1.8.7
  */
 

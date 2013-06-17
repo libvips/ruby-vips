@@ -71,7 +71,7 @@ img_invfftr(VALUE obj)
 	RUBY_VIPS_UNARY(im_invfftr);
 }
 
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 22
+#if ATLEAST_VIPS( 7, 22 )
 
 /*
  *  call-seq:

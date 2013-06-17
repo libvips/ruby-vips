@@ -427,7 +427,7 @@ img_gammacorrect(VALUE obj, VALUE exponent)
 VALUE
 img_mpercent_hist(VALUE obj, VALUE percent)
 {
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 22
+#if ATLEAST_VIPS( 7, 22 )
     int ret;
 	GetImg(obj, data, im);
     
@@ -627,7 +627,7 @@ VALUE
 img_tone_analyse(VALUE obj,
 	VALUE ps, VALUE pm, VALUE ph, VALUE s, VALUE m, VALUE h)
 {
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
+#if ATLEAST_VIPS( 7, 23 )
 	GetImg(obj, data, im);
 	OutImg(obj, new, data_new, im_new);
 

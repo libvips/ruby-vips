@@ -56,7 +56,7 @@ static VALUE
 writer_meta_remove(VALUE obj, const char* name)
 {
     GetImg(obj, data, im);
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 22
+#if ATLEAST_VIPS( 7, 22 )
 	if (im_meta_remove(im, name))
 		return Qfalse;
 #else
@@ -147,7 +147,7 @@ jpeg_buf_internal(VALUE obj, VALUE quality)
 
     GetImg(obj, data, im);
 
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 28
+#if ATLEAST_VIPS( 7, 28 )
 {
     size_t len;
 
@@ -216,13 +216,13 @@ png_buf_internal(VALUE obj, VALUE compression, VALUE interlace)
     size_t length;
     GetImg(obj, data, im);
 
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 28
+#if ATLEAST_VIPS( 7, 28 )
     if (vips_pngsave_buffer(im, &buf, &length,
         "compression", NUM2INT(compression),
 	"interlace", NUM2INT(interlace),
 	NULL))
         vips_lib_error();
-#elif IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 23
+#elif ATLEAST_VIPS( 7, 23 )
     if (im_vips2bufpng(im, NULL, NUM2INT(compression), NUM2INT(interlace),
         &buf, &length)) 
         vips_lib_error();

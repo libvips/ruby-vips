@@ -192,23 +192,30 @@ jpeg_data = IO.read('mypic.jpg')
 reader = JPEGReader.new(jpeg_data, :shrink_factor => 2, :fail_on_warn => true)
 im = reader.read_buffer
 
-# brighten
-im = im.lin(1.5, 0)
-
 # As above, the image will not be processed until the .to_memory() method 
 # is called, and then will only decompress the section being processed. 
 # You will need to have all of the compressed data in memory at once though. 
+
+# Note that this means you will get a coredump if you free the compressed
+# image buffer (jpeg_data above) before the write has completed.
 
 writer = PNGWriter.new(im, :compression => 2, :interlace => false)
 png_data = writer.to_memory
 IO.write('out.png', png_data)
 
+# Only JPEG, PNG and uncompressed memory images are supported at the moment,
+# and png memory read is only in vips-7.34 and later.
+
+# We hope to add other formats in future. 
+
+png_data = IO.read('mypic.png')
+reader = PNGReader.new(png_data)
+im = reader.read_buffer
+
 writer = JPEGWriter.new(im, :quality => 50)
 jpeg_data = writer.to_memory
 IO.write('out.jpg', jpeg_data)
 
-# VIPS currently only suports JPEG and PNG memory compress and decompress. 
-# We hope to add other formats in future. 
 ```
 
 ## Why use ruby-vips?

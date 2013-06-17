@@ -205,6 +205,10 @@ module VIPS
 
       @_im = read_retry str, seq
     end
+
+    def read_buffer
+      @_im = buf_internal @path
+    end
   end
 
   class Image

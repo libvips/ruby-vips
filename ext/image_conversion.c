@@ -68,7 +68,7 @@ img_copy_swap(VALUE obj)
 VALUE
 img_copy_native(VALUE obj, VALUE input_msb_first)
 {
-#if IM_MAJOR_VERSION > 7 || IM_MINOR_VERSION >= 22
+#if ATLEAST_VIPS( 7, 22 )
     vipsImg *in, *out;
     int msb_first;
 

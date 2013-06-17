@@ -1,5 +1,11 @@
 # master 
 
+# Version 0.3.6
+
+* add png and jpg load from memory buffer [John Cupitt]
+* README updated to include buffer read/write example [John Cupitt]
+* better vips version testing [John Cupitt]
+
 # Version 0.3.5
 
 * rb_raise() in mask.c no longer passes a string pointer as the fmt arg, stopping gcc bailing out on some platforms [John Cupitt]
