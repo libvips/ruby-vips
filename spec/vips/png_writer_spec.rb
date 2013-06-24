@@ -18,7 +18,11 @@ describe VIPS::PNGWriter do
   it "should write a png to memory" do
     if Spec::Helpers.match_vips_version("> 7.22")
       str = @writer.to_memory
-      str.size.should == 54804
+      if Spec::Helpers.match_vips_version("> 7.34")
+        reader = PNGReader.new(str)
+        im = reader.read_buffer
+        im.should match_image(@image)
+      end
     else
       lambda{ @writer.to_memory }.should raise_error(VIPS::Error)
     end
@@ -28,7 +32,11 @@ describe VIPS::PNGWriter do
     if Spec::Helpers.match_vips_version("> 7.22")
       im = VIPS::Image.black(10, 10, 1)
       s = im.png.to_memory
-      s.size.should == 69
+      if Spec::Helpers.match_vips_version("> 7.34")
+        reader = PNGReader.new(s)
+        im2 = reader.read_buffer
+        im2.should match_image(im)
+      end
     end
   end
 
@@ -67,7 +75,7 @@ describe VIPS::PNGWriter do
     size1.should < size2 / 2
   end
 
-  pending "should write an interlaced png" do
+  it "should write an interlaced png" do
     @writer.interlace = true
     @writer.write @path
 
