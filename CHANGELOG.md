@@ -5,6 +5,7 @@
 * add png and jpg load from memory buffer [John Cupitt]
 * README updated to include buffer read/write example [John Cupitt]
 * better vips version testing [John Cupitt]
+* spec tests for new buffer read/write code [John Cupitt]
 
 # Version 0.3.5
 

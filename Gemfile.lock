@@ -9,7 +9,7 @@ GEM
       rake
       rdoc
     json (1.8.0)
-    rake (10.0.4)
+    rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
     rspec (2.13.0)
