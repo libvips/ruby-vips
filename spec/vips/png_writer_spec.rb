@@ -15,28 +15,22 @@ describe VIPS::PNGWriter do
     im.y_size.should == @image.y_size
   end
 
-  it "should write a png to memory" do
-    if Spec::Helpers.match_vips_version("> 7.22")
-      str = @writer.to_memory
-      if Spec::Helpers.match_vips_version("> 7.34")
-        reader = PNGReader.new(str)
-        im = reader.read_buffer
-        im.should match_image(@image)
-      end
-    else
-      lambda{ @writer.to_memory }.should raise_error(VIPS::Error)
+  it "should write a png to memory", :vips_lib_version => "> 7.22" do
+    str = @writer.to_memory
+    if Spec::Helpers.match_vips_version(">= 7.34")
+      reader = VIPS::PNGReader.new(str)
+      im = reader.read_buffer
+      im.should match_image(@image)
     end
   end
 
-  it "should write a tiny png file to memory" do
-    if Spec::Helpers.match_vips_version("> 7.22")
-      im = VIPS::Image.black(10, 10, 1)
-      s = im.png.to_memory
-      if Spec::Helpers.match_vips_version("> 7.34")
-        reader = PNGReader.new(s)
-        im2 = reader.read_buffer
-        im2.should match_image(im)
-      end
+  it "should write a tiny png file to memory", :vips_lib_version => "> 7.22" do
+    im = VIPS::Image.black(10, 10, 1)
+    s = im.png.to_memory
+    if Spec::Helpers.match_vips_version(">= 7.34")
+      reader = VIPS::PNGReader.new(s)
+      im2 = reader.read_buffer
+      im2.should match_image(im)
     end
   end
 

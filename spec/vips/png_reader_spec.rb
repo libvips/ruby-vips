@@ -21,9 +21,9 @@ describe VIPS::PNGReader do
   end
 
   it "should read a png file from memory" do
-    if Spec::Helpers.match_vips_version("> 7.34")
+    if Spec::Helpers.match_vips_version(">= 7.34")
       png_data = IO.read(@path)
-      reader = PNGReader.new(png_data)
+      reader = VIPS::PNGReader.new(png_data)
       im = reader.read_buffer
       im.x_size.should == @image.x_size
     end

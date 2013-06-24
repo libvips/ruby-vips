@@ -35,7 +35,7 @@ describe VIPS::JPEGReader do
 
   it "should read a jpeg image from a memory buffer" do
     jpeg_data = IO.read(@path)
-    reader = JPEGReader.new(jpeg_data, 
+    reader = VIPS::JPEGReader.new(jpeg_data, 
         :shrink_factor => 2, :fail_on_warn => true)
     im = reader.read_buffer
     im.x_size.should == @image.x_size / 2
