@@ -19,17 +19,21 @@ describe VIPS::JPEGWriter do
   it "should write a tiny jpeg file to memory", :vips_lib_version => "> 7.20" do
     im = VIPS::Image.black(10, 10, 1)
     s = im.jpeg.to_memory
-    reader = VIPS::JPEGReader.new(s)
-    im2 = reader.read_buffer
-    im2.x_size.should == im.x_size 
+    if Spec::Helpers.match_vips_version(">= 7.28")
+      reader = VIPS::JPEGReader.new(s)
+      im2 = reader.read_buffer
+      im2.x_size.should == im.x_size 
+    end
   end
 
   it "should write a large jpeg file to memory" do
     im = VIPS::Image.black(1000, 1000, 3)
     s = im.jpeg.to_memory
-    reader = VIPS::JPEGReader.new(s)
-    im2 = reader.read_buffer
-    im2.x_size.should == im.x_size 
+    if Spec::Helpers.match_vips_version(">= 7.28")
+      reader = VIPS::JPEGReader.new(s)
+      im2 = reader.read_buffer
+      im2.x_size.should == im.x_size 
+    end
   end
 
   it "should detect icc headers and preserve the input image icc header" do
