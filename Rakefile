@@ -41,6 +41,10 @@ Jeweler::Tasks.new do |gem|
     "ext/**/*"
   ]
 
+  gem.rdoc_options << 
+    '--title' << 'ruby-vips #{version}' <<
+    'ext'
+
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
@@ -62,4 +66,5 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = "ruby-vips #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.rdoc_files.include('ext/**/*.c')
 end
