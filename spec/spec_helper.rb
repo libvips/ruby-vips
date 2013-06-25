@@ -24,15 +24,14 @@ RSpec.configure do |config|
     reset_working!
   end
 
+  config.filter_run_excluding :vips_lib_version => lambda{ |ver|
+    return !Spec::Helpers.match_vips_version(ver)
+  }
+
   # Use this to print vips debug info before exit
   # config.after :suite do
   #    GC.start
   #    VIPS.exit_info
   # end
 
-
-  #  save this for RSpec2
-  #  config.filter_run_excluding :vips_lib_version => lambda{ |ver|
-  #    return !Spec::Helpers.match_vips_version(ver)
-  #  }
 end

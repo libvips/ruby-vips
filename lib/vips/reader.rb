@@ -65,7 +65,7 @@ module VIPS
     end
 
     def read
-      str = "#{@path}:#{shrink_factor}"
+      str = "#{@path}:#{@shrink_factor}"
       str << "," 
       str << "fail" if @fail_on_warn
 
@@ -195,11 +195,14 @@ module VIPS
     end
 
     def read
-      str = "#{@path}:"
+      # some old versions of vips (eg. 7.26) have a bug in the png reader where
+      # the ':' is not tripped from the filename in the ispng test ... only put
+      # the ':' there if we have to
+      str = "#{@path}"
 
       seq = 0
       if VIPS.sequential_mode_supported?
-        str << "sequential" if @sequential
+        str << ":sequential" if @sequential
         seq = 1
       end
 

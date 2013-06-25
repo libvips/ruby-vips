@@ -7,6 +7,7 @@
 * better vips version testing [John Cupitt]
 * spec tests for new buffer read/write code [John Cupitt]
 * fix rdoc build to include C sources [John Cupitt]
+* better compat with older libvips [John Cupitt]
 
 # Version 0.3.5
 
