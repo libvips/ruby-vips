@@ -62,6 +62,11 @@ $ brew tap homebrew/science
 $ brew install vips
 ```
 
+Unfortunately homebrew/science is having some problem updating at the moment, you may find
+this gives you a rather old libvips. See [the notes
+here](http://www.vips.ecs.soton.ac.uk/index.php?title=Build_on_OS_X) for
+possible work-arounds. 
+
 This will give you a very bare-bones vips, missing things like imagemagick
 loading, openslide support, FFTs, and so on. To get a list of all the optional
 dependencies, try:
@@ -93,14 +98,14 @@ To verify that your vips install is correct and working, try:
 
 ```bash
 $ vips --version
-vips-7.32.1-Mon May 20 10:01:38 BST 2013
+vips-7.36.4-Tue Nov 19 12:22:47 GMT 2013
 ```
 
-To verrify that your pkg-config is working correctly with vips, try:
+To verify that your pkg-config is working correctly with vips, try:
 
 ```bash
 $ pkg-config vips --libs
--L/usr/local/Cellar/vips/7.32.1/lib ... a lot of stuff
+-L/usr/local/Cellar/vips/7.36.4/lib ... a lot of stuff
 ```
 
 TODO: Describe & test with macports.
