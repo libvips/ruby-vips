@@ -120,7 +120,7 @@ img_s_fmask_ideal_highpass(VALUE obj, VALUE x, VALUE y, VALUE frequency_cutoff)
 {
 	OutPartial(new, data, im);
 
-    if (im_create_fmask(im, NUM2INT(x), NUM2INT(y), VIPS_MASK_IDEAL_HIGHPASS,
+    if (im_create_fmask(im, NUM2INT(x), NUM2INT(y), IM_MASK_IDEAL_HIGHPASS,
 		NUM2DBL(frequency_cutoff)))
         vips_lib_error();
 
@@ -141,7 +141,7 @@ img_s_fmask_ideal_lowpass(VALUE obj, VALUE x, VALUE y, VALUE frequency_cutoff)
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im, NUM2INT(x), NUM2INT(y),
-		VIPS_MASK_IDEAL_LOWPASS, NUM2DBL(frequency_cutoff)))
+		IM_MASK_IDEAL_LOWPASS, NUM2DBL(frequency_cutoff)))
         vips_lib_error();
 
     return new;
@@ -162,7 +162,7 @@ img_s_fmask_butterworth_highpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_BUTTERWORTH_HIGHPASS, NUM2DBL(order),
+		NUM2INT(x), NUM2INT(y), IM_MASK_BUTTERWORTH_HIGHPASS, NUM2DBL(order),
 		NUM2DBL(frequency_cutoff), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
 
@@ -184,7 +184,7 @@ img_s_fmask_butterworth_lowpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_BUTTERWORTH_LOWPASS, NUM2DBL(order),
+		NUM2INT(x), NUM2INT(y), IM_MASK_BUTTERWORTH_LOWPASS, NUM2DBL(order),
 		NUM2DBL(frequency_cutoff), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
 
@@ -206,7 +206,7 @@ img_s_fmask_gauss_highpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_GAUSS_HIGHPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_GAUSS_HIGHPASS,
 		NUM2DBL(frequency_cutoff), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
 
@@ -228,7 +228,7 @@ img_s_fmask_gauss_lowpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_GAUSS_LOWPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_GAUSS_LOWPASS,
 		NUM2DBL(frequency_cutoff), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
 
@@ -249,7 +249,7 @@ img_s_fmask_ideal_ringpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_IDEAL_RINGPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_IDEAL_RINGPASS,
 		NUM2DBL(frequency_cutoff), NUM2DBL(width)))
         vips_lib_error();
 
@@ -270,7 +270,7 @@ img_s_fmask_ideal_ringreject(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_IDEAL_RINGREJECT,
+		NUM2INT(x), NUM2INT(y), IM_MASK_IDEAL_RINGREJECT,
 		NUM2DBL(frequency_cutoff), NUM2DBL(width)))
         vips_lib_error();
 
@@ -292,7 +292,7 @@ img_s_fmask_butterworth_ringpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_BUTTERWORTH_RINGPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_BUTTERWORTH_RINGPASS,
 		NUM2DBL(order), NUM2DBL(frequency_cutoff), NUM2DBL(width),
 		NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
@@ -315,7 +315,7 @@ img_s_fmask_butterworth_ringreject(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_BUTTERWORTH_RINGREJECT,
+		NUM2INT(x), NUM2INT(y), IM_MASK_BUTTERWORTH_RINGREJECT,
 		NUM2DBL(order), NUM2DBL(frequency_cutoff), NUM2DBL(width),
 		NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
@@ -338,7 +338,7 @@ img_s_fmask_gauss_ringpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_GAUSS_RINGPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_GAUSS_RINGPASS,
 		NUM2DBL(frequency_cutoff), NUM2DBL(width), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
 
@@ -360,7 +360,7 @@ img_s_fmask_gauss_ringreject(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_GAUSS_RINGREJECT,
+		NUM2INT(x), NUM2INT(y), IM_MASK_GAUSS_RINGREJECT,
 		NUM2DBL(frequency_cutoff), NUM2DBL(width), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
 
@@ -382,7 +382,7 @@ img_s_fmask_ideal_bandpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_IDEAL_BANDPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_IDEAL_BANDPASS,
 		NUM2DBL(frequency_cutoffx), NUM2DBL(frequency_cutoffy),
 		NUM2DBL(radius)))
         vips_lib_error();
@@ -405,7 +405,7 @@ img_s_fmask_ideal_bandreject(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_IDEAL_BANDREJECT,
+		NUM2INT(x), NUM2INT(y), IM_MASK_IDEAL_BANDREJECT,
 		NUM2DBL(frequency_cutoffx), NUM2DBL(frequency_cutoffy),
 		NUM2DBL(radius)))
         vips_lib_error();
@@ -429,7 +429,7 @@ img_s_fmask_butterworth_bandpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_BUTTERWORTH_BANDPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_BUTTERWORTH_BANDPASS,
 		NUM2DBL(order), NUM2DBL(frequency_cutoffx), NUM2DBL(frequency_cutoffy),
 		NUM2DBL(radius), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
@@ -453,7 +453,7 @@ img_s_fmask_butterworth_bandreject(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_BUTTERWORTH_BANDREJECT,
+		NUM2INT(x), NUM2INT(y), IM_MASK_BUTTERWORTH_BANDREJECT,
 		NUM2DBL(order), NUM2DBL(frequency_cutoffx), NUM2DBL(frequency_cutoffy),
 		NUM2DBL(radius), NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
@@ -477,7 +477,7 @@ img_s_fmask_gauss_bandpass(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_GAUSS_BANDPASS,
+		NUM2INT(x), NUM2INT(y), IM_MASK_GAUSS_BANDPASS,
 		NUM2DBL(frequency_cutoffx), NUM2DBL(frequency_cutoffy), NUM2DBL(radius),
 		NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
@@ -501,7 +501,7 @@ img_s_fmask_gauss_bandreject(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_GAUSS_BANDREJECT,
+		NUM2INT(x), NUM2INT(y), IM_MASK_GAUSS_BANDREJECT,
 		NUM2DBL(frequency_cutoffx), NUM2DBL(frequency_cutoffy), NUM2DBL(radius),
 		NUM2DBL(amplitude_cutoff)))
         vips_lib_error();
@@ -525,7 +525,7 @@ img_s_fmask_fractal_flt(VALUE obj, VALUE x, VALUE y,
 	OutPartial(new, data, im);
 
     if (im_create_fmask(im,
-		NUM2INT(x), NUM2INT(y), VIPS_MASK_FRACTAL_FLT,
+		NUM2INT(x), NUM2INT(y), IM_MASK_FRACTAL_FLT,
 		NUM2DBL(fractal_dimension)))
         vips_lib_error();
 
