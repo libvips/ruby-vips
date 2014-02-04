@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Timothy Elliott", "John Cupitt"]
-  s.date = "2013-06-25"
+  s.date = "2014-02-04"
   s.description = "Ruby extension for the vips image processing library."
   s.email = "jcupitt@gmail.com"
   s.extensions = ["ext/extconf.rb"]
@@ -57,7 +57,6 @@ Gem::Specification.new do |s|
     "ext/reader.h",
     "ext/ruby_vips.c",
     "ext/ruby_vips.h",
-    "ext/tags",
     "ext/writer.c",
     "ext/writer.h",
     "lib/vips.rb",
@@ -71,27 +70,27 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.rdoc_options = ["--title", "ruby-vips \#{version}", "ext"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
+  s.rubygems_version = "2.0.3"
   s.summary = "ruby-vips is a ruby extension for vips. It is extremely fast and it can process huge images without requiring the entire image to be loaded into memory."
 
   if s.respond_to? :specification_version then
-    s.specification_version = 3
+    s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, [">= 0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_development_dependency(%q<jeweler>, [">= 2.0.1"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
     else
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, [">= 0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_dependency(%q<jeweler>, [">= 2.0.1"])
       s.add_dependency(%q<rspec>, [">= 0"])
     end
   else
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, [">= 0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+    s.add_dependency(%q<jeweler>, [">= 2.0.1"])
     s.add_dependency(%q<rspec>, [">= 0"])
   end
 end
