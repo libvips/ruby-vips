@@ -1,5 +1,10 @@
 # master 
 
+# Version 0.3.7
+
+* update build dependencies [John Cupitt]
+* README updated [John Cupitt]
+
 # Version 0.3.6
 
 * add png and jpg load from memory buffer [John Cupitt]
