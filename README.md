@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
 
 ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
-It is fast and it can process images without requiring the 
+It is fast and it can work without needing the 
 entire image to be loaded into memory. For example, the benchmark at 
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
 image, crops, shrinks, sharpens and saves again:
@@ -47,41 +47,29 @@ latest libvips you can.
   * libvips 7.24 and later (it will work with earlier libvips, but some
     features may not be functional)
 
-## Installation.
+## Installation prerequisites
 
-### Ubuntu Prerequisites.
+### Ubuntu 
 
 ```bash
 $ apt-get install libvips-dev
 ```
 
-### OS X Prerequisites.
+### OS X 
+
+Install [homebrew](http://mxcl.github.com/homebrew) and enter:
 
 ```bash
 $ brew tap homebrew/science
-$ brew install vips
-```
-
-Unfortunately homebrew/science is having some problem updating at the moment, you may find
-this gives you a rather old libvips. See [the notes
-here](http://www.vips.ecs.soton.ac.uk/index.php?title=Build_on_OS_X) for
-possible work-arounds. 
-
-This will give you a very bare-bones vips, missing things like imagemagick
-loading, openslide support, FFTs, and so on. To get a list of all the optional
-dependencies, try:
-
-```bash
-$ brew info vips
-```
-
-For a full-fat version, try:
-
-```bash
 $ brew install vips --with-cfitsio --with-fftw --with-imagemagick \
     --with-libexif --with-liboil --with-libtiff --with-little-cms \
     --with-openexr --with-openslide --with-pango
 ```
+
+libvips has a lot of optional dependencies. You
+may not need all of them.  See [the notes
+here](http://www.vips.ecs.soton.ac.uk/index.php?title=Build_on_OS_X) for
+more information.
 
 If you want to build things outside homebrew which depend on vips,
 such as ruby-vips, your pkg-config will need to be working. You
