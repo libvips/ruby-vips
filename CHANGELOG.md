@@ -1,5 +1,9 @@
 # master 
 
+# Version 0.3.8
+
+* add VIPS::thread_shutdown(), must be called on foreign thread exit [John Cupitt]
+
 # Version 0.3.7
 
 * update build dependencies [John Cupitt]

@@ -84,6 +84,28 @@ vips_s_debug_info(VALUE obj)
 }
 
 /*
+ *  call-seq:
+ *     VIPS.thread_shutdown -> string
+ *
+ *   Free any thread-private data and flush any profiling information.
+ *   
+ *   This function needs to be called when a thread that has been using vips
+ *   exits. It is called for you by vips_shutdown() and for any threads created
+ *   by vips_g_thread_new(). 
+ *    
+ *   You will need to call it from threads created in other ways. If you do 
+ *   not call it, vips will generate an error message.
+ *    
+ *   May be called many times. 
+ */
+static VALUE
+vips_s_thread_shutdown(VALUE obj)
+{
+    vips_thread_shutdown();
+    return Qnil;
+}
+
+/*
  * Build a call to im_init_world() and pass command line options to vips. This
  * sets some library wide options.
  */
@@ -148,6 +170,8 @@ Init_vips_ext()
     eVIPSError = rb_define_class_under(mVIPS, "Error", rb_eStandardError);
 
     rb_define_singleton_method(mVIPS, "debug_info", vips_s_debug_info, 0);
+
+    rb_define_singleton_method(mVIPS, "thread_shutdown", vips_s_thread_shutdown, 0);
 
     /* Vips Library version string */
     rb_define_const(mVIPS, "LIB_VERSION", vips_s_version_string());
