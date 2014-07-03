@@ -57,7 +57,6 @@ Gem::Specification.new do |s|
     "ext/reader.h",
     "ext/ruby_vips.c",
     "ext/ruby_vips.h",
-    "ext/tags",
     "ext/writer.c",
     "ext/writer.h",
     "lib/vips.rb",
