@@ -15,14 +15,20 @@ describe VIPS::Image do
     ]
   end
 
-  pending "should gather image stats" do
+  it "should gather image stats" do
     res = @image.stats
 
-    res.should == [
-      [ 3.0, 248.0, 11922736.0, 1581021538.0, 109.62830556475045, 50.18948900355393 ],
-      [10.0, 248.0,  3820127.0,  491492227.0, 105.37699988966126, 49.5319475110716  ],
-      [11.0, 205.0,  4096959.0,  541591827.0, 113.01332340284674, 46.558441399535226],
-      [ 3.0, 192.0,  4005650.0,  547937484.0, 110.49459340174336, 53.90461824817105 ]
+    # columns 7 and later may give variable results between runs ... they give
+    # the image maximum and minimum position, and are the first found rather
+    # than the average
+ 
+    # only test the first 6 columns
+
+    res.map { |x| x[0..5] }.should == [
+      [3.0, 248.0, 11922736.0, 1581021538.0, 109.62830556475045, 50.18948900355393], 
+      [10.0, 248.0, 3820127.0, 491492227.0, 105.37699988966126, 49.5319475110716], 
+      [11.0, 205.0, 4096959.0, 541591827.0, 113.01332340284674, 46.558441399535226], 
+      [3.0, 192.0, 4005650.0, 547937484.0, 110.49459340174336, 53.90461824817105]
     ]
   end
 
@@ -94,8 +100,8 @@ describe VIPS::Image do
   end
 
   it "should return the average location of the image max" do
-    pending "Recent vips versions disagree with older ones. Insert a real test here."
-    @image.maxpos_avg.should == [235.63179916317992, 190.29707112970712, 255.0]
+    pending "variable results in git master right now"
+    @image.maxpos_avg.should == [107.0, 116.5, 248.0]
   end
 
   it "should return an array of n image max locations" do
@@ -263,7 +269,7 @@ describe VIPS::Image do
     pt.should == @image[103, 100][1]
 
     pt2 = @image.point(:bilinear, 102.5, 100, 0)
-    pt2.should == 64.0
+    pt2.should == 92.0
   end
 
   it "should raise pixel band values in an image to the given power" do

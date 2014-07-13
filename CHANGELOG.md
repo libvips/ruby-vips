@@ -1,5 +1,11 @@
 # master 
 
+# Version 0.3.9
+
+* removed a stray file from gemspec [Alessandro Tagliapietra]
+* updated bundle [John Cupitt]
+* revised spec tests [John CUpitt]
+
 # Version 0.3.8
 
 * add VIPS::thread_shutdown(), must be called on foreign thread exit [John Cupitt]
