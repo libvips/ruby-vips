@@ -4,7 +4,8 @@
 
 * removed a stray file from gemspec [Alessandro Tagliapietra]
 * updated bundle [John Cupitt]
-* revised spec tests [John CUpitt]
+* revised spec tests [John Cupitt]
+* fix a segv in im.label_regions [John Cupitt]
 
 # Version 0.3.8
 

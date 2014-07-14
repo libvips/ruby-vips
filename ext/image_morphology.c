@@ -323,5 +323,5 @@ img_label_regions(VALUE obj)
     if (im_label_regions(im, im_new, &segments))
         vips_lib_error();
 
-    return rb_ary_new3(2, new, segments);
+    return rb_ary_new3(2, new, INT2NUM(segments));
 }
