@@ -16,8 +16,6 @@ describe VIPS::Image do
   end
 
   it "should convert a double mask to an image" do
-    pending "calling im_mask2vips segfaults."
-
     coeffs = [
       [2.3, 3.3, 4.3],
       [1.2, 3.4, 5.6],
@@ -38,9 +36,8 @@ describe VIPS::Image do
   end
 
   it "should create pass-through copies of files" do
-    pending "calling im_copy_file segfaults. This is on Ubuntu 10.04, vips 7.20.4-1"
     im = @image.invert.copy_file
-    im.filename.should =~ /^\/tmp\//
+    im.x_size.should == @image.x_size
   end
 
   it "should scale the color range in an image" do
