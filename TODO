@@ -1,3 +1,5 @@
+- add something to make a memory image, useful in some cases, eg. making very
+  large image mosaics
 
 - support vips_flatten(), see 
 
