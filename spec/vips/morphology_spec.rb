@@ -49,13 +49,13 @@ describe VIPS::Image do
   end
 
   it "should detect the +ve edges of zero crossings of an image" do
-    im = @image.zerox_pos
-    pending "need validation of Image#zerox_pos"
+    im = @binary.zerox_pos
+    im.should match_sha1('b6cf701f906e28948acd8b9c1a6abdb29be111ac')
   end
 
   it "should detect the -ve edges of zero crossings of an image" do
-    im = @image.zerox_neg
-    pending "need validation of Image#zerox_neg"
+    im = @binary.zerox_neg
+    im.should match_sha1('b6cf701f906e28948acd8b9c1a6abdb29be111ac')
   end
 
   it "should find the position of the first non-zero pixel from the top and from the left" do

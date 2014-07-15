@@ -345,7 +345,7 @@ img_data(VALUE obj)
         return( Qnil );
 
     return rb_tainted_str_new((const char *) im->data, 
-		    IM_IMAGE_SIZEOF_IMAGE(im) );
+		    IM_IMAGE_SIZEOF_LINE(im) * im->Ysize);
 }
 
 /*

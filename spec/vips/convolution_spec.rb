@@ -27,16 +27,16 @@ describe VIPS::Image do
     # TODO: some kind of validation of the generated image
   end
 
-  pending "should perform a seperable convolution with an int mask" do
+  it "should perform a seperable convolution with an int mask" do
     m = VIPS::Mask.new [[1, -2, 3]], 3
     im = @image.convsep m
-    im.should match_sha1('1389e7d7fb3f1646e774ac69d6a8802c26652aa5')
+    im.should match_sha1('4c017e1d28bbc4833faad83142231a4a88663289')
   end
 
-  pending "should perform a seperable convolution with a float mask" do
+  it "should perform a seperable convolution with a float mask" do
     m = VIPS::Mask.new [[1.2, -2.1, 3.0]], 3.4
     im = @image.convsep m
-    im.should match_sha1('e6c79ddd45c93b31a77c830c925561c6d2139529')
+    im.should match_sha1('a3263e83248b79df792d22981ad2c863aa28e887')
   end
 
   it "should convolve 8 times, rotating 45 deg each time" do
@@ -72,10 +72,10 @@ describe VIPS::Image do
     im.should match_sha1('78580ff728cca4722c73f610406ac8eba0604ba9')
   end
 
-  pending "should sharpen an image coded in LABS or LABQ format" do
+  it "should sharpen an image coded in LABS or LABQ format" do
     im = @image.srgb_to_xyz.xyz_to_lab.lab_to_labs.sharpen(7, 1.5, 20, 50, 1, 2)
     if Spec::Helpers.match_vips_version("> 7.23")
-      im.should match_sha1('f46d4ba8b0c16e19af95fcd3518caae0a7c2170d')
+      im.should match_sha1('f6fdf3136cc01b3f267b80450f4c4419ae22b77a')
     end
   end
 

@@ -11,9 +11,7 @@ describe VIPS::CSVWriter do
     @writer.write(@path)
 
     im = VIPS::Image.csv @path
-    pending "figure out why a csv image doesn't perfectly match its original"
-
-    im.should match_image(@image)
+    im.clip2fmt(:UCHAR).should match_image(@image)
   end
 
   it "should write a csv file with an alternate separator character" do
@@ -21,8 +19,7 @@ describe VIPS::CSVWriter do
     @writer.write(@path)
 
     im = VIPS::Image.csv @path, :separator => '|'
-    pending "figure out why a csv image doesn't perfectly match its original"
-    im.should match_image(@image)
+    im.clip2fmt(:UCHAR).should match_image(@image)
   end
 
   it "should create a csv writer" do

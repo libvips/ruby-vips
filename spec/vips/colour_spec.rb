@@ -137,30 +137,30 @@ describe VIPS::Image do
     im.band_fmt.should == :FLOAT
   end
 
-  pending "should calculate a CMC color difference image between two lab images" do
+  it "should calculate a CMC color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.decmc_from_lab(im2)
     if Spec::Helpers.match_vips_version("> 7.23")
-      diff.should match_sha1('30d9850f3414d9931d4d90a156a57f1202ba692b')
+      diff.should match_sha1('91396adda33cc10e71bc79b0cd3cbf449f756d0b')
     end
   end
 
-  pending "should calculate a CIE76 color difference image between two lab images" do
+  it "should calculate a CIE76 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de_from_lab(im2)
     if Spec::Helpers.match_vips_version("> 7.23")
-      diff.should match_sha1('f7c261b5d8532c2c34f77039af8754fffe23dcc6')
+      diff.should match_sha1('e5810662fa9866a39e778bdf73e910c2196e56e9')
     end
   end
 
-  pending "should calculate a CIEDE2000 color difference image between two lab images" do
+  it "should calculate a CIEDE2000 color difference image between two lab images" do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de00_from_lab(im2)
     if Spec::Helpers.match_vips_version("> 7.23")
-      diff.should match_sha1('66d4869acf57df855ced1d38ed308612f6a198f4')
+      diff.should match_sha1('629b5fb844c1f2e61c5e652f23435297b0ec76f4')
     end
   end
 

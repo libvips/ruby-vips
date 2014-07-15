@@ -21,8 +21,7 @@ describe VIPS::CSVReader do
 
   it "should read a csv image" do
     im = @reader.read
-    pending "CSV Images don't currently match the original"
-    im.should match_image(@image)
+    im.clip2fmt(:UCHAR).should match_image(@image)
   end
 
   it "should read the dimensions from the header" do

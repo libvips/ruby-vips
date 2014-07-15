@@ -101,7 +101,7 @@ describe VIPS::Image do
 
   it "should return the average location of the image max" do
     pending "variable results in git master right now"
-    @image.maxpos_avg.should == [107.0, 116.5, 248.0]
+    @image.maxpos_avg.should == [12.0, 116.5, 248.0]
   end
 
   it "should return an array of n image max locations" do
