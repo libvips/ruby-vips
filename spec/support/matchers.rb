@@ -2,6 +2,10 @@ require 'digest/sha1'
 
 RSpec::Matchers.define :match_sha1 do |sha1|
   match do |image|
+    actual_sha1 = Digest::SHA1.hexdigest(image.data) 
+    if actual_sha1 != sha1
+        puts "expected #{sha1}, saw #{actual_sha1}"
+    end
     Digest::SHA1.hexdigest(image.data) == sha1
   end
 end

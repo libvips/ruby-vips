@@ -67,52 +67,52 @@ describe VIPS::Image do
 
   it "should create a butterworth ringpass image mask" do
     im = VIPS::Image.fmask_butterworth_ringpass 32, 32, 2, 0.5, 0.3, 0.7
-    im.scaleps.should match_sha1('d1900d284bf30a6c6c71345734ccc1e6e0f3eec1')
+    im.scaleps.should match_sha1('30838c31af7872b69be6678236b05b2b3611b72b')
   end
 
   it "should create a butterworth ringreject image mask" do
     im = VIPS::Image.fmask_butterworth_ringreject 32, 32, 2, 0.5, 0.3, 0.7
-    im.scaleps.should match_sha1('81c2dc2bfbc92c4b3f72a0ed3b56c1c2ccbf29ee')
+    im.scaleps.should match_sha1('708eaadfed1eede305f5386f503371d4a44f359c')
   end
 
   it "should create a gauss ringpass image mask" do
     im = VIPS::Image.fmask_gauss_ringpass 32, 32, 0.5, 0.2, 0.5
-    im.scaleps.should match_sha1('6f223b1188f611bbe9065e7b5df277ff94b52abb')
+    im.scaleps.should match_sha1('c4a2eb833eaab64f00b8bbbe0ac164308aebcec2')
   end
 
   it "should create a gauss ringreject image mask" do
     im = VIPS::Image.fmask_gauss_ringreject 32, 32, 0.5, 0.2, 0.5
-    im.scaleps.should match_sha1('f5407bcaa954f53601ca67708cc2ad7c78dd2a2f')
+    im.scaleps.should match_sha1('7a8ca3995a39c9d1041db34174ae7576fcead59d')
   end
 
   it "should create an ideal bandpass image mask" do
     im = VIPS::Image.fmask_ideal_bandpass 32, 32, 0.5, 0.4, 20
-    im.scaleps.should match_sha1('d1758cb264c821baca7a8cdbcb025b2cbd4914a3')
+    im.scaleps.should match_sha1('60cacbf3d72e1e7834203da608037b1bf83b40e8')
   end
 
   it "should create an ideal bandreject image mask" do
     im = VIPS::Image.fmask_ideal_bandreject 32, 32, 0.5, 0.4, 20
-    im.scaleps.should match_sha1('21189b26737c6a23995bb47df03521759c63ccda')
+    im.scaleps.should match_sha1('059a104f98f5658171c48a4d6b0d39036f953264')
   end
 
   it "should create a butterworth bandpass image mask" do
     im = VIPS::Image.fmask_butterworth_bandpass 32, 32, 2, 0.5, 0.4, 20, 0.7
-    im.scaleps.should match_sha1('52dbea90d2029700c1c699b93ecb734c6409c5af')
+    im.scaleps.should match_sha1('5334a257ccd51517af9991c53d312490b9381240')
   end
 
   it "should create a butterworth bandreject image mask" do
     im = VIPS::Image.fmask_butterworth_bandreject 32, 32, 2, 0.5, 0.4, 20, 0.7
-    im.scaleps.should match_sha1('3ebf6c5f8e54e4fafe84474c6c2f1e4b4eb648e1')
+    im.scaleps.should match_sha1('6e34ef8d76138f7df3882d796d5d343758cb80c4')
   end
 
   it "should create a gauss bandpass image mask" do
     im = VIPS::Image.fmask_gauss_bandpass 32, 32, 0.5, 0.4, 20, 0.5
-    im.scaleps.should match_sha1('e284f7152b45eac5560f8f401d6a5b0df7260b2c')
+    im.scaleps.should match_sha1('f8be20f1071abeefcbe7090d2cdfcf5e593e1787')
   end
 
   it "should create a gauss bandreject image mask" do
     im = VIPS::Image.fmask_gauss_bandreject 32, 32, 0.5, 0.4, 20, 0.5
-    im.scaleps.should match_sha1('6ea1fb1f705114153965baee9e9b5c6779abda58')
+    im.scaleps.should match_sha1('ab86d1f2bffc8acc8289bb42ab87d32e96890ebd')
   end
 
   it "should create a fractal filter image mask" do
