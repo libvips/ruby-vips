@@ -351,7 +351,7 @@ img_monotonic_p(VALUE obj)
 	if( im_ismonotonic(im, &ret) )
 	    vips_lib_error();
 
-	return( ret == 0 ? Qtrue : Qfalse );
+	return( ret == 0 ? Qfalse : Qtrue );
 }
 
 /*

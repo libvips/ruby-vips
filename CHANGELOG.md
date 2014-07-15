@@ -7,6 +7,7 @@
 * revised spec tests [John Cupitt]
 * fix a segv in im.label_regions [John Cupitt]
 * add a Valgrind suppressions file [John Cupitt]
+* fix monotonic? [John Cupitt]
 
 # Version 0.3.8
 
