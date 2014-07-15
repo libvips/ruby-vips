@@ -35,12 +35,14 @@ describe VIPS::Image do
   end
 
   it "should make a one two or three dimensional histogram" do
-    pending "this segfaults and unsure how to test"
-    hist = @image.histnd(1)
+    hist = @image.histnd(10)
+    hist[0, 0][0].should == 433
   end
 
   it "should generate a histogram from an index image" do
-    pending "need a test case for this"
+    im, segments = @image.label_regions
+    im2 = im.hist_indexed(@image)
+    im2[140, 0][0].should == 32
   end
 
   it "should generate an n-band lut (lookup table) identity" do
@@ -64,7 +66,7 @@ describe VIPS::Image do
 	ident[1102, 0].should == [1102, 1102, 1102]
   end
   
-  pending "should create an inverted lookup table" do
+  it "should create an inverted lookup table" do
     mask = [
       [0.1, 0.2, 0.3, 0.1],
       [0.2, 0.4, 0.4, 0.2],
@@ -73,10 +75,10 @@ describe VIPS::Image do
 
     im = VIPS::Image.invertlut mask, 2000
 
-    im.histplot.should match_sha1('c3e791834af4f1c7edc0b1d48f7b5f7bd3acf9f4')
+    im.histplot.should match_sha1('3b8104928ce8a9369c18dc5e48e7dbbd0058ce0b')
   end
   
-  pending "should build a lookup table from a set of points", :vips_lib_version => "> 7.20" do
+  it "should build a lookup table from a set of points", :vips_lib_version => "> 7.20" do
     mask = [
       [12, 100],
       [14, 110],
@@ -96,18 +98,19 @@ describe VIPS::Image do
   it "should calculate row sums and column sums for an image" do
     im1, im2 = @image.project
 
-    expected_row_sum = [0, 0, 0]
-    @image.x_size.times do |i|
-      @image[i, 55].each_with_index{ |v, i| expected_row_sum[i] += v }
-    end
-    im1[0, 55].should == expected_row_sum
-
     expected_col_sum = [0, 0, 0]
     @image.y_size.times do |i|
       @image[99, i].each_with_index{ |v, i| expected_col_sum[i] += v }
     end
 
-    im2[99, 0].should == expected_col_sum
+    im1[99, 0].should == expected_col_sum
+
+    expected_row_sum = [0, 0, 0]
+    @image.x_size.times do |i|
+      @image[i, 55].each_with_index{ |v, i| expected_row_sum[i] += v }
+    end
+
+    im2[0, 55].should == expected_row_sum
   end
 
   it "should normalize a histogram to make it square" do
@@ -136,8 +139,8 @@ describe VIPS::Image do
   end
 
   it "should indicate when a histogram is monotonic" do
-    pending "the identity LUT should be monotonic, but isnt..."
-    VIPS::Image.identity(1).monotonic?.should be_true
+    VIPS::Image.identity(1).monotonic?.should == true
+    VIPS::Image.identity(1).invert.monotonic?.should == false
   end
 
   it "should generate a displayable histogram from an image" do
@@ -163,15 +166,9 @@ describe VIPS::Image do
     @image.gammacorrect(power).should match_image(im)
   end
 
-  it "should calculate the pixel value at the nth percentile of the image", :vips_lib_version => "> 7.20" do
-    val = @image.bandmean.histgr.mpercent_hist(0.1)
-    val.should == 224
-  end
-
-
   it "should calculate the pixel value at the nth percentile of the image" do
-    val = @image.bandmean.mpercent(0.1)
-    val.should == 224
+    val = @image.mpercent(0.1)
+    val.should == 33
   end
 
   it "should perform histogram equalization on an image" do
@@ -186,11 +183,12 @@ describe VIPS::Image do
 
   it "should perform statistical differencing on an image" do
     im = @image.bandmean.scale.stdif 0.5, 128, 0.5, 50, 11, 11
-    im.should match_sha1('59e6eb2dde4eb48de3aef092135057b09538d202')
+    im.should match_sha1('9fd296c929c09ddfcd82d403f52a485082985cad')
   end
 
   it "should build a tone curve for the adjustment of color levels" do
-    pending "find a way to test tone_build_range, tone_build & tone_analyse"
+    im = VIPS::Image.tone_build 0, 100, 0.2, 0.5, 0.8, 0.1, 0.1, 0.1
+    im.should match_sha1('faa3f64fb080a3a94200c6f89cc67b1391e4e428')
   end
 
   it "should plot a histogram" do
@@ -202,7 +200,7 @@ describe VIPS::Image do
     lut = VIPS::Image.identity(3).lin(0.2, 30)
     im = @image.maplut(lut)
 
-    im.should match_sha1('0825bc97cf86f8c36d31c22d36f6bec7f373383c')
+    im.should match_sha1('46dc7c508e90f2682400f13559e5512ab737ef58')
   end
 end
 

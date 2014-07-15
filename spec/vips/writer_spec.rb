@@ -13,7 +13,7 @@ describe VIPS::Writer do
 
   it "should write an arbitrary file" do
     @writer.write @path
-    File.exists?(@path).should be_true
+    File.exists?(@path).should == true
 
     im = VIPS::Image.new @path
     im.should match_image(@image)
@@ -21,7 +21,7 @@ describe VIPS::Writer do
 
   it "should write through the image class" do
     @image.write @path
-    File.exists?(@path).should be_true
+    File.exists?(@path).should == true
 
     im = VIPS::Image.new @path
     im.should match_image(@image)

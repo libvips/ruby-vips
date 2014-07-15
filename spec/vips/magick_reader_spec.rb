@@ -5,16 +5,13 @@ describe VIPS::MagickReader do
     @path = sample('lion.svg').to_s
   end
 
-  pending "should read just about anything through imagemagick" do
+  it "should read just about anything through imagemagick" do
     im = VIPS::Image.magick @path
-    im.x_size.should == 425
+    im.x_size.should == 531
   end
 
-  pending "should recognize a magick image" do
-    vips_res = VIPS::MagickReader.recognized? sample('wagon.v').to_s
-    vips_res.should be_false
-
+  it "should recognize a magick image" do
     res = VIPS::MagickReader.recognized? @path
-    res.should be_true
+    res.should == true
   end
 end

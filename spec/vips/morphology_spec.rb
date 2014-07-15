@@ -3,15 +3,27 @@ require "spec_helper"
 describe VIPS::Image do
   before :all do
     @image = simg 'wagon.v'
+    @binary = @image.more(128).extract_band(1)
   end
 
-  # TODO: "these methods operate on 1-channel binary images (b/w)" 
   it "should dilate an image given an integer mask" do
-    pending "Image#dilate"
+    mask = [
+        [128, 255, 128],
+        [255, 255, 255],
+        [128, 255, 128]
+    ]
+    im = @binary.dilate(mask)
+    im.should match_sha1('82b0e8e68504beeca1dc59fe879fe135ae0a90be')
   end
 
   it "should erode an image given an integer mask" do
-    pending "Image#erode"
+    mask = [
+        [128, 255, 128],
+        [255, 255, 255],
+        [128, 255, 128]
+    ]
+    im = @binary.erode(mask)
+    im.should match_sha1('38cf97b262f9baa8409be567d35b609151b51d8f')
   end
 
   it "should rank pixels in a given window of the image and create a new image with the order-th pixels" do
@@ -60,8 +72,8 @@ describe VIPS::Image do
 
   it "should mark regions of 4-connected pixels with the same color" do
     im, segments = @image.label_regions
-    segments.should == 15363
-    im.should match_sha1('bdd5a7e8ebdf3358757fa988940eb3bf811cce1d')
+    segments.should == 30728
+    im.should match_sha1('426bf35dcca03d79354b85375334a677141e7296')
   end
 end
 

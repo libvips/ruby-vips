@@ -92,12 +92,13 @@ describe VIPS::Image do
   it "should calculate a fast correlation surface between two images" do
     segment = @image.extract_area(120, 120, 30, 30, 1, 1).scale
     im = @image.extract_band(0).fastcor(segment)
-    pending "not sure how to get a useful image from this method"
+    im.should match_sha1('e14c148c8b9f86707ac911f61b166e9f2e1cf54d')
   end
 
   it "should calculate a correlation surface between two images" do
     segment = @image.extract_area(120, 120, 30, 30, 1, 1).scale
     im = @image.extract_band(0).spcor(segment)
+    im.should match_sha1('d2c2bcf3b6d28f9ae705dadae82b11c2df1bf344')
   end
 
   it "should calculate a correlation surface between two images via gradients" do

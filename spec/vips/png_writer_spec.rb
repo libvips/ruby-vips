@@ -92,6 +92,6 @@ describe VIPS::PNGWriter do
   it "should accept options on creation from an image" do
     writer = @image.png(nil, :compression => 3, :interlace => true)
     writer.compression.should == 3
-    writer.interlace.should be_true
+    writer.interlace.should == true
   end
 end

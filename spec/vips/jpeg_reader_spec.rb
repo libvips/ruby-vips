@@ -14,7 +14,7 @@ describe VIPS::JPEGReader do
 
   it "should recognize options in the init hash" do
     reader = VIPS::JPEGReader.new @path, :fail_on_warn => true
-    reader.fail_on_warn.should be_true
+    reader.fail_on_warn.should == true
     reader.path.should == @path
   end
 
@@ -27,10 +27,10 @@ describe VIPS::JPEGReader do
 
   it "should recognize a jpeg image" do
     vips_res = VIPS::JPEGReader.recognized? sample('wagon.v').to_s
-    vips_res.should be_false
+    vips_res.should == false
 
     res = VIPS::JPEGReader.recognized? @path
-    res.should be_true
+    res.should == true
   end
 
   it "should read a jpeg image from a memory buffer", 

@@ -41,12 +41,12 @@ describe VIPS::JPEGWriter do
     im2 = im.shrink 5, 5
     jpeg = im2.jpeg
 
-    jpeg.icc?.should be_true
+    jpeg.icc?.should == true
 
     jpeg.write @path
     im3 = VIPS::Image.jpeg @path
     jpeg2 = im3.jpeg
-    jpeg2.icc?.should be_true
+    jpeg2.icc?.should == true
     jpeg.icc.should == jpeg2.icc
   end
 
@@ -56,12 +56,12 @@ describe VIPS::JPEGWriter do
     jpeg = im2.jpeg
 
     jpeg.remove_icc
-    jpeg.icc?.should be_false
+    jpeg.icc?.should == false
 
     jpeg.write @path
     im3 = VIPS::Image.jpeg @path
     jpeg2 = im3.jpeg
-    jpeg2.icc?.should be_false
+    jpeg2.icc?.should == false
   end
 
   it "should allow attaching an external icc profile to the header", :vips_lib_version => ">= 7.22" do
@@ -73,7 +73,7 @@ describe VIPS::JPEGWriter do
 
     jpeg.remove_icc
     jpeg.icc = icc
-    jpeg.icc?.should be_true
+    jpeg.icc?.should == true
     jpeg.icc.should == icc
 
     jpeg0 = im.jpeg
@@ -91,12 +91,12 @@ describe VIPS::JPEGWriter do
     im2 = im.shrink 5, 5
     jpeg = im2.jpeg
 
-    jpeg.exif?.should be_true
+    jpeg.exif?.should == true
 
     jpeg.write @path
     im3 = VIPS::Image.jpeg @path
     jpeg2 = im3.jpeg
-    jpeg2.exif?.should be_true
+    jpeg2.exif?.should == true
   end
 
   it "should remove the exif header", :vips_lib_version => ">= 7.22" do
@@ -105,7 +105,7 @@ describe VIPS::JPEGWriter do
     jpeg = im2.jpeg
 
     jpeg.remove_exif
-    jpeg.exif?.should be_false
+    jpeg.exif?.should == false
 
     jpeg.write @path
     im3 = VIPS::Image.jpeg @path
@@ -124,13 +124,13 @@ describe VIPS::JPEGWriter do
     exif = im.jpeg.exif
 
     jpeg = @image.jpeg
-    jpeg.exif?.should be_false
+    jpeg.exif?.should == false
 
     jpeg.exif = exif
     jpeg.write @path
 
     jpeg2 = VIPS::Image.jpeg(@path).jpeg
-    jpeg2.exif.size.should > 10000
+    jpeg2.exif.size.should > 9000
   end
 
   it "should set a default quality of 75" do

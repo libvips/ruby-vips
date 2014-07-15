@@ -5,25 +5,25 @@ describe VIPS::Image do
     @image = simg('wagon.v')
   end
 
-  pending "should perform a fast fourier transform on an image", :vips_lib_version => "> 7.23" do
+  it "should perform a FFT on an image", :vips_lib_version => "> 7.23" do
     im = @image.fwfft
     im.abs.scaleps.rotquad.should match_sha1('72ea6aa0808097376a8d58a18d43220a683c6f1f')
   end
 
-  pending "should perform an inverted fast fourier transform" do
+  it "should perform an inverse FFT" do
     im = @image.fwfft.invfft
+    im.abs.scaleps.rotquad.should match_sha1('709ffff085b09824ea9c96ab2a548c4eb5b0f61c')
   end
 
-  pending "should perform a fast inverted fast fourier transform" do
+  it "should perform an inverse FFT to real space" do
     im = @image.fwfft.invfftr
+    im.abs.scaleps.rotquad.should match_sha1('709ffff085b09824ea9c96ab2a548c4eb5b0f61c')
   end
 
   it "should perform quad rotation on an image", :vips_lib_version => "> 7.23" do
     im = @image.rotquad
     im.should match_sha1('a2d63a4b32b54f6ab7b44d9f27498797ee7dc0db')
   end
-
-  if Spec::Helpers.match_vips_version('> 7.20')
 
   it "should create an ideal highpass image mask" do
     im = VIPS::Image.fmask_ideal_highpass 32, 32, 0.5
@@ -120,7 +120,7 @@ describe VIPS::Image do
     im.scaleps.rotquad.should match_sha1('ee2e68593a0407c938b139634e4208eea7c38140')
   end
 
-  pending "should apply frequency filter image masks" do
+  it "should apply frequency filter image masks" do
     im = @image.extract_area(30, 10, 128, 128)
 
     mask_lo = VIPS::Image.fmask_ideal_highpass 128, 128, 0.1
@@ -133,26 +133,22 @@ describe VIPS::Image do
     combined.should match_sha1('8800da7d7ca039c6b7121858741a535e90ceacfb')
   end
 
-  end # vips version check
-
-  pending "should display a power spectrum of an image", :vips_lib_version => "> 7.23" do
+  it "should display a power spectrum of an image", :vips_lib_version => "> 7.23" do
     im = @image.disp_ps
     im.should match_sha1('72ea6aa0808097376a8d58a18d43220a683c6f1f')
   end
 
-  pending "should calculate the phase correlation between two images" do
+  it "should calculate the phase correlation between two images" do
     im1 = @image.extract_area(30, 10, 128, 128)
     im2 = @image.extract_area(40, 25, 128, 128)
 
-    # [BUG] Segmentation fault
     phasecor = im1.phasecor_fft(im2)
     maxpos = phasecor.maxpos
     maxpos[0].should == 10
     maxpos[1].should == 15
   end
 
-  # when not marked as pending - produces Segmentation fault bug on Travis (issue #32)
-  pending "should create a random fractal image" do
+  it "should create a random fractal image" do
     im = VIPS::Image.fractsurf 512, 2.5
   end
 end

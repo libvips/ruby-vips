@@ -14,10 +14,10 @@ describe VIPS::TIFFReader do
 
   it "should recognize a tiff image" do
     vips_res = VIPS::TIFFReader.recognized? sample('wagon.v').to_s
-    vips_res.should be_false
+    vips_res.should == false
 
     tiff_res = VIPS::TIFFReader.recognized? @path
-    tiff_res.should be_true
+    tiff_res.should == true
   end
 
   it "should recognize options" do

@@ -5,19 +5,18 @@ describe VIPS::EXRReader do
     @path = sample('sample.exr').to_s
   end
 
-  # TODO: find out whether the sample image really is a bunch of blotches. The
-  # sample may be in an unsupported pixel format.
-  pending "should read an exr image" do
+  it "should read an exr image" do
     im = VIPS::Image.exr @path
     im.x_size.should == 610
-    im.should match_sha1('3bea5ddaa343315c817ffae770f9bad4aa5e6e21')
+    im = im.lin(256,0).clip2fmt(:UCHAR)
+    im.should match_sha1('4d1c515a038aa624318da9f6b186bf442fc1635c')
   end
 
-  pending "should recognize an exr image" do
-    vips_res = VIPS::EXRReader.recognized? sample('wagon.v').to_s
-    vips_res.should be_false
+  it "should recognize an exr image" do
+    res = VIPS::EXRReader.recognized? sample('wagon.v').to_s
+    res.should == false
 
     res = VIPS::EXRReader.recognized? @path
-    res.should be_true
+    res.should == true
   end
 end

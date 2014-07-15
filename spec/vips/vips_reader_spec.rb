@@ -17,9 +17,9 @@ describe VIPS::VIPSReader do
 
   it "should recognize an vips image" do
     vips_res = VIPS::VIPSReader.recognized? sample('icc.jpg').to_s
-    vips_res.should be_false
+    vips_res.should == false
 
     res = VIPS::VIPSReader.recognized? @path
-    res.should be_true
+    res.should == true
   end
 end
