@@ -341,11 +341,11 @@ img_data(VALUE obj)
 {
     GetImg(obj, data, im);
 
-    if (im_incheck(im) || im_check_uncoded("img_aref", im))
+    if (im_incheck(im) )
         return( Qnil );
 
     return rb_tainted_str_new((const char *) im->data, 
-		    IM_IMAGE_SIZEOF_LINE(im) * im->Ysize);
+		    IM_IMAGE_SIZEOF_IMAGE(im) );
 }
 
 /*
