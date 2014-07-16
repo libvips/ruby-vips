@@ -80,6 +80,24 @@ header_y_size(VALUE obj)
 
 /*
  *  call-seq:
+ *     im.size -> [width, height]
+ *
+ *  Get the size of the image in pixels.
+ */
+
+static VALUE
+header_size(VALUE obj)
+{
+	GetImg(obj, data, im);
+
+    if (im)
+    	return rb_ary_new3(2, INT2FIX(im->Xsize), INT2FIX(im->Ysize));
+
+    return Qnil;
+}
+
+/*
+ *  call-seq:
  *    im.bands -> number
  *
  *  Get the number of bands in the image.
@@ -403,6 +421,7 @@ init_Header( void )
 
     rb_define_method(mVIPSHeader, "x_size", header_x_size, 0);
     rb_define_method(mVIPSHeader, "y_size", header_y_size, 0);
+    rb_define_method(mVIPSHeader, "size", header_size, 0);
     rb_define_method(mVIPSHeader, "bands", header_bands, 0);
     rb_define_method(mVIPSHeader, "band_fmt", header_band_fmt, 0);
     rb_define_method(mVIPSHeader, "x_res", header_x_res, 0);

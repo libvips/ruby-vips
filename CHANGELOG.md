@@ -9,6 +9,7 @@
 * add a Valgrind suppressions file [John Cupitt]
 * fix .monotonic? [John Cupitt]
 * fix .data on coded images [John Cupitt]
+* add .size, see issue #58 [John Cupitt]
 
 # Version 0.3.8
 
