@@ -29,12 +29,18 @@ describe VIPS::Image do
 
   it "should merge two images from left to right, doing an affine transformation to align two points on each image" do
     im = @image.lrmerge1(@image2, 199, 29, 27, 20, 212, 146, 19, 144, 50)
-    im.should match_sha1('e030e36d6097c3bdb4376a14bcdbc03caf5991dc')
+    # 7.40 has revised mosaic stuff
+    if Spec::Helpers.match_vips_version("> 7.40")
+      im.should match_sha1('e030e36d6097c3bdb4376a14bcdbc03caf5991dc')
+    end
   end
 
   it "should merge two images from top to bottom, doing an affine transformation to align two points on each image" do
     im = @image.tbmerge1(@image2, 40, 140, 20, 30, 200, 150, 190, 25, 50)
-    im.should match_sha1('ac53cf11369892c5f0a388833c1f6f2fba8fed20')
+    # 7.40 has revised mosaic stuff
+    if Spec::Helpers.match_vips_version("> 7.40")
+      im.should match_sha1('ac53cf11369892c5f0a388833c1f6f2fba8fed20')
+    end
   end
 
   # it "should mosaic two image top to bottom (Image#tbmosaic)"

@@ -70,10 +70,13 @@ describe VIPS::Image do
     im[0, 3].should == 0
   end
 
+# 7.40 has revised label stuff
+if Spec::Helpers.match_vips_version("> 7.40")
   it "should mark regions of 4-connected pixels with the same color" do
     im, segments = @image.label_regions
     segments.should == 30728
     im.should match_sha1('426bf35dcca03d79354b85375334a677141e7296')
   end
+end
 end
 

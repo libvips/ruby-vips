@@ -12,12 +12,18 @@ describe VIPS::Image do
 
   it "should perform an inverse FFT" do
     im = @image.fwfft.invfft
-    im.abs.scaleps.rotquad.should match_sha1('709ffff085b09824ea9c96ab2a548c4eb5b0f61c')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.abs.scaleps.rotquad.should match_sha1('709ffff085b09824ea9c96ab2a548c4eb5b0f61c')
+    end
   end
 
   it "should perform an inverse FFT to real space" do
     im = @image.fwfft.invfftr
-    im.abs.scaleps.rotquad.should match_sha1('709ffff085b09824ea9c96ab2a548c4eb5b0f61c')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.abs.scaleps.rotquad.should match_sha1('709ffff085b09824ea9c96ab2a548c4eb5b0f61c')
+    end
   end
 
   it "should perform quad rotation on an image", :vips_lib_version => "> 7.23" do
@@ -67,52 +73,82 @@ describe VIPS::Image do
 
   it "should create a butterworth ringpass image mask" do
     im = VIPS::Image.fmask_butterworth_ringpass 32, 32, 2, 0.5, 0.3, 0.7
-    im.scaleps.should match_sha1('30838c31af7872b69be6678236b05b2b3611b72b')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('30838c31af7872b69be6678236b05b2b3611b72b')
+    end
   end
 
   it "should create a butterworth ringreject image mask" do
     im = VIPS::Image.fmask_butterworth_ringreject 32, 32, 2, 0.5, 0.3, 0.7
-    im.scaleps.should match_sha1('708eaadfed1eede305f5386f503371d4a44f359c')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('708eaadfed1eede305f5386f503371d4a44f359c')
+    end
   end
 
   it "should create a gauss ringpass image mask" do
     im = VIPS::Image.fmask_gauss_ringpass 32, 32, 0.5, 0.2, 0.5
-    im.scaleps.should match_sha1('c4a2eb833eaab64f00b8bbbe0ac164308aebcec2')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('c4a2eb833eaab64f00b8bbbe0ac164308aebcec2')
+    end
   end
 
   it "should create a gauss ringreject image mask" do
     im = VIPS::Image.fmask_gauss_ringreject 32, 32, 0.5, 0.2, 0.5
-    im.scaleps.should match_sha1('7a8ca3995a39c9d1041db34174ae7576fcead59d')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('7a8ca3995a39c9d1041db34174ae7576fcead59d')
+    end
   end
 
   it "should create an ideal bandpass image mask" do
     im = VIPS::Image.fmask_ideal_bandpass 32, 32, 0.5, 0.4, 20
-    im.scaleps.should match_sha1('60cacbf3d72e1e7834203da608037b1bf83b40e8')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('60cacbf3d72e1e7834203da608037b1bf83b40e8')
+    end
   end
 
   it "should create an ideal bandreject image mask" do
     im = VIPS::Image.fmask_ideal_bandreject 32, 32, 0.5, 0.4, 20
-    im.scaleps.should match_sha1('059a104f98f5658171c48a4d6b0d39036f953264')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('059a104f98f5658171c48a4d6b0d39036f953264')
+    end
   end
 
   it "should create a butterworth bandpass image mask" do
     im = VIPS::Image.fmask_butterworth_bandpass 32, 32, 2, 0.5, 0.4, 20, 0.7
-    im.scaleps.should match_sha1('5334a257ccd51517af9991c53d312490b9381240')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('5334a257ccd51517af9991c53d312490b9381240')
+    end
   end
 
   it "should create a butterworth bandreject image mask" do
     im = VIPS::Image.fmask_butterworth_bandreject 32, 32, 2, 0.5, 0.4, 20, 0.7
-    im.scaleps.should match_sha1('6e34ef8d76138f7df3882d796d5d343758cb80c4')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('6e34ef8d76138f7df3882d796d5d343758cb80c4')
+    end
   end
 
   it "should create a gauss bandpass image mask" do
     im = VIPS::Image.fmask_gauss_bandpass 32, 32, 0.5, 0.4, 20, 0.5
-    im.scaleps.should match_sha1('f8be20f1071abeefcbe7090d2cdfcf5e593e1787')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('f8be20f1071abeefcbe7090d2cdfcf5e593e1787')
+    end
   end
 
   it "should create a gauss bandreject image mask" do
     im = VIPS::Image.fmask_gauss_bandreject 32, 32, 0.5, 0.4, 20, 0.5
-    im.scaleps.should match_sha1('ab86d1f2bffc8acc8289bb42ab87d32e96890ebd')
+    # 7.38 has revised fft stuff
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.scaleps.should match_sha1('ab86d1f2bffc8acc8289bb42ab87d32e96890ebd')
+    end
   end
 
   it "should create a fractal filter image mask" do

@@ -141,7 +141,8 @@ describe VIPS::Image do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.decmc_from_lab(im2)
-    if Spec::Helpers.match_vips_version("> 7.23")
+    # 7.32 has revised colour difference stuff
+    if Spec::Helpers.match_vips_version("> 7.32")
       diff.should match_sha1('91396adda33cc10e71bc79b0cd3cbf449f756d0b')
     end
   end
@@ -150,7 +151,8 @@ describe VIPS::Image do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de_from_lab(im2)
-    if Spec::Helpers.match_vips_version("> 7.23")
+    # 7.32 has revised colour difference stuff
+    if Spec::Helpers.match_vips_version("> 7.32")
       diff.should match_sha1('e5810662fa9866a39e778bdf73e910c2196e56e9')
     end
   end
@@ -159,7 +161,8 @@ describe VIPS::Image do
     im = @image.srgb_to_xyz.xyz_to_lab
     im2 = @image2.srgb_to_xyz.xyz_to_lab
     diff = im.de00_from_lab(im2)
-    if Spec::Helpers.match_vips_version("> 7.23")
+    # 7.32 has revised colour difference stuff
+    if Spec::Helpers.match_vips_version("> 7.32")
       diff.should match_sha1('629b5fb844c1f2e61c5e652f23435297b0ec76f4')
     end
   end

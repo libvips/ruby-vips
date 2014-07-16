@@ -74,7 +74,8 @@ describe VIPS::Image do
 
   it "should sharpen an image coded in LABS or LABQ format" do
     im = @image.srgb_to_xyz.xyz_to_lab.lab_to_labs.sharpen(7, 1.5, 20, 50, 1, 2)
-    if Spec::Helpers.match_vips_version("> 7.23")
+    # revised in 7.38
+    if Spec::Helpers.match_vips_version("> 7.38")
       im.should match_sha1('f6fdf3136cc01b3f267b80450f4c4419ae22b77a')
     end
   end
@@ -92,24 +93,36 @@ describe VIPS::Image do
   it "should calculate a fast correlation surface between two images" do
     segment = @image.extract_area(120, 120, 30, 30, 1, 1).scale
     im = @image.extract_band(0).fastcor(segment)
-    im.should match_sha1('e14c148c8b9f86707ac911f61b166e9f2e1cf54d')
+    # revised in 7.38
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.should match_sha1('e14c148c8b9f86707ac911f61b166e9f2e1cf54d')
+    end
   end
 
   it "should calculate a correlation surface between two images" do
     segment = @image.extract_area(120, 120, 30, 30, 1, 1).scale
     im = @image.extract_band(0).spcor(segment)
-    im.should match_sha1('d2c2bcf3b6d28f9ae705dadae82b11c2df1bf344')
+    # revised in 7.38
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.should match_sha1('d2c2bcf3b6d28f9ae705dadae82b11c2df1bf344')
+    end
   end
 
   it "should calculate a correlation surface between two images via gradients" do
     segment = @image.extract_area(120, 120, 30, 30, 1, 1).scale
     im = @image.extract_band(0).gradcor(segment)
-    im.should match_sha1('3f0193e24f89b5c5b98f56e48c1ee858ec2a2c01')
+    # revised in 7.38
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.should match_sha1('3f0193e24f89b5c5b98f56e48c1ee858ec2a2c01')
+    end
   end
 
   it "should generate an image where every pixel represents the contrast within a window" do
     im = @image.bandmean.contrast_surface(10, 2)
-    im.should match_sha1('3bee875c3f12c263bf96ea8881e5b76b10f1ae7e')
+    # revised in 7.38
+    if Spec::Helpers.match_vips_version("> 7.38")
+      im.should match_sha1('3bee875c3f12c263bf96ea8881e5b76b10f1ae7e')
+    end
   end
 
   it "should add gaussian noise to an image" do

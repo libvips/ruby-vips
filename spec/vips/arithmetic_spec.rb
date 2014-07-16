@@ -266,10 +266,16 @@ describe VIPS::Image do
 
   it "should calculate the value of a point in a band in an image" do
     pt = @image.point(:bilinear, 103, 100, 1)
-    pt.should == @image[103, 100][1]
+    # 7.40 fixed im_point()
+    if Spec::Helpers.match_vips_version("> 7.40")
+      pt.should == @image[103, 100][1]
+    end
 
     pt2 = @image.point(:bilinear, 102.5, 100, 0)
-    pt2.should == 92.0
+    # 7.40 fixed im_point()
+    if Spec::Helpers.match_vips_version("> 7.40")
+      pt2.should == 92.0
+    end
   end
 
   it "should raise pixel band values in an image to the given power" do
