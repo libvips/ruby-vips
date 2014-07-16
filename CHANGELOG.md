@@ -10,6 +10,7 @@
 * fix .monotonic? [John Cupitt]
 * fix .data on coded images [John Cupitt]
 * add .size, see issue #58 [John Cupitt]
+* add rdoc-data dep, maybe it will help ruby-gems docs [John Cupitt]
 
 # Version 0.3.8
 
