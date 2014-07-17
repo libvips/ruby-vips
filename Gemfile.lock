@@ -39,8 +39,10 @@ GEM
       rack (~> 1.2)
     rack (1.5.2)
     rake (10.2.2)
-    rdoc (3.12.2)
+    rdoc (4.1.1)
       json (~> 1.4)
+    rdoc-data (4.0.1)
+      rdoc (~> 4.0)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
       rspec-expectations (~> 3.0.0)
@@ -60,5 +62,6 @@ PLATFORMS
 DEPENDENCIES
   bundler
   jeweler (~> 1.8.3)
-  rdoc (~> 3.12)
+  rdoc (~> 4.1)
+  rdoc-data (~> 4.0)
   rspec
