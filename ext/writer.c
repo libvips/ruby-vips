@@ -249,6 +249,23 @@ png_write_internal(VALUE obj, VALUE path)
 /* :nodoc: */
 
 static VALUE
+webp_write_internal(VALUE obj, VALUE path)
+{
+#if ATLEAST_VIPS( 7, 42 )
+    GetImg(obj, data, im);
+
+    if (im_vips2webp(im, RSTRING_PTR(path)))
+        vips_lib_error();
+#else
+    rb_raise(eVIPSError, "This method is not implemented in your version of VIPS");
+#endif
+
+    return obj;
+}
+
+/* :nodoc: */
+
+static VALUE
 csv_write_internal(VALUE obj, VALUE path)
 {
     GetImg(obj, data, im);
@@ -326,6 +343,13 @@ init_Writer(void)
     VALUE png_writer = rb_define_class_under(mVIPS, "PNGWriter", writer);
     rb_define_private_method(png_writer, "write_internal", png_write_internal, 1);
     rb_define_private_method(png_writer, "buf_internal", png_buf_internal, 2);
+
+    /*
+     * Write WebP images.
+     */
+
+    VALUE webp_writer = rb_define_class_under(mVIPS, "WEBPWriter", writer);
+    rb_define_private_method(webp_writer, "write_internal", webp_write_internal, 1);
 
     /*
      * Write CSV images.

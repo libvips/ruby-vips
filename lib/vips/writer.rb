@@ -102,6 +102,40 @@ module VIPS
     end
   end
 
+  class WEBPWriter < Writer
+    attr_accessor :quality, :lossless
+
+    def initialize(image, options={})
+      super image
+
+      @quality = 75
+      @lossless = false
+
+      self.quality = options[:quality] if options.has_key?(:quality)
+      self.lossless = options[:lossless] if options.has_key?(:lossless)
+    end
+
+    def write(path)
+      write_gc "#{path}:#{@quality},#{@lossless ? 1 : 0}"
+    end
+
+    def quality=(quality_v)
+      unless (0..100).include?(quality_v)
+        raise ArgumentError, 'quality must be a numeric value between 0 and 100'
+      end
+
+      @quality = quality_v
+    end
+
+    def lossless=(lossless_v)
+      unless [True, False].include?(lossless_v)
+        raise ArgumentError, 'lossless must be a boolean value'
+      end
+
+      @lossless = lossless_v
+    end
+  end
+
   class PPMWriter < Writer
     attr_reader :format
 

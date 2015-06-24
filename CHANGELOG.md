@@ -1,5 +1,9 @@
 # master 
 
+# Version 0.3.10
+
+* added webp write [John Cupitt]
+
 # Version 0.3.9
 
 * removed a stray file from gemspec [Alessandro Tagliapietra]

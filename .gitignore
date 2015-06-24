@@ -8,3 +8,4 @@ tags
 *.o
 /Makefile
 /mkmf.log
+rdoc
