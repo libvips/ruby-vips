@@ -61,39 +61,42 @@ Install [homebrew](http://mxcl.github.com/homebrew) and enter:
 
 ```bash
 $ brew tap homebrew/science
-$ brew install vips --with-cfitsio --with-fftw --with-imagemagick \
-    --with-libexif --with-liboil --with-libtiff --with-little-cms \
-    --with-openexr --with-openslide --with-pango
+$ brew install vips 
+```
+
+You may see some harmless warnings. 
+
+To verify that your vips install is working, try:
+
+```bash
+$ vips --version
+vips-7.42.1-Sat Dec 27 12:01:43 GMT 2014
 ```
 
 libvips has a lot of optional dependencies. You
-may not need all of them.  See [the notes
+may not need all of them.  True `brew info vips` to see what you have enabled
+and what is disabled. See also [the notes
 here](http://www.vips.ecs.soton.ac.uk/index.php?title=Build_on_OS_X) for
 more information.
 
 If you want to build things outside homebrew which depend on vips,
-such as ruby-vips, your pkg-config will need to be working. You
-need to point pkg-config at the homebrew area, and, additionally, at
-homebrew's libxml2 area:
-
-In your .profile, add something like:
+such as ruby-vips, your pkg-config will need to be working. To test
+`pkg-config`, try:
 
 ```bash
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgconfig
+$ pkg-config vips --modversion
 ```
 
-To verify that your vips install is correct and working, try:
+If you see a version number, you are OK. If you don't, either update your
+homebrew, or try adjusting `PKG_CONFIG_PATH`. At various times homebrew has
+needed various settings. You might need to point it at homebrew or even at
+libxml2. 
 
-```bash
-$ vips --version
-vips-7.36.4-Tue Nov 19 12:22:47 GMT 2013
-```
-
-To verify that your pkg-config is working correctly with vips, try:
+To verify that your `pkg-config` is working correctly with vips, try:
 
 ```bash
 $ pkg-config vips --libs
--L/usr/local/Cellar/vips/7.36.4/lib ... a lot of stuff
+-L/usr/local/Cellar/vips/7.42.1/lib ... a lot of stuff
 ```
 
 TODO: Describe & test with macports.
