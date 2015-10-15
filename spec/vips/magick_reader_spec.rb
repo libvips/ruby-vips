@@ -14,4 +14,13 @@ describe VIPS::MagickReader do
     res = VIPS::MagickReader.recognized? @path
     res.should == true
   end
+
+  it "should read a magick file from memory" do
+    if Spec::Helpers.match_vips_version(">= 8.2")
+      png_data = IO.read(@path)
+      reader = VIPS::MagickReader.new(png_data)
+      im = reader.read_buffer
+      im.x_size.should == @image.x_size
+    end
+  end
 end

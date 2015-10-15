@@ -1,5 +1,9 @@
 # master 
 
+# Version 0.3.11
+
+* added magick load from buffer [John Cupitt]
+
 # Version 0.3.10
 
 * added webp write [John Cupitt]

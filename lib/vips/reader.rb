@@ -214,6 +214,12 @@ module VIPS
     end
   end
 
+  class MagickReader < Reader
+    def read_buffer
+      @_im = buf_internal @path
+    end
+  end
+
   class Image
 
     # Load a ppm file straight to a VIPS Image.

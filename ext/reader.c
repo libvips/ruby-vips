@@ -74,6 +74,28 @@ jpeg_buf_internal(VALUE obj, VALUE buf, VALUE shrink, VALUE fail)
 }
 
 static VALUE
+magick_buf_internal(VALUE obj, VALUE buf)
+{
+    VipsImage *im_new;
+
+    im_new = NULL; 
+
+#if ATLEAST_VIPS( 8, 2 )
+    buf = StringValue(buf);
+
+    if (!(im_new = im_open("", "p")))
+        vips_lib_error();
+
+    if (im_bufmagick2vips(RSTRING_PTR(buf), RSTRING_LEN(buf), im_new, FALSE))
+        vips_lib_error();
+#else
+    rb_raise(eVIPSError, "This method is not implemented in your version of VIPS");
+#endif
+
+    return img_init(cVIPSImage, im_new);
+}
+
+static VALUE
 png_buf_internal(VALUE obj, VALUE buf)
 {
     VipsImage *im_new;
@@ -212,6 +234,10 @@ init_Reader(void)
 
     VALUE magick_reader = rb_define_class_under(mVIPS, "MagickReader", reader);
     rb_define_private_method(magick_reader, "read_internal", magick_read_internal, 2);
+    reader_fmt_set(magick_reader, "magick");
+
+    magick_reader = rb_define_class_under(mVIPS, "MagickReader", reader);
+    rb_define_private_method(magick_reader, "buf_internal", magick_buf_internal, 1);
     reader_fmt_set(magick_reader, "magick");
 
     /*
