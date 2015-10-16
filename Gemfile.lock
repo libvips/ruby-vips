@@ -25,7 +25,7 @@ GEM
       nokogiri (= 1.5.10)
       rake
       rdoc
-    json (1.8.1)
+    json (1.8.3)
     jwt (1.0.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
@@ -39,10 +39,8 @@ GEM
       rack (~> 1.2)
     rack (1.5.2)
     rake (10.2.2)
-    rdoc (4.1.1)
+    rdoc (3.12.2)
       json (~> 1.4)
-    rdoc-data (4.0.1)
-      rdoc (~> 4.0)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
       rspec-expectations (~> 3.0.0)
@@ -60,9 +58,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler
+  bundler (~> 1.0)
   jeweler (~> 1.8.3)
-  rdoc (~> 4.1)
-  rdoc-data (~> 4.0)
+  rdoc (~> 3.12)
   rspec
-
