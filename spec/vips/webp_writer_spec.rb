@@ -8,12 +8,14 @@ describe VIPS::WEBPWriter do
   end
 
   it "should write to a webp file" do
-    @writer.write(@path)
+    if Spec::Helpers.match_vips_version(">= 7.42")
+      @writer.write(@path)
 
-    # no webp reader
-    #im = VIPS::Image.webp @path
-    #im.x_size.should == @image.x_size
-    #im.y_size.should == @image.y_size
+      # no webp reader
+      #im = VIPS::Image.webp @path
+      #im.x_size.should == @image.x_size
+      #im.y_size.should == @image.y_size
+    end
   end
 
   it "should set a default quality of 75" do
@@ -32,15 +34,17 @@ describe VIPS::WEBPWriter do
   end
 
   it "should write smaller images with lower quality settings" do
-    @writer.quality = 10
-    @writer.write(@path)
-    size1 = File.size @path
-
-    @writer.quality = 90
-    @writer.write(@path)
-    size2 = File.size @path
-
-    size1.should < size2 / 2
+    if Spec::Helpers.match_vips_version(">= 7.42")
+      @writer.quality = 10
+      @writer.write(@path)
+      size1 = File.size @path
+  
+      @writer.quality = 90
+      @writer.write(@path)
+      size2 = File.size @path
+  
+      size1.should < size2 / 2
+    end
   end
 
   it "should create a webp writer from an image" do
@@ -49,8 +53,10 @@ describe VIPS::WEBPWriter do
   end
 
   it "should accept options on creation from an image" do
-    writer = @image.webp(nil, :quality => 22)
-    writer.quality.should == 22
+    if Spec::Helpers.match_vips_version(">= 7.42")
+      writer = @image.webp(nil, :quality => 22)
+      writer.quality.should == 22
+    end
   end
 
   it "should allow access to header fields" do
