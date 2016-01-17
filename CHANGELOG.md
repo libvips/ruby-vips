@@ -1,5 +1,9 @@
 # master 
 
+# Version 0.3.13
+
+* don't use generational GC options on old Rubys [John Cupitt]
+
 # Version 0.3.12
 
 * incremental GC every 10 writes [felixbuenemann]
