@@ -1,5 +1,10 @@
 # master 
 
+# Version 0.3.12
+
+* incremental GC every 10 writes [felixbuenemann]
+* updated bundle [John Cupitt]
+
 # Version 0.3.11
 
 * added magick load from buffer [John Cupitt]
