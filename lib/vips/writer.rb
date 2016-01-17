@@ -14,14 +14,22 @@ module VIPS
     # GCing before every write would have a horrible effect on performance, so
     # as a compromise we GC every @@gc_interval writes
 
-    @@gc_interval = 10
+    # ruby2.1 introduced a generational GC which can do a low-impact GC ... we
+    # behave differently for this
+    @@generational_gc = RUBY_ENGINE == "ruby" && RUBY_VERSION.to_f >= 2.1
+
+    @@gc_interval = if @@generational_gc then 10 else 100 end
     @@gc_countdown = @@gc_interval
 
     def write_gc(path)
       @@gc_countdown -= 1
       if @@gc_countdown < 0 
         @@gc_countdown = @@gc_interval
-        GC.start full_mark: false, immediate_sweep: false
+        if @@generational_gc 
+            GC.start full_mark: false, immediate_sweep: false
+        else
+            GC.start 
+        end
       end
 
       write_internal path
