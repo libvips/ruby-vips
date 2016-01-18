@@ -1,6 +1,8 @@
 - add something to make a memory image, useful in some cases, eg. making very
   large image mosaics
 
+- support vips_resize()
+
 - support vips_flatten(), see 
 
 	https://github.com/jcupitt/ruby-vips/issues/45
