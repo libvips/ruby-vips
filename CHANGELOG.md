@@ -1,5 +1,10 @@
 # master 
 
+# Version 0.3.14
+
+* more GC tuning [felixbuenemann]
+* add `write.rb` example program [felixbuenemann]
+
 # Version 0.3.13
 
 * don't use generational GC options on old Rubys [John Cupitt]

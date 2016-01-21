@@ -6,29 +6,31 @@ module VIPS
 
     private
 
-    # write can fail due to no file descriptors 
+    # write can fail due to no file descriptors, memory can fill if large
+    # objects are not collected fairly soon
     #
     # we can't try a write and GC and retry on fail, since the write may take a
     # long time 
     #
     # GCing before every write would have a horrible effect on performance, so
     # as a compromise we GC every @@gc_interval writes
-
-    # ruby2.1 introduced a generational GC which can do a low-impact GC ... we
-    # behave differently for this
+    # 
+    # ruby2.1 introduced a generational GC which 
+    # is fast enough to be able to GC on every write
+ 
     @@generational_gc = RUBY_ENGINE == "ruby" && RUBY_VERSION.to_f >= 2.1
 
-    @@gc_interval = if @@generational_gc then 10 else 100 end
+    @@gc_interval = 100
     @@gc_countdown = @@gc_interval
 
     def write_gc(path)
-      @@gc_countdown -= 1
-      if @@gc_countdown < 0 
-        @@gc_countdown = @@gc_interval
-        if @@generational_gc 
-            GC.start full_mark: false, immediate_sweep: false
-        else
-            GC.start 
+      if @@generational_gc 
+        GC.start full_mark: false
+      else
+        @@gc_countdown -= 1
+        if @@gc_countdown < 0 
+          @@gc_countdown = @@gc_interval
+          GC.start 
         end
       end
 
