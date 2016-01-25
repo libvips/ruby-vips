@@ -2,26 +2,31 @@
 
 [![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
 
-ruby-vips is a ruby extension for [vips](http://www.vips.ecs.soton.ac.uk). 
-It is fast and it can work without needing the 
+This is `ruby-vips`, a gem for the 
+[libvips](http://www.vips.ecs.soton.ac.uk) image processing library. 
+This gem is still being maintained, but for new projects you should look at
+the newer [ruby-vips8](https://rubygems.org/gems/ruby-vips8) gem. 
+
+ruby-vips is fast and it can work without needing the 
 entire image to be loaded into memory. For example, the benchmark at 
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
 image, crops, shrinks, sharpens and saves again:
 
 ```text
 real time in seconds, fastest of three runs
-benchmark       tiff    jpeg
-ruby-vips.rb    0.45    0.56    
-rmagick.rb      1.69    1.90    
-netpbm.sh       1.74    1.63    
-image-magick.sh 2.87    3.02    
-image_sci.rb    3.19    2.90    
+benchmark       tiff	jpeg
+ruby-vips.rb    2.77	2.98	
+ruby-vips8.rb   2.97	3.29	
+image-magick    8.18	9.71	
+rmagick.rb      9.22	10.06	
+image_sci.rb    9.39	7.20	
 
-peak memory use in kilobytes
+peak memory use in bytes
 benchmark       peak RSS
-ruby-vips.rb    160400
-image_sci.rb    546992
-rmagick.rb      1370064
+ruby-vips.rb    107340
+ruby-vips8.rb   117604
+image_sci.rb    146536
+rmagick.rb      3352020
 ```
 
 See also [benchmarks at the official libvips
