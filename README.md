@@ -5,7 +5,7 @@
 This is `ruby-vips`, a gem for the 
 [libvips](http://www.vips.ecs.soton.ac.uk) image processing library. 
 This gem is still being maintained, but for new projects you should look at
-the newer [ruby-vips8](https://rubygems.org/gems/ruby-vips8) gem. 
+the replacement [ruby-vips8](https://rubygems.org/gems/ruby-vips8) gem. 
 
 ruby-vips is fast and it can work without needing the 
 entire image to be loaded into memory. For example, the benchmark at 
