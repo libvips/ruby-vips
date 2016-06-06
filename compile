@@ -1,3 +1,0 @@
-ruby ext/extconf.rb
-make
-mv vips_ext.so lib/

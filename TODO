@@ -1,38 +1,14 @@
-- add something to make a memory image, useful in some cases, eg. making very
-  large image mosaics
+- need something like ruby-vips occasional GC stuff, we can fill memory before
+  a GC is triggered
 
-- support vips_resize()
+- mail about the getpoint unimplemented error
 
-- support vips_flatten(), see 
+  http://sourceforge.net/p/ruby-gnome2/mailman/ruby-gnome2-devel-en/thread/CAGNS0RuZ5N6bha3M7B0%2BYf2M9-oni44idzZO17mtQiykS%2BmJKQ%40mail.gmail.com/#msg34790843
 
-	https://github.com/jcupitt/ruby-vips/issues/45
+- still missing a few enum docs
 
+- add complex constants, eg. 
 
-btw, there's a method called to_memory in JPEGWriter and PNGWriter, that works
-cool to retrieve the VIPS::Image as a memory buffer, will be cool if this
-method is moved up to Writer and then it handles the correct to_memory method
-using the image headers.
+	Complex(1, 2)
+	=> (1+2i)
 
-add from_memory? or should the open method accept a blob in place of a path?
-
-
-
-
-TODO
-* Verify that all memory gets released when vips ops return errors. Namely,
-  make sure that the allocated IMAGEs get released via ruby's free callbacks.
-* Allow for injecting ruby code into an image transformation pipeline (may be
-  slow to call out to ruby with every read, but may be worthwhile for fun custom
-  image processors).
-* Tap into VIPS callback system to allow progress updates, etc.
-* Allow for creating a ruby endpoint to the pipeline could be useful for
-  streaming.
-* Image#to_a
-* look into other.h, audit all libvips methods and make sure they are all
-  implemented
-* JRuby support
-* Optional extensions to core Ruby classes, allowing operations such as
-  [1, 2, 3] & im . This could be optionally enabled by requiring e.g.
-  vips/core_ext
-* Put groups of image operations into modules, breaking docs into themes and
-  possibly allowing for selective loading of image ops.

@@ -1,37 +1,49 @@
-$:.unshift File.expand_path('../../ext', __FILE__)
+require 'vips'
 
-require "vips"
+require 'tempfile'
 
-puts "testing ruby-vips #{VIPS::VERSION}"
-puts "linked against libvips #{VIPS::LIB_VERSION}"
+module Spec
 
-require "rspec"
+    module Path
+        def root
+            @root ||= Pathname.new(File.expand_path('..', __FILE__))
+        end
 
-Dir["#{File.expand_path('../support', __FILE__)}/*.rb"].each do |file|
-  require file
+        def sample(*path)
+            root.join 'samples', *path
+        end
+
+        def tmp(*path)
+            root.join 'tmp', 'working', *path
+        end
+
+        extend self
+
+    end
+
+    module Helpers
+        def reset_working!
+            FileUtils.rm Dir[tmp.join('*.*')]
+            FileUtils.mkdir_p(tmp)
+        end
+    end
+
+end
+
+def simg(name)
+    Spec::Path::sample(name).to_s
+end
+
+def timg(name)
+    Spec::Path::tmp(name).to_s
 end
 
 RSpec.configure do |config|
-  config.include Spec::Path
-  config.include Spec::Helpers
+    config.include Spec::Path
+    config.include Spec::Helpers
 
-  config.before :all do
-    reset_formats!
-    reset_working!
-  end
-
-  config.before :each do
-    reset_working!
-  end
-
-  config.filter_run_excluding :vips_lib_version => lambda{ |ver|
-    return !Spec::Helpers.match_vips_version(ver)
-  }
-
-  # Use this to print vips debug info before exit
-  # config.after :suite do
-  #    GC.start
-  #    VIPS.exit_info
-  # end
+    config.before :each do
+        reset_working!
+    end
 
 end

@@ -1,22 +1,28 @@
-# ruby-vips : A fast image processing extension for Ruby.
+# ruby-vips
 
-[![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
+*API break:* version 1.0 of this gem is an API break, see below for some notes
+on why there is a break and how to update your code. 
+The older `ruby-vips` is still here and still maintained in branch 
+`0.3-stable`.
 
-This is `ruby-vips`, a gem for the 
-[libvips](http://www.vips.ecs.soton.ac.uk) image processing library. 
-This gem is still being maintained, but for new projects you should look at
-the replacement [ruby-vips8](https://rubygems.org/gems/ruby-vips8) gem. 
+This gem provides a Ruby binding for the [vips image processing
+library](http://www.vips.ecs.soton.ac.uk). 
 
-ruby-vips is fast and it can work without needing the 
-entire image to be loaded into memory. For example, the benchmark at 
+`ruby-vips` is fast and it can work without needing to have the 
+entire image loaded into memory. Programs that use `ruby-vips` don't
+manipulate images directly, instead they create pipelines of image processing
+operations building on a source image. When the end of the pipe is connected
+to a destination, the whole pipline executes at once, streaming the image
+in parallel from source to destination a section at a time. 
+
+For example, the benchmark at 
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
-image, crops, shrinks, sharpens and saves again:
+image, crops, shrinks, sharpens and saves again, and repeats 10 times. 
 
 ```text
 real time in seconds, fastest of three runs
 benchmark       tiff	jpeg
-ruby-vips.rb    2.77	2.98	
-ruby-vips8.rb   2.97	3.29	
+ruby-vips.rb    2.97	3.29	
 image-magick    8.18	9.71	
 rmagick.rb      9.22	10.06	
 image_sci.rb    9.39	7.20	
@@ -24,7 +30,7 @@ image_sci.rb    9.39	7.20
 peak memory use in bytes
 benchmark       peak RSS
 ruby-vips.rb    107340
-ruby-vips8.rb   117604
+ruby-vips.rb    117604
 image_sci.rb    146536
 rmagick.rb      3352020
 ```
@@ -35,83 +41,47 @@ There's a handy blog post explaining [how libvips opens
 files](http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html)
 which gives some more background.
 
-ruby-vips allows you to set up pipelines that don't get executed until you
-output the image to disk or to a string. This means you can create,
-manipulate, and pass around Image objects without incurring any memory or CPU
-costs. The image is not actually processed until you write the image to memory
-or to disk.
-
-*note*: ruby-vips will work with versions of libvips as far back as 7.12, but
-with missing features and with reduced performance. For best results, use the 
-latest libvips you can.
-
-## Requirements.
+## Requirements
 
   * OS X or Linux
-  * MRI 1.8.7, 1.9.3
-  * libvips 7.24 and later (it will work with earlier libvips, but some
-    features may not be functional)
+  * libvips 8.2 and later
 
 ## Installation prerequisites
-
-### Ubuntu 
-
-```bash
-$ apt-get install libvips-dev
-```
 
 ### OS X 
 
 Install [homebrew](http://mxcl.github.com/homebrew) and enter:
 
 ```bash
-$ brew tap homebrew/science
-$ brew install vips 
+$ brew install homebrew/science/vips
 ```
-
-You may see some harmless warnings. 
 
 To verify that your vips install is working, try:
 
 ```bash
 $ vips --version
-vips-7.42.1-Sat Dec 27 12:01:43 GMT 2014
+vips-8.2.1
 ```
 
-libvips has a lot of optional dependencies. You
-may not need all of them.  True `brew info vips` to see what you have enabled
-and what is disabled. See also [the notes
-here](http://www.vips.ecs.soton.ac.uk/index.php?title=Build_on_OS_X) for
-more information.
-
-If you want to build things outside homebrew which depend on vips,
-such as ruby-vips, your pkg-config will need to be working. To test
-`pkg-config`, try:
+Depending on how your system is configured, you may need to add the 
+directory containing `Vips-8.0.typelib` to your
+your `GI_TYPELIB_PATH`. Something like:
 
 ```bash
-$ pkg-config vips --modversion
+$ export GI_TYPELIB_PATH=/usr/local/lib/girepository-1.0
 ```
-
-If you see a version number, you are OK. If you don't, either update your
-homebrew, or try adjusting `PKG_CONFIG_PATH`. At various times homebrew has
-needed various settings. You might need to point it at homebrew or even at
-libxml2. 
-
-To verify that your `pkg-config` is working correctly with vips, try:
-
-```bash
-$ pkg-config vips --libs
--L/usr/local/Cellar/vips/7.42.1/lib ... a lot of stuff
-```
-
-TODO: Describe & test with macports.
 
 ### Other platforms
 
-See [Installation on various
-platforms](https://github.com/jcupitt/ruby-vips/wiki/installation-on-various-platforms).
+You need to install libvips from source since 8.2 has not been packaged yet
+(Jan 2016).
 
-### Installing the gem.
+Download a tarball from the 
+[libvips website](http://www.vips.ecs.soton.ac.uk/supported/current), or build
+from [the git repository](https://github.com/jcupitt/libvips) and see the
+README.
+
+## Installing the gem.
 
 ```bash
 $ gem install ruby-vips
@@ -123,105 +93,100 @@ or include it in Gemfile:
 gem 'ruby-vips'
 ```
 
-For a debug build:
+And take a look in `examples/`. There is full yard documentation, take a look
+there too.
 
-```bash
-$ gem install ruby-vips -- --enable-debug
-```
-
-## Documentation.
-
-ruby-vips has [rdoc
-documentation](http://rubydoc.info/gems/ruby-vips/frames). Also
-see [Wiki page](https://github.com/jcupitt/ruby-vips/wiki)
-
-## Small example
-
-See also the
-[examples](https://github.com/jcupitt/ruby-vips/tree/master/examples)
-directory.
+# Example
 
 ```ruby
-require 'rubygems'
 require 'vips'
 
-include VIPS
+im = Vips::Image.new_from_file filename
 
-# Create an image object. It will not actually load the pixel data until 
-# needed. 
-im = Image.jpeg('mypic.jpg')
+# put im at position (100, 100) in a 3000 x 3000 pixel image, 
+# make the other pixels in the image by mirroring im up / down / 
+# left / right, see
+# http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/libvips-conversion.html#vips-embed
+im = im.embed 100, 100, 3000, 3000, :extend => :mirror
 
-# You can read all the header fields without triggering a pixel load.
-puts "it's #{im.x_size} pixels across!"
+# multiply the green (middle) band by 2, leave the other two alone
+im *= [1, 2, 1]
 
-# Shrink the jpeg by a factor of four when loading -- huge speed and CPU
-# improvements on large images.
-im = Image.jpeg('mypic.jpg', :shrink_factor => 4)
-puts "but only #{im.x_size} pixels when we shrink on load"
+# make an image from an array constant, convolve with it
+mask = Vips::Image.new_from_array [
+    [-1, -1, -1],
+    [-1, 16, -1],
+    [-1, -1, -1]], 8
+im = im.conv mask
 
-# Add a shrink by a factor of two to the pipeline. This will not actually be
-# executed yet.
-im_shrink_by_two = im.shrink(2)
-
-# Write out the shrunk image to a PNG file. This is where the image is
-# actually loaded and resized. With images that allow for random access from
-# the hard drive (VIPS native format, tiled OpenEXR, ppm/pbm/pgm/pfm, tiled
-# tiff, and RAW images), the entire image is never read into memory.
-# For other formats, the image is either decompressed to a temporary disc 
-# file and then processed from there, or, if you give the :sequential hint, 
-# streamed directly from the file.
-im_shrink_by_two.png('out.png', :interlace => true)
-
-# All ruby-vips image commands can be chained, so the above sequence could
-# be written as:
-Image.jpeg('mypic.jpg', :shrink_factor => 4).shrink(2).png('out.png')
-
-# You hint sequential mode in the loader, so this will stream directly from
-# the source image:
-Image.jpeg('large.png', :sequential => true).shrink(2).png('out.png')
-
-# The statement above will load the jpeg (pre-shrunk by a factor of four),
-# shrink the image again by a factor of two, and then save as a png image.
-
-# If you want to let vips determine file formats, you can use the generic
-# reader and writer:
-Image.new('mypic.jpg').shrink(2).write('out.png')
-
-# You can also read and write images from memory areas. For example:
-
-jpeg_data = IO.read('mypic.jpg')
-reader = JPEGReader.new(jpeg_data, :shrink_factor => 2, :fail_on_warn => true)
-im = reader.read_buffer
-
-# As above, the image will not be processed until the .to_memory() method 
-# is called, and then will only decompress the section being processed. 
-# You will need to have all of the compressed data in memory at once though. 
-
-# Note that this means you will get a coredump if you free the compressed
-# image buffer (jpeg_data above) before the write has completed.
-
-writer = PNGWriter.new(im, :compression => 2, :interlace => false)
-png_data = writer.to_memory
-IO.write('out.png', png_data)
-
-# Only JPEG, PNG and uncompressed memory images are supported at the moment,
-# and png memory read is only in vips-7.34 and later.
-
-# We hope to add other formats in future. 
-
-png_data = IO.read('mypic.png')
-reader = PNGReader.new(png_data)
-im = reader.read_buffer
-
-writer = JPEGWriter.new(im, :quality => 50)
-jpeg_data = writer.to_memory
-IO.write('out.jpg', jpeg_data)
-
+# finally, write the result back to a file on disk
+im.write_to_file output_filename
 ```
 
-## Why use ruby-vips?
+# Why the API break?
 
-  - It supports over 250 low-level image and color manipulation operations.
-  - Operations are chainable and do not get executed until the image is sent to an output.
-  - Memory use is low, even for very, very large images.
-  - Fastest ruby library for resizing large images. See [benchmarks at the official libvips website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use) and [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks)
+There's been a `ruby-vips` for a few years now. 
+It was written by a Ruby
+expert, it works well, it includes a test-suite, and has pretty full
+documentation. Why rewrite?
+
+`ruby-vips` 0.3 was based on the old vips7 API. There's now vips8, 
+which adds several
+very useful new features:
+
+* [GObject](https://developer.gnome.org/gobject/stable/)-based API with full
+  introspection. You can discover the vips8 API at runtime. This means that if
+  libvips gets a new operator, any binding that goes via vips8 will 
+  get the new thing immediately. With vips7, whenever libvips was changed, all
+  the bindings needed to be changed too.
+
+* No C required. Thanks to
+  [gobject-introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
+  you can write the binding in Ruby itself, there's no need for any C. This
+  makes it a lot smaller and more portable. 
+
+* vips7 probably won't get new features. vips7 doesn't really exist any more:
+  the API is still there, but now just a thin compatibility layer over vips8.
+  New features may well not get added to the vips7 API.
+
+There are some more minor pluses as well:
+
+* Named and optional arguments. vips8 lets you have optional and required
+  arguments, both input and output, and optional arguments can have default
+  values. 
+
+* Operation cache. vips8 keeps track of the last 1,000 or so operations and
+  will automatically reuse results when it can. This can give a huge speedup
+  in some cases.
+
+* vips8 is much simpler and more regular. For example, 
+  ruby-vips had to work hard to offer a nice loader system, but that's all
+  built into vips8. It can do things like load and save formatted images to 
+  and from memory buffers as well, which just wasn't possible before. 
+
+This binding adds some extra useful features over the old `ruby-vips` binding.
+
+* Full set of arithmetic operator overloads.
+
+* Automatic constant expansion. You can write things like
+  `image.bandjoin(255)` and the 255 will be automatically expanded to an image 
+  and attached as an extra band. You can mix int, float, scalar, vector and
+  image constants freely.
+
+# How to update your code
+
+* `VIPS::` becomes `Vips::`
+
+* `VIPS::Image.new(filename)` becomes `Vips::Image.new_from_file(filename)`. 
+  `VIPS::Image.jpeg(filename)` also becomes 
+  `Vips::Image.new_from_file(filename)`, similarly for other formats.  
+
+* `#write(filename)` becomes `#write_to_file(filename)`. `#png(filename)` also
+  becomes `#write_to_file(filename)`, same for all other
+  formats.
+
+* Most member functions are unchanged, but check the yard docs. You can also
+  use the C docs directly, since `ruby-vips` is now a very thin layer over the
+  C API. See the docs for the `Vips` class for guidance. 
+
+* There are lots of nice new features, see the docs and examples.

@@ -1,5 +1,9 @@
 # master 
 
+# Version 1.0.0
+
+* complete rewrite, API break [John Cupitt]
+
 # Version 0.3.14
 
 * more GC tuning [felixbuenemann]
