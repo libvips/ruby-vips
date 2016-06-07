@@ -29,7 +29,6 @@ image_sci.rb    9.39	7.20
 
 peak memory use in bytes
 benchmark       peak RSS
-ruby-vips.rb    107340
 ruby-vips.rb    117604
 image_sci.rb    146536
 rmagick.rb      3352020
@@ -61,14 +60,6 @@ To verify that your vips install is working, try:
 ```bash
 $ vips --version
 vips-8.2.1
-```
-
-Depending on how your system is configured, you may need to add the 
-directory containing `Vips-8.0.typelib` to your
-your `GI_TYPELIB_PATH`. Something like:
-
-```bash
-$ export GI_TYPELIB_PATH=/usr/local/lib/girepository-1.0
 ```
 
 ### Other platforms
