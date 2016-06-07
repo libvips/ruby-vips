@@ -2,9 +2,6 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
-sudo: false
-cache: bundler
-
 language: ruby
 rvm:
   - 1.9.3
@@ -18,5 +15,6 @@ gemfile:
 
 before_install:
   - uname -a
-  - apt-get update
-  - apt-get install libvips-dev
+  - sudo apt-get update
+  - sudo apt-get install libvips-dev
+
