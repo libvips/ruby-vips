@@ -1,4 +1,4 @@
 .yardoc
 *.swp
 doc
-
+pkg/*.gem
