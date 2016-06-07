@@ -19,60 +19,9 @@ Gem::Specification.new do |s|
     "README.md",
     "TODO"
   ]
-  s.files = [
-    ".travis.yml",
-    "CHANGELOG.md",
-    "Gemfile",
-    "Gemfile.lock",
-    "LICENSE.txt",
-    "README.md",
-    "Rakefile",
-    "TODO",
-    "VERSION",
-    "example/annotate.rb",
-    "example/daltonize8.rb",
-    "example/example1.rb",
-    "example/example2.rb",
-    "example/example3.rb",
-    "example/example4.rb",
-    "example/example5.rb",
-    "example/trim8.rb",
-    "example/watermark.rb",
-    "example/wobble.rb",
-    "lib/vips.rb",
-    "lib/vips/access.rb",
-    "lib/vips/align.rb",
-    "lib/vips/angle.rb",
-    "lib/vips/angle45.rb",
-    "lib/vips/argument.rb",
-    "lib/vips/bandformat.rb",
-    "lib/vips/call.rb",
-    "lib/vips/coding.rb",
-    "lib/vips/demandstyle.rb",
-    "lib/vips/direction.rb",
-    "lib/vips/error.rb",
-    "lib/vips/extend.rb",
-    "lib/vips/foreignflags.rb",
-    "lib/vips/image.rb",
-    "lib/vips/interpolate.rb",
-    "lib/vips/interpretation.rb",
-    "lib/vips/methods.rb",
-    "lib/vips/operation.rb",
-    "ruby-vips8.gemspec",
-    "spec/image_spec.rb",
-    "spec/samples/balloon.v",
-    "spec/samples/ghost.ppm",
-    "spec/samples/huge.jpg",
-    "spec/samples/icc.jpg",
-    "spec/samples/lcd.icc",
-    "spec/samples/lion.svg",
-    "spec/samples/sample.csv",
-    "spec/samples/sample.exr",
-    "spec/samples/wagon.jpg",
-    "spec/samples/wagon.v",
-    "spec/spec_helper.rb",
-    "spec/vips_spec.rb"
-  ]
+  s.files = `git ls-files -z`.split("\x0").reject do |f|
+    f.match(%r{^(test|spec|features)/})
+  end
   s.homepage = "http://github.com/jcupitt/ruby-vips"
   s.licenses = ["MIT"]
   s.rubygems_version = "2.5.1"
