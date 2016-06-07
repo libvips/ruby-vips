@@ -2,10 +2,11 @@
 
 [![Build Status](https://secure.travis-ci.org/jcupitt/ruby-vips.png)](http://travis-ci.org/jcupitt/ruby-vips)
 
+**This branch (0.3-stable) is still being maintained, but for new projects you should look at
+the master branch, which use the newer vips-8 under the hood.**
+
 This is `ruby-vips`, a gem for the 
 [libvips](http://www.vips.ecs.soton.ac.uk) image processing library. 
-This gem is still being maintained, but for new projects you should look at
-the replacement [ruby-vips8](https://rubygems.org/gems/ruby-vips8) gem. 
 
 ruby-vips is fast and it can work without needing the 
 entire image to be loaded into memory. For example, the benchmark at 
