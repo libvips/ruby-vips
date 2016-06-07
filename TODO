@@ -12,3 +12,29 @@
 	Complex(1, 2)
 	=> (1+2i)
 
+- fix travis ... the difficulty is getting a libvips with goi built first,
+  perhaps copy-paste from libvips .travis.yml
+
+  this is almost enough to do the ruby side:
+
+----------
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
+language: ruby
+rvm:
+  - 2.1
+  - 2.2
+  - 2.3
+
+script: "bundle exec rake"
+
+gemfile:
+  - Gemfile
+
+before_install:
+  - uname -a
+  - sudo apt-get update
+  - sudo apt-get install libvips-dev
+-----------
