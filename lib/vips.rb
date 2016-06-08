@@ -91,6 +91,7 @@ module Vips
             require 'vips/operation'
             require 'vips/call'
             require 'vips/image'
+            require 'vips/version'
         end
     end
 
