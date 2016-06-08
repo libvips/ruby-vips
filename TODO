@@ -1,5 +1,9 @@
-- need something like ruby-vips occasional GC stuff, we can fill memory before
-  a GC is triggered
+# Notes
+
+- need something like the old ruby-vips occasional GC stuff, we can fill 
+  memory before a GC is triggered
+
+  ... or can we? find an example program
 
 - mail about the getpoint unimplemented error
 
@@ -38,3 +42,21 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libvips-dev
 -----------
+
+# Common operations
+
+- version bump
+
+  edit lib/vips/version.rb 
+
+- reinstall local copy of gem after a change
+
+  bundle exec rake install
+
+- run test suite
+
+  bundle exec rake 
+
+- push new gem to rubygems, tag repository with version
+
+  bundle exec rake release
