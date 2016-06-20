@@ -926,6 +926,21 @@ module Vips
             end
         end
 
+        # Convert to an Array. This will be very slow for large images. 
+        #
+        # @return [Array] array of Fixnum
+        def to_a
+            ar = Array.new(height)
+            for y in 0...height
+                ar[y] = Array.new(width)
+                    for x in 0...width
+                        ar[y][x] = getpoint(x, y)
+                    end
+            end
+
+            return ar
+        end
+
         # Return the largest integral value not greater than the argument.
         #
         # @return [Image] floor of image 

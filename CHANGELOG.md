@@ -4,6 +4,7 @@
 
 * simplify gemspec [sandstrom]
 * remove jeweler dependency [John Cupitt]
+* add `.to_a` to Image [John Cupitt]
 
 # Version 1.0.0
 
