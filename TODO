@@ -1,5 +1,11 @@
+- lots of getpoint() on the result of stats() is clumsy
+
+  how about to_a for images? only useful for small images, of course
+
 - need something like ruby-vips occasional GC stuff, we can fill memory before
   a GC is triggered
+
+  need a test case
 
 - mail about the getpoint unimplemented error
 
