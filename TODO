@@ -1,9 +1,7 @@
-- lots of getpoint() on the result of stats() is clumsy
+# Notes
 
-  how about to_a for images? only useful for small images, of course
-
-- need something like ruby-vips occasional GC stuff, we can fill memory before
-  a GC is triggered
+- need something like the old ruby-vips occasional GC stuff, we can fill 
+  memory before a GC is triggered
 
   need a test case
 
@@ -44,3 +42,21 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libvips-dev
 -----------
+
+# Common operations
+
+- version bump
+
+  edit lib/vips/version.rb 
+
+- reinstall local copy of gem after a change
+
+  bundle exec rake install
+
+- run test suite
+
+  bundle exec rake 
+
+- push new gem to rubygems, tag repository with version
+
+  bundle exec rake release
