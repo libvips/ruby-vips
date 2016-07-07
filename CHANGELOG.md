@@ -2,6 +2,10 @@
 
 # Version 1.0.1
 
+* add .yardopts to fix ruby-gems docs [John Cupitt]
+
+# Version 1.0.1
+
 * simplify gemspec [sandstrom]
 * remove jeweler dependency [John Cupitt]
 * add `.to_a` to Image [John Cupitt]

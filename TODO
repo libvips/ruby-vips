@@ -47,7 +47,7 @@ before_install:
 
 - version bump
 
-  edit lib/vips/version.rb 
+  edit lib/vips/version.rb and VERSION
 
 - reinstall local copy of gem after a change
 
