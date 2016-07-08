@@ -240,6 +240,27 @@
 #
 # The wrapper spots errors from vips operations and raises the {Vips::Error}
 # exception. You can catch it in the usual way. 
+#
+# # Enums
+#
+# The libvips enums, such as `VipsBandFormat` appear in ruby-vips as classes
+# like {Vips::BandFormat}. Overloads let you manipulate them in the obvious 
+# way. For example:
+#
+# ```ruby
+# irb(main):002:0> im = Vips::Image.new_from_file "IMG_1867.JPG"
+# => #<Vips::Image:0x13e9760 ptr=0x1a88010>
+# irb(main):003:0> im.format
+# => #<Vips::BandFormat uchar>
+# irb(main):004:0> im.format == :uchar
+# => true
+# irb(main):005:0> im.format == "uchar"
+# => true
+# irb(main):007:0> im.format == 0
+# => true
+# ```
+#
+# The `0` is the C value of the enum. 
 # 
 # # Draw operations
 #
