@@ -1,6 +1,10 @@
 # master 
 
-# Version 1.0.1
+# Version 1.0.3
+
+* doc improvements [John Cupitt]
+
+# Version 1.0.2
 
 * add .yardopts to fix ruby-gems docs [John Cupitt]
 
