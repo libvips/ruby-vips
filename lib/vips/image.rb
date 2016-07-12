@@ -742,6 +742,13 @@ module Vips
             set name, value
         end
 
+        # Get the image size. 
+        #
+        # @return [Integer, Integer] image width and height
+        def size
+            [width, height]
+        end
+
         # Add an image, constant or array. 
         #
         # @param other [Image, Real, Array<Real>] Thing to add to self

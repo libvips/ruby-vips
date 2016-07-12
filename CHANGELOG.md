@@ -3,6 +3,7 @@
 # Version 1.0.3
 
 * doc improvements [John Cupitt]
+* add #size to get [width, height] [John Cupitt]
 
 # Version 1.0.2
 
