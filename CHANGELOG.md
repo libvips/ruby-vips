@@ -4,6 +4,7 @@
 
 * doc improvements [John Cupitt]
 * add #size to get [width, height] [John Cupitt]
+* only ask for ruby 2.0 to help OS X [John Cupitt] 
 
 # Version 1.0.2
 

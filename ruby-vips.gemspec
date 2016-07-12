@@ -16,7 +16,9 @@ Gem::Specification.new do |spec|
   spec.homepage = "http://github.com/jcupitt/ruby-vips"
   spec.licenses = ["MIT"]
 
-  spec.required_ruby_version = ">= 2.1"
+  # gobject-introspection really needs 2.1, but it just about works on 2.0, the
+  # ruby that OS X is still bundling ... only ask for 2.0 to help OS X
+  spec.required_ruby_version = ">= 2.0"
   spec.rubygems_version = "2.5.1"
   spec.require_paths = ["lib"]
   spec.extra_rdoc_files = [
