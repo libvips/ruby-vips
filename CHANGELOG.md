@@ -5,6 +5,7 @@
 * doc improvements [John Cupitt]
 * add #size to get [width, height] [John Cupitt]
 * only ask for ruby 2.0 to help OS X [John Cupitt] 
+* break up Image.call to make it easier to understand [John Cupitt] 
 
 # Version 1.0.2
 
