@@ -1,7 +1,7 @@
 module Vips
 
     # An interpolator. One of these can be given to operations like 
-    # {Vips::affine} or {Vips::mapim} to select the type of pixel interpolation
+    # {Image#affine} or {Image#mapim} to select the type of pixel interpolation
     # to use.
     #
     # To see all interpolators supported by your
@@ -23,7 +23,7 @@ module Vips
     #  For example:
     #
     #  ```ruby
-    #  im = im.affine :interpolate => Vips::Interpolate.new :bicubic
+    #  im = im.affine [2, 0, 0, 2], :interpolate => Vips::Interpolate.new(:bicubic)
     #  ```
 
     class Interpolate

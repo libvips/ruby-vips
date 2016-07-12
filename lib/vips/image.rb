@@ -70,7 +70,7 @@
 # {Image.new_from_array} creates an image from an array constant. The 8 at
 # the end sets the scale: the amount to divide the image by after 
 # integer convolution. See the libvips API docs for `vips_conv()` (the operation
-# invoked by {Vips::Image.conv}) for details on the convolution operator. 
+# invoked by {Image#conv}) for details on the convolution operator. 
 #
 # Finally:
 #
@@ -78,7 +78,7 @@
 # im.write_to_file ARGV[1]
 # ```
 #
-# {Vips::Image.write_to_file} writes an image back to the filesystem. It can 
+# {Image#write_to_file} writes an image back to the filesystem. It can 
 # write any format supported by vips: the file type is set from the filename 
 # suffix. You can also write formatted images to memory buffers, or dump 
 # image data to a raw memory array. 
@@ -108,7 +108,7 @@
 #
 # `ruby-vips` adds a {Image.method_missing} handler to {Image} and uses
 # it to look up vips operations. For example, the libvips operation `add`, which
-# appears in C as `vips_add()`, appears in Ruby as {Vips::Image.add}. 
+# appears in C as `vips_add()`, appears in Ruby as {Image#add}. 
 #
 # The operation's list of required arguments is searched and the first input 
 # image is set to the value of `self`. Operations which do not take an input 
@@ -120,7 +120,7 @@
 # produces several results. If the operation has optional output objects, they
 # are returned as a final hash.
 #
-# For example, {Vips::Image.min}, the vips operation that searches an image for 
+# For example, {Image#min}, the vips operation that searches an image for 
 # the minimum value, has a large number of optional arguments. You can use it to
 # find the minimum value like this:
 #
@@ -137,7 +137,7 @@
 # ```
 #
 # Now `x_pos` and `y_pos` will have the coordinates of the minimum value. 
-# There's actually a convenience function for this, {Vips::Image.minpos}.
+# There's actually a convenience function for this, {Image#minpos}.
 #
 # You can also ask for the top *n* minimum, for example:
 #
@@ -162,7 +162,7 @@
 #
 # libvips types are also automatically wrapped. The override looks at the type 
 # of argument required by the operation and converts the value you supply, 
-# when it can. For example, {Vips::Image.linear} takes a `VipsArrayDouble` as 
+# when it can. For example, {Image#linear} takes a `VipsArrayDouble` as 
 # an argument 
 # for the set of constants to use for multiplication. You can supply this 
 # value as an integer, a float, or some kind of compound object and it 
@@ -175,7 +175,7 @@
 # result_image = image.linear 1, [4, 5, 6] 
 # ```
 #
-# And so on. A set of overloads are defined for {Vips::Image.linear}, see below.
+# And so on. A set of overloads are defined for {Image#linear}, see below.
 #
 # It does a couple of more ambitious conversions. It will automatically convert
 # to and from the various vips types, like `VipsBlob` and `VipsArrayImage`. For
@@ -189,7 +189,7 @@
 #
 # If an operation takes several input images, you can use a constant for all but
 # one of them and the wrapper will expand the constant to an image for you. For
-# example, {Vips::Image.ifthenelse} uses a condition image to pick pixels 
+# example, {Image#ifthenelse} uses a condition image to pick pixels 
 # between a then and an else image:
 #
 # ```ruby
@@ -206,7 +206,7 @@
 #
 # Will make an image where true pixels are green and false pixels are red.
 #
-# This is useful for {Vips::Image.bandjoin}, the thing to join two or more 
+# This is useful for {Image#bandjoin}, the thing to join two or more 
 # images up bandwise. You can write:
 #
 # ```ruby
@@ -230,7 +230,7 @@
 # The bulk of these API docs are generated automatically by 
 # {Vips::generate_yard}. It examines
 # libvips and writes a summary of each operation and the arguments and options
-# that operation expects. 
+# that that operation expects. 
 # 
 # Use the [C API 
 # docs](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips) 
@@ -264,7 +264,7 @@
 # 
 # # Draw operations
 #
-# Paint operations like {Vips::Image.draw_circle} and {Vips::Image.draw_line}
+# Paint operations like {Image#draw_circle} and {Image#draw_line}
 # modify their input image. This
 # makes them hard to use with the rest of libvips: you need to be very careful
 # about the order in which operations execute or you can get nasty crashes.
@@ -291,7 +291,7 @@
 # # Expansions
 #
 # Some vips operators take an enum to select an action, for example 
-# {Vips::Image.math} can be used to calculate sine of every pixel like this:
+# {Image#math} can be used to calculate sine of every pixel like this:
 #
 # ```ruby
 # result_image = image.math :sin
@@ -307,9 +307,9 @@
 # # Convenience functions
 #
 # The wrapper defines a few extra useful utility functions: 
-# {Vips::Image.get_value}, {Vips::Image.set_value}, {Vips::Image.bandsplit}, 
-# {Vips::Image.maxpos}, {Vips::Image.minpos}, 
-# {Vips::Image.median}.
+# {Image#get_value}, {Image#set_value}, {Image#bandsplit}, 
+# {Image#maxpos}, {Image#minpos}, 
+# {Image#median}.
 
 module Vips
 
@@ -1284,9 +1284,11 @@ module Vips
     #
     # Regenerate with something like: 
     #
-    #   ruby > methods.rb
-    #   require 'vips'; Vips::generate_yard
-    #   ^D
+    # ```
+    # $ ruby > methods.rb
+    # require 'vips'; Vips::generate_yard
+    # ^D
+    # ```
 
     def self.generate_yard
         # these have hand-written methods, see above
