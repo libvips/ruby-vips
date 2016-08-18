@@ -237,7 +237,7 @@ module Vips
 #   @return [Array<] First non-zero pixel in column, First non-zero pixel in row
 
 # @!method measure(h, v, opts = {})
-#   Measure a set of patches on a color chart.
+#   Measure a set of patches on a colour chart.
 #   @param h [Integer] Number of patches across chart
 #   @param v [Integer] Number of patches down chart
 #   @param [Hash] opts Set of options
@@ -313,7 +313,7 @@ module Vips
 #   @param height [Integer] Image height in pixels
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Extend] :extend How to generate the extra pixels
-#   @option opts [Array<Double>] :background Color for background pixels
+#   @option opts [Array<Double>] :background Colour for background pixels
 #   @return [Vips::Image] Output image
 
 # @!method flip(direction, opts = {})
@@ -329,7 +329,7 @@ module Vips
 #   @param y [Integer] Top edge of sub in main
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :expand Expand output to hold all of both inputs
-#   @option opts [Array<Double>] :background Color for new pixels
+#   @option opts [Array<Double>] :background Colour for new pixels
 #   @return [Vips::Image] Output image
 
 # @!method join(in2, direction, opts = {})
@@ -523,7 +523,7 @@ module Vips
 #   @return [Vips::Image] Output image
 
 # @!method falsecolour(, opts = {})
-#   False-color an image.
+#   False-colour an image.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
@@ -631,9 +631,9 @@ module Vips
 #   @param frequency_cutoff [Float] Frequency cutoff
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
-#   @option opts [Boolean] :nodc Remove DC component
-#   @option opts [Boolean] :reject Invert the sense of the filter
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
+#   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_ideal_ring(width, height, frequency_cutoff, ringwidth, opts = {})
@@ -644,9 +644,9 @@ module Vips
 #   @param ringwidth [Float] Ringwidth
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
-#   @option opts [Boolean] :nodc Remove DC component
-#   @option opts [Boolean] :reject Invert the sense of the filter
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
+#   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_ideal_band(width, height, frequency_cutoff_x, frequency_cutoff_y, radius, opts = {})
@@ -659,8 +659,8 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
-#   @option opts [Boolean] :nodc Remove DC component
 #   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_butterworth(width, height, order, frequency_cutoff, amplitude_cutoff, opts = {})
@@ -673,8 +673,8 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
-#   @option opts [Boolean] :nodc Remove DC component
 #   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_butterworth_ring(width, height, order, frequency_cutoff, amplitude_cutoff, ringwidth, opts = {})
@@ -688,8 +688,8 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
-#   @option opts [Boolean] :nodc Remove DC component
 #   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_butterworth_band(width, height, order, frequency_cutoff_x, frequency_cutoff_y, radius, amplitude_cutoff, opts = {})
@@ -716,9 +716,9 @@ module Vips
 #   @param amplitude_cutoff [Float] Amplitude cutoff
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
-#   @option opts [Boolean] :nodc Remove DC component
-#   @option opts [Boolean] :reject Invert the sense of the filter
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
+#   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_gaussian_ring(width, height, frequency_cutoff, amplitude_cutoff, ringwidth, opts = {})
@@ -731,8 +731,8 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
-#   @option opts [Boolean] :nodc Remove DC component
 #   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_gaussian_band(width, height, frequency_cutoff_x, frequency_cutoff_y, radius, amplitude_cutoff, opts = {})
@@ -746,8 +746,8 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
-#   @option opts [Boolean] :nodc Remove DC component
 #   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method self.mask_fractal(width, height, fractal_dimension, opts = {})
@@ -757,9 +757,9 @@ module Vips
 #   @param fractal_dimension [Float] Fractal dimension
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :uchar Output an unsigned char image
-#   @option opts [Boolean] :nodc Remove DC component
-#   @option opts [Boolean] :reject Invert the sense of the filter
 #   @option opts [Boolean] :optical Rotate quadrants to optical space
+#   @option opts [Boolean] :reject Invert the sense of the filter
+#   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
 # @!method buildlut(, opts = {})
@@ -802,6 +802,23 @@ module Vips
 #   @param height [Integer] Image height in pixels
 #   @param fractal_dimension [Float] Fractal dimension
 #   @param [Hash] opts Set of options
+#   @return [Vips::Image] Output image
+
+# @!method self.worley(width, height, opts = {})
+#   Make a worley noise image.
+#   @param width [Integer] Image width in pixels
+#   @param height [Integer] Image height in pixels
+#   @param [Hash] opts Set of options
+#   @option opts [Integer] :cell_size Size of Worley cells
+#   @return [Vips::Image] Output image
+
+# @!method self.perlin(width, height, opts = {})
+#   Make a perlin noise image.
+#   @param width [Integer] Image width in pixels
+#   @param height [Integer] Image height in pixels
+#   @param [Hash] opts Set of options
+#   @option opts [Integer] :cell_size Size of Perlin cells
+#   @option opts [Boolean] :uchar Output an unsigned char image
 #   @return [Vips::Image] Output image
 
 # @!method self.csvload(filename, opts = {})
@@ -1292,8 +1309,8 @@ module Vips
 #   @option opts [Integer] :tile_width Tile width in pixels
 #   @option opts [Integer] :tile_height Tile height in pixels
 #   @option opts [Boolean] :pyramid Write a pyramidal tiff
-#   @option opts [Boolean] :miniswhite Use 0 for white in 1-bit images
 #   @option opts [Boolean] :squash Squash images down to 1 bit
+#   @option opts [Boolean] :miniswhite Use 0 for white in 1-bit images
 #   @option opts [Vips::ForeignTiffResunit] :resunit Resolution unit
 #   @option opts [Float] :xres Horizontal resolution in pixels/mm
 #   @option opts [Float] :yres Vertical resolution in pixels/mm
@@ -1318,43 +1335,43 @@ module Vips
 #   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
 #   @return [Vips::Image] Output image
 
-# @!method shrink(xshrink, yshrink, opts = {})
+# @!method shrink(hshrink, vshrink, opts = {})
 #   Shrink an image.
-#   @param xshrink [Float] Horizontal shrink factor
-#   @param yshrink [Float] Vertical shrink factor
+#   @param hshrink [Float] Horizontal shrink factor
+#   @param vshrink [Float] Vertical shrink factor
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method shrinkh(xshrink, opts = {})
+# @!method shrinkh(hshrink, opts = {})
 #   Shrink an image horizontally.
-#   @param xshrink [Integer] Horizontal shrink factor
+#   @param hshrink [Integer] Horizontal shrink factor
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method shrinkv(yshrink, opts = {})
+# @!method shrinkv(vshrink, opts = {})
 #   Shrink an image vertically.
-#   @param yshrink [Integer] Vertical shrink factor
+#   @param vshrink [Integer] Vertical shrink factor
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method reduceh(xshrink, opts = {})
+# @!method reduceh(hshrink, opts = {})
 #   Shrink an image horizontally.
-#   @param xshrink [Float] Horizontal shrink factor
+#   @param hshrink [Float] Horizontal shrink factor
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Kernel] :kernel Resampling kernel
 #   @return [Vips::Image] Output image
 
-# @!method reducev(yshrink, opts = {})
+# @!method reducev(vshrink, opts = {})
 #   Shrink an image vertically.
-#   @param yshrink [Float] Vertical shrink factor
+#   @param vshrink [Float] Vertical shrink factor
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Kernel] :kernel Resampling kernel
 #   @return [Vips::Image] Output image
 
-# @!method reduce(xshrink, yshrink, opts = {})
+# @!method reduce(hshrink, vshrink, opts = {})
 #   Reduce an image.
-#   @param xshrink [Float] Horizontal shrink factor
-#   @param yshrink [Float] Vertical shrink factor
+#   @param hshrink [Float] Horizontal shrink factor
+#   @param vshrink [Float] Vertical shrink factor
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Kernel] :kernel Resampling kernel
 #   @return [Vips::Image] Output image
@@ -1399,16 +1416,16 @@ module Vips
 #   @return [Vips::Image] Output image
 
 # @!method colourspace(space, opts = {})
-#   Convert to a new colorspace.
-#   @param space [Vips::Interpretation] Destination color space
+#   Convert to a new colourspace.
+#   @param space [Vips::Interpretation] Destination colour space
 #   @param [Hash] opts Set of options
-#   @option opts [Vips::Interpretation] :source_space Source color space
+#   @option opts [Vips::Interpretation] :source_space Source colour space
 #   @return [Vips::Image] Output image
 
 # @!method Lab2XYZ(, opts = {})
 #   Transform cielab to xyz.
 #   @param [Hash] opts Set of options
-#   @option opts [Array<Double>] :temp Color temperature
+#   @option opts [Array<Double>] :temp Colour temperature
 #   @return [Vips::Image] Output image
 
 # @!method XYZ2Lab(, opts = {})
@@ -1515,8 +1532,8 @@ module Vips
 # @!method icc_import(, opts = {})
 #   Import from device with icc profile.
 #   @param [Hash] opts Set of options
-#   @option opts [Vips::PCS] :pcs Set Profile Connection Space
 #   @option opts [Vips::Intent] :intent Rendering intent
+#   @option opts [Vips::PCS] :pcs Set Profile Connection Space
 #   @option opts [Boolean] :embedded Use embedded input profile, if available
 #   @option opts [String] :input_profile Filename to load input profile from
 #   @return [Vips::Image] Output image
@@ -1524,8 +1541,8 @@ module Vips
 # @!method icc_export(, opts = {})
 #   Output to device with icc profile.
 #   @param [Hash] opts Set of options
-#   @option opts [Vips::PCS] :pcs Set Profile Connection Space
 #   @option opts [Vips::Intent] :intent Rendering intent
+#   @option opts [Vips::PCS] :pcs Set Profile Connection Space
 #   @option opts [String] :output_profile Filename to load output profile from
 #   @option opts [Integer] :depth Output device space depth in bits
 #   @return [Vips::Image] Output image
@@ -1534,8 +1551,8 @@ module Vips
 #   Transform between devices with icc profiles.
 #   @param output_profile [String] Filename to load output profile from
 #   @param [Hash] opts Set of options
-#   @option opts [Vips::PCS] :pcs Set Profile Connection Space
 #   @option opts [Vips::Intent] :intent Rendering intent
+#   @option opts [Vips::PCS] :pcs Set Profile Connection Space
 #   @option opts [Boolean] :embedded Use embedded input profile, if available
 #   @option opts [String] :input_profile Filename to load input profile from
 #   @option opts [Integer] :depth Output device space depth in bits
@@ -1595,9 +1612,9 @@ module Vips
 #   @param height [Integer] Window height in pixels
 #   @param [Hash] opts Set of options
 #   @option opts [Float] :a Weight of new mean
-#   @option opts [Float] :s0 New deviation
-#   @option opts [Float] :b Weight of new deviation
 #   @option opts [Float] :m0 New mean
+#   @option opts [Float] :b Weight of new deviation
+#   @option opts [Float] :s0 New deviation
 #   @return [Vips::Image] Output image
 
 # @!method hist_cum(, opts = {})
@@ -1653,6 +1670,26 @@ module Vips
 #   @option opts [Integer] :cluster Cluster lines closer than this in approximation
 #   @return [Vips::Image] Output image
 
+# @!method conva(mask, opts = {})
+#   Approximate integer convolution.
+#   @param mask [Vips::Image] Input matrix image
+#   @param [Hash] opts Set of options
+#   @option opts [Integer] :layers Use this many layers in approximation
+#   @option opts [Integer] :cluster Cluster lines closer than this in approximation
+#   @return [Vips::Image] Output image
+
+# @!method convf(mask, opts = {})
+#   Float convolution operation.
+#   @param mask [Vips::Image] Input matrix image
+#   @param [Hash] opts Set of options
+#   @return [Vips::Image] Output image
+
+# @!method convi(mask, opts = {})
+#   Int convolution operation.
+#   @param mask [Vips::Image] Input matrix image
+#   @param [Hash] opts Set of options
+#   @return [Vips::Image] Output image
+
 # @!method compass(mask, opts = {})
 #   Convolve with rotating mask.
 #   @param mask [Vips::Image] Input matrix image
@@ -1672,6 +1709,13 @@ module Vips
 #   @option opts [Vips::Precision] :precision Convolve with this precision
 #   @option opts [Integer] :layers Use this many layers in approximation
 #   @option opts [Integer] :cluster Cluster lines closer than this in approximation
+#   @return [Vips::Image] Output image
+
+# @!method convasep(mask, opts = {})
+#   Approximate separable integer convolution.
+#   @param mask [Vips::Image] Input matrix image
+#   @param [Hash] opts Set of options
+#   @option opts [Integer] :layers Use this many layers in approximation
 #   @return [Vips::Image] Output image
 
 # @!method fastcor(ref, opts = {})
@@ -1762,7 +1806,7 @@ module Vips
 
 # @!method draw_rect(ink, left, top, width, height, opts = {})
 #   Paint a rectangle on an image.
-#   @param ink [Array<Double>] Color for pixels
+#   @param ink [Array<Double>] Colour for pixels
 #   @param left [Integer] Rect to fill
 #   @param top [Integer] Rect to fill
 #   @param width [Integer] Rect to fill
@@ -1773,7 +1817,7 @@ module Vips
 
 # @!method draw_mask(ink, mask, x, y, opts = {})
 #   Draw a mask on an image.
-#   @param ink [Array<Double>] Color for pixels
+#   @param ink [Array<Double>] Colour for pixels
 #   @param mask [Vips::Image] Mask of pixels to draw
 #   @param x [Integer] Draw mask here
 #   @param y [Integer] Draw mask here
@@ -1782,7 +1826,7 @@ module Vips
 
 # @!method draw_line(ink, x1, y1, x2, y2, opts = {})
 #   Draw a line on an image.
-#   @param ink [Array<Double>] Color for pixels
+#   @param ink [Array<Double>] Colour for pixels
 #   @param x1 [Integer] Start of draw_line
 #   @param y1 [Integer] Start of draw_line
 #   @param x2 [Integer] End of draw_line
@@ -1792,7 +1836,7 @@ module Vips
 
 # @!method draw_circle(ink, cx, cy, radius, opts = {})
 #   Draw a circle on an image.
-#   @param ink [Array<Double>] Color for pixels
+#   @param ink [Array<Double>] Colour for pixels
 #   @param cx [Integer] Centre of draw_circle
 #   @param cy [Integer] Centre of draw_circle
 #   @param radius [Integer] Radius in pixels
@@ -1802,7 +1846,7 @@ module Vips
 
 # @!method draw_flood(ink, x, y, opts = {})
 #   Flood-fill an area.
-#   @param ink [Array<Double>] Color for pixels
+#   @param ink [Array<Double>] Colour for pixels
 #   @param x [Integer] DrawFlood start point
 #   @param y [Integer] DrawFlood start point
 #   @param [Hash] opts Set of options
