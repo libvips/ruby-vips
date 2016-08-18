@@ -68,6 +68,12 @@ RSpec.describe Vips do
             expect(max_test).to eq(255)
         end
 
+        it 'can throw errors for failed operations' do
+            black = Vips::call "black", 100, 1
+
+            expect{black.resize(0.5)}.to raise_exception(Vips::Error)
+        end
+
     end
 
 end

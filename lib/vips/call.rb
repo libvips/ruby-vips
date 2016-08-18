@@ -180,7 +180,7 @@ module Vips
                 log "cache miss ... building"
 
                 hit = false
-                if not @op.build
+                if @op.build() != 0
                     raise Vips::Error
                 end
                 # showall
