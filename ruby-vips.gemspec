@@ -31,7 +31,8 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
 
-  spec.add_runtime_dependency "gobject-introspection", ["~> 3.0"]
+  # 3.0.9 has some breaking changes, stick with 3.0.7 for now
+  spec.add_runtime_dependency "gobject-introspection", ["3.0.8"]
 
   spec.add_development_dependency "rake", ["~> 11.0"]
   spec.add_development_dependency "rspec", ["~> 3.3"]
