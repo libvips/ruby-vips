@@ -1,5 +1,7 @@
 # ruby-vips
 
+[![Gem Version](https://badge.fury.io/rb/ruby-vips.svg)](https://badge.fury.io/rb/ruby-vips)
+
 *API break:* version 1.0 of this gem is an API break, see below for some notes
 on why there is a break and how to update your code. 
 The older `ruby-vips` is still here and still maintained in branch 
