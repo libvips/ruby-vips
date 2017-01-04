@@ -71,7 +71,7 @@ RSpec.describe Vips do
         it 'can throw errors for failed operations' do
             black = Vips::call "black", 100, 1
 
-            expect{black.resize(0.5)}.to raise_exception(Vips::Error)
+            expect{black.resize(0.4)}.to raise_exception(Vips::Error)
         end
 
     end
