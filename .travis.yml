@@ -12,10 +12,8 @@ addons:
     packages:
       - libxml2-dev
       - gettext
-      - libgtk2.0-dev
       - python-dev
       - liblcms1-dev
-      - liboil-dev
       - libmagickwand-dev
       - libopenexr-dev
       - libcfitsio3-dev
@@ -30,8 +28,6 @@ addons:
       - libpango1.0-dev
       - libpoppler-glib-dev
       - libwebp-dev
-      - automake
-      - libtool
       - libglib2.0-dev
 
 language: ruby
@@ -49,7 +45,7 @@ before_install:
   - uname -a
   - sudo apt-get update
   - wget http://www.vips.ecs.soton.ac.uk/supported/current/vips-$LIBVIPS.tar.gz
-  - tar -xvzf vips-$LIBVIPS.tar.gz
+  - tar xvf vips-$LIBVIPS.tar.gz
   - cd vips-$LIBVIPS
   - >
     CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
