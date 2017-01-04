@@ -1,0 +1,60 @@
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
+env:
+  - LIBVIPS=8.4.4
+
+dist: trusty
+
+addons:
+  apt:
+    packages:
+      - libxml2-dev
+      - gettext
+      - libgtk2.0-dev
+      - python-dev
+      - liblcms1-dev
+      - liboil-dev
+      - libmagickwand-dev
+      - libopenexr-dev
+      - libcfitsio3-dev
+      - gobject-introspection
+      - libgirepository1.0-dev
+      - libgif-dev
+      - libgs-dev
+      - libgsf-1-dev
+      - libmatio-dev
+      - libopenslide-dev
+      - liborc-0.4-dev
+      - libpango1.0-dev
+      - libpoppler-glib-dev
+      - libwebp-dev
+      - automake
+      - libtool
+      - libglib2.0-dev
+
+language: ruby
+rvm:
+  - 2.1
+  - 2.2
+  - 2.3
+
+script: "bundle exec rake"
+
+gemfile:
+  - Gemfile
+
+before_install:
+  - uname -a
+  - sudo apt-get update
+  - wget http://www.vips.ecs.soton.ac.uk/supported/current/vips-$LIBVIPS.tar.gz
+  - tar -xvzf vips-$LIBVIPS.tar.gz
+  - cd vips-$LIBVIPS
+  - >
+    CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
+    ./configure
+  - make
+  - sudo make install
+  - sudo ldconfig
+  - cd ..
