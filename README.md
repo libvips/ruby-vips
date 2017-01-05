@@ -11,13 +11,14 @@ The older `ruby-vips` is still here and still maintained in branch
 This gem provides a Ruby binding for the [vips image processing
 library](http://www.vips.ecs.soton.ac.uk). 
 
-`ruby-vips` is fast and it can work without needing to have the 
-entire image loaded into memory. Programs that use `ruby-vips` don't
+Programs that use `ruby-vips` don't
 manipulate images directly, instead they create pipelines of image processing
 operations building on a source image. When the end of the pipe is connected
-to a destination, the whole pipline executes at once, streaming the image
+to a destination, the whole pipeline executes at once, streaming the image
 in parallel from source to destination a section at a time. 
 
+Because `ruby-vips` is very parallel, it's quick, and because it doesn't need
+to keep entire images in memory, it's light. 
 For example, the benchmark at 
 [vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
 image, crops, shrinks, sharpens and saves again, and repeats 10 times. 
@@ -67,9 +68,10 @@ vips-8.2.1
 
 ### Other platforms
 
-You need to install libvips from source since 8.2 has not been packaged yet
-(Jan 2016).
+Check your package manager and see if the libvips on your system is new enough.
+`ruby-vips` needs libvips 8.2 or later. 
 
+If it's too old, you'll need to build libvips from source. 
 Download a tarball from the 
 [libvips website](http://www.vips.ecs.soton.ac.uk/supported/current), or build
 from [the git repository](https://github.com/jcupitt/libvips) and see the
