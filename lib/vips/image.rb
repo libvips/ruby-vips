@@ -421,10 +421,11 @@ module Vips
         # $ vips jpegload
         # ```
         #
-        # at the command-line to see a summary of the available options.
+        # at the command-line to see a summary of the available options for the
+        # JPEG loader.
         #
         # Loading is fast: only enough of the image is loaded to be able to fill
-        # out the header. Pixels will only be processed when they are needed.
+        # out the header. Pixels will only be decompressed when they are needed.
         #
         # @!macro [new] vips.loadopts
         #   @param [Hash] opts set of options
@@ -451,8 +452,8 @@ module Vips
             Vips::call_base loader, nil, option_string, [filename, opts]
         end
 
-        # Create a new {Image} for an image encoded in a format, such as
-        # JPEG, in a memory string. Load options may be passed encoded as
+        # Create a new {Image} for an image encoded, in a format such as
+        # JPEG, in a memory string. Load options may be passed as
         # strings, or appended as a hash. For example:
         #
         # ```
@@ -471,11 +472,12 @@ module Vips
         # $ vips jpegload_buffer
         # ```
         #
-        # at the command-line to see the available options. Only JPEG, PNG and
-        # TIFF images can be read from memory buffers. 
+        # at the command-line to see the available options. Not all loaders 
+        # support load from buffer, but at least JPEG, PNG and
+        # TIFF images will work. 
         #
         # Loading is fast: only enough of the image is loaded to be able to fill
-        # out the header. Pixels will only be processed when they are needed.
+        # out the header. Pixels will only be decompressed when they are needed.
         #
         # @param data [String] the data to load from
         # @param option_string [String] load options as a string
@@ -574,7 +576,7 @@ module Vips
         # $ vips jpegsave
         # ```
         #
-        # to see all the available options. 
+        # to see all the available options for JPEG save. 
         #
         # @!macro [new] vips.saveopts
         #   @param [Hash] opts set of options
@@ -616,7 +618,7 @@ module Vips
         # $ vips jpegsave
         # ```
         #
-        # to see all the available options. 
+        # to see all the available options for JPEG save. 
         #
         # @param format_string [String] save format plus options
         # @macro vips.saveopts
@@ -1352,7 +1354,8 @@ module Vips
             print "self." if not member_x 
             print "#{nickname}("
             print required_input.map(&:name).join(", ")
-            puts ", opts = {})"
+            print ", " if required_input.length > 0
+            puts "opts = {})"
 
             puts "#   #{op.description.capitalize}."
 

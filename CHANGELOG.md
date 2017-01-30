@@ -1,5 +1,11 @@
 # master 
 
+# Version 1.0.4
+
+* remove stray comma from some docs lines [John Cupitt]
+* update generated docs for libvips 8.5 [John Cupitt]
+* small doc improvements [John Cupitt]
+
 # Version 1.0.3
 
 * doc improvements [John Cupitt]

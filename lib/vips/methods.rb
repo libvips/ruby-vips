@@ -82,7 +82,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method invert(, opts = {})
+# @!method invert(opts = {})
 #   Invert an image.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
@@ -101,12 +101,12 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method abs(, opts = {})
+# @!method abs(opts = {})
 #   Absolute value of an image.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method sign(, opts = {})
+# @!method sign(opts = {})
 #   Unit vector of pixel.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
@@ -138,7 +138,7 @@ module Vips
 #   @return [Vips::Image] Output image
 
 # @!method math2_const(c, math2, opts = {})
-#   Pow( @in, @c ).
+#   Binary math operations with a constant.
 #   @param c [Array<Double>] Array of constants
 #   @param math2 [Vips::OperationMath2] math to perform
 #   @param [Hash] opts Set of options
@@ -156,12 +156,12 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method avg(, opts = {})
+# @!method avg(opts = {})
 #   Find image average.
 #   @param [Hash] opts Set of options
 #   @return [Float] Output value
 
-# @!method min(, opts = {})
+# @!method min(opts = {})
 #   Find image minimum.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :size Number of minimum values to find
@@ -172,7 +172,7 @@ module Vips
 #   @option opts [Array<Integer>] :y_array Output Array of vertical positions
 #   @return [Float, Hash<Symbol => Object>] Output value, Hash of optional output items
 
-# @!method max(, opts = {})
+# @!method max(opts = {})
 #   Find image maximum.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :size Number of maximum values to find
@@ -183,23 +183,23 @@ module Vips
 #   @option opts [Array<Integer>] :y_array Output Array of vertical positions
 #   @return [Float, Hash<Symbol => Object>] Output value, Hash of optional output items
 
-# @!method deviate(, opts = {})
+# @!method deviate(opts = {})
 #   Find image standard deviation.
 #   @param [Hash] opts Set of options
 #   @return [Float] Output value
 
-# @!method stats(, opts = {})
+# @!method stats(opts = {})
 #   Find image average.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output array of statistics
 
-# @!method hist_find(, opts = {})
+# @!method hist_find(opts = {})
 #   Find image histogram.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :band Find histogram of band
 #   @return [Vips::Image] Output histogram
 
-# @!method hist_find_ndim(, opts = {})
+# @!method hist_find_ndim(opts = {})
 #   Find n-dimensional image histogram.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :bins Number of bins in each dimension
@@ -211,14 +211,14 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output histogram
 
-# @!method hough_line(, opts = {})
+# @!method hough_line(opts = {})
 #   Find hough line transform.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :width horizontal size of parameter space
 #   @option opts [Integer] :height Vertical size of parameter space
 #   @return [Vips::Image] Output image
 
-# @!method hough_circle(, opts = {})
+# @!method hough_circle(opts = {})
 #   Find hough circle transform.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :scale Scale down dimensions by this factor
@@ -226,12 +226,12 @@ module Vips
 #   @option opts [Integer] :max_radius Largest radius to search for
 #   @return [Vips::Image] Output image
 
-# @!method project(, opts = {})
+# @!method project(opts = {})
 #   Find image projections.
 #   @param [Hash] opts Set of options
 #   @return [Array<] Sums of columns, Sums of rows
 
-# @!method profile(, opts = {})
+# @!method profile(opts = {})
 #   Find image profiles.
 #   @param [Hash] opts Set of options
 #   @return [Array<] First non-zero pixel in column, First non-zero pixel in row
@@ -254,7 +254,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Array<Double>] Array of output values
 
-# @!method copy(, opts = {})
+# @!method copy(opts = {})
 #   Copy an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :width Image width in pixels
@@ -269,7 +269,7 @@ module Vips
 #   @option opts [Integer] :yoffset Vertical offset of origin
 #   @return [Vips::Image] Output image
 
-# @!method tilecache(, opts = {})
+# @!method tilecache(opts = {})
 #   Cache an image as a set of tiles.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :tile_width Tile width in pixels
@@ -280,7 +280,7 @@ module Vips
 #   @option opts [Boolean] :persistent Keep cache between evaluations
 #   @return [Vips::Image] Output image
 
-# @!method linecache(, opts = {})
+# @!method linecache(opts = {})
 #   Cache an image as a set of lines.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :tile_height Tile height in pixels
@@ -289,7 +289,7 @@ module Vips
 #   @option opts [Boolean] :persistent Keep cache between evaluations
 #   @return [Vips::Image] Output image
 
-# @!method sequential(, opts = {})
+# @!method sequential(opts = {})
 #   Check sequential access.
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :trace trace pixel requests
@@ -297,7 +297,7 @@ module Vips
 #   @option opts [Vips::Access] :access Expected access pattern
 #   @return [Vips::Image] Output image
 
-# @!method cache(, opts = {})
+# @!method cache(opts = {})
 #   Cache an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :tile_width Tile width in pixels
@@ -394,7 +394,7 @@ module Vips
 #   @option opts [Integer] :index Select this band element from sorted list
 #   @return [Vips::Image] Output image
 
-# @!method bandmean(, opts = {})
+# @!method bandmean(opts = {})
 #   Band-wise average.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
@@ -425,13 +425,13 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method rot45(, opts = {})
+# @!method rot45(opts = {})
 #   Rotate an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Angle45] :angle Angle to rotate image
 #   @return [Vips::Image] Output image
 
-# @!method autorot(, opts = {})
+# @!method autorot(opts = {})
 #   Autorotate image by exif tag.
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Angle] :angle Output Angle image was rotated by
@@ -443,32 +443,32 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method bandfold(, opts = {})
+# @!method bandfold(opts = {})
 #   Fold up x axis into bands.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :factor Fold by this factor
 #   @return [Vips::Image] Output image
 
-# @!method bandunfold(, opts = {})
+# @!method bandunfold(opts = {})
 #   Unfold image bands into x axis.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :factor Unfold by this factor
 #   @return [Vips::Image] Output image
 
-# @!method flatten(, opts = {})
+# @!method flatten(opts = {})
 #   Flatten alpha out of an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Float] :max_alpha Maximum value of alpha channel
 #   @return [Vips::Image] Output image
 
-# @!method premultiply(, opts = {})
+# @!method premultiply(opts = {})
 #   Premultiply image alpha.
 #   @param [Hash] opts Set of options
 #   @option opts [Float] :max_alpha Maximum value of alpha channel
 #   @return [Vips::Image] Output image
 
-# @!method unpremultiply(, opts = {})
+# @!method unpremultiply(opts = {})
 #   Unpremultiply image alpha.
 #   @param [Hash] opts Set of options
 #   @option opts [Float] :max_alpha Maximum value of alpha channel
@@ -482,14 +482,14 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method scale(, opts = {})
+# @!method scale(opts = {})
 #   Scale an image to uchar.
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :log Log scale
 #   @option opts [Float] :exp Exponent for log scale
 #   @return [Vips::Image] Output image
 
-# @!method wrap(, opts = {})
+# @!method wrap(opts = {})
 #   Wrap image origin.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :x Left edge of input in output
@@ -511,23 +511,23 @@ module Vips
 #   @option opts [Boolean] :point Point sample
 #   @return [Vips::Image] Output image
 
-# @!method msb(, opts = {})
+# @!method msb(opts = {})
 #   Pick most-significant byte from an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :band Band to msb
 #   @return [Vips::Image] Output image
 
-# @!method byteswap(, opts = {})
+# @!method byteswap(opts = {})
 #   Byteswap an image.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method falsecolour(, opts = {})
+# @!method falsecolour(opts = {})
 #   False-colour an image.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method gamma(, opts = {})
+# @!method gamma(opts = {})
 #   Gamma an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Float] :exponent Gamma factor
@@ -762,18 +762,18 @@ module Vips
 #   @option opts [Boolean] :nodc Remove DC component
 #   @return [Vips::Image] Output image
 
-# @!method buildlut(, opts = {})
+# @!method buildlut(opts = {})
 #   Build a look-up table.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method invertlut(, opts = {})
+# @!method invertlut(opts = {})
 #   Build an inverted look-up table.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :size LUT size to generate
 #   @return [Vips::Image] Output image
 
-# @!method self.tonelut(, opts = {})
+# @!method self.tonelut(opts = {})
 #   Build a look-up table.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :in_max Size of LUT to build
@@ -788,7 +788,7 @@ module Vips
 #   @option opts [Float] :H Adjust highlights by this much
 #   @return [Vips::Image] Output image
 
-# @!method self.identity(, opts = {})
+# @!method self.identity(opts = {})
 #   Make a 1d image where pixel values are indexes.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :bands Number of bands in LUT
@@ -828,6 +828,7 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :skip Skip this many lines at the start of the file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Integer] :lines Read this many lines from the file
 #   @option opts [String] :whitespace Set of whitespace characters
 #   @option opts [String] :separator Set of separator characters
@@ -840,6 +841,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -852,6 +854,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Integer] :offset Offset in bytes from start of file
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
@@ -862,6 +865,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -871,6 +875,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -880,6 +885,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -889,6 +895,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -899,6 +906,7 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :page Load this page from the file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Integer] :n Load this many pages
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
@@ -912,6 +920,7 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :page Load this page from the file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Integer] :n Load this many pages
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
@@ -924,6 +933,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
@@ -935,6 +945,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
@@ -944,9 +955,11 @@ module Vips
 #   Load gif with giflib.
 #   @param filename [String] Filename to load from
 #   @param [Hash] opts Set of options
+#   @option opts [Integer] :n Load this many pages
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :page Load this page from the file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -954,9 +967,11 @@ module Vips
 #   Load gif with giflib.
 #   @param buffer [Vips::Blob] Buffer to load from
 #   @param [Hash] opts Set of options
+#   @option opts [Integer] :n Load this many pages
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :page Load this page from the file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -966,6 +981,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -975,6 +991,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -984,6 +1001,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1018,6 +1036,7 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :shrink Shrink factor on load
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1028,6 +1047,7 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :shrink Shrink factor on load
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1038,6 +1058,8 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :page Load this page from the image
+#   @option opts [Boolean] :fail Fail on first warning
+#   @option opts [Integer] :n Load this many pages
 #   @option opts [Boolean] :autorotate Rotate image using orientation tag
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
@@ -1049,6 +1071,8 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :page Load this page from the image
+#   @option opts [Boolean] :fail Fail on first warning
+#   @option opts [Integer] :n Load this many pages
 #   @option opts [Boolean] :autorotate Rotate image using orientation tag
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
@@ -1060,6 +1084,7 @@ module Vips
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Integer] :level Load this level from the file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Boolean] :autocrop Crop to image bounds
 #   @option opts [String] :associated Load this associated image
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
@@ -1069,11 +1094,12 @@ module Vips
 #   Load file with imagemagick.
 #   @param filename [String] Filename to load from
 #   @param [Hash] opts Set of options
-#   @option opts [Boolean] :all_frames Read all frames from an image
 #   @option opts [String] :density Canvas resolution for rendering vector formats like SVG
 #   @option opts [Integer] :page Load this page from the file
+#   @option opts [Integer] :n Load this many pages
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1081,11 +1107,12 @@ module Vips
 #   Load buffer with imagemagick.
 #   @param buffer [Vips::Blob] Buffer to load from
 #   @param [Hash] opts Set of options
-#   @option opts [Boolean] :all_frames Read all frames from an image
 #   @option opts [String] :density Canvas resolution for rendering vector formats like SVG
 #   @option opts [Integer] :page Load this page from the file
+#   @option opts [Integer] :n Load this many pages
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1095,6 +1122,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1104,6 +1132,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :disc Open to disc
 #   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first warning
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1124,7 +1153,7 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
 
-# @!method matrixprint(, opts = {})
+# @!method matrixprint(opts = {})
 #   Print matrix.
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :strip Strip all metadata from image
@@ -1173,7 +1202,7 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
 
-# @!method radsave_buffer(, opts = {})
+# @!method radsave_buffer(opts = {})
 #   Save image to radiance buffer.
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :strip Strip all metadata from image
@@ -1181,9 +1210,10 @@ module Vips
 #   @return [Vips::Blob] Buffer to save to
 
 # @!method dzsave(filename, opts = {})
-#   Save image to deep zoom format.
+#   Save image to deepzoom file.
 #   @param filename [String] Filename to save to
 #   @param [Hash] opts Set of options
+#   @option opts [String] :basename Base name to save to
 #   @option opts [Vips::ForeignDzLayout] :layout Directory layout
 #   @option opts [String] :suffix Filename suffix for tiles
 #   @option opts [Integer] :overlap Tile overlap in pixels
@@ -1198,6 +1228,24 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
 
+# @!method dzsave_buffer(opts = {})
+#   Save image to dz buffer.
+#   @param [Hash] opts Set of options
+#   @option opts [String] :basename Base name to save to
+#   @option opts [Vips::ForeignDzLayout] :layout Directory layout
+#   @option opts [String] :suffix Filename suffix for tiles
+#   @option opts [Integer] :overlap Tile overlap in pixels
+#   @option opts [Integer] :tile_size Tile size in pixels
+#   @option opts [Vips::ForeignDzDepth] :depth Pyramid depth
+#   @option opts [Boolean] :centre Center image in tile
+#   @option opts [Vips::Angle] :angle Rotate image during save
+#   @option opts [Vips::ForeignDzContainer] :container Pyramid container type
+#   @option opts [Boolean] :properties Write a properties file to the output directory
+#   @option opts [Integer] :compression ZIP deflate compression level
+#   @option opts [Boolean] :strip Strip all metadata from image
+#   @option opts [Array<Double>] :background Background value
+#   @return [Vips::Blob] Buffer to save to
+
 # @!method pngsave(filename, opts = {})
 #   Save image to png file.
 #   @param filename [String] Filename to save to
@@ -1210,7 +1258,7 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
 
-# @!method pngsave_buffer(, opts = {})
+# @!method pngsave_buffer(opts = {})
 #   Save image to png buffer.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :compression Compression factor
@@ -1238,7 +1286,7 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
 
-# @!method jpegsave_buffer(, opts = {})
+# @!method jpegsave_buffer(opts = {})
 #   Save image to jpeg buffer.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :Q Q factor
@@ -1254,7 +1302,7 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [Vips::Blob] Buffer to save to
 
-# @!method jpegsave_mime(, opts = {})
+# @!method jpegsave_mime(opts = {})
 #   Save image to jpeg mime.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :Q Q factor
@@ -1284,7 +1332,7 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
 
-# @!method webpsave_buffer(, opts = {})
+# @!method webpsave_buffer(opts = {})
 #   Save image to webp buffer.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :Q Q factor
@@ -1320,6 +1368,28 @@ module Vips
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
 
+# @!method tiffsave_buffer(opts = {})
+#   Save image to tiff buffer.
+#   @param [Hash] opts Set of options
+#   @option opts [Vips::ForeignTiffCompression] :compression Compression for this file
+#   @option opts [Integer] :Q Q factor
+#   @option opts [Vips::ForeignTiffPredictor] :predictor Compression prediction
+#   @option opts [String] :profile ICC profile to embed
+#   @option opts [Boolean] :tile Write a tiled tiff
+#   @option opts [Integer] :tile_width Tile width in pixels
+#   @option opts [Integer] :tile_height Tile height in pixels
+#   @option opts [Boolean] :pyramid Write a pyramidal tiff
+#   @option opts [Boolean] :squash Squash images down to 1 bit
+#   @option opts [Boolean] :miniswhite Use 0 for white in 1-bit images
+#   @option opts [Vips::ForeignTiffResunit] :resunit Resolution unit
+#   @option opts [Float] :xres Horizontal resolution in pixels/mm
+#   @option opts [Float] :yres Vertical resolution in pixels/mm
+#   @option opts [Boolean] :bigtiff Write a bigtiff image
+#   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
+#   @option opts [Boolean] :strip Strip all metadata from image
+#   @option opts [Array<Double>] :background Background value
+#   @return [Vips::Blob] Buffer to save to
+
 # @!method fitssave(filename, opts = {})
 #   Save image to fits file.
 #   @param filename [String] Filename to save to
@@ -1327,6 +1397,34 @@ module Vips
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
+
+# @!method self.thumbnail(filename, width, opts = {})
+#   Generate thumbnail from file.
+#   @param filename [String] Filename to read from
+#   @param width [Integer] Size to this width
+#   @param [Hash] opts Set of options
+#   @option opts [Integer] :height Size to this height
+#   @option opts [Vips::Size] :size Only upsize, only downsize, or both
+#   @option opts [Boolean] :auto_rotate Use orientation tags to rotate image upright
+#   @option opts [Boolean] :crop Reduce to fill target rectangle, then crop
+#   @option opts [Boolean] :linear Reduce in linear light
+#   @option opts [String] :import_profile Fallback import profile
+#   @option opts [String] :export_profile Fallback export profile
+#   @return [Vips::Image] Output image
+
+# @!method self.thumbnail_buffer(buffer, width, opts = {})
+#   Generate thumbnail from buffer.
+#   @param buffer [Vips::Blob] Buffer to load from
+#   @param width [Integer] Size to this width
+#   @param [Hash] opts Set of options
+#   @option opts [Integer] :height Size to this height
+#   @option opts [Vips::Size] :size Only upsize, only downsize, or both
+#   @option opts [Boolean] :auto_rotate Use orientation tags to rotate image upright
+#   @option opts [Boolean] :crop Reduce to fill target rectangle, then crop
+#   @option opts [Boolean] :linear Reduce in linear light
+#   @option opts [String] :import_profile Fallback import profile
+#   @option opts [String] :export_profile Fallback export profile
+#   @return [Vips::Image] Output image
 
 # @!method mapim(index, opts = {})
 #   Resample with an mapim image.
@@ -1359,6 +1457,7 @@ module Vips
 #   @param hshrink [Float] Horizontal shrink factor
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Kernel] :kernel Resampling kernel
+#   @option opts [Boolean] :centre Use centre sampling convention
 #   @return [Vips::Image] Output image
 
 # @!method reducev(vshrink, opts = {})
@@ -1366,6 +1465,7 @@ module Vips
 #   @param vshrink [Float] Vertical shrink factor
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Kernel] :kernel Resampling kernel
+#   @option opts [Boolean] :centre Use centre sampling convention
 #   @return [Vips::Image] Output image
 
 # @!method reduce(hshrink, vshrink, opts = {})
@@ -1374,6 +1474,7 @@ module Vips
 #   @param vshrink [Float] Vertical shrink factor
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Kernel] :kernel Resampling kernel
+#   @option opts [Boolean] :centre Use centre sampling convention
 #   @return [Vips::Image] Output image
 
 # @!method quadratic(coeff, opts = {})
@@ -1395,7 +1496,7 @@ module Vips
 #   @option opts [Float] :idy Vertical input displacement
 #   @return [Vips::Image] Output image
 
-# @!method similarity(, opts = {})
+# @!method similarity(opts = {})
 #   Similarity transform of an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
@@ -1412,6 +1513,7 @@ module Vips
 #   @param scale [Float] Scale image by this factor
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Kernel] :kernel Resampling kernel
+#   @option opts [Boolean] :centre Use centre sampling convention
 #   @option opts [Float] :vscale Vertical scale image by this factor
 #   @return [Vips::Image] Output image
 
@@ -1422,114 +1524,114 @@ module Vips
 #   @option opts [Vips::Interpretation] :source_space Source colour space
 #   @return [Vips::Image] Output image
 
-# @!method Lab2XYZ(, opts = {})
+# @!method Lab2XYZ(opts = {})
 #   Transform cielab to xyz.
 #   @param [Hash] opts Set of options
 #   @option opts [Array<Double>] :temp Colour temperature
 #   @return [Vips::Image] Output image
 
-# @!method XYZ2Lab(, opts = {})
+# @!method XYZ2Lab(opts = {})
 #   Transform xyz to lab.
 #   @param [Hash] opts Set of options
 #   @option opts [Array<Double>] :temp Colour temperature
 #   @return [Vips::Image] Output image
 
-# @!method Lab2LCh(, opts = {})
+# @!method Lab2LCh(opts = {})
 #   Transform lab to lch.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method LCh2Lab(, opts = {})
+# @!method LCh2Lab(opts = {})
 #   Transform lch to lab.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method LCh2CMC(, opts = {})
+# @!method LCh2CMC(opts = {})
 #   Transform lch to cmc.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method CMC2LCh(, opts = {})
+# @!method CMC2LCh(opts = {})
 #   Transform lch to cmc.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method XYZ2Yxy(, opts = {})
+# @!method XYZ2Yxy(opts = {})
 #   Transform xyz to yxy.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method Yxy2XYZ(, opts = {})
+# @!method Yxy2XYZ(opts = {})
 #   Transform yxy to xyz.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method scRGB2XYZ(, opts = {})
+# @!method scRGB2XYZ(opts = {})
 #   Transform scrgb to xyz.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method XYZ2scRGB(, opts = {})
+# @!method XYZ2scRGB(opts = {})
 #   Transform xyz to scrgb.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method LabQ2Lab(, opts = {})
+# @!method LabQ2Lab(opts = {})
 #   Unpack a labq image to float lab.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method Lab2LabQ(, opts = {})
+# @!method Lab2LabQ(opts = {})
 #   Transform float lab to labq coding.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method LabQ2LabS(, opts = {})
+# @!method LabQ2LabS(opts = {})
 #   Unpack a labq image to short lab.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method LabS2LabQ(, opts = {})
+# @!method LabS2LabQ(opts = {})
 #   Transform short lab to labq coding.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method LabS2Lab(, opts = {})
+# @!method LabS2Lab(opts = {})
 #   Transform signed short lab to float.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method Lab2LabS(, opts = {})
+# @!method Lab2LabS(opts = {})
 #   Transform float lab to signed short.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method rad2float(, opts = {})
+# @!method rad2float(opts = {})
 #   Unpack radiance coding to float rgb.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method float2rad(, opts = {})
+# @!method float2rad(opts = {})
 #   Transform float rgb to radiance coding.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method LabQ2sRGB(, opts = {})
+# @!method LabQ2sRGB(opts = {})
 #   Convert a labq image to srgb.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method sRGB2HSV(, opts = {})
+# @!method sRGB2HSV(opts = {})
 #   Transform srgb to hsv.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method HSV2sRGB(, opts = {})
+# @!method HSV2sRGB(opts = {})
 #   Transform hsv to srgb.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method icc_import(, opts = {})
+# @!method icc_import(opts = {})
 #   Import from device with icc profile.
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Intent] :intent Rendering intent
@@ -1538,7 +1640,7 @@ module Vips
 #   @option opts [String] :input_profile Filename to load input profile from
 #   @return [Vips::Image] Output image
 
-# @!method icc_export(, opts = {})
+# @!method icc_export(opts = {})
 #   Output to device with icc profile.
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Intent] :intent Rendering intent
@@ -1576,18 +1678,18 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method sRGB2scRGB(, opts = {})
+# @!method sRGB2scRGB(opts = {})
 #   Convert an srgb image to scrgb.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method scRGB2BW(, opts = {})
+# @!method scRGB2BW(opts = {})
 #   Convert scrgb to bw.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :depth Output device space depth in bits
 #   @return [Vips::Image] Output image
 
-# @!method scRGB2sRGB(, opts = {})
+# @!method scRGB2sRGB(opts = {})
 #   Convert an scrgb image to srgb.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :depth Output device space depth in bits
@@ -1617,7 +1719,7 @@ module Vips
 #   @option opts [Float] :s0 New deviation
 #   @return [Vips::Image] Output image
 
-# @!method hist_cum(, opts = {})
+# @!method hist_cum(opts = {})
 #   Form cumulative histogram.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
@@ -1628,18 +1730,18 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method hist_norm(, opts = {})
+# @!method hist_norm(opts = {})
 #   Normalise histogram.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method hist_equal(, opts = {})
+# @!method hist_equal(opts = {})
 #   Histogram equalisation.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :band Equalise with this band
 #   @return [Vips::Image] Output image
 
-# @!method hist_plot(, opts = {})
+# @!method hist_plot(opts = {})
 #   Plot histogram.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
@@ -1649,14 +1751,15 @@ module Vips
 #   @param width [Integer] Window width in pixels
 #   @param height [Integer] Window height in pixels
 #   @param [Hash] opts Set of options
+#   @option opts [Integer] :max_slope Maximum slope (CLAHE)
 #   @return [Vips::Image] Output image
 
-# @!method hist_ismonotonic(, opts = {})
+# @!method hist_ismonotonic(opts = {})
 #   Test for monotonicity.
 #   @param [Hash] opts Set of options
 #   @return [Boolean] true if in is monotonic
 
-# @!method hist_entropy(, opts = {})
+# @!method hist_entropy(opts = {})
 #   Estimate image entropy.
 #   @param [Hash] opts Set of options
 #   @return [Float] Output value
@@ -1730,7 +1833,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method sharpen(, opts = {})
+# @!method sharpen(opts = {})
 #   Unsharp masking for print.
 #   @param [Hash] opts Set of options
 #   @option opts [Float] :sigma Sigma of Gaussian
@@ -1749,12 +1852,12 @@ module Vips
 #   @option opts [Vips::Precision] :precision Convolve with this precision
 #   @return [Vips::Image] Output image
 
-# @!method fwfft(, opts = {})
+# @!method fwfft(opts = {})
 #   Forward fft.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method invfft(, opts = {})
+# @!method invfft(opts = {})
 #   Inverse fft.
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :real Output only the real part of the transform
@@ -1766,7 +1869,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method spectrum(, opts = {})
+# @!method spectrum(opts = {})
 #   Make displayable power spectrum.
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
@@ -1798,7 +1901,7 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Float] Number of lines
 
-# @!method labelregions(, opts = {})
+# @!method labelregions(opts = {})
 #   Label regions in an image.
 #   @param [Hash] opts Set of options
 #   @option opts [Integer] :segments Output Number of discrete contigious regions
@@ -1946,7 +2049,7 @@ module Vips
 #   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
 #   @return [Vips::Image] Output image
 
-# @!method globalbalance(, opts = {})
+# @!method globalbalance(opts = {})
 #   Global balance an image mosaic.
 #   @param [Hash] opts Set of options
 #   @option opts [Float] :gamma Image gamma

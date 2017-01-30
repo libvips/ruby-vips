@@ -1,26 +1,5 @@
 # Notes
 
-- travis needs fixing, we have this is 0.3
-
-	rvm:
-	  - 1.9.3
-	  - 2.0
-	  - 2.1
-	script: "rake"
-	gemfile:
-	  - Gemfile
-	before_install:
-	  - uname -a
-	  - sudo apt-get update
-	  - sudo apt-get install libvips-dev
-	before_script:
-	  - ./compile
-
-- need something like the old ruby-vips occasional GC stuff, we can fill 
-  memory before a GC is triggered
-
-  need a test case
-
 - mail about the getpoint unimplemented error
 
   http://sourceforge.net/p/ruby-gnome2/mailman/ruby-gnome2-devel-en/thread/CAGNS0RuZ5N6bha3M7B0%2BYf2M9-oni44idzZO17mtQiykS%2BmJKQ%40mail.gmail.com/#msg34790843
@@ -31,33 +10,6 @@
 
 	Complex(1, 2)
 	=> (1+2i)
-
-- fix travis ... the difficulty is getting a libvips with goi built first,
-  perhaps copy-paste from libvips .travis.yml
-
-  this is almost enough to do the ruby side:
-
-----------
-env:
-  global:
-    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-
-language: ruby
-rvm:
-  - 2.1
-  - 2.2
-  - 2.3
-
-script: "bundle exec rake"
-
-gemfile:
-  - Gemfile
-
-before_install:
-  - uname -a
-  - sudo apt-get update
-  - sudo apt-get install libvips-dev
------------
 
 # Common operations
 
