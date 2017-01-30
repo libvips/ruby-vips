@@ -697,7 +697,7 @@ module Vips
         # @return [Object] Value of field
         def get_value(name)
             ret, gval = get name
-            if ret[0] != 0
+            if ret != 0
                 raise Vips::Error, "Field #{name} not found."
             end
             value = gval.value

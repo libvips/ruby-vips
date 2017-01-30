@@ -106,7 +106,7 @@ module Vips
             [Vips::Blob, Vips::ArrayDouble, Vips::ArrayImage, 
                 Vips::ArrayInt, Vips::RefString].each do |cls|
                 if value.is_a? cls
-                    value, length = value.get
+                    value = value.get
 
                     # blobs come from gobject-introspection as arrays ... 
                     # repack as strings for convenience
