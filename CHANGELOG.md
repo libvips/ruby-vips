@@ -5,6 +5,8 @@
 * remove stray comma from some docs lines [John Cupitt]
 * update generated docs for libvips 8.5 [John Cupitt]
 * small doc improvements [John Cupitt]
+* update for gobject-introspection 3.1 [John Cupitt]
+* support ruby 2.4 [John Cupitt]
 
 # Version 1.0.3
 
