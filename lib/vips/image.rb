@@ -1061,11 +1061,11 @@ module Vips
         # @return [Array<Float>] the pixel values as an array
         def getpoint(x, y)
             # vips has an operation that does this, but we can't call it via
-            # gobject-introspection 3.0.7 since it's missing array double
+            # gobject-introspection 3.1 since it's missing array double
             # get
             #
             # remove this def when gobject-introspection updates
-            crop(x, y, 1, 1).bandsplit.map {|i| i.avg}
+            crop(x, y, 1, 1).bandsplit.map(&:avg)
         end
 
         # a median filter
