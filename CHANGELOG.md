@@ -1,5 +1,9 @@
 # master 
 
+# Version 1.0.5
+
+* fix `_const` for libvips 8.5 [John Cupitt]
+
 # Version 1.0.4
 
 * remove stray comma from some docs lines [John Cupitt]
