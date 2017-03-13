@@ -119,8 +119,11 @@ module Vips
         end
 
         def set_required_input(match_image, required_input)
+            log "set_required_input: @instance = #{@instance}"
+
             # do we have a non-nil instance? set the first image arg with this
             if @instance != nil
+                log "BANANA"
                 log "setting first image arg with instance ..."
                 x = required_input.find do |arg|
                     gtype = GLib::Type["VipsImage"]
@@ -238,6 +241,8 @@ module Vips
         end
 
         def invoke
+            log "invoke starting ..."
+            log "invoke instance is #{@instance}"
             set_string_args()
             match_image = find_match_image()
             required_input, optional_input = find_input()

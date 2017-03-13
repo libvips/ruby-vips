@@ -384,6 +384,24 @@ module Vips
             end
         end
 
+        # libvips 8.4 and earlier had a bug which swapped the args to the _const
+        # enum operations
+        def swap_const_args
+            Vips::version(0) < 8 or 
+                (Vips::version(0) == 8 and Vips::version(1) <= 4)
+        end
+
+        # handy for expanding enum operations
+        def call_enum(name, other, enum)
+            if other.is_a?(Vips::Image)
+                Vips::call_base name.to_s, self, "", [other, enum]
+            else
+                args = swap_const_args ? [other, enum] : [enum, other]
+
+                Vips::call_base name.to_s + "_const", self, "", args
+            end
+        end
+
         public
 
         # Invoke a vips operation with {call}, using self as the first 
@@ -392,7 +410,7 @@ module Vips
         # @param name [String] vips operation to call
         # @return result of vips operation
         def method_missing(name, *args)
-            Vips::call_base(name.to_s, self, "", args)
+            Vips::call_base name.to_s, self, "", args
         end
 
         # Invoke a vips operation with {call}.
@@ -697,7 +715,7 @@ module Vips
         # @return [Object] Value of field
         def get_value(name)
             ret, gval = get name
-            if ret[0] != 0
+            if ret != 0
                 raise Vips::Error, "Field #{name} not found."
             end
             value = gval.value
@@ -756,7 +774,8 @@ module Vips
         # @param other [Image, Real, Array<Real>] Thing to add to self
         # @return [Image] result of addition
         def +(other)
-            other.is_a?(Vips::Image) ? add(other) : linear(1, other)
+            other.is_a?(Vips::Image) ? 
+                add(other) : linear(1, other)
         end
 
         # Subtract an image, constant or array. 
@@ -773,7 +792,8 @@ module Vips
         # @param other [Image, Real, Array<Real>] Thing to multiply by self
         # @return [Image] result of multiplication
         def *(other)
-            other.is_a?(Vips::Image) ? multiply(other) : linear(other, 0)
+            other.is_a?(Vips::Image) ? 
+                multiply(other) : linear(other, 0)
         end
 
         # Divide an image, constant or array. 
@@ -799,8 +819,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] self to the power of this
         # @return [Image] result of power
         def **(other)
-            other.is_a?(Vips::Image) ? 
-                math2(other, :pow) : math2_const(other, :pow)
+            call_enum("math2", other, :pow)
         end
 
         # Integer left shift with an image, constant or array. 
@@ -808,8 +827,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] shift left by this much
         # @return [Image] result of left shift
         def <<(other)
-            other.is_a?(Vips::Image) ? 
-                boolean(other, :lshift) : boolean_const(other, :lshift)
+            call_enum("boolean", other, :lshift)
         end
 
         # Integer right shift with an image, constant or array. 
@@ -817,8 +835,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] shift right by this much
         # @return [Image] result of right shift
         def >>(other)
-            other.is_a?(Vips::Image) ? 
-                boolean(other, :rshift) : boolean_const(other, :rshift)
+            call_enum("boolean", other, :rshift)
         end
 
         # Integer bitwise OR with an image, constant or array. 
@@ -826,8 +843,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] bitwise OR with this
         # @return [Image] result of bitwise OR 
         def |(other)
-            other.is_a?(Vips::Image) ? 
-                boolean(other, :or) : boolean_const(other, :or)
+            call_enum("boolean", other, :or)
         end
 
         # Integer bitwise AND with an image, constant or array. 
@@ -835,8 +851,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] bitwise AND with this
         # @return [Image] result of bitwise AND 
         def &(other)
-            other.is_a?(Vips::Image) ? 
-                boolean(other, :and) : boolean_const(other, :and)
+            call_enum("boolean", other, :and)
         end
 
         # Integer bitwise EOR with an image, constant or array. 
@@ -844,8 +859,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] bitwise EOR with this
         # @return [Image] result of bitwise EOR 
         def ^(other)
-            other.is_a?(Vips::Image) ? 
-                boolean(other, :eor) : boolean_const(other, :eor)
+            call_enum("boolean", other, :eor)
         end
 
         # Equivalent to image ^ -1
@@ -879,8 +893,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] relational less than with this
         # @return [Image] result of less than
         def <(other)
-            other.is_a?(Vips::Image) ? 
-                relational(other, :less) : relational_const(other, :less)
+            call_enum("relational", other, :less)
         end
 
         # Relational less than or equal to with an image, constant or array. 
@@ -889,8 +902,7 @@ module Vips
         #   equal to with this
         # @return [Image] result of less than or equal to
         def <=(other)
-            other.is_a?(Vips::Image) ? 
-                relational(other, :lesseq) : relational_const(other, :lesseq)
+            call_enum("relational", other, :lesseq)
         end
 
         # Relational more than with an image, constant or array. 
@@ -898,8 +910,7 @@ module Vips
         # @param other [Image, Real, Array<Real>] relational more than with this
         # @return [Image] result of more than
         def >(other)
-            other.is_a?(Vips::Image) ? 
-                relational(other, :more) : relational_const(other, :more)
+            call_enum("relational", other, :more)
         end
 
         # Relational more than or equal to with an image, constant or array. 
@@ -908,8 +919,7 @@ module Vips
         #   equal to with this
         # @return [Image] result of more than or equal to
         def >=(other)
-            other.is_a?(Vips::Image) ? 
-                relational(other, :moreeq) : relational_const(other, :moreeq)
+            call_enum("relational", other, :moreeq)
         end
 
         # Compare equality to nil, an image, constant or array.
@@ -917,12 +927,11 @@ module Vips
         # @param other [nil, Image, Real, Array<Real>] test equality to this
         # @return [Image] result of equality
         def ==(other)
+            # for equality, we must allow tests against nil
             if other == nil
                 false
-            elsif other.is_a?(Vips::Image)  
-                relational(other, :equal) 
             else
-                relational_const(other, :equal)
+                call_enum("relational", other, :equal)
             end
         end
 
@@ -931,12 +940,11 @@ module Vips
         # @param other [nil, Image, Real, Array<Real>] test inequality to this
         # @return [Image] result of inequality
         def !=(other)
+            # for equality, we must allow tests against nil
             if other == nil
                 true
-            elsif other.is_a?(Vips::Image) 
-                relational(other, :noteq) 
             else
-                relational_const(other, :noteq)
+                call_enum("relational", other, :noteq)
             end
         end
 
@@ -1061,11 +1069,11 @@ module Vips
         # @return [Array<Float>] the pixel values as an array
         def getpoint(x, y)
             # vips has an operation that does this, but we can't call it via
-            # gobject-introspection 3.0.7 since it's missing array double
+            # gobject-introspection 3.1 since it's missing array double
             # get
             #
             # remove this def when gobject-introspection updates
-            crop(x, y, 1, 1).bandsplit.map {|i| i.avg}
+            crop(x, y, 1, 1).bandsplit.map(&:avg)
         end
 
         # a median filter

@@ -6,7 +6,7 @@
 
 - still missing a few enum docs
 
-- add complex constants, eg. 
+- support complex constants, eg. 
 
 	Complex(1, 2)
 	=> (1+2i)

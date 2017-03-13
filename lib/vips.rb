@@ -117,7 +117,7 @@ module Vips
 
             # call Vips::init
             init = repository.find(namespace, "init")
-            succeeded, argv, error = init.invoke(:arguments => [$PROGRAM_NAME])
+            succeeded, argv, error = init.invoke([$PROGRAM_NAME])
 
             # TODO get the vips error buffer
             raise error unless succeeded
