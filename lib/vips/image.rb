@@ -394,29 +394,11 @@ module Vips
         # handy for expanding enum operations
         def call_enum(name, other, enum)
             if other.is_a?(Vips::Image)
-                Vips::call(name.to_s, self, other, enum)
+                Vips::call_base name.to_s, self, "", [other, enum]
             else
-                if swap_const_args
-                    Vips::call(name.to_s + "_const", self, other, enum)
-                else
-                    Vips::call(name.to_s + "_const", self, enum, other)
-                end
-            end
-        end
+                args = swap_const_args ? [other, enum] : [enum, other]
 
-        # handy for equality-style operators, where we must allow comparison 
-        # with nil
-        def call_enum_eq(name, other, enum)
-            if other == nil
-                false
-            elsif other.is_a?(Vips::Image)
-                Vips::call(name.to_s, self, other, enum)
-            else
-                if swap_const_args
-                    Vips::call(name.to_s + "_const", self, other, enum)
-                else
-                    Vips::call(name.to_s + "_const", self, enum, other)
-                end
+                Vips::call_base name.to_s + "_const", self, "", args
             end
         end
 
@@ -428,7 +410,7 @@ module Vips
         # @param name [String] vips operation to call
         # @return result of vips operation
         def method_missing(name, *args)
-            Vips::call_base(name.to_s, self, "", args)
+            Vips::call_base name.to_s, self, "", args
         end
 
         # Invoke a vips operation with {call}.
@@ -945,7 +927,12 @@ module Vips
         # @param other [nil, Image, Real, Array<Real>] test equality to this
         # @return [Image] result of equality
         def ==(other)
-            call_enum_eq("relational", other, :equal)
+            # for equality, we must allow tests against nil
+            if other == nil
+                false
+            else
+                call_enum("relational", other, :equal)
+            end
         end
 
         # Compare inequality to nil, an image, constant or array.
@@ -953,7 +940,12 @@ module Vips
         # @param other [nil, Image, Real, Array<Real>] test inequality to this
         # @return [Image] result of inequality
         def !=(other)
-            call_enum_eq("relational", other, :noteq)
+            # for equality, we must allow tests against nil
+            if other == nil
+                true
+            else
+                call_enum("relational", other, :noteq)
+            end
         end
 
         # Fetch bands using a number or a range
