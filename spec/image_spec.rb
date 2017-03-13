@@ -103,6 +103,15 @@ RSpec.describe Vips::Image do
         expect(image.avg).to eq(1.5)
     end
 
+    it 'supports imagescale' do
+        image = Vips::Image.new_from_array [1, 2], 8, 2
+        image = image.scaleimage
+        expect(image.width).to eq(2)
+        expect(image.height).to eq(1)
+        expect(image.max).to eq(255)
+        expect(image.min).to eq(0)
+    end
+
     if has_jpeg?
         it 'can load a sample jpg image' do
             x = Vips::Image.new_from_file simg("wagon.jpg")

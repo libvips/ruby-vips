@@ -1287,6 +1287,15 @@ module Vips
             Vips::call_base "ifthenelse", self, "", [th, el, opts]
         end
 
+        # Scale an image to uchar. This is the vips `scale` operation, but
+        # renamed to avoid a clash with the `.scale` property.
+        #
+        # @param [Hash] opts Set of options
+        # @return [Vips::Image] Output image
+        def scaleimage(opts = {})
+            Vips::Image.scale self, opts
+        end
+
     end
 
     # This method generates yard comments for all the dynamically bound
@@ -1302,7 +1311,7 @@ module Vips
 
     def self.generate_yard
         # these have hand-written methods, see above
-        no_generate = ["bandjoin", "ifthenelse"]
+        no_generate = ["scale", "bandjoin", "ifthenelse"]
 
         generate_operation = lambda do |op|
             flags = op.flags

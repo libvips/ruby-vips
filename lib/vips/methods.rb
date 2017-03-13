@@ -482,13 +482,6 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method scale(opts = {})
-#   Scale an image to uchar.
-#   @param [Hash] opts Set of options
-#   @option opts [Boolean] :log Log scale
-#   @option opts [Float] :exp Exponent for log scale
-#   @return [Vips::Image] Output image
-
 # @!method wrap(opts = {})
 #   Wrap image origin.
 #   @param [Hash] opts Set of options
