@@ -1,9 +1,20 @@
+sudo: false
+
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
 env:
-  - LIBVIPS=8.4.4
+  - VIPS_SITE=http://www.vips.ecs.soton.ac.uk/supported
+  - VIPS_VERSION_MAJOR=8
+  - VIPS_VERSION_MINOR=4
+  - VIPS_VERSION_MICRO=4
+  - VIPS_VERSION=$VIPS_VERSION_MAJOR.$VIPS_VERSION_MINOR.$VIPS_VERSION_MICRO
+  - PATH=$HOME/vips/bin:$PATH
+  - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
+  - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
+  - PYTHONPATH=$HOME/vips/lib/python2.7/site-packages:$PYTHONPATH
+  - GI_TYPELIB_PATH=$HOME/vips/lib/girepository-1.0:$GI_TYPELIB_PATH
 
 dist: trusty
 
@@ -30,6 +41,10 @@ addons:
       - libwebp-dev
       - libglib2.0-dev
 
+cache:
+  directories:
+    - $HOME/vips
+
 language: ruby
 rvm:
   - 2.1
@@ -43,13 +58,4 @@ gemfile:
 
 before_install:
   - uname -a
-  - sudo apt-get update
-  - wget http://www.vips.ecs.soton.ac.uk/supported/current/vips-$LIBVIPS.tar.gz
-  - tar xvf vips-$LIBVIPS.tar.gz
-  - cd vips-$LIBVIPS
-  - >
-    CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
-    ./configure --prefix=/usr
-  - make
-  - sudo make install
-  - sudo ldconfig
+  - bash install-vips.sh
