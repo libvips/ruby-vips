@@ -8,18 +8,14 @@ module Vips
     class Call
         attr_writer :instance, :option_string
 
-        def initialize(name, supplied_values)
+        def initialize(name, *args, **options)
             @name = name
             @supplied_values = supplied_values
             @instance = nil
             @option_string = nil
 
-            if @supplied_values.last.is_a? Hash
-                @optional_values = @supplied_values.last
-                @supplied_values.delete_at -1
-            else
-                @optional_values = {}
-            end
+            @supplied_values = args
+            @optional_values = options
 
             begin
                 @op = Vips::Operation.new @name
