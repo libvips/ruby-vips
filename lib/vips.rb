@@ -121,6 +121,8 @@ module Vips
 
             # TODO get the vips error buffer
             raise error unless succeeded
+
+            log "Vips::Loader.call_init_function: argv = #{argv}"
         end
 
         def define_value_modules

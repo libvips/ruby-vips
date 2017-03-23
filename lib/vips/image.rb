@@ -322,7 +322,7 @@ module Vips
         # handy for overloads ... want to be able to apply a function to an 
         # array or to a scalar
         def self.smap(x, &block)
-            x.is_a?(Array) ? x.map {|x| smap(x, &block)} : block.(x)
+            x.is_a?(Array) ? x.map {|y| smap(y, &block)} : block.(x)
         end
 
         # run a complex operation on a complex image, or an image with an even
