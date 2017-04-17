@@ -9,7 +9,7 @@ The older `ruby-vips` is still here and still maintained in branch
 `0.3-stable`.
 
 This gem provides a Ruby binding for the [vips image processing
-library](http://www.vips.ecs.soton.ac.uk). 
+library](https://jcupitt.github.io/libvips).
 
 Programs that use `ruby-vips` don't
 manipulate images directly, instead they create pipelines of image processing
@@ -39,7 +39,7 @@ rmagick.rb      3352020
 ```
 
 See also [benchmarks at the official libvips
-website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
+website](https://github.com/jcupitt/libvips/wiki/Speed-and-memory-use).
 There's a handy blog post explaining [how libvips opens
 files](http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html)
 which gives some more background.
@@ -73,7 +73,7 @@ Check your package manager and see if the libvips on your system is new enough.
 
 If it's too old, you'll need to build libvips from source. 
 Download a tarball from the 
-[libvips website](http://www.vips.ecs.soton.ac.uk/supported/current), or build
+[libvips website](https://jcupitt.github.io/libvips), or build
 from [the git repository](https://github.com/jcupitt/libvips) and see the
 README.
 
@@ -102,7 +102,7 @@ im = Vips::Image.new_from_file filename
 # put im at position (100, 100) in a 3000 x 3000 pixel image, 
 # make the other pixels in the image by mirroring im up / down / 
 # left / right, see
-# http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/libvips-conversion.html#vips-embed
+# https://jcupitt.github.io/libvips/API/current/libvips-conversion.html#vips-embed
 im = im.embed 100, 100, 3000, 3000, :extend => :mirror
 
 # multiply the green (middle) band by 2, leave the other two alone

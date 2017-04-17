@@ -1,5 +1,5 @@
 # This module provides a set of overrides for the [vips image processing 
-# library](http://www.vips.ecs.soton.ac.uk)
+# library](https://jcupitt.github.io/libvips/)
 # used via the [gobject-introspection
 # gem](https://rubygems.org/gems/gobject-introspection). 
 #
@@ -98,7 +98,7 @@
 # of overrides which try to make it nicer to use. 
 #
 # The API you end up with is a Ruby-ish version of the [VIPS C 
-# API](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/). 
+# API](https://jcupitt.github.io/libvips/API/current). 
 # Full documentation
 # on the operations and what they do is there, you can use it directly. This
 # document explains the extra features of the Ruby API and lists the available 
@@ -233,7 +233,7 @@
 # that that operation expects. 
 # 
 # Use the [C API 
-# docs](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips) 
+# docs](https://jcupitt.github.io/libvips/API/current) 
 # for more detail.
 #
 # # Exceptions
