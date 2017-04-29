@@ -45,7 +45,8 @@
 # but is slower and needs more memory. See {Access}
 # for full details
 # on the various modes available. You can also load formatted images from 
-# memory buffers or create images that wrap C-style memory arrays. 
+# memory buffers, create images that wrap C-style memory arrays, or make images
+# from constants.
 #
 # The next line:
 #
@@ -574,6 +575,23 @@ module Vips
             return image
         end
 
+        # A new image is created with the same width, height, format,
+        # interpretation, resolution and offset as self, but with every pixel
+        # set to the specified value.
+        #
+        # You can pass an array to make a many-band image, or a single value to
+        # make a one-band image.
+        #
+        # @param pixel [Real, Array<Real>] value to put in each pixel
+        # @return [Image] constant image
+        def new_from_image(value)
+            pixel = (Vips::Image.black(1, 1) + value).cast(format)
+            image = pixel.embed(0, 0, width, height, :extend => :copy)
+            image.copy :interpretation => interpretation,
+                :xres => xres, :yres => yres,
+                :xoffset => xoffset, :yoffset => yoffset
+        end
+
         # Write this image to a file. Save options may be encoded in the
         # filename or given as a hash. For example:
         #
@@ -1037,7 +1055,14 @@ module Vips
                 other = [other]
             end
 
-            Vips::Image.bandjoin([self] + other)
+            # if other is just Numeric, we can use bandjoin_const
+            not_all_real = (other.map {|x| not x.is_a?(Numeric)}).include?(true)
+
+            if not_all_real
+                Vips::Image.bandjoin([self] + other)
+            else
+                bandjoin_const(other)
+            end
         end
 
         # Return the coordinates of the image maximum.

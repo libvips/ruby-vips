@@ -5,6 +5,10 @@
 * fix `_const` for libvips 8.5 [John Cupitt]
 * add `scaleimage`, the scale operation renamed to avoid a clash with the
   `scale` property [John Cupitt]
+* add `.new_from_image`: make a new image from a constant [John Cupitt]
+* `bandjoin` will use `bandjoin_const`, if it can [John Cupitt]
+* update generated docs for libvips 8.5 [John Cupitt]
+* added docs for new libvips 8.5 enums [John Cupitt]
 
 # Version 1.0.4
 

@@ -117,10 +117,10 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method relational_const(c, relational, opts = {})
+# @!method relational_const(relational, c, opts = {})
 #   Relational operations against a constant.
-#   @param c [Array<Double>] Array of constants
 #   @param relational [Vips::OperationRelational] relational to perform
+#   @param c [Array<Double>] Array of constants
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
@@ -130,17 +130,17 @@ module Vips
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method boolean_const(c, boolean, opts = {})
+# @!method boolean_const(boolean, c, opts = {})
 #   Boolean operations against a constant.
-#   @param c [Array<Double>] Array of constants
 #   @param boolean [Vips::OperationBoolean] boolean to perform
+#   @param c [Array<Double>] Array of constants
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
-# @!method math2_const(c, math2, opts = {})
+# @!method math2_const(math2, c, opts = {})
 #   Binary math operations with a constant.
-#   @param c [Array<Double>] Array of constants
 #   @param math2 [Vips::OperationMath2] math to perform
+#   @param c [Array<Double>] Array of constants
 #   @param [Hash] opts Set of options
 #   @return [Vips::Image] Output image
 
@@ -292,9 +292,7 @@ module Vips
 # @!method sequential(opts = {})
 #   Check sequential access.
 #   @param [Hash] opts Set of options
-#   @option opts [Boolean] :trace trace pixel requests
 #   @option opts [Integer] :tile_height Tile height in pixels
-#   @option opts [Vips::Access] :access Expected access pattern
 #   @return [Vips::Image] Output image
 
 # @!method cache(opts = {})
@@ -313,7 +311,7 @@ module Vips
 #   @param height [Integer] Image height in pixels
 #   @param [Hash] opts Set of options
 #   @option opts [Vips::Extend] :extend How to generate the extra pixels
-#   @option opts [Array<Double>] :background Colour for background pixels
+#   @option opts [Array<Double>] :background Color for background pixels
 #   @return [Vips::Image] Output image
 
 # @!method flip(direction, opts = {})
@@ -329,7 +327,7 @@ module Vips
 #   @param y [Integer] Top edge of sub in main
 #   @param [Hash] opts Set of options
 #   @option opts [Boolean] :expand Expand output to hold all of both inputs
-#   @option opts [Array<Double>] :background Colour for new pixels
+#   @option opts [Array<Double>] :background Color for new pixels
 #   @return [Vips::Image] Output image
 
 # @!method join(in2, direction, opts = {})
@@ -337,10 +335,10 @@ module Vips
 #   @param in2 [Vips::Image] Second input image
 #   @param direction [Vips::Direction] Join left-right or up-down
 #   @param [Hash] opts Set of options
-#   @option opts [Vips::Align] :align Align on the low, centre or high coordinate edge
 #   @option opts [Boolean] :expand Expand output to hold all of both inputs
 #   @option opts [Integer] :shim Pixels between images
 #   @option opts [Array<Double>] :background Colour for new pixels
+#   @option opts [Vips::Align] :align Align on the low, centre or high coordinate edge
 #   @return [Vips::Image] Output image
 
 # @!method self.arrayjoin(in, opts = {})
@@ -372,6 +370,14 @@ module Vips
 #   @param width [Integer] Width of extract area
 #   @param height [Integer] Height of extract area
 #   @param [Hash] opts Set of options
+#   @return [Vips::Image] Output image
+
+# @!method smartcrop(width, height, opts = {})
+#   Extract an area from an image.
+#   @param width [Integer] Width of extract area
+#   @param height [Integer] Height of extract area
+#   @param [Hash] opts Set of options
+#   @option opts [Vips::Interesting] :interesting How to measure interestingness
 #   @return [Vips::Image] Output image
 
 # @!method extract_band(band, opts = {})
@@ -480,6 +486,13 @@ module Vips
 #   @param across [Integer] number of tiles across
 #   @param down [Integer] number of tiles down
 #   @param [Hash] opts Set of options
+#   @return [Vips::Image] Output image
+
+# @!method scale(opts = {})
+#   Scale an image to uchar.
+#   @param [Hash] opts Set of options
+#   @option opts [Boolean] :log Log scale
+#   @option opts [Float] :exp Exponent for log scale
 #   @return [Vips::Image] Output image
 
 # @!method wrap(opts = {})
@@ -1399,7 +1412,7 @@ module Vips
 #   @option opts [Integer] :height Size to this height
 #   @option opts [Vips::Size] :size Only upsize, only downsize, or both
 #   @option opts [Boolean] :auto_rotate Use orientation tags to rotate image upright
-#   @option opts [Boolean] :crop Reduce to fill target rectangle, then crop
+#   @option opts [Vips::Interesting] :crop Reduce to fill target rectangle, then crop
 #   @option opts [Boolean] :linear Reduce in linear light
 #   @option opts [String] :import_profile Fallback import profile
 #   @option opts [String] :export_profile Fallback export profile
@@ -1413,7 +1426,7 @@ module Vips
 #   @option opts [Integer] :height Size to this height
 #   @option opts [Vips::Size] :size Only upsize, only downsize, or both
 #   @option opts [Boolean] :auto_rotate Use orientation tags to rotate image upright
-#   @option opts [Boolean] :crop Reduce to fill target rectangle, then crop
+#   @option opts [Vips::Interesting] :crop Reduce to fill target rectangle, then crop
 #   @option opts [Boolean] :linear Reduce in linear light
 #   @option opts [String] :import_profile Fallback import profile
 #   @option opts [String] :export_profile Fallback export profile
@@ -1520,7 +1533,7 @@ module Vips
 # @!method Lab2XYZ(opts = {})
 #   Transform cielab to xyz.
 #   @param [Hash] opts Set of options
-#   @option opts [Array<Double>] :temp Colour temperature
+#   @option opts [Array<Double>] :temp Color temperature
 #   @return [Vips::Image] Output image
 
 # @!method XYZ2Lab(opts = {})
@@ -1902,7 +1915,7 @@ module Vips
 
 # @!method draw_rect(ink, left, top, width, height, opts = {})
 #   Paint a rectangle on an image.
-#   @param ink [Array<Double>] Colour for pixels
+#   @param ink [Array<Double>] Color for pixels
 #   @param left [Integer] Rect to fill
 #   @param top [Integer] Rect to fill
 #   @param width [Integer] Rect to fill
@@ -1913,7 +1926,7 @@ module Vips
 
 # @!method draw_mask(ink, mask, x, y, opts = {})
 #   Draw a mask on an image.
-#   @param ink [Array<Double>] Colour for pixels
+#   @param ink [Array<Double>] Color for pixels
 #   @param mask [Vips::Image] Mask of pixels to draw
 #   @param x [Integer] Draw mask here
 #   @param y [Integer] Draw mask here
@@ -1922,7 +1935,7 @@ module Vips
 
 # @!method draw_line(ink, x1, y1, x2, y2, opts = {})
 #   Draw a line on an image.
-#   @param ink [Array<Double>] Colour for pixels
+#   @param ink [Array<Double>] Color for pixels
 #   @param x1 [Integer] Start of draw_line
 #   @param y1 [Integer] Start of draw_line
 #   @param x2 [Integer] End of draw_line
@@ -1932,7 +1945,7 @@ module Vips
 
 # @!method draw_circle(ink, cx, cy, radius, opts = {})
 #   Draw a circle on an image.
-#   @param ink [Array<Double>] Colour for pixels
+#   @param ink [Array<Double>] Color for pixels
 #   @param cx [Integer] Centre of draw_circle
 #   @param cy [Integer] Centre of draw_circle
 #   @param radius [Integer] Radius in pixels
@@ -1942,7 +1955,7 @@ module Vips
 
 # @!method draw_flood(ink, x, y, opts = {})
 #   Flood-fill an area.
-#   @param ink [Array<Double>] Colour for pixels
+#   @param ink [Array<Double>] Color for pixels
 #   @param x [Integer] DrawFlood start point
 #   @param y [Integer] DrawFlood start point
 #   @param [Hash] opts Set of options

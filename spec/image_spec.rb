@@ -522,5 +522,17 @@ RSpec.describe Vips::Image do
         expect(image.size).to eq([image.width, image.height])
     end
 
+    it 'has #new_from_image method' do
+        image = Vips::Image.black(200, 100) 
+
+        image2 = image.new_from_image 12
+        expect(image2.bands).to eq(1)
+        expect(image2.avg).to eq(12)
+
+        image2 = image.new_from_image [1, 2, 3]
+        expect(image2.bands).to eq(3)
+        expect(image2.avg).to eq(2)
+    end
+
 end
 

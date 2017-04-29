@@ -50,11 +50,7 @@ module Vips
 
             # we have a 1D array ... use that as a pixel constant and expand 
             # to match match_image
-            pixel = (Vips::Image.black(1, 1) + value).cast(match_image.format)
-            pixel = pixel.copy :interpretation => match_image.interpretation,
-                :xres => match_image.xres, :yres =>  match_image.yres
-            pixel.embed(0, 0, match_image.width, match_image.height, 
-                        :extend => :copy)
+            match_image.new_from_image(value)
         end
 
         # @private
