@@ -6,3 +6,9 @@ gobject-introspection for direct ffi calls.
 # Setup
 
 	gem install ffi
+
+# Links
+
+	https://github.com/ffi/ffi
+
+	https://github.com/ffi/ffi/wiki/Basic-Usage
