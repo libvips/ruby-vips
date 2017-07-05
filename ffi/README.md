@@ -12,3 +12,7 @@ gobject-introspection for direct ffi calls.
 	https://github.com/ffi/ffi
 
 	https://github.com/ffi/ffi/wiki/Basic-Usage
+
+	http://www.rubydoc.info/github/ffi/ffi
+
+	https://searchcode.com/codesearch/view/16003552/

@@ -1,6 +1,23 @@
 #!/usr/bin/ruby
 
 require 'ffi'
+require 'forwardable'
+
+# this is really very crude logging
+
+# @private
+$vips_debug = true
+
+# @private
+def log str
+    if $vips_debug
+        puts str
+    end
+end
+
+def set_debug debug
+    $vips_debug = debug
+end
 
 module Libc
     extend FFI::Library
@@ -10,17 +27,62 @@ module Libc
     attach_function :free, [:pointer], :void
 end
 
-module Libgobject
+module GLib
     extend FFI::Library
     ffi_lib 'gobject-2.0'
+
+    # nil being the default
+    glib_log_domain = nil
+
+    def self.set_log_domain(domain)
+        glib_log_domain = domain
+    end
 
     attach_function :g_malloc, [:size_t], :pointer
     attach_function :g_free, [:pointer], :void
 
-    class GObject < FFI::Struct
-        layout :g_type_instance, :pointer,
-               :ref_count, :uint,
-               :qdata, :pointer
+    # instead of having a GObject inheriting directly from FFI::Struct, we have
+    # our own wrapper class with a @struct member ... this lets us inherit from
+    # GObject correctly in Vips:: below
+    class GObject
+        extend Forwardable
+        def_delegators :@struct, :[], :to_ptr
+
+        # the actual struct we manage
+        class Struct < FFI::Struct
+            layout :g_type_instance, :pointer,
+                   :ref_count, :uint,
+                   :qdata, :pointer
+
+            def self.release(ptr)
+                log "GLib::GObject::Struct: releasing #{ptr}"
+                GLib::g_object_unref(ptr) unless ptr.null?
+            end
+
+        end
+
+        def initialize(ptr = nil)
+            @struct = ptr.nil? ? 
+                self.ffi_structure.new : self.ffi_structure.new(ptr)
+        end
+
+        def ptr
+            @struct.ptr
+        end
+
+        def ffi_structure
+            self.class.ffi_structure
+        end
+
+        class << self
+            def ptr
+                ffi_structure.ptr
+            end
+
+            def ffi_structure
+                self.const_get(:Struct)
+            end
+        end
 
     end
 
@@ -44,53 +106,53 @@ module Libgobject
                :data, [:ulong_long, 2]
 
         def self.release(ptr)
-            Libgobject::g_value_unset(ptr) unless ptr.null?
+            GLib::g_value_unset(ptr) unless ptr.null?
         end
 
         def init(gtype)
-            Libgobject::g_value_init(self, gtype)
+            GLib::g_value_init(self, gtype)
         end
 
         def set(value)
             gtype = self[:gtype]
-            fundamental = Libgobject::g_type_fundamental gtype
+            fundamental = GLib::g_type_fundamental gtype
 
             case gtype
             when GBOOL_TYPE
-                Libgobject::g_value_set_boolean self, (value ? 1 : 0)
+                GLib::g_value_set_boolean self, (value ? 1 : 0)
             when GINT_TYPE
-                Libgobject::g_value_set_int self, value
+                GLib::g_value_set_int self, value
             when GDOUBLE_TYPE
-                Libgobject::g_value_set_double self, value
+                GLib::g_value_set_double self, value
             when GSTR_TYPE
                 # set_string takes a copy, no lifetime worries
-                Libgobject::g_value_set_string self, value
-            when Libvips::IMAGE_TYPE
+                GLib::g_value_set_string self, value
+            when Vips::IMAGE_TYPE
                 # this will add a ref, held by the gvalue ... it will be 
                 # dropped by g_value_unset() when the gvalue is GC'd
-                Libgobject::g_value_set_object self, value
-            when Libvips::ARRAY_INT_TYPE
-            when Libvips::ARRAY_DOUBLE_TYPE
-            when Libvips::ARRAY_IMAGE_TYPE
-            when Libvips::BLOB_TYPE
+                GLib::g_value_set_object self, value
+            when Vips::ARRAY_INT_TYPE
+            when Vips::ARRAY_DOUBLE_TYPE
+            when Vips::ARRAY_IMAGE_TYPE
+            when Vips::BLOB_TYPE
             else
                 case fundamental
                 when GFLAGS_TYPE
-                    Libgobject::g_value_set_flags self, value
+                    GLib::g_value_set_flags self, value
                 when GENUM_TYPE
                     if value.is_a? Symbol
                         value = value.to_s
                     end
 
                     if value.is_a? String
-                        value = Libvips::vips_enum_from_nick "ruby-vips", 
+                        value = Vips::vips_enum_from_nick "ruby-vips", 
                             self[:gtype], value
                         if value == -1
-                            throw Libvips::get_error
+                            throw Vips::get_error
                         end
                     end
 
-                    Libgobject::g_value_set_enum self, value
+                    GLib::g_value_set_enum self, value
                 else
                     puts "unimplemented gtype for set: #{gtype}"
                 end
@@ -99,36 +161,36 @@ module Libgobject
 
         def get
             gtype = self[:gtype]
-            fundamental = Libgobject::g_type_fundamental gtype
+            fundamental = GLib::g_type_fundamental gtype
 
             case gtype
             when GBOOL_TYPE
-                Libgobject::g_value_get_boolean(self) != 0 ? true : false
+                GLib::g_value_get_boolean(self) != 0 ? true : false
             when GINT_TYPE
-                Libgobject::g_value_get_int(self)
+                GLib::g_value_get_int(self)
             when GDOUBLE_TYPE
-                Libgobject::g_value_get_double(self)
+                GLib::g_value_get_double(self)
             when GSTR_TYPE
                 # FIXME do we need to strdup here?
-                Libvips::g_value_get_string self
-            when Libvips::IMAGE_TYPE
+                Vips::g_value_get_string self
+            when Vips::IMAGE_TYPE
                 # FIXME ... cast to VipsImage
-                Libvips::g_value_get_object self
-            when Libvips::ARRAY_INT_TYPE
-            when Libvips::ARRAY_DOUBLE_TYPE
-            when Libvips::ARRAY_IMAGE_TYPE
-            when Libvips::BLOB_TYPE
+                Vips::g_value_get_object self
+            when Vips::ARRAY_INT_TYPE
+            when Vips::ARRAY_DOUBLE_TYPE
+            when Vips::ARRAY_IMAGE_TYPE
+            when Vips::BLOB_TYPE
             else
                 case fundamental
                 when GFLAGS_TYPE
-                    Libgobject::g_value_get_flags(self)
+                    GLib::g_value_get_flags(self)
                 when GENUM_TYPE
-                    enum_value = Libgobject::g_value_get_enum(self)
+                    enum_value = GLib::g_value_get_enum(self)
                     # this returns a static string, no need to worry about 
                     # lifetime
-                    enum_name = Libvips::vips_enum_nick self[:gtype], enum_value
+                    enum_name = Vips::vips_enum_nick self[:gtype], enum_value
                     if enum_name == nil
-                        throw Libvips::get_error
+                        throw Vips::get_error
                     end
                     enum_name.to_sym
                 else
@@ -181,67 +243,89 @@ module Libgobject
 
 end
 
-module Libvips
+module Vips
     extend FFI::Library
     ffi_lib 'vips'
+
+    LOG_DOMAIN = "VIPS"
+    GLib::set_log_domain(LOG_DOMAIN)
 
     # need to repeat this
     typedef :ulong, :GType
 
     attach_function :vips_init, [:string], :int
+    attach_function :vips_shutdown, [], :void
 
     attach_function :vips_error_buffer, [], :string
     attach_function :vips_error_clear, [], :void
 
-    def Libvips::get_error
-        errstr = Libvips::vips_error_buffer
-        Libvips::vips_error_clear
+    def self.get_error
+        errstr = Vips::vips_error_buffer
+        Vips::vips_error_clear
         errstr
     end
 
-    if Libvips::vips_init($0) != 0
-        puts Libvips::get_error
+    if Vips::vips_init($0) != 0
+        puts Vips::get_error
         exit 1
     end
 
+    at_exit {
+        Vips::vips_shutdown
+    }
+
+    attach_function :vips_object_print_all, [], :void
+    attach_function :vips_leak_set, [:int], :void
+
+    def self.showall
+        if $vips_debug
+            GC.start
+            vips_object_print_all
+        end
+    end
+
+    if $vips_debug
+        vips_leak_set 1
+    end
+
     # some handy gtypes
-    IMAGE_TYPE = Libgobject::g_type_from_name("VipsImage")
-    ARRAY_INT_TYPE = Libgobject::g_type_from_name("VipsArrayInt")
-    ARRAY_DOUBLE_TYPE = Libgobject::g_type_from_name("VipsArrayDouble")
-    ARRAY_IMAGE_TYPE = Libgobject::g_type_from_name("VipsArrayImage")
-    REFSTR_TYPE = Libgobject::g_type_from_name("VipsRefString")
-    BLOB_TYPE = Libgobject::g_type_from_name("VipsBlob")
+    IMAGE_TYPE = GLib::g_type_from_name("VipsImage")
+    ARRAY_INT_TYPE = GLib::g_type_from_name("VipsArrayInt")
+    ARRAY_DOUBLE_TYPE = GLib::g_type_from_name("VipsArrayDouble")
+    ARRAY_IMAGE_TYPE = GLib::g_type_from_name("VipsArrayImage")
+    REFSTR_TYPE = GLib::g_type_from_name("VipsRefString")
+    BLOB_TYPE = GLib::g_type_from_name("VipsBlob")
 
     attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
     attach_function :vips_enum_nick, [:GType, :int], :string
 
     attach_function :vips_value_set_array_double, 
-        [Libgobject::GValue.ptr, :pointer, :int], :void
+        [GLib::GValue.ptr, :pointer, :int], :void
     attach_function :vips_value_set_array_int, 
-        [Libgobject::GValue.ptr, :pointer, :int], :void
+        [GLib::GValue.ptr, :pointer, :int], :void
     attach_function :vips_value_set_array_image, 
-        [Libgobject::GValue.ptr, :int], :void
+        [GLib::GValue.ptr, :int], :void
     callback :free_fn, [:pointer], :void
     attach_function :vips_value_set_blob, 
-        [Libgobject::GValue.ptr, :free_fn, :pointer, :size_t], :void
+        [GLib::GValue.ptr, :free_fn, :pointer, :size_t], :void
 
     attach_function :vips_value_get_ref_string, 
-        [Libgobject::GValue.ptr, :pointer], :string
+        [GLib::GValue.ptr, :pointer], :string
     attach_function :vips_value_get_array_double, 
-        [Libgobject::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, :pointer], :pointer
     attach_function :vips_value_get_array_int, 
-        [Libgobject::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, :pointer], :pointer
     attach_function :vips_value_get_array_image, 
-        [Libgobject::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, :pointer], :pointer
     attach_function :vips_value_get_blob, 
-        [Libgobject::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, :pointer], :pointer
 
     # init by hand for testing 
     attach_function :vips_interpretation_get_type, [], :GType
 
-    class VipsObject < Libgobject::GObject
+    class VipsObject < GLib::GObject
         # don't actually need most of these, remove them later
-        layout :parent_object, Libgobject::GObject,
+        layout :parent_object, GLib::GObject,
                :constructed, :int,
                :static_object, :int,
                :argument_table, :pointer,
@@ -253,15 +337,15 @@ module Libvips
                :local_memory, :size_t
 
         def get_typeof(name)
-            pspec = Libgobject::GParamSpecPtr.new
-            argument_class = Libvips::VipsArgumentClassPtr.new
-            argument_instance = Libvips::VipsArgumentInstancePtr.new
+            pspec = GLib::GParamSpecPtr.new
+            argument_class = Vips::VipsArgumentClassPtr.new
+            argument_instance = Vips::VipsArgumentInstancePtr.new
 
-            result = Libvips::vips_object_get_argument self, name,
+            result = Vips::vips_object_get_argument self, name,
                 pspec, argument_class, argument_instance
 
             if result != 0 
-                throw Libvips::get_error
+                throw Vips::get_error
             end
 
             pspec[:value][:value_type]
@@ -269,18 +353,18 @@ module Libvips
 
         def get(name)
             gtype = get_typeof name
-            gvalue = Libgobject::GValue.new 
+            gvalue = GLib::GValue.new 
             gvalue.init gtype
-            Libgobject::g_object_get_property self, name, gvalue
+            GLib::g_object_get_property self, name, gvalue
             gvalue.get
         end
 
         def set(name, value)
             gtype = get_typeof name
-            gvalue = Libgobject::GValue.new 
+            gvalue = GLib::GValue.new 
             gvalue.init gtype
             gvalue.set value
-            Libgobject::g_object_set_property self, name, gvalue
+            GLib::g_object_set_property self, name, gvalue
         end
 
     end
@@ -290,7 +374,7 @@ module Libvips
     end
 
     class VipsArgument < FFI::Struct
-        layout :pspec, Libgobject::GParamSpec.ptr
+        layout :pspec, GLib::GParamSpec.ptr
     end
 
     class VipsArgumentInstance < VipsArgument
@@ -327,7 +411,7 @@ module Libvips
 
     attach_function :vips_object_get_argument, 
         [VipsObject.ptr, :string, 
-         Libgobject::GParamSpecPtr.ptr, VipsArgumentClassPtr.ptr, 
+         GLib::GParamSpecPtr.ptr, VipsArgumentClassPtr.ptr, 
          VipsArgumentInstancePtr.ptr], :int
 
     attach_function :vips_object_print_all, [], :void
@@ -337,27 +421,27 @@ module Libvips
         layout :parent, VipsObject
 
         def self.new_from_name(name)
-            VipsOperation.new (Libvips::vips_operation_new name)
+            VipsOperation.new (Vips::vips_operation_new name)
         end
 
         def argument_map(&block)
             fn = Proc.new do |op, pspec, argument_class, argument_instance, a, b|
                 # not sure why we have to cast these ... sad!
-                pspec = Libgobject::GParamSpec.new pspec
-                argument_class = Libvips::VipsArgumentClass.new argument_class
+                pspec = GLib::GParamSpec.new pspec
+                argument_class = Vips::VipsArgumentClass.new argument_class
                 argument_instance = 
-                    Libvips::VipsArgumentInstance.new argument_instance
+                    Vips::VipsArgumentInstance.new argument_instance
 
                 block.call(pspec, argument_class, argument_instance)
             end
 
-            Libvips::vips_argument_map(self, fn, nil, nil)
+            Vips::vips_argument_map(self, fn, nil, nil)
         end
 
     end
 
     callback :argument_map_fn, [VipsOperation, 
-                                Libgobject::GParamSpec, 
+                                GLib::GParamSpec, 
                                 VipsArgumentClass, 
                                 VipsArgumentInstance, 
                                 :pointer, :pointer], :pointer
@@ -370,6 +454,7 @@ module Libvips
     class VipsImage < VipsObject
         # rest opaque
         layout :parent, VipsObject
+
     end
 
     attach_function :vips_image_new, [], VipsImage.ptr
@@ -380,10 +465,10 @@ x = Libc::malloc 1000
 puts "x = #{x}"
 puts ""
 
-puts "creating gvalue with Libgobject::GValue"
-x = Libgobject::GValue.new 
-gtype = Libgobject::g_type_from_name "gboolean"
-puts "Libgobject::g_type_from_name 'gboolean' = #{gtype}"
+puts "creating gvalue with GLib::GValue"
+x = GLib::GValue.new 
+gtype = GLib::g_type_from_name "gboolean"
+puts "GLib::g_type_from_name 'gboolean' = #{gtype}"
 x.init gtype
 x.set true
 puts "x = #{x}"
@@ -393,10 +478,10 @@ puts ""
 puts "creating enum"
 # need to init this by hand, it's not created normally until the first image is
 # made
-Libvips::vips_interpretation_get_type
-x = Libgobject::GValue.new 
-gtype = Libgobject::g_type_from_name "VipsInterpretation"
-puts "Libgobject::g_type_from_name 'VipsInterpretation' = #{gtype}"
+Vips::vips_interpretation_get_type
+x = GLib::GValue.new 
+gtype = GLib::g_type_from_name "VipsInterpretation"
+puts "GLib::g_type_from_name 'VipsInterpretation' = #{gtype}"
 x.init gtype
 x.set :lab
 puts "x = #{x}"
@@ -404,19 +489,23 @@ puts "x.get = #{x.get}"
 puts ""
 
 puts "creating image"
-x = Libvips::vips_image_new
+x = Vips::vips_image_new
+Vips::showall
 puts "x = #{x}"
 puts "x.get_typeof('width') = #{x.get_typeof('width')}"
-puts "Libvips::GINT_TYPE = #{Libgobject::GINT_TYPE}"
+puts "Vips::GINT_TYPE = #{GLib::GINT_TYPE}"
 puts "x.get('width') = #{x.get('width')}"
 puts "x.set('width', 99)"
 x.set('width', 99)
 puts "x.get('width') = #{x.get('width')}"
 puts "x[:parent][:description] = #{x[:parent][:description]}"
+x = nil
+GC.start
+Vips::showall
 puts ""
 
 puts "creating operation"
-x = Libvips::VipsOperation.new_from_name "invert"
+x = Vips::VipsOperation.new_from_name "invert"
 puts "x = #{x}"
 x.argument_map do |pspec, argument_class, argument_instance|
     puts "in arg_map fn"
@@ -424,5 +513,6 @@ x.argument_map do |pspec, argument_class, argument_instance|
     puts "   argument_class = #{argument_class}"
     puts "   argument_instance = #{argument_instance}"
 end
+x = nil
 puts ""
 
