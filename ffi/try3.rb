@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 
 require 'ffi'
+require 'forwardable'
 
 # this is really very crude logging
 
@@ -40,14 +41,42 @@ module GLib
     attach_function :g_malloc, [:size_t], :pointer
     attach_function :g_free, [:pointer], :void
 
-    class GObject < FFI::Struct
-        layout :g_type_instance, :pointer,
-               :ref_count, :uint,
-               :qdata, :pointer
+    # instead of having a GObject inheriting directly from FFI::Struct, we have
+    # a wrapper class with a @struct member ... this lets us inherit from
+    # GObject correctly in Vips:: below
+    class GObject
+        extend Forwardable
+        extend SingleForwardable
 
-        def self.release(ptr)
-            log "GLib::GObject::Struct: releasing #{ptr}"
-            GLib::g_object_unref(ptr) unless ptr.null?
+        def_instance_delegators :@struct, :[], :to_ptr
+        def_single_delegators :ffi_structure, :ptr
+
+        # the actual struct we manage
+        class Struct < FFI::Struct
+            layout :g_type_instance, :pointer,
+                   :ref_count, :uint,
+                   :qdata, :pointer
+
+            def self.release(ptr)
+                log "GLib::GObject::Struct: releasing #{ptr}"
+                GLib::g_object_unref(ptr) unless ptr.null?
+            end
+
+        end
+
+        def initialize(ptr = nil)
+            @struct = ptr.nil? ? 
+                self.ffi_structure.new : self.ffi_structure.new(ptr)
+        end
+
+        def ffi_structure
+            self.class.ffi_structure
+        end
+
+        class << self
+            def ffi_structure
+                self.const_get(:Struct)
+            end
         end
 
     end
@@ -289,9 +318,14 @@ module Vips
     # init by hand for testing 
     attach_function :vips_interpretation_get_type, [], :GType
 
+
+    class Bar < Foo
+    end
+
     class VipsObject < GLib::GObject
-        # don't actually need most of these, remove them later
-        layout :parent_object, GLib::GObject,
+        class Struct < FFI::Struct
+            # don't actually need most of these, remove them later
+            layout :parent, GLib::GObject.ffi_structure, 
                :constructed, :int,
                :static_object, :int,
                :argument_table, :pointer,
@@ -301,6 +335,7 @@ module Vips
                :close, :int,
                :postclose, :int,
                :local_memory, :size_t
+        end
 
         def get_typeof(name)
             pspec = GLib::GParamSpecPtr.new
