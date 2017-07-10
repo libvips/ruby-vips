@@ -49,32 +49,29 @@ module GLib
         extend SingleForwardable
 
         def_instance_delegators :@struct, :[], :to_ptr
-        def_single_delegators :ffi_structure, :ptr
+        def_single_delegators :ffi_struct, :ptr
 
         # the actual struct we manage
         class Struct < FFI::Struct
             layout :g_type_instance, :pointer,
                    :ref_count, :uint,
                    :qdata, :pointer
-
-            def self.release(ptr)
-                log "GLib::GObject::Struct: releasing #{ptr}"
-                GLib::g_object_unref(ptr) unless ptr.null?
-            end
-
         end
 
-        def initialize(ptr = nil)
-            @struct = ptr.nil? ? 
-                self.ffi_structure.new : self.ffi_structure.new(ptr)
+        # don't allow ptr == nil, we never want to allocate a GObject struct
+        # ourselves, we just want to wrap GLib-allocated GObjects
+        def initialize(ptr)
+            puts "GLib::GObject: initialize ptr = #{ptr}"
+            pointer = FFI::Pointer.new Struct, ptr.pointer
+            @struct = self.ffi_struct.new(pointer)
         end
 
-        def ffi_structure
-            self.class.ffi_structure
+        def ffi_struct
+            self.class.ffi_struct
         end
 
         class << self
-            def ffi_structure
+            def ffi_struct
                 self.const_get(:Struct)
             end
         end
@@ -96,12 +93,20 @@ module GLib
     GFLAGS_TYPE = g_type_from_name("GFlags")
     GSTR_TYPE = g_type_from_name("gchararray")
 
-    class GValue < FFI::Struct
+    class GValue < FFI::ManagedStruct
         layout :gtype, :GType, 
                :data, [:ulong_long, 2]
 
         def self.release(ptr)
-            GLib::g_value_unset(ptr) unless ptr.null?
+            puts "GValue::release ptr = #{ptr}"
+            GLib::g_value_unset(ptr) 
+        end
+
+        def self.alloc
+            # we seem to need the extra cast, I'm not sure why
+            memory = FFI::MemoryPointer.new GValue
+            pointer = FFI::Pointer.new GValue, memory
+            GValue.new(pointer)
         end
 
         def init(gtype)
@@ -227,10 +232,11 @@ module GLib
     attach_function :g_object_ref, [:pointer], :void
     attach_function :g_object_unref, [:pointer], :void
 
+    # use :pointer rather than GObject.ptr to avoid casting later
     attach_function :g_object_set_property, 
-        [GObject.ptr, :string, GValue.ptr], :void
+        [:pointer, :string, GValue.ptr], :void
     attach_function :g_object_get_property, 
-        [GObject.ptr, :string, GValue.ptr], :void
+        [:pointer, :string, GValue.ptr], :void
 
     class GParamSpecPtr < FFI::Struct
         layout :value, GParamSpec.ptr
@@ -318,14 +324,11 @@ module Vips
     # init by hand for testing 
     attach_function :vips_interpretation_get_type, [], :GType
 
-
-    class Bar < Foo
-    end
-
     class VipsObject < GLib::GObject
+
         class Struct < FFI::Struct
             # don't actually need most of these, remove them later
-            layout :parent, GLib::GObject.ffi_structure, 
+            layout :parent, GLib::GObject.ffi_struct, 
                :constructed, :int,
                :static_object, :int,
                :argument_table, :pointer,
@@ -354,7 +357,7 @@ module Vips
 
         def get(name)
             gtype = get_typeof name
-            gvalue = GLib::GValue.new 
+            gvalue = GLib::GValue.alloc 
             gvalue.init gtype
             GLib::g_object_get_property self, name, gvalue
             gvalue.get
@@ -362,7 +365,7 @@ module Vips
 
         def set(name, value)
             gtype = get_typeof name
-            gvalue = GLib::GValue.new 
+            gvalue = GLib::GValue.alloc 
             gvalue.init gtype
             gvalue.set value
             GLib::g_object_set_property self, name, gvalue
@@ -410,29 +413,33 @@ module Vips
         layout :value, VipsArgumentInstance.ptr
     end
 
+    # just use :pointer, not VipsObject.ptr, to avoid casting gobject
+    # subclasses
     attach_function :vips_object_get_argument, 
-        [VipsObject.ptr, :string, 
+        [:pointer, :string, 
          GLib::GParamSpecPtr.ptr, VipsArgumentClassPtr.ptr, 
          VipsArgumentInstancePtr.ptr], :int
 
     attach_function :vips_object_print_all, [], :void
 
     class VipsOperation < VipsObject
-        # rest opaque
-        layout :parent, VipsObject
+
+        class Struct < FFI::ManagedStruct
+            layout :parent, VipsObject.ffi_struct
+            # rest opaque
+
+            def self.release(ptr)
+                log "Vips::VipsOperation::Struct: releasing #{ptr}"
+                GLib::g_object_unref(ptr) unless ptr.null?
+            end
+        end
 
         def self.new_from_name(name)
-            VipsOperation.new (Vips::vips_operation_new name)
+            VipsOperation.new (Vips::vips_operation_new(name))
         end
 
         def argument_map(&block)
             fn = Proc.new do |op, pspec, argument_class, argument_instance, a, b|
-                # not sure why we have to cast these ... sad!
-                pspec = GLib::GParamSpec.new pspec
-                argument_class = Vips::VipsArgumentClass.new argument_class
-                argument_instance = 
-                    Vips::VipsArgumentInstance.new argument_instance
-
                 block.call(pspec, argument_class, argument_instance)
             end
 
@@ -441,20 +448,32 @@ module Vips
 
     end
 
-    callback :argument_map_fn, [VipsOperation, 
-                                GLib::GParamSpec, 
-                                VipsArgumentClass, 
-                                VipsArgumentInstance, 
+    callback :argument_map_fn, [:pointer,
+                                GLib::GParamSpec.ptr, 
+                                VipsArgumentClass.ptr, 
+                                VipsArgumentInstance.ptr, 
                                 :pointer, :pointer], :pointer
-    attach_function :vips_argument_map, [VipsOperation, 
+    attach_function :vips_argument_map, [:pointer,
                                          :argument_map_fn, 
                                          :pointer, :pointer], :pointer
 
-    attach_function :vips_operation_new, [:string], VipsOperation
+    attach_function :vips_operation_new, [:string], VipsOperation.ptr
 
     class VipsImage < VipsObject
-        # rest opaque
-        layout :parent, VipsObject
+
+        class Struct < FFI::ManagedStruct
+            layout :parent, VipsObject.ffi_struct
+            # rest opaque
+
+            def self.release(ptr)
+                log "Vips::VipsImage::Struct: releasing #{ptr}"
+                GLib::g_object_unref(ptr) unless ptr.null?
+            end
+        end
+
+        def self.new_partial
+            VipsImage.new(Vips::vips_image_new())
+        end
 
     end
 
@@ -462,12 +481,8 @@ module Vips
 
 end
 
-x = Libc::malloc 1000
-puts "x = #{x}"
-puts ""
-
 puts "creating gvalue with GLib::GValue"
-x = GLib::GValue.new 
+x = GLib::GValue.alloc 
 gtype = GLib::g_type_from_name "gboolean"
 puts "GLib::g_type_from_name 'gboolean' = #{gtype}"
 x.init gtype
@@ -480,7 +495,7 @@ puts "creating enum"
 # need to init this by hand, it's not created normally until the first image is
 # made
 Vips::vips_interpretation_get_type
-x = GLib::GValue.new 
+x = GLib::GValue.alloc 
 gtype = GLib::g_type_from_name "VipsInterpretation"
 puts "GLib::g_type_from_name 'VipsInterpretation' = #{gtype}"
 x.init gtype
@@ -490,7 +505,7 @@ puts "x.get = #{x.get}"
 puts ""
 
 puts "creating image"
-x = Vips::vips_image_new
+x = Vips::VipsImage.new_partial
 Vips::showall
 puts "x = #{x}"
 puts "x.get_typeof('width') = #{x.get_typeof('width')}"
