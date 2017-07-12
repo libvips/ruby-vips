@@ -51,17 +51,22 @@ module GLib
         def_instance_delegators :@struct, :[], :to_ptr
         def_single_delegators :ffi_struct, :ptr
 
-        # the actual struct we manage
-        class Struct < FFI::Struct
+        # A struct with unref ... inherit from this in subclasses 
+        class Struct < FFI::ManagedStruct
             layout :g_type_instance, :pointer,
                    :ref_count, :uint,
                    :qdata, :pointer
+
+            def self.release(ptr)
+                log "GLib::GObject::Struct.release: unreffing #{ptr}"
+                GLib::g_object_unref(ptr) unless ptr.null?
+            end
         end
 
         # don't allow ptr == nil, we never want to allocate a GObject struct
         # ourselves, we just want to wrap GLib-allocated GObjects
         def initialize(ptr)
-            puts "GLib::GObject: initialize ptr = #{ptr}"
+            puts "GLib::GObject.initialize: ptr = #{ptr}"
             pointer = FFI::Pointer.new Struct, ptr.pointer
             @struct = self.ffi_struct.new(pointer)
         end
@@ -98,7 +103,7 @@ module GLib
                :data, [:ulong_long, 2]
 
         def self.release(ptr)
-            puts "GValue::release ptr = #{ptr}"
+            puts "GLib::GValue::release ptr = #{ptr}"
             GLib::g_value_unset(ptr) 
         end
 
@@ -326,7 +331,7 @@ module Vips
 
     class VipsObject < GLib::GObject
 
-        class Struct < FFI::Struct
+        class Struct < GLib::GObject.ffi_struct
             # don't actually need most of these, remove them later
             layout :parent, GLib::GObject.ffi_struct, 
                :constructed, :int,
@@ -424,14 +429,9 @@ module Vips
 
     class VipsOperation < VipsObject
 
-        class Struct < FFI::ManagedStruct
+        class Struct < VipsObject.ffi_struct
             layout :parent, VipsObject.ffi_struct
             # rest opaque
-
-            def self.release(ptr)
-                log "Vips::VipsOperation::Struct: releasing #{ptr}"
-                GLib::g_object_unref(ptr) unless ptr.null?
-            end
         end
 
         def self.new_from_name(name)
@@ -461,14 +461,9 @@ module Vips
 
     class VipsImage < VipsObject
 
-        class Struct < FFI::ManagedStruct
+        class Struct < VipsObject.ffi_struct
             layout :parent, VipsObject.ffi_struct
             # rest opaque
-
-            def self.release(ptr)
-                log "Vips::VipsImage::Struct: releasing #{ptr}"
-                GLib::g_object_unref(ptr) unless ptr.null?
-            end
         end
 
         def self.new_partial
