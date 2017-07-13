@@ -51,26 +51,54 @@ module GLib
         def_instance_delegators :@struct, :[], :to_ptr
         def_single_delegators :ffi_struct, :ptr
 
-        # A struct with unref ... inherit from this in subclasses 
-        class Struct < FFI::ManagedStruct
-            layout :g_type_instance, :pointer,
-                   :ref_count, :uint,
-                   :qdata, :pointer
+        # the layout of the GObject struct
+        module GObjectLayout
+            def self.included(base)
+                base.class_eval do
+                    layout :g_type_instance, :pointer,
+                           :ref_count, :uint,
+                           :qdata, :pointer
+                end
+            end
+        end
+
+        # the struct with unref ... manage object lifetime with this
+        class ManagedStruct < FFI::ManagedStruct
+            include GObjectLayout
+
+            def initialize(ptr)
+                log "GLib::GObject::ManagedStruct.new: #{ptr}"
+                super
+            end
 
             def self.release(ptr)
-                log "GLib::GObject::Struct.release: unreffing #{ptr}"
+                log "GLib::GObject::ManagedStruct.release: unreffing #{ptr}"
                 GLib::g_object_unref(ptr) unless ptr.null?
             end
         end
 
-        # don't allow ptr == nil, we never want to allocate a GObject struct
-        # ourselves, we just want to wrap GLib-allocated GObjects
-        def initialize(ptr)
-            puts "GLib::GObject.initialize: ptr = #{ptr}"
-            pointer = FFI::Pointer.new Struct, ptr.pointer
-            @struct = self.ffi_struct.new(pointer)
+        # the plain struct ... cast with this
+        class Struct < FFI::Struct
+            include GObjectLayout
+
+            def initialize(ptr)
+                log "GLib::GObject::Struct.new: #{ptr}"
+                super
+            end
+
         end
 
+        # don't allow ptr == nil, we never want to allocate a GObject struct
+        # ourselves, we just want to wrap GLib-allocated GObjects
+        #
+        # here we use ManagedStruct, not Struct, since this is the ref that will
+        # need the unref
+        def initialize(ptr)
+            log "GLib::GObject.initialize: ptr = #{ptr}"
+            @struct = ffi_managed_struct.new(ptr)
+        end
+
+        # access to the casting struct for this class
         def ffi_struct
             self.class.ffi_struct
         end
@@ -78,6 +106,17 @@ module GLib
         class << self
             def ffi_struct
                 self.const_get(:Struct)
+            end
+        end
+
+        # access to the lifetime managed struct for this class
+        def ffi_managed_struct
+            self.class.ffi_managed_struct
+        end
+
+        class << self
+            def ffi_managed_struct
+                self.const_get(:ManagedStruct)
             end
         end
 
@@ -331,18 +370,43 @@ module Vips
 
     class VipsObject < GLib::GObject
 
-        class Struct < GLib::GObject.ffi_struct
-            # don't actually need most of these, remove them later
-            layout :parent, GLib::GObject.ffi_struct, 
-               :constructed, :int,
-               :static_object, :int,
-               :argument_table, :pointer,
-               :nickname, :string,
-               :description, :string,
-               :preclose, :int,
-               :close, :int,
-               :postclose, :int,
-               :local_memory, :size_t
+        # the layout of the VipsObject struct
+        module VipsObjectLayout
+            def self.included(base)
+                base.class_eval do
+                    # don't actually need most of these
+                    layout :parent, GLib::GObject::Struct, 
+                       :constructed, :int,
+                       :static_object, :int,
+                       :argument_table, :pointer,
+                       :nickname, :string,
+                       :description, :string,
+                       :preclose, :int,
+                       :close, :int,
+                       :postclose, :int,
+                       :local_memory, :size_t
+                end
+            end
+        end
+
+        class Struct < GLib::GObject::Struct
+            include VipsObjectLayout
+
+            def initialize(ptr)
+                log "Vips::VipsObject::Struct.new: #{ptr}"
+                super
+            end
+
+        end
+
+        class ManagedStruct < GLib::GObject::ManagedStruct
+            include VipsObjectLayout
+
+            def initialize(ptr)
+                log "Vips::VipsObject::ManagedStruct.new: #{ptr}"
+                super
+            end
+
         end
 
         def get_typeof(name)
@@ -402,6 +466,18 @@ module Vips
     VIPS_ARGUMENT_DEPRECATED = 64
     VIPS_ARGUMENT_MODIFY = 128
 
+    VIPS_ARGUMENT_FLAGS = {
+        :none => VIPS_ARGUMENT_NONE,
+        :required => VIPS_ARGUMENT_REQUIRED,
+        :construct => VIPS_ARGUMENT_CONSTRUCT,
+        :set_once => VIPS_ARGUMENT_SET_ONCE,
+        :set_always => VIPS_ARGUMENT_SET_ALWAYS,
+        :input => VIPS_ARGUMENT_INPUT,
+        :output => VIPS_ARGUMENT_OUTPUT,
+        :deprecated => VIPS_ARGUMENT_DEPRECATED,
+        :modify => VIPS_ARGUMENT_MODIFY
+    }
+
     class VipsArgumentClass < VipsArgument
         layout :parent, VipsArgument,
                :object_class, VipsObjectClass.ptr,
@@ -429,9 +505,34 @@ module Vips
 
     class VipsOperation < VipsObject
 
-        class Struct < VipsObject.ffi_struct
-            layout :parent, VipsObject.ffi_struct
-            # rest opaque
+        # the layout of the VipsImage struct
+        module VipsOperationLayout
+            def self.included(base)
+                base.class_eval do
+                    layout :parent, VipsObject::Struct
+                    # rest opaque
+                end
+            end
+        end
+
+        class Struct < VipsObject::Struct
+            include VipsOperationLayout
+
+            def initialize(ptr)
+                log "Vips::VipsOperation::Struct.new: #{ptr}"
+                super
+            end
+
+        end
+
+        class ManagedStruct < VipsObject::ManagedStruct
+            include VipsOperationLayout
+
+            def initialize(ptr)
+                log "Vips::VipsOperation::ManagedStruct.new: #{ptr}"
+                super
+            end
+
         end
 
         def self.new_from_name(name)
@@ -457,22 +558,47 @@ module Vips
                                          :argument_map_fn, 
                                          :pointer, :pointer], :pointer
 
-    attach_function :vips_operation_new, [:string], VipsOperation.ptr
+    attach_function :vips_operation_new, [:string], :pointer
 
     class VipsImage < VipsObject
 
-        class Struct < VipsObject.ffi_struct
-            layout :parent, VipsObject.ffi_struct
-            # rest opaque
+        # the layout of the VipsImage struct
+        module VipsImageLayout
+            def self.included(base)
+                base.class_eval do
+                    layout :parent, VipsObject::Struct
+                    # rest opaque
+                end
+            end
+        end
+
+        class Struct < VipsObject::Struct
+            include VipsImageLayout
+
+            def initialize(ptr)
+                log "Vips::VipsImage::Struct.new: #{ptr}"
+                super
+            end
+
+        end
+
+        class ManagedStruct < VipsObject::ManagedStruct
+            include VipsImageLayout
+
+            def initialize(ptr)
+                log "Vips::VipsImage::ManagedStruct.new: #{ptr}"
+                super
+            end
+
         end
 
         def self.new_partial
-            VipsImage.new(Vips::vips_image_new())
+            VipsImage.new(Vips::vips_image_new)
         end
 
     end
 
-    attach_function :vips_image_new, [], VipsImage.ptr
+    attach_function :vips_image_new, [], :pointer
 
 end
 
@@ -509,11 +635,21 @@ puts "x.get('width') = #{x.get('width')}"
 puts "x.set('width', 99)"
 x.set('width', 99)
 puts "x.get('width') = #{x.get('width')}"
+puts "x[:parent] = #{x[:parent]}"
 puts "x[:parent][:description] = #{x[:parent][:description]}"
 x = nil
 GC.start
 Vips::showall
 puts ""
+
+def show_flags(table, flags)
+    set = []
+    table.each do |key, value|
+        set << key.to_s if (flags & value) != 0
+    end
+
+    set.join " " 
+end
 
 puts "creating operation"
 x = Vips::VipsOperation.new_from_name "invert"
@@ -523,6 +659,7 @@ x.argument_map do |pspec, argument_class, argument_instance|
     puts "   pspec[:name] = #{pspec[:name]}"
     puts "   argument_class = #{argument_class}"
     puts "   argument_instance = #{argument_instance}"
+    puts "   flags = #{show_flags(Vips::VIPS_ARGUMENT_FLAGS, argument_class[:flags])}"
 end
 x = nil
 puts ""
