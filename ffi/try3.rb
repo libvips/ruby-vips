@@ -41,9 +41,27 @@ module GLib
     attach_function :g_malloc, [:size_t], :pointer
     attach_function :g_free, [:pointer], :void
 
-    # instead of having a GObject inheriting directly from FFI::Struct, we have
-    # a wrapper class with a @struct member ... this lets us inherit from
-    # GObject correctly in Vips:: below
+    # we have a set of things we need to inherit in different ways:
+    #
+    # - we want to be able to subclass GObject in a simple way
+    # - the layouts of the nested structs
+    # - casting between structs which share a base
+    # - gobject refcounting
+    #
+    # the solution is to split the class into four areas which we treat
+    # differently:
+    #
+    # - we have a "wrapper" Ruby class to allow easy subclassing ... this has a
+    #   @struct member which holds the actual pointer
+    # - we use "forwardable" to forward the various ffi methods on to the
+    #   @struct member ... we arrange things so that subclasses do not need to
+    #   do the forwarding themselves
+    # - we have two versions of the struct: a plain one which we can use for
+    #   casting that will not change the refcounts
+    # - and a managed one with an unref which we just use for .new
+    # - we separate the struct layout into a separate module to avoid repeating
+    #   ourselves
+
     class GObject
         extend Forwardable
         extend SingleForwardable
