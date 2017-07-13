@@ -521,6 +521,8 @@ module Vips
 
     attach_function :vips_object_print_all, [], :void
 
+    attach_function :vips_object_set_from_string, [:pointer, :string], :int
+
     class VipsOperation < VipsObject
 
         # the layout of the VipsImage struct
@@ -563,6 +565,20 @@ module Vips
             end
 
             Vips::vips_argument_map(self, fn, nil, nil)
+        end
+
+        # not quick! try to call this infrequently
+        def get_construct_args
+            args = []
+
+            argument_map do |pspec, argument_class, argument_instance|
+                flags = argument_class[:flags]
+                if (flags & VIPS_ARGUMENT_CONSTRUCT) != 0 
+                    args << [pspec[:name], flags] 
+                end
+            end
+
+            args
         end
 
     end
@@ -670,7 +686,7 @@ def show_flags(table, flags)
 end
 
 puts "creating operation"
-x = Vips::VipsOperation.new_from_name "invert"
+x = Vips::VipsOperation.new_from_name "perlin"
 puts "x = #{x}"
 x.argument_map do |pspec, argument_class, argument_instance|
     puts "in arg_map fn"
@@ -679,6 +695,13 @@ x.argument_map do |pspec, argument_class, argument_instance|
     puts "   argument_instance = #{argument_instance}"
     puts "   flags = #{show_flags(Vips::VIPS_ARGUMENT_FLAGS, argument_class[:flags])}"
 end
+args = x.get_construct_args
+puts "x.get_construct_args = #{args}"
+args.each do |name, flags| 
+    puts "#{name} = #{flags}"
+end
+x.set("width", 100)
+x.set("height", 100)
 x = nil
 puts ""
 
