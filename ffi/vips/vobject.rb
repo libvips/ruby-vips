@@ -7,9 +7,6 @@
 require 'ffi'
 
 module Vips
-    extend FFI::Library
-    ffi_lib 'vips'
-
     # some handy gtypes
     IMAGE_TYPE = GLib::g_type_from_name("VipsImage")
     ARRAY_INT_TYPE = GLib::g_type_from_name("VipsArrayInt")
@@ -133,26 +130,24 @@ module Vips
     end
 
     # enum VipsArgumentFlags 
-    VIPS_ARGUMENT_NONE = 0
-    VIPS_ARGUMENT_REQUIRED = 1
-    VIPS_ARGUMENT_CONSTRUCT = 2
-    VIPS_ARGUMENT_SET_ONCE = 4
-    VIPS_ARGUMENT_SET_ALWAYS = 8
-    VIPS_ARGUMENT_INPUT = 16
-    VIPS_ARGUMENT_OUTPUT = 32
-    VIPS_ARGUMENT_DEPRECATED = 64
-    VIPS_ARGUMENT_MODIFY = 128
+    ARGUMENT_REQUIRED = 1
+    ARGUMENT_CONSTRUCT = 2
+    ARGUMENT_SET_ONCE = 4
+    ARGUMENT_SET_ALWAYS = 8
+    ARGUMENT_INPUT = 16
+    ARGUMENT_OUTPUT = 32
+    ARGUMENT_DEPRECATED = 64
+    ARGUMENT_MODIFY = 128
 
     VIPS_ARGUMENT_FLAGS = {
-        :none => VIPS_ARGUMENT_NONE,
-        :required => VIPS_ARGUMENT_REQUIRED,
-        :construct => VIPS_ARGUMENT_CONSTRUCT,
-        :set_once => VIPS_ARGUMENT_SET_ONCE,
-        :set_always => VIPS_ARGUMENT_SET_ALWAYS,
-        :input => VIPS_ARGUMENT_INPUT,
-        :output => VIPS_ARGUMENT_OUTPUT,
-        :deprecated => VIPS_ARGUMENT_DEPRECATED,
-        :modify => VIPS_ARGUMENT_MODIFY
+        :required => ARGUMENT_REQUIRED,
+        :construct => ARGUMENT_CONSTRUCT,
+        :set_once => ARGUMENT_SET_ONCE,
+        :set_always => ARGUMENT_SET_ALWAYS,
+        :input => ARGUMENT_INPUT,
+        :output => ARGUMENT_OUTPUT,
+        :deprecated => ARGUMENT_DEPRECATED,
+        :modify => ARGUMENT_MODIFY
     }
 
     class VipsArgumentClass < VipsArgument

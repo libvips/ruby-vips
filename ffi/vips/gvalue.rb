@@ -6,27 +6,6 @@
 require 'ffi'
 
 module GLib
-    extend FFI::Library
-    ffi_lib 'gobject-2.0'
-
-    attach_function :g_malloc, [:size_t], :pointer
-    attach_function :g_free, [:pointer], :void
-
-    # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
-    typedef :ulong, :GType
-
-    attach_function :g_type_name, [:GType], :string
-    attach_function :g_type_from_name, [:string], :GType
-    attach_function :g_type_fundamental, [:GType], :GType
-
-    # look up some common gtypes
-    GBOOL_TYPE = g_type_from_name("gboolean")
-    GINT_TYPE = g_type_from_name("gint")
-    GDOUBLE_TYPE = g_type_from_name("gdouble")
-    GENUM_TYPE = g_type_from_name("GEnum")
-    GFLAGS_TYPE = g_type_from_name("GFlags")
-    GSTR_TYPE = g_type_from_name("gchararray")
-
     class GValue < FFI::ManagedStruct
         layout :gtype, :GType, 
                :data, [:ulong_long, 2]
@@ -153,5 +132,11 @@ module GLib
     attach_function :g_value_get_flags, [GValue.ptr], :int
     attach_function :g_value_get_string, [GValue.ptr], :string
     attach_function :g_value_get_object, [GValue.ptr], GObject.ptr
+
+    # use :pointer rather than GObject.ptr to avoid casting later
+    attach_function :g_object_set_property, 
+        [:pointer, :string, GValue.ptr], :void
+    attach_function :g_object_get_property, 
+        [:pointer, :string, GValue.ptr], :void
 
 end

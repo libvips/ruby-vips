@@ -14,11 +14,43 @@ def log str
     end
 end
 
-require 'vips/glib'
-require 'vips/gvalue'
-require 'vips/gobject'
+module GLib
+    extend FFI::Library
+    ffi_lib 'gobject-2.0'
+
+    # nil being the default
+    glib_log_domain = nil
+
+    def self.set_log_domain(domain)
+        glib_log_domain = domain
+    end
+
+    attach_function :g_malloc, [:size_t], :pointer
+    attach_function :g_free, [:pointer], :void
+
+    # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
+    typedef :ulong, :GType
+
+    attach_function :g_type_name, [:GType], :string
+    attach_function :g_type_from_name, [:string], :GType
+    attach_function :g_type_fundamental, [:GType], :GType
+
+    # look up some common gtypes
+    GBOOL_TYPE = g_type_from_name("gboolean")
+    GINT_TYPE = g_type_from_name("gint")
+    GDOUBLE_TYPE = g_type_from_name("gdouble")
+    GENUM_TYPE = g_type_from_name("GEnum")
+    GFLAGS_TYPE = g_type_from_name("GFlags")
+    GSTR_TYPE = g_type_from_name("gchararray")
+end
+
+require_relative 'vips/gobject'
+require_relative 'vips/gvalue'
 
 module Vips
+    extend FFI::Library
+    ffi_lib 'vips'
+
     # @private
     LOG_DOMAIN = "VIPS"
     GLib::set_log_domain(LOG_DOMAIN)
@@ -70,5 +102,9 @@ module Vips
     end
 
 end
+
+require_relative 'vips/vobject'
+require_relative 'vips/voperation'
+require_relative 'vips/vimage'
 
 

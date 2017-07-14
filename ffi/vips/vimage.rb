@@ -7,8 +7,6 @@
 require 'ffi'
 
 module Vips
-    extend FFI::Library
-    ffi_lib 'vips'
 
     class VipsImage < VipsObject
 

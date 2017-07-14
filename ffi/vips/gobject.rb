@@ -8,9 +8,6 @@ require 'ffi'
 require 'forwardable'
 
 module GLib
-    extend FFI::Library
-    ffi_lib 'gobject-2.0'
-
     # we have a set of things we need to inherit in different ways:
     #
     # - we want to be able to subclass GObject in a simple way
@@ -121,12 +118,6 @@ module GLib
 
     attach_function :g_object_ref, [:pointer], :void
     attach_function :g_object_unref, [:pointer], :void
-
-    # use :pointer rather than GObject.ptr to avoid casting later
-    attach_function :g_object_set_property, 
-        [:pointer, :string, GValue.ptr], :void
-    attach_function :g_object_get_property, 
-        [:pointer, :string, GValue.ptr], :void
 
     class GParamSpecPtr < FFI::Struct
         layout :value, GParamSpec.ptr
