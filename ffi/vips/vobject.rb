@@ -103,10 +103,16 @@ module Vips
             gvalue = GLib::GValue.alloc 
             gvalue.init gtype
             GLib::g_object_get_property self, name, gvalue
-            gvalue.get
+            result = gvalue.get
+
+            log "Vips::VipsObject.get(\"#{name}\"): result = #{result}"
+
+            return result
         end
 
         def set(name, value)
+            log "Vips::VipsObject.set: #{name} = #{value}"
+
             gtype = get_typeof name
             gvalue = GLib::GValue.alloc 
             gvalue.init gtype

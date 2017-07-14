@@ -27,6 +27,8 @@ module GLib
         end
 
         def set(value)
+            log "GLib::GValue.set: value = #{value}"
+
             gtype = self[:gtype]
             fundamental = GLib::g_type_fundamental gtype
 
@@ -75,20 +77,21 @@ module GLib
         def get
             gtype = self[:gtype]
             fundamental = GLib::g_type_fundamental gtype
+            result = nil
 
             case gtype
             when GBOOL_TYPE
-                GLib::g_value_get_boolean(self) != 0 ? true : false
+                result = GLib::g_value_get_boolean(self) != 0 ? true : false
             when GINT_TYPE
-                GLib::g_value_get_int(self)
+                result = GLib::g_value_get_int(self)
             when GDOUBLE_TYPE
-                GLib::g_value_get_double(self)
+                result = GLib::g_value_get_double(self)
             when GSTR_TYPE
                 # FIXME do we need to strdup here?
-                Vips::g_value_get_string self
+                result = Vips::g_value_get_string self
             when Vips::IMAGE_TYPE
-                # FIXME ... cast to VipsImage
-                Vips::g_value_get_object self
+                obj = GLib::g_value_get_object self
+                result = Vips::VipsImage.new obj
             when Vips::ARRAY_INT_TYPE
             when Vips::ARRAY_DOUBLE_TYPE
             when Vips::ARRAY_IMAGE_TYPE
@@ -96,7 +99,7 @@ module GLib
             else
                 case fundamental
                 when GFLAGS_TYPE
-                    GLib::g_value_get_flags(self)
+                    result = GLib::g_value_get_flags(self)
                 when GENUM_TYPE
                     enum_value = GLib::g_value_get_enum(self)
                     # this returns a static string, no need to worry about 
@@ -105,11 +108,15 @@ module GLib
                     if enum_name == nil
                         throw Vips::get_error
                     end
-                    enum_name.to_sym
+                    result = enum_name.to_sym
                 else
-                    puts "unimplemented gtype for set: #{gtype}"
+                    throw "unimplemented gtype for set: #{gtype}"
                 end
             end
+
+            log "GLib::GValue.get: result = #{result}"
+
+            return result
         end
 
     end
@@ -131,7 +138,7 @@ module GLib
     attach_function :g_value_get_enum, [GValue.ptr], :int
     attach_function :g_value_get_flags, [GValue.ptr], :int
     attach_function :g_value_get_string, [GValue.ptr], :string
-    attach_function :g_value_get_object, [GValue.ptr], GObject.ptr
+    attach_function :g_value_get_object, [GValue.ptr], :pointer
 
     # use :pointer rather than GObject.ptr to avoid casting later
     attach_function :g_object_set_property, 

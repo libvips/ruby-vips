@@ -71,6 +71,12 @@ x.set("height", 100)
 x = nil
 puts ""
 
+puts "calling VipsOperation::call"
+x = Vips::VipsOperation.call "perlin", [128, 128]
+puts "x = #{x}"
+x = nil
+puts ""
+
 # x = Vips::Image.new_from_file "/home/john/pics/k2.jpg"
 # x = x.invert
 # x.write_to_file "x.jpg"

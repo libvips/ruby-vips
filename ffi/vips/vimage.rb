@@ -41,7 +41,7 @@ module Vips
         end
 
         def self.new_partial
-            VipsImage.new(Vips::vips_image_new)
+            VipsImage.new Vips::vips_image_new
         end
 
     end
