@@ -36,8 +36,8 @@ module GLib
     GSTR_TYPE = g_type_from_name("gchararray")
 end
 
-require_relative 'vips/gobject'
-require_relative 'vips/gvalue'
+require 'vips/gobject'
+require 'vips/gvalue'
 
 module Vips
     extend FFI::Library
@@ -122,9 +122,9 @@ module Vips
 
 end
 
-require_relative 'vips/object'
-require_relative 'vips/operation'
-require_relative 'vips/image'
-require_relative 'vips/version'
+require 'vips/object'
+require 'vips/operation'
+require 'vips/image'
+require 'vips/version'
 
 
