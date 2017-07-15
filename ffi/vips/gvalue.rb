@@ -43,13 +43,17 @@ module GLib
                 # set_string takes a copy, no lifetime worries
                 GLib::g_value_set_string self, value
             when Vips::IMAGE_TYPE
-                # this will add a ref, held by the gvalue ... it will be 
-                # dropped by g_value_unset() when the gvalue is GC'd
+                # g_value_set_object() will add an extra ref
                 GLib::g_value_set_object self, value
+                GLib::g_object_unref value
             when Vips::ARRAY_INT_TYPE
+                raise "unimplemented"
             when Vips::ARRAY_DOUBLE_TYPE
+                raise "unimplemented"
             when Vips::ARRAY_IMAGE_TYPE
+                raise "unimplemented"
             when Vips::BLOB_TYPE
+                raise "unimplemented"
             else
                 case fundamental
                 when GFLAGS_TYPE
@@ -69,7 +73,7 @@ module GLib
 
                     GLib::g_value_set_enum self, value
                 else
-                    puts "unimplemented gtype for set: #{gtype}"
+                    raise Vips::Error, "unimplemented gtype for set: #{gtype}"
                 end
             end
         end
@@ -90,11 +94,15 @@ module GLib
                 # FIXME do we need to strdup here?
                 result = GLib::g_value_get_string self
             when Vips::IMAGE_TYPE
+                # g_value_get_object() does not add a ref
                 obj = GLib::g_value_get_object self
                 result = Vips::Image.new obj
             when Vips::ARRAY_INT_TYPE
+                raise "unimplemented"
             when Vips::ARRAY_DOUBLE_TYPE
+                raise "unimplemented"
             when Vips::ARRAY_IMAGE_TYPE
+                raise "unimplemented"
             when Vips::BLOB_TYPE
             else
                 case fundamental
