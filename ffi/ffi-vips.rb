@@ -67,25 +67,44 @@ module Vips
     # need to repeat this
     typedef :ulong, :GType
 
-    attach_function :vips_init, [:string], :int
-    attach_function :vips_shutdown, [], :void
-
     attach_function :vips_error_buffer, [], :string
     attach_function :vips_error_clear, [], :void
 
-    def self.get_error
-        errstr = Vips::vips_error_buffer
-        Vips::vips_error_clear
-        errstr
+    # The ruby-vips error class. 
+    class Error < RuntimeError
+        # @param msg [String] The error message. If this is not supplied, grab
+        #   and clear the vips error buffer and use that. 
+        def initialize(msg = nil)
+            if msg
+                @details = msg
+            elsif Vips::vips_error_buffer != ""
+                @details = Vips::vips_error_buffer
+                Vips::vips_error_clear
+            else 
+                @details = nil
+            end
+        end
+
+        # Pretty-print a {Vips::Error}.
+        #
+        # @return [String] The error message
+        def to_s
+            if @details != nil
+                @details
+            else
+                super.to_s
+            end
+        end
     end
+
+    attach_function :vips_init, [:string], :int
 
     if Vips::vips_init($0) != 0
         throw Vips::get_error
     end
 
-    at_exit {
-        Vips::vips_shutdown
-    }
+    # don't use at_exit to call vips_shutdown, it causes problems with fork, and
+    # in any case libvips does this for us
 
     attach_function :vips_object_print_all, [], :void
     attach_function :vips_leak_set, [:int], :void

@@ -63,7 +63,7 @@ module GLib
                         value = Vips::vips_enum_from_nick "ruby-vips", 
                             self[:gtype], value
                         if value == -1
-                            throw Vips::get_error
+                            raise Vips::Error
                         end
                     end
 
@@ -106,11 +106,11 @@ module GLib
                     # lifetime
                     enum_name = Vips::vips_enum_nick self[:gtype], enum_value
                     if enum_name == nil
-                        throw Vips::get_error
+                        raise Vips::Error
                     end
                     result = enum_name.to_sym
                 else
-                    throw "unimplemented gtype for set: #{gtype}"
+                    raise Vips::Error, "unimplemented gtype for get: #{gtype}"
                 end
             end
 

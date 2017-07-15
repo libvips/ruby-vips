@@ -8,6 +8,11 @@ require 'ffi'
 
 module Vips
 
+    attach_function :vips_operation_new, [:string], :pointer
+
+    attach_function :vips_cache_operation_build, [:pointer], :pointer
+    attach_function :vips_object_unref_outputs, [:pointer], :void
+
     class VipsOperation < VipsObject
 
         # the layout of the VipsOperation struct
@@ -42,6 +47,15 @@ module Vips
 
         def self.new_from_name name
             VipsOperation.new Vips::vips_operation_new(name)
+        end
+
+        def build 
+            op = Vips::vips_cache_operation_build self 
+            if op == nil
+                raise Vips::Error
+            end
+
+            return VipsOperation.new(op)
         end
 
         def argument_map &block
@@ -126,7 +140,7 @@ module Vips
                 "supplied = #{supplied} option_string = #{option_string}"
 
             op = new_from_name name
-            throw get_error if op == nil
+            raise Vips::Error if op == nil
 
             # find and classify all the arguments the operator can take
             log "Vips::VipsOperation.call: analyzing args..."
@@ -163,7 +177,7 @@ module Vips
             # n_required_input + 1 if there's a hash of options at the end
             log "Vips::VipsOperation.call: checking supplied args ..."
             if not supplied.is_a? Array
-                throw "unable to call #{name}: " + 
+                raise Vips::Error, "unable to call #{name}: " + 
                     "argument array is not an array"
             elsif supplied.length == required_input.length 
                 supplied_optional = nil
@@ -172,7 +186,7 @@ module Vips
                 supplied_optional = supplied.last
                 supplied.delete_at -1
             else
-                throw "unable to call #{name}: " + 
+                raise Vips::Error, "unable to call #{name}: " + 
                     "you supplied #{supplied.length} arguments, " +
                     "but operation needs #{required_input.length}."
             end
@@ -183,7 +197,7 @@ module Vips
                 supplied_optional.each do |key, value|
                     if not optional_input.has_key? key and
                         not optional_output.has_key? key 
-                        throw "unable to call #{name}: " + 
+                        raise Vips::Error, "unable to call #{name}: " + 
                             "unknown option #{key}"
                     end
                 end
@@ -204,7 +218,7 @@ module Vips
             if option_string != nil
                 log "Vips::VipsOperation.call: setting string args ..."
                 if Vips::vips_object_set_from_string(op, option_string) != 0
-                    throw "unable to call #{name}: #{Vips::get_error}"
+                    raise Vips::Error
                 end
             end
 
@@ -230,15 +244,8 @@ module Vips
                 end
             end
 
-            # build and adjust counts
             log "Vips::VipsOperation.call: building ..."
-            op2 = Vips::vips_cache_operation_build op 
-            if op2 == nil
-                throw "unable to call #{name}: #{Vips::get_error}"
-            end
-            op2 = VipsOperation.new op2
-            op = op2
-            op2 = nil
+            op = op.build
 
             # get all required results, then all optional ones
             log "Vips::VipsOperation.call: fetching output ..."
@@ -268,6 +275,8 @@ module Vips
 
             log "Vips::VipsOperation.call: result = #{result}"
 
+            Vips::vips_object_unref_outputs op
+
             return result
         end
 
@@ -282,8 +291,5 @@ module Vips
                                          :argument_map_fn, 
                                          :pointer, :pointer], :pointer
 
-    attach_function :vips_operation_new, [:string], :pointer
-
-    attach_function :vips_cache_operation_build, [:pointer], :pointer
 
 end

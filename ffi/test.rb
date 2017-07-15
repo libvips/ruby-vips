@@ -77,6 +77,11 @@ puts "x = #{x}"
 x = nil
 puts ""
 
-# x = Vips::Image.new_from_file "/home/john/pics/k2.jpg"
+puts "calling VipsImage::new_from_file"
+x = Vips::VipsImage.new_from_file "/home/john/pics/k2.jpg"
+puts "x = #{x}"
+x = nil
+puts ""
+
 # x = x.invert
 # x.write_to_file "x.jpg"

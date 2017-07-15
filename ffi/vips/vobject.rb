@@ -90,9 +90,8 @@ module Vips
 
             result = Vips::vips_object_get_argument self, name,
                 pspec, argument_class, argument_instance
-
             if result != 0 
-                throw Vips::get_error
+                raise Vips::Error
             end
 
             pspec[:value][:value_type]
