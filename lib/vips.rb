@@ -47,7 +47,7 @@ module Vips
     LOG_DOMAIN = "VIPS"
     GLib::set_log_domain(LOG_DOMAIN)
 
-    @@debug = true
+    @@debug = false
 
     # Turn debug logging on and off.
     #

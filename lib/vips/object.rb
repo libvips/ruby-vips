@@ -18,6 +18,8 @@ module Vips
     FORMAT_TYPE = GLib::g_type_from_name("VipsFormat")
     INTERPRETATION_TYPE = GLib::g_type_from_name("VipsInterpretation")
 
+    private
+
     attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
     attach_function :vips_enum_nick, [:GType, :int], :string
 
@@ -42,8 +44,7 @@ module Vips
     attach_function :vips_value_get_blob, 
         [GLib::GValue.ptr, :pointer], :pointer
 
-    # init by hand for testing 
-    attach_function :vips_interpretation_get_type, [], :GType
+    attach_function :type_find, :vips_type_find, [:string, :string], :GType
 
     class Object < GLib::GObject
 
