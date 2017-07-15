@@ -91,7 +91,7 @@ module GLib
                 result = Vips::g_value_get_string self
             when Vips::IMAGE_TYPE
                 obj = GLib::g_value_get_object self
-                result = Vips::VipsImage.new obj
+                result = Vips::Image.new obj
             when Vips::ARRAY_INT_TYPE
             when Vips::ARRAY_DOUBLE_TYPE
             when Vips::ARRAY_IMAGE_TYPE

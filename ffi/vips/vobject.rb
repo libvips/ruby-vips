@@ -42,10 +42,10 @@ module Vips
     # init by hand for testing 
     attach_function :vips_interpretation_get_type, [], :GType
 
-    class VipsObject < GLib::GObject
+    class Object < GLib::GObject
 
         # the layout of the VipsObject struct
-        module VipsObjectLayout
+        module ObjectLayout
             def self.included(base)
                 base.class_eval do
                     # don't actually need most of these
@@ -64,20 +64,20 @@ module Vips
         end
 
         class Struct < GLib::GObject::Struct
-            include VipsObjectLayout
+            include ObjectLayout
 
             def initialize(ptr)
-                log "Vips::VipsObject::Struct.new: #{ptr}"
+                log "Vips::Object::Struct.new: #{ptr}"
                 super
             end
 
         end
 
         class ManagedStruct < GLib::GObject::ManagedStruct
-            include VipsObjectLayout
+            include ObjectLayout
 
             def initialize(ptr)
-                log "Vips::VipsObject::ManagedStruct.new: #{ptr}"
+                log "Vips::Object::ManagedStruct.new: #{ptr}"
                 super
             end
 
@@ -85,8 +85,8 @@ module Vips
 
         def get_typeof(name)
             pspec = GLib::GParamSpecPtr.new
-            argument_class = Vips::VipsArgumentClassPtr.new
-            argument_instance = Vips::VipsArgumentInstancePtr.new
+            argument_class = Vips::ArgumentClassPtr.new
+            argument_instance = Vips::ArgumentInstancePtr.new
 
             result = Vips::vips_object_get_argument self, name,
                 pspec, argument_class, argument_instance
@@ -104,13 +104,13 @@ module Vips
             GLib::g_object_get_property self, name, gvalue
             result = gvalue.get
 
-            log "Vips::VipsObject.get(\"#{name}\"): result = #{result}"
+            log "Vips::Object.get(\"#{name}\"): result = #{result}"
 
             return result
         end
 
         def set(name, value)
-            log "Vips::VipsObject.set: #{name} = #{value}"
+            log "Vips::Object.set: #{name} = #{value}"
 
             gtype = get_typeof name
             gvalue = GLib::GValue.alloc 
@@ -121,16 +121,16 @@ module Vips
 
     end
 
-    class VipsObjectClass < FFI::Struct
+    class ObjectClass < FFI::Struct
         # opaque
     end
 
-    class VipsArgument < FFI::Struct
+    class Argument < FFI::Struct
         layout :pspec, GLib::GParamSpec.ptr
     end
 
-    class VipsArgumentInstance < VipsArgument
-        layout :parent, VipsArgument
+    class ArgumentInstance < Argument
+        layout :parent, Argument
         # rest opaque
     end
 
@@ -144,7 +144,7 @@ module Vips
     ARGUMENT_DEPRECATED = 64
     ARGUMENT_MODIFY = 128
 
-    VIPS_ARGUMENT_FLAGS = {
+    ARGUMENT_FLAGS = {
         :required => ARGUMENT_REQUIRED,
         :construct => ARGUMENT_CONSTRUCT,
         :set_once => ARGUMENT_SET_ONCE,
@@ -155,28 +155,28 @@ module Vips
         :modify => ARGUMENT_MODIFY
     }
 
-    class VipsArgumentClass < VipsArgument
-        layout :parent, VipsArgument,
-               :object_class, VipsObjectClass.ptr,
+    class ArgumentClass < Argument
+        layout :parent, Argument,
+               :object_class, ObjectClass.ptr,
                :flags, :uint,
                :priority, :int,
                :offset, :ulong_long
     end
 
-    class VipsArgumentClassPtr < FFI::Struct
-        layout :value, VipsArgumentClass.ptr
+    class ArgumentClassPtr < FFI::Struct
+        layout :value, ArgumentClass.ptr
     end
 
-    class VipsArgumentInstancePtr < FFI::Struct
-        layout :value, VipsArgumentInstance.ptr
+    class ArgumentInstancePtr < FFI::Struct
+        layout :value, ArgumentInstance.ptr
     end
 
     # just use :pointer, not VipsObject.ptr, to avoid casting gobject
     # subclasses
     attach_function :vips_object_get_argument, 
         [:pointer, :string, 
-         GLib::GParamSpecPtr.ptr, VipsArgumentClassPtr.ptr, 
-         VipsArgumentInstancePtr.ptr], :int
+         GLib::GParamSpecPtr.ptr, ArgumentClassPtr.ptr, ArgumentInstancePtr.ptr],
+        :int
 
     attach_function :vips_object_print_all, [], :void
 

@@ -13,40 +13,49 @@ module Vips
     attach_function :vips_cache_operation_build, [:pointer], :pointer
     attach_function :vips_object_unref_outputs, [:pointer], :void
 
-    class VipsOperation < VipsObject
+    callback :argument_map_fn, [:pointer,
+                                GLib::GParamSpec.ptr, 
+                                ArgumentClass.ptr, 
+                                ArgumentInstance.ptr, 
+                                :pointer, :pointer], :pointer
+    attach_function :vips_argument_map, [:pointer,
+                                         :argument_map_fn, 
+                                         :pointer, :pointer], :pointer
+
+    class Operation < Vips::Object
 
         # the layout of the VipsOperation struct
-        module VipsOperationLayout
+        module OperationLayout
             def self.included base
                 base.class_eval do
-                    layout :parent, VipsObject::Struct
+                    layout :parent, Vips::Object::Struct
                     # rest opaque
                 end
             end
         end
 
-        class Struct < VipsObject::Struct
-            include VipsOperationLayout
+        class Struct < Vips::Object::Struct
+            include OperationLayout
 
             def initialize ptr
-                log "Vips::VipsOperation::Struct.new: #{ptr}"
+                log "Vips::Operation::Struct.new: #{ptr}"
                 super
             end
 
         end
 
-        class ManagedStruct < VipsObject::ManagedStruct
-            include VipsOperationLayout
+        class ManagedStruct < Vips::Object::ManagedStruct
+            include OperationLayout
 
             def initialize ptr
-                log "Vips::VipsOperation::ManagedStruct.new: #{ptr}"
+                log "Vips::Operation::ManagedStruct.new: #{ptr}"
                 super
             end
 
         end
 
         def self.new_from_name name
-            VipsOperation.new Vips::vips_operation_new(name)
+            Operation.new Vips::vips_operation_new(name)
         end
 
         def build 
@@ -55,7 +64,7 @@ module Vips
                 raise Vips::Error
             end
 
-            return VipsOperation.new(op)
+            return Operation.new op
         end
 
         def argument_map &block
@@ -97,16 +106,16 @@ module Vips
         # expand a constant into an image
         def self.imageize match_image, value
             return value if match_image == nil
-            return value if value.is_a? Vips::VipsImage
+            return value if value.is_a? Vips::Image
 
             # 2D array values become tiny 2D images
             if value.is_a? Array and value[0].is_a? Array
-                return Vips::VipsImage.new_from_array value
+                return Vips::Image.new_from_array value
             end
 
             # if there's nothing to match to, we also make a 2D image
             if match_image == nil
-                return Vips::VipsImage.new_from_array value
+                return Vips::Image.new_from_array value
             end
 
             # we have a 1D array ... use that as a pixel constant and
@@ -143,7 +152,7 @@ module Vips
             raise Vips::Error if op == nil
 
             # find and classify all the arguments the operator can take
-            log "Vips::VipsOperation.call: analyzing args..."
+            log "Vips::Operation.call: analyzing args..."
             args = op.get_construct_args
             required_input = [] 
             optional_input = {}
@@ -209,21 +218,21 @@ module Vips
             # look inside array and hash arguments, since we may be passing an
             # array of images
             match_image = find_inside(supplied) do |value|
-                value.is_a? VipsImage
+                value.is_a? Image
             end
 
-            log "Vips::VipsOperation.call: match_image = #{match_image}"
+            log "Vips::Operation.call: match_image = #{match_image}"
 
             # set any string args first so they can't be overridden
             if option_string != nil
-                log "Vips::VipsOperation.call: setting string args ..."
+                log "Vips::Operation.call: setting string args ..."
                 if Vips::vips_object_set_from_string(op, option_string) != 0
                     raise Vips::Error
                 end
             end
 
             # set all required inputs
-            log "Vips::VipsOperation.call: setting required inputs ..."
+            log "Vips::Operation.call: setting required inputs ..."
             required_input.each_index do |i|
                 arg_name = required_input[i][0]
                 flags = required_input[i][1]
@@ -234,7 +243,7 @@ module Vips
 
             # set all optional inputs
             if supplied_optional
-                log "Vips::VipsOperation.call: setting optional inputs ..."
+                log "Vips::Operation.call: setting optional inputs ..."
                 supplied_optional.each do |arg_name, value|
                     if optional_input.has_key? arg_name
                         flags = optional_input[arg_name]
@@ -244,11 +253,11 @@ module Vips
                 end
             end
 
-            log "Vips::VipsOperation.call: building ..."
+            log "Vips::Operation.call: building ..."
             op = op.build
 
             # get all required results, then all optional ones
-            log "Vips::VipsOperation.call: fetching output ..."
+            log "Vips::Operation.call: fetching output ..."
             result = []
             required_output.each do |arg_name, flags|
                 result << op.get(arg_name)
@@ -273,7 +282,7 @@ module Vips
                 result = nil
             end
 
-            log "Vips::VipsOperation.call: result = #{result}"
+            log "Vips::Operation.call: result = #{result}"
 
             Vips::vips_object_unref_outputs op
 
@@ -281,15 +290,6 @@ module Vips
         end
 
     end
-
-    callback :argument_map_fn, [:pointer,
-                                GLib::GParamSpec.ptr, 
-                                VipsArgumentClass.ptr, 
-                                VipsArgumentInstance.ptr, 
-                                :pointer, :pointer], :pointer
-    attach_function :vips_argument_map, [:pointer,
-                                         :argument_map_fn, 
-                                         :pointer, :pointer], :pointer
 
 
 end

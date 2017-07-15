@@ -19,40 +19,40 @@ module Vips
     attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
     attach_function :vips_foreign_find_save_buffer, [:pointer, :size_t], :string
 
-    class VipsImage < VipsObject
+    class Image < Vips::Object
 
         # the layout of the VipsImage struct
-        module VipsImageLayout
+        module ImageLayout
             def self.included(base)
                 base.class_eval do
-                    layout :parent, VipsObject::Struct
+                    layout :parent, Vips::Object::Struct
                     # rest opaque
                 end
             end
         end
 
-        class Struct < VipsObject::Struct
-            include VipsImageLayout
+        class Struct < Vips::Object::Struct
+            include ImageLayout
 
             def initialize(ptr)
-                log "Vips::VipsImage::Struct.new: #{ptr}"
+                log "Vips::Image::Struct.new: #{ptr}"
                 super
             end
 
         end
 
-        class ManagedStruct < VipsObject::ManagedStruct
-            include VipsImageLayout
+        class ManagedStruct < Vips::Object::ManagedStruct
+            include ImageLayout
 
             def initialize(ptr)
-                log "Vips::VipsImage::ManagedStruct.new: #{ptr}"
+                log "Vips::Image::ManagedStruct.new: #{ptr}"
                 super
             end
 
         end
 
         def self.new_partial
-            VipsImage.new Vips::vips_image_new
+            Image.new Vips::vips_image_new
         end
 
         def self.new_from_file(name, opts = {})
@@ -68,7 +68,7 @@ module Vips
                 raise Vips::Error
             end
 
-            Vips::VipsOperation::call loader, [filename, opts], option_string
+            Operation::call loader, [filename, opts], option_string
         end
 
     end

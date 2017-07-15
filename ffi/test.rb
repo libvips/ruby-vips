@@ -26,7 +26,7 @@ puts "x.get = #{x.get}"
 puts ""
 
 puts "creating image"
-x = Vips::VipsImage.new_partial
+x = Vips::Image.new_partial
 Vips::showall
 puts "x = #{x}"
 puts "x.get_typeof('width') = #{x.get_typeof('width')}"
@@ -52,14 +52,14 @@ def show_flags(table, flags)
 end
 
 puts "creating operation"
-x = Vips::VipsOperation.new_from_name "perlin"
+x = Vips::Operation.new_from_name "perlin"
 puts "x = #{x}"
 x.argument_map do |pspec, argument_class, argument_instance|
     puts "in arg_map fn"
     puts "   pspec[:name] = #{pspec[:name]}"
     puts "   argument_class = #{argument_class}"
     puts "   argument_instance = #{argument_instance}"
-    puts "   flags = #{show_flags(Vips::VIPS_ARGUMENT_FLAGS, argument_class[:flags])}"
+    puts "   flags = #{show_flags(Vips::ARGUMENT_FLAGS, argument_class[:flags])}"
 end
 args = x.get_construct_args
 puts "x.get_construct_args = #{args}"
@@ -71,14 +71,14 @@ x.set("height", 100)
 x = nil
 puts ""
 
-puts "calling VipsOperation::call"
-x = Vips::VipsOperation.call "perlin", [128, 128]
+puts "calling Operation::call"
+x = Vips::Operation.call "perlin", [128, 128]
 puts "x = #{x}"
 x = nil
 puts ""
 
-puts "calling VipsImage::new_from_file"
-x = Vips::VipsImage.new_from_file "/home/john/pics/k2.jpg"
+puts "calling Image::new_from_file"
+x = Vips::Image.new_from_file "/home/john/pics/k2.jpg"
 puts "x = #{x}"
 x = nil
 puts ""
