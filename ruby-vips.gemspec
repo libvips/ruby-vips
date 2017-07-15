@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.name = "ruby-vips"
   spec.version = Vips::VERSION
   spec.authors = ["John Cupitt"]
-  spec.date = "2016-06-07"
+  spec.date = "2017-07-15"
   spec.email = "jcupitt@gmail.com"
 
   spec.summary = "Ruby extension for the vips image processing library."
@@ -16,10 +16,6 @@ Gem::Specification.new do |spec|
   spec.homepage = "http://github.com/jcupitt/ruby-vips"
   spec.licenses = ["MIT"]
 
-  # gobject-introspection really needs 2.1, but it just about works on 2.0, the
-  # ruby that OS X is still bundling ... only ask for 2.0 to help OS X
-  spec.required_ruby_version = ">= 2.0"
-  spec.rubygems_version = "2.5.1"
   spec.require_paths = ["lib"]
   spec.extra_rdoc_files = [
     "LICENSE.txt",
@@ -31,7 +27,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
 
-  spec.add_runtime_dependency "gobject-introspection", ["~> 3.1"]
+  spec.add_runtime_dependency "ffi", ["~> 1.9"]
 
   spec.add_development_dependency "rake", ["~> 11.0"]
   spec.add_development_dependency "rspec", ["~> 3.3"]

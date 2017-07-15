@@ -312,18 +312,84 @@
 # {Image#maxpos}, {Image#minpos}, 
 # {Image#median}.
 
+require 'ffi'
+
 module Vips
+    private
+
+    attach_function :vips_image_new, [], :pointer
+
+    attach_function :vips_filename_get_filename, [:string], :string
+    attach_function :vips_filename_get_options, [:string], :string
+    attach_function :vips_filename_get_options, [:string], :string
+
+    attach_function :vips_foreign_find_load, [:string], :string
+    attach_function :vips_foreign_find_save, [:string], :string
+    attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
+    attach_function :vips_foreign_find_save_buffer, [:pointer, :size_t], :string
+
+    attach_function :vips_image_get_typeof, [:pointer, :string], :GType
+    attach_function :vips_image_get, [:pointer, :string, GLib::GValue.ptr], :int
+    attach_function :vips_image_set, [:pointer, :string, GLib::GValue.ptr], :void
+    attach_function :vips_image_remove, [:pointer, :string], :void
+
+    attach_function :vips_band_format_iscomplex, [:int], :int
+    attach_function :vips_band_format_isfloat, [:int], :int
+
+    public
 
     # This class represents a libvips image. See the {Vips} module documentation
     # for an introduction to using this module.
 
-    class Image
+    class Image < Vips::Object
         private
+
+        # the layout of the VipsImage struct
+        module ImageLayout
+            def self.included(base)
+                base.class_eval do
+                    layout :parent, Vips::Object::Struct
+                    # rest opaque
+                end
+            end
+        end
+
+        class Struct < Vips::Object::Struct
+            include ImageLayout
+
+            def initialize(ptr)
+                Vips::log "Vips::Image::Struct.new: #{ptr}"
+                super
+            end
+
+        end
+
+        class ManagedStruct < Vips::Object::ManagedStruct
+            include ImageLayout
+
+            def initialize(ptr)
+                Vips::log "Vips::Image::ManagedStruct.new: #{ptr}"
+                super
+            end
+
+        end
 
         # handy for overloads ... want to be able to apply a function to an 
         # array or to a scalar
         def self.smap(x, &block)
             x.is_a?(Array) ? x.map {|y| smap(y, &block)} : block.(x)
+        end
+
+        def self.complex? format
+            format_number = Vips::vips_enum_from_nick "complex?", 
+                FORMAT_TYPE, format
+            Vips::vips_band_format_iscomplex format_number
+        end
+
+        def self.float? format
+            format_number = Vips::vips_enum_from_nick "float?", 
+                FORMAT_TYPE, format
+            Vips::vips_band_format_isfloat format_number
         end
 
         # run a complex operation on a complex image, or an image with an even
@@ -332,12 +398,12 @@ module Vips
         def self.run_cmplx(image, &block)
             original_format = image.format
 
-            if not Vips::band_format_iscomplex image.format
+            if not Image::complex? image.format
                 if image.bands % 2 != 0
                     raise Error, "not an even number of bands"
                 end
 
-                if not Vips::band_format_isfloat image.format
+                if not Image::float? image.format
                     image = image.cast :float 
                 end
 
@@ -348,13 +414,31 @@ module Vips
 
             image = block.(image)
 
-            if not Vips::band_format_iscomplex original_format
+            if not Image::complex? original_format
                 new_format = image.format == :dpcomplex ? :double : :float
                 image = image.copy :format => new_format, 
                     :bands => image.bands * 2
             end
 
             image
+        end
+
+        # libvips 8.4 and earlier had a bug which swapped the args to the _const
+        # enum operations
+        def swap_const_args
+            Vips::version(0) < 8 or 
+                (Vips::version(0) == 8 and Vips::version(1) <= 4)
+        end
+
+        # handy for expanding enum operations
+        def call_enum(name, other, enum)
+            if other.is_a?(Vips::Image)
+                Vips::call_base name.to_s, self, "", [other, enum]
+            else
+                args = swap_const_args ? [other, enum] : [enum, other]
+
+                Vips::call_base name.to_s + "_const", self, "", args
+            end
         end
 
         # Write can fail due to no file descriptors and memory can fill if
@@ -385,38 +469,20 @@ module Vips
             end
         end
 
-        # libvips 8.4 and earlier had a bug which swapped the args to the _const
-        # enum operations
-        def swap_const_args
-            Vips::version(0) < 8 or 
-                (Vips::version(0) == 8 and Vips::version(1) <= 4)
-        end
-
-        # handy for expanding enum operations
-        def call_enum(name, other, enum)
-            if other.is_a?(Vips::Image)
-                Vips::call_base name.to_s, self, "", [other, enum]
-            else
-                args = swap_const_args ? [other, enum] : [enum, other]
-
-                Vips::call_base name.to_s + "_const", self, "", args
-            end
-        end
-
         public
 
         # Invoke a vips operation with {call}, using self as the first 
-        # input image argument. 
+        # input argument. 
         #
         # @param name [String] vips operation to call
         # @return result of vips operation
         def method_missing(name, *args)
-            Vips::call_base name.to_s, self, "", args
+            Vips::Operation::call name.to_s, [self] + args
         end
 
         # Invoke a vips operation with {call}.
         def self.method_missing(name, *args)
-            Vips::call_base name.to_s, nil, "", args
+            Vips::Operation::call name.to_s, args
         end
 
         # Return a new {Image} for a file on disc. This method can load
@@ -456,24 +522,21 @@ module Vips
         # @macro vips.loadopts
         # @return [Image] the loaded image
         def self.new_from_file(name, opts = {})
-            # very common, and Vips::filename_get_filename will segv if we pass
-            # this
-            if name == nil
-                raise Error, "filename is nil"
-            end
-            filename = Vips::filename_get_filename name
-            option_string = Vips::filename_get_options name
-            loader = Vips::Foreign.find_load filename
-            if loader == nil
-                raise Vips::Error
-            end
+            # very common, and Vips::vips_filename_get_filename will segv if we 
+            # pass this
+            raise Vips::Error, "filename is nil" if name == nil
 
-            Vips::call_base loader, nil, option_string, [filename, opts]
+            filename = Vips::vips_filename_get_filename name
+            option_string = Vips::vips_filename_get_options name
+            loader = Vips::vips_foreign_find_load filename
+            raise Vips::Error if loader == nil
+
+            Operation::call loader, [filename, opts], option_string
         end
 
         # Create a new {Image} for an image encoded, in a format such as
         # JPEG, in a memory string. Load options may be passed as
-        # strings, or appended as a hash. For example:
+        # strings or appended as a hash. For example:
         #
         # ```
         # image = Vips::new_from_from_buffer memory_buffer, "shrink=2"
@@ -502,13 +565,11 @@ module Vips
         # @param option_string [String] load options as a string
         # @macro vips.loadopts
         # @return [Image] the loaded image
-        def self.new_from_buffer(data, option_string, opts = {})
-            loader = Vips::Foreign.find_load_buffer data
-            if loader == nil
-                raise Vips::Error
-            end
+        def self.new_from_buffer data, option_string, opts = {}
+            loader = Vips::vips_foreign_find_load_buffer data
+            raise Vips::Error if loader == nil
 
-            Vips::call_base loader, nil, option_string, [data, opts]
+            Vips::Operation::call loader, [data, opts], option_string
         end
 
         # Create a new Image from a 1D or 2D array. A 1D array becomes an
@@ -537,7 +598,7 @@ module Vips
         # @param scale [Real] the convolution scale
         # @param offset [Real] the convolution offset
         # @return [Image] the image
-        def self.new_from_array(array, scale = 1, offset = 0)
+        def self.new_from_array array, scale = 1, offset = 0
             # we accept a 1D array and assume height == 1, or a 2D array
             # and check all lines are the same length
             if not array.is_a? Array
@@ -564,13 +625,11 @@ module Vips
             end
 
             image = Vips::Image.matrix_from_array width, height, array
-            if image == nil
-                raise Vips::Error
-            end
+            raise Vips::Error if image == nil
 
             # be careful to set them as double
-            image.set_double 'scale', scale.to_f
-            image.set_double 'offset', offset.to_f
+            image.set_type GLib::GDOUBLE_TYPE, 'scale', scale.to_f
+            image.set_type GLib::GDOUBLE_TYPE, 'offset', offset.to_f
 
             return image
         end
@@ -584,7 +643,7 @@ module Vips
         #
         # @param pixel [Real, Array<Real>] value to put in each pixel
         # @return [Image] constant image
-        def new_from_image(value)
+        def new_from_image value
             pixel = (Vips::Image.black(1, 1) + value).cast(format)
             image = pixel.embed(0, 0, width, height, :extend => :copy)
             image.copy :interpretation => interpretation,
@@ -621,15 +680,15 @@ module Vips
         #     flatten alpha against, if necessary
         #
         # @param name [String] filename to write to
-        def write_to_file(name, opts = {})
-            filename = Vips::filename_get_filename name
-            option_string = Vips::filename_get_options name
-            saver = Vips::Foreign.find_save filename
+        def write_to_file name, opts = {}
+            filename = Vips::vips_filename_get_filename name
+            option_string = Vips::vips_filename_get_options name
+            saver = Vips::vips_foreign_find_save filename
             if saver == nil
                 raise Vips::Error, "No known saver for '#{filename}'."
             end
 
-            Vips::call_base saver, self, option_string, [filename, opts]
+            Vips::Operation::call saver, [self, filename, opts]
 
             write_gc
         end
@@ -659,63 +718,29 @@ module Vips
         # @param format_string [String] save format plus options
         # @macro vips.saveopts
         # @return [String] the image saved in the specified format
-        def write_to_buffer(format_string, opts = {})
-            filename = Vips::filename_get_filename format_string
-            option_string = Vips::filename_get_options format_string
-            saver = Vips::Foreign.find_save_buffer filename
+        def write_to_buffer format_string, opts = {}
+            filename = Vips::vips_filename_get_filename format_string
+            option_string = Vips::vips_filename_get_options format_string
+            saver = Vips::vips_foreign_find_save_buffer filename
             if saver == nil
                 raise Vips::Error, "No known saver for '#{filename}'."
             end
 
-            buffer = Vips::call_base saver, self, option_string, [opts]
+            buffer = Vips::call saver, [self, opts], option_string
 
             write_gc
 
             return buffer
         end
 
-        # @!attribute [r] width
-        #   @return [Integer] image width, in pixels
-        # @!attribute [r] height
-        #   @return [Integer] image height, in pixels
-        # @!attribute [r] bands
-        #   @return [Integer] image bands
-        # @!attribute [r] format
-        #   @return [Vips::BandFormat] image format
-        # @!attribute [r] interpretation
-        #   @return [Vips::Interpretation] image interpretation
-        # @!attribute [r] coding
-        #   @return [Vips::Coding] image coding
-        # @!attribute [r] filename
-        #   @return [String] image filename
-        # @!attribute [r] xres
-        #   @return [Float] horizontal image resolution, in pixels per mm
-        # @!attribute [r] yres
-        #   @return [Float] vertical image resolution, in pixels per mm
-
         # Fetch a `GType` from an image. `GType` will be 0 for no such field.
         #
         # @see get
-        # @see get_value
-        # @!method get_typeof(name)
         # @param name [String] Metadata field to fetch
         # @return [Integer] GType
-
-        # Fetch a `GValue` from an image. The return status is 0 for success, -1
-        # for failure.
-        #
-        # @see get_value
-        # @see get_typeof
-        # @!method get(name)
-        # @param name [String] Metadata field to fetch
-        # @return [Integer, GValue] Return status, GValue from image
-
-        # Set a `GValue` on an image
-        #
-        # @see set_value
-        # @!method set(name, value)
-        # @param name [String] Metadata field to set
-        # @param value [GValue] GValue to set
+        def get_typeof name
+            Vips::vips_image_get_typeof self, name
+        end
 
         # Get a metadata item from an image. Ruby types are constructed 
         # automatically from the `GValue`, if possible. 
@@ -723,61 +748,157 @@ module Vips
         # For example, you can read the ICC profile from an image like this:
         #
         # ```
-        # profile = image.get_value "icc-profile-data"
+        # profile = image.get "icc-profile-data"
         # ```
         #
         # and profile will be an array containing the profile. 
         #
-        # @see get
-        # @param name [String] Metadata field to set
+        # @param name [String] Metadata field to get
         # @return [Object] Value of field
-        def get_value(name)
-            ret, gval = get name
-            if ret != 0
-                raise Vips::Error, "Field #{name} not found."
+        def get name
+            gvalue = GLib::GValue.alloc
+            result = Vips::vips_image_get self, name, gvalue
+            if result != 0 
+                raise Vips::Error
             end
-            value = gval.value
 
-            Argument::unwrap(value)
+            return gvalue.get
         end
 
-        # Set a metadata item on an image. Ruby types are automatically
-        # transformed into the matching `GValue`, if possible. 
+        # Create a metadata item on an image, of the specifed type. Ruby types 
+        # are automatically
+        # transformed into the matching `GType`, if possible. 
         #
         # For example, you can use this to set an image's ICC profile:
         #
         # ```
-        # x = y.set_value "icc-profile-data", profile
+        # x = y.set Vips::BLOB_TYPE, "icc-profile-data", profile
         # ```
         #
         # where `profile` is an ICC profile held as a binary string object.
         #
         # @see set
+        # @param gtype [Integer] GType of item
         # @param name [String] Metadata field to set
         # @param value [Object] Value to set
-        def set_value(name, value)
-            gtype = get_typeof name
-            if gtype != 0
-                # array-ize
-                value = Argument::arrayize gtype, value
+        def set_type gtype, name, value
+            gvalue = GLib::GValue.alloc
+            gvalue.init gtype
+            gvalue.set value
+            Vips::vips_image_set self, name, gvalue
+        end
 
-                # blob-ize
-                if gtype.type_is_a? GLib::Type["VipsBlob"]
-                    if not value.is_a? Vips::Blob
-                        value = Vips::Blob.copy value
-                    end
-                end
+        # Set the value of a metadata item on an image. The metadata item must 
+        # already exist. Ruby types are automatically
+        # transformed into the matching `GValue`, if possible. 
+        #
+        # For example, you can use this to set an image's ICC profile:
+        #
+        # ```
+        # x = y.set "icc-profile-data", profile
+        # ```
+        #
+        # where `profile` is an ICC profile held as a binary string object.
+        #
+        # @see set_type
+        # @param name [String] Metadata field to set
+        # @param value [Object] Value to set
+        def set name, value
+            set_type get_typeof(name), name, value
+        end
 
-                # image-ize
-                if gtype.type_is_a? GLib::Type["VipsImage"]
-                    if not value.is_a? Vips::Image
-                        value = imageize match_image, value
-                    end
-                end
+        # Remove a metadata item from an image.
+        #
+        # @param name [String] Metadata field to remove
+        def remove name
+            Vips::vips_image_remove self, name
+        end
 
-            end
+        # compatibility: old name for get
+        def get_value name
+            get name
+        end
 
+        # compatibility: old name for set
+        def set_value name, value
             set name, value
+        end
+
+        # Get image width, in pixels.
+        #
+        # @return [Integer] image width, in pixels
+        def width
+            get "width"
+        end
+
+        # Get image height, in pixels.
+        #
+        # @return [Integer] image height, in pixels
+        def height
+            get "height"
+        end
+
+        # Get number of image bands.
+        #
+        # @return [Integer] number of image bands
+        def bands
+            get "bands"
+        end
+
+        # Get image format.
+        #
+        # @return [Symbol] image format
+        def format
+            get "format"
+        end
+
+        # Get image interpretation.
+        #
+        # @return [Symbol] image interpretation
+        def interpretation
+            get "interpretation"
+        end
+
+        # Get image coding.
+        #
+        # @return [Symbol] image coding
+        def coding
+            get "coding"
+        end
+
+        # Get image filename, if any.
+        #
+        # @return [Symbol] image filename
+        def filename
+            get "filename"
+        end
+
+        # Get image xoffset.
+        #
+        # @return [Symbol] image xoffset
+        def xoffset
+            get "xoffset"
+        end
+
+        # Get image yoffset.
+        #
+        # @return [Symbol] image yoffset
+        def yoffset
+            get "yoffset"
+        end
+
+        # Get image x resolution.
+        #
+        # @return [Symbol] image x resolution
+        def xres
+            get "xres"
+        end
+
+        # Get image y resolution.
+        #
+        # @return [Symbol] image y resolution
+        def yres
+            get "yres"
         end
 
         # Get the image size. 
@@ -1303,10 +1424,10 @@ module Vips
             match_image = [th, el, self].find {|x| x.is_a? Vips::Image}
 
             if not th.is_a? Vips::Image
-                th = Argument::imageize match_image, th
+                th = Operation::imageize match_image, th
             end
             if not el.is_a? Vips::Image
-                el = Argument::imageize match_image, el
+                el = Operation::imageize match_image, el
             end
 
             Vips::call_base "ifthenelse", self, "", [th, el, opts]
@@ -1458,10 +1579,6 @@ module Vips
         puts "  class Image"
         puts ""
 
-        # gobject-introspection 3.0.7 crashes a lot if it GCs while doing 
-        # something
-        GC.disable
-
         generate_class.(GLib::Type["VipsOperation"])
 
         puts "  end"
@@ -1469,4 +1586,3 @@ module Vips
     end
 
 end
-

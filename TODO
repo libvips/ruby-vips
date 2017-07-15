@@ -1,11 +1,5 @@
 # Notes
 
-- mail about the getpoint unimplemented error
-
-  http://sourceforge.net/p/ruby-gnome2/mailman/ruby-gnome2-devel-en/thread/CAGNS0RuZ5N6bha3M7B0%2BYf2M9-oni44idzZO17mtQiykS%2BmJKQ%40mail.gmail.com/#msg34790843
-
-- still missing a few enum docs
-
 - support complex constants, eg. 
 
 	Complex(1, 2)

@@ -1,5 +1,9 @@
 # master 
 
+# Version 2.0.0
+
+* rewrite on top of 'ffi' [John Cupitt]
+
 # Version 1.0.5
 
 * fix `_const` for libvips 8.5 [John Cupitt]

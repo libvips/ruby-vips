@@ -15,6 +15,9 @@ module Vips
     REFSTR_TYPE = GLib::g_type_from_name("VipsRefString")
     BLOB_TYPE = GLib::g_type_from_name("VipsBlob")
 
+    FORMAT_TYPE = GLib::g_type_from_name("VipsFormat")
+    INTERPRETATION_TYPE = GLib::g_type_from_name("VipsInterpretation")
+
     attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
     attach_function :vips_enum_nick, [:GType, :int], :string
 

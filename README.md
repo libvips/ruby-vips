@@ -3,11 +3,6 @@
 [![Gem Version](https://badge.fury.io/rb/ruby-vips.svg)](https://badge.fury.io/rb/ruby-vips)
 [![Build Status](https://travis-ci.org/jcupitt/ruby-vips.svg?branch=master)](https://travis-ci.org/jcupitt/ruby-vips)
 
-*API break:* version 1.0 of this gem is an API break, see below for some notes
-on why there is a break and how to update your code. 
-The older `ruby-vips` is still here and still maintained in branch 
-`0.3-stable`.
-
 This gem provides a Ruby binding for the [vips image processing
 library](https://jcupitt.github.io/libvips).
 
@@ -56,7 +51,7 @@ which gives some more background.
 Install [homebrew](http://mxcl.github.com/homebrew) and enter:
 
 ```bash
-$ brew install homebrew/science/vips
+$ brew install vips
 ```
 
 To verify that your vips install is working, try:
@@ -118,6 +113,17 @@ im = im.conv mask
 # finally, write the result back to a file on disk
 im.write_to_file output_filename
 ```
+
+# Older versions
+
+There are two older versions of this gem.
+
+The `0.3-stable` branch is written in C, and supports a different API. It still
+works, but is only supported for compatibility.
+
+The `1.0-stable` branch is based on `gobject-introspection`. It supports the
+same API as the current version, but is harder to install, slower, and less
+stable. 
 
 # Why the API break?
 

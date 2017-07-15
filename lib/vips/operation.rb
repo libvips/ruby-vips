@@ -1,19 +1,367 @@
-module Vips
+# This module provides an interface to the top level bits of GLib
+# via ruby-ffi.
+#
+# Author::    John Cupitt  (mailto:jcupitt@gmail.com)
+# License::   MIT
 
-    # add a conventience method to Operation
-    # @private
-    class Operation
-        # Fetch arg list, remove boring ones, sort into priority order.
-        def get_args
-            gobject_class = gtype.to_class
-            props = gobject_class.properties.select do |name|
-                flags = get_argument_flags name
-                io = ((flags & :input) | (flags & :output)) != 0
-                dep = (flags & :deprecated) != 0
-                io & (not dep)
+require 'ffi'
+
+module Vips
+    private
+
+    attach_function :vips_operation_new, [:string], :pointer
+
+    attach_function :vips_cache_operation_build, [:pointer], :pointer
+    attach_function :vips_object_unref_outputs, [:pointer], :void
+
+    callback :argument_map_fn, [:pointer,
+                                GLib::GParamSpec.ptr, 
+                                ArgumentClass.ptr, 
+                                ArgumentInstance.ptr, 
+                                :pointer, :pointer], :pointer
+    attach_function :vips_argument_map, [:pointer,
+                                         :argument_map_fn, 
+                                         :pointer, :pointer], :pointer
+
+    class Operation < Vips::Object
+
+        # the layout of the VipsOperation struct
+        module OperationLayout
+            def self.included base
+                base.class_eval do
+                    layout :parent, Vips::Object::Struct
+                    # rest opaque
+                end
             end
-            args = props.map {|name| Argument.new self, name}
-            args.sort! {|a, b| a.priority - b.priority}
         end
+
+        class Struct < Vips::Object::Struct
+            include OperationLayout
+
+            def initialize ptr
+                Vips::log "Vips::Operation::Struct.new: #{ptr}"
+                super
+            end
+
+        end
+
+        class ManagedStruct < Vips::Object::ManagedStruct
+            include OperationLayout
+
+            def initialize ptr
+                Vips::log "Vips::Operation::ManagedStruct.new: #{ptr}"
+                super
+            end
+
+        end
+
+        def self.new_from_name name
+            op = Vips::vips_operation_new name
+            raise Vips::Error if op == nil
+
+            Operation.new op
+        end
+
+        def build 
+            op = Vips::vips_cache_operation_build self 
+            if op == nil
+                raise Vips::Error
+            end
+
+            return Operation.new op
+        end
+
+        def argument_map &block
+            fn = Proc.new do |op, pspec, argument_class, argument_instance, a, b|
+                block.call(pspec, argument_class, argument_instance)
+            end
+
+            Vips::vips_argument_map(self, fn, nil, nil)
+        end
+
+        # not quick! try to call this infrequently
+        def get_construct_args
+            args = []
+
+            argument_map do |pspec, argument_class, argument_instance|
+                flags = argument_class[:flags]
+                if (flags & ARGUMENT_CONSTRUCT) != 0 
+                    args << [pspec[:name], flags] 
+                end
+            end
+
+            return args
+        end
+
+        # search array for the first element to match a predicate ...
+        # search inside subarrays and sub-hashes
+        def self.find_inside(object, &block)
+            return object if block.call(object)
+
+            if object.is_a? Enumerable
+                object.each do |value|
+                    return value if block.call(value, block)
+                end
+            end
+
+            return nil
+        end
+
+        # expand a constant into an image
+        def self.imageize match_image, value
+            return value if match_image == nil
+            return value if value.is_a? Vips::Image
+
+            # 2D array values become tiny 2D images
+            if value.is_a? Array and value[0].is_a? Array
+                return Vips::Image.new_from_array value
+            end
+
+            # if there's nothing to match to, we also make a 2D image
+            if match_image == nil
+                return Vips::Image.new_from_array value
+            end
+
+            # we have a 1D array ... use that as a pixel constant and
+            # expand to match match_image
+            match_image.new_from_image(value)
+        end
+
+        # set an operation argument, expanding constants and copying images as
+        # required
+        def set name, value, match_image = nil, flags = 0
+            if match_image 
+                gtype = get_typeof name
+
+                if gtype == Vips::IMAGE_TYPE 
+                    value = Operation::imageize match_image, value
+                elsif gtype == Vips::ARRAY_IMAGE_TYPE
+                    value = value.map {|x| Operation::imageize match_image, x}
+                end
+            end
+
+            if (flags & ARGUMENT_MODIFY) != 0
+                # make sure we have a unique copy
+                value = value.copy.copy_memory
+            end
+
+            super name, value
+        end
+
+        public
+
+        # This is the public entry point for the vips binding. {call} will run
+        # any vips operation, for example:
+        #
+        # ```ruby
+        # out = Vips::Operation.call "black", 100, 100, :bands => 12
+        # ```
+        #
+        # will call the C function 
+        #
+        # ```C
+        # vips_black( &out, 100, 100, "bands", 12, NULL );
+        # ```
+        # 
+        # There are {Image#method_missing} hooks which will run {call} for you 
+        # on {Image} for undefined instance or class methods. So you can also 
+        # write:
+        #
+        # ```ruby
+        # out = Vips::Image.black 100, 100, :bands => 12
+        # ```
+        #
+        # Or perhaps:
+        #
+        # ```ruby
+        # x = Vips::Image.black 100, 100
+        # y = x.invert
+        # ```
+        #
+        # to run the `vips_invert()` operator.
+        #
+        # There are also a set of operator overloads and some convenience 
+        # functions, see {Image}. 
+        #
+        # If the operator needs a vector constant, {call} will turn a scalar 
+        # into a
+        # vector for you. So for `x.linear(a, b)`, which calculates 
+        # `x * a + b` where `a` and `b` are vector constants, you can write:
+        #
+        # ```ruby
+        # x = Vips::Image.black 100, 100, :bands => 3
+        # y = x.linear(1, 2)
+        # y = x.linear([1], 4)
+        # y = x.linear([1, 2, 3], 4)
+        # ```
+        #
+        # or any other combination. The operator overloads use this facility to
+        # support all the variations on:
+        #
+        # ```ruby
+        # x = Vips::Image.black 100, 100, :bands => 3
+        # y = x * 2
+        # y = x + [1,2,3]
+        # y = x % [1]
+        # ```
+        #
+        # Similarly, wherever an image is required, you can use a constant. The
+        # constant will be expanded to an image matching the first input image
+        # argument. For example, you can write:
+        #
+        # ```
+        # x = Vips::Image.black 100, 100, :bands => 3
+        # y = x.bandjoin(255)
+        # ```
+        #
+        # to add an extra band to the image where each pixel in the new band has 
+        # the constant value 255. 
+
+        def self.call name, supplied, option_string = ""
+            Vips::log "Vips::VipsOperation.call: name = #{name}, " + 
+                "supplied = #{supplied} option_string = #{option_string}"
+
+            op = new_from_name name
+
+            # find and classify all the arguments the operator can take
+            Vips::log "Vips::Operation.call: analyzing args..."
+            args = op.get_construct_args
+            required_input = [] 
+            optional_input = {}
+            required_output = [] 
+            optional_output = {}
+            args.each do |name, flags|
+                next if (flags & ARGUMENT_DEPRECATED) != 0
+
+                if (flags & ARGUMENT_INPUT) != 0 
+                    if (flags & ARGUMENT_REQUIRED) != 0 and
+                        required_input << [name, flags]
+                    else
+                        optional_input[name] = flags
+                    end
+                end
+
+                # MODIFY INPUT args count as OUTPUT as well
+                if (flags & ARGUMENT_OUTPUT) != 0 or
+                    ((flags & ARGUMENT_INPUT) != 0 and
+                     (flags & ARGUMENT_MODIFY) != 0)
+                    if (flags & ARGUMENT_REQUIRED) != 0 and
+                        required_output << [name, flags]
+                    else
+                        optional_output[name] = flags
+                    end
+                end
+
+            end
+
+            # so we should have been supplied with n_required_input values, or
+            # n_required_input + 1 if there's a hash of options at the end
+            Vips::log "Vips::VipsOperation.call: checking supplied args ..."
+            if not supplied.is_a? Array
+                raise Vips::Error, "unable to call #{name}: " + 
+                    "argument array is not an array"
+            elsif supplied.length == required_input.length 
+                supplied_optional = nil
+            elsif supplied.length == required_input.length + 1 and
+                supplied.last.is_a? Hash
+                supplied_optional = supplied.last
+                supplied.delete_at -1
+            else
+                raise Vips::Error, "unable to call #{name}: " + 
+                    "you supplied #{supplied.length} arguments, " +
+                    "but operation needs #{required_input.length}."
+            end
+
+            # very that all supplied_optional keys are in optional_input or
+            # optional_output
+            if supplied_optional
+                supplied_optional.each do |key, value|
+                    if not optional_input.has_key? key and
+                        not optional_output.has_key? key 
+                        raise Vips::Error, "unable to call #{name}: " + 
+                            "unknown option #{key}"
+                    end
+                end
+            end
+
+            # the first image arg is the thing we expand constants to match ...
+            # we need to find it
+            #
+            # look inside array and hash arguments, since we may be passing an
+            # array of images
+            match_image = find_inside(supplied) do |value|
+                value.is_a? Image
+            end
+
+            Vips::log "Vips::Operation.call: match_image = #{match_image}"
+
+            # set any string args first so they can't be overridden
+            if option_string != nil
+                Vips::log "Vips::Operation.call: setting string args ..."
+                if Vips::vips_object_set_from_string(op, option_string) != 0
+                    raise Vips::Error
+                end
+            end
+
+            # set all required inputs
+            Vips::log "Vips::Operation.call: setting required inputs ..."
+            required_input.each_index do |i|
+                arg_name = required_input[i][0]
+                flags = required_input[i][1]
+                value = supplied[i]
+
+                op.set arg_name, value, match_image, flags
+            end
+
+            # set all optional inputs
+            if supplied_optional
+                Vips::log "Vips::Operation.call: setting optional inputs ..."
+                supplied_optional.each do |arg_name, value|
+                    if optional_input.has_key? arg_name
+                        flags = optional_input[arg_name]
+
+                        op.set arg_name, value, matgch_image, flags
+                    end
+                end
+            end
+
+            Vips::log "Vips::Operation.call: building ..."
+            op = op.build
+
+            # get all required results, then all optional ones
+            Vips::log "Vips::Operation.call: fetching output ..."
+            result = []
+            required_output.each do |arg_name, flags|
+                result << op.get(arg_name)
+            end
+
+            optional_results = {}
+            if supplied_optional
+                supplied_optional.each do |arg_name, value|
+                    if optional_output.has_key? arg_name
+                        flags = optional_output[arg_name]
+
+                        optional_results[arg_name] = op.get arg_name
+                    end
+                end
+            end
+
+            result << optional_results if optional_results != {}
+
+            if result.length == 1
+                result = result.first
+            elsif result.length == 0
+                result = nil
+            end
+
+            Vips::log "Vips::Operation.call: result = #{result}"
+
+            Vips::vips_object_unref_outputs op
+
+            return result
+        end
+
     end
+
+
 end

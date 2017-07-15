@@ -24,8 +24,6 @@ addons:
       - libmagickwand-dev
       - libopenexr-dev
       - libcfitsio3-dev
-      - gobject-introspection
-      - libgirepository1.0-dev
       - libgif-dev
       - libgs-dev
       - libgsf-1-dev
@@ -41,11 +39,10 @@ cache:
   directories:
     - $HOME/vips
 
-# gobject-introspection 3.1 declares itself as 2.1 minimum, so we can't test
-# 2.0 ... in fact it seems to work if you force it, but I don't think we can do
-# that on travis
 language: ruby
 rvm:
+  - 1.9
+  - 2.0
   - 2.1
   - 2.2
   - 2.3
