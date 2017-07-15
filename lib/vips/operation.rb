@@ -276,10 +276,12 @@ module Vips
             # optional_output
             if supplied_optional
                 supplied_optional.each do |key, value|
-                    if not optional_input.has_key? key and
-                        not optional_output.has_key? key 
+                    arg_name = key.to_s
+
+                    if not optional_input.has_key? arg_name and
+                        not optional_output.has_key? arg_name 
                         raise Vips::Error, "unable to call #{name}: " + 
-                            "unknown option #{key}"
+                            "unknown option #{arg_name}"
                     end
                 end
             end
@@ -316,11 +318,14 @@ module Vips
             # set all optional inputs
             if supplied_optional
                 Vips::log "Vips::Operation.call: setting optional inputs ..."
-                supplied_optional.each do |arg_name, value|
+
+                supplied_optional.each do |key, value|
+                    arg_name = key.to_s
+
                     if optional_input.has_key? arg_name
                         flags = optional_input[arg_name]
 
-                        op.set arg_name, value, matgch_image, flags
+                        op.set arg_name, value, match_image, flags
                     end
                 end
             end
@@ -337,7 +342,9 @@ module Vips
 
             optional_results = {}
             if supplied_optional
-                supplied_optional.each do |arg_name, value|
+                supplied_optional.each do |key, value|
+                    arg_name = key.to_s
+
                     if optional_output.has_key? arg_name
                         flags = optional_output[arg_name]
 
@@ -362,6 +369,5 @@ module Vips
         end
 
     end
-
 
 end

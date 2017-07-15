@@ -120,6 +120,11 @@ module Vips
         vips_leak_set 1
     end
 
+    attach_function :version, :vips_version, [:int], :int
+    attach_function :version_string, :vips_version_string, [], :string
+
+    LIBRARY_VERSION = Vips::version_string
+
 end
 
 require 'vips/object'

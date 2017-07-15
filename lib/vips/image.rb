@@ -317,7 +317,10 @@ require 'ffi'
 module Vips
     private
 
-    attach_function :vips_image_new, [], :pointer
+    attach_function :vips_image_new_matrix_from_array, 
+        [:int, :int, :pointer, :int], :pointer
+
+    attach_function :vips_image_copy_memory, [:pointer], :pointer
 
     attach_function :vips_filename_get_filename, [:string], :string
     attach_function :vips_filename_get_options, [:string], :string
@@ -326,7 +329,7 @@ module Vips
     attach_function :vips_foreign_find_load, [:string], :string
     attach_function :vips_foreign_find_save, [:string], :string
     attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
-    attach_function :vips_foreign_find_save_buffer, [:pointer, :size_t], :string
+    attach_function :vips_foreign_find_save_buffer, [:string], :string
 
     attach_function :vips_image_get_typeof, [:pointer, :string], :GType
     attach_function :vips_image_get, [:pointer, :string, GLib::GValue.ptr], :int
@@ -382,14 +385,14 @@ module Vips
 
         def self.complex? format
             format_number = Vips::vips_enum_from_nick "complex?", 
-                FORMAT_TYPE, format
-            Vips::vips_band_format_iscomplex format_number
+                BAND_FORMAT_TYPE, format.to_s
+            Vips::vips_band_format_iscomplex(format_number) != 0
         end
 
         def self.float? format
             format_number = Vips::vips_enum_from_nick "float?", 
-                FORMAT_TYPE, format
-            Vips::vips_band_format_isfloat format_number
+                BAND_FORMAT_TYPE, format.to_s
+            Vips::vips_band_format_isfloat(format_number) != 0
         end
 
         # run a complex operation on a complex image, or an image with an even
@@ -433,11 +436,12 @@ module Vips
         # handy for expanding enum operations
         def call_enum(name, other, enum)
             if other.is_a?(Vips::Image)
-                Vips::call_base name.to_s, self, "", [other, enum]
+                Vips::Operation.call name.to_s, [self, other, enum]
             else
-                args = swap_const_args ? [other, enum] : [enum, other]
+                args = swap_const_args ? 
+                    [self, other, enum] : [self, enum, other]
 
-                Vips::call_base name.to_s + "_const", self, "", args
+                Vips::Operation.call name.to_s + "_const", args
             end
         end
 
@@ -566,10 +570,18 @@ module Vips
         # @macro vips.loadopts
         # @return [Image] the loaded image
         def self.new_from_buffer data, option_string, opts = {}
-            loader = Vips::vips_foreign_find_load_buffer data
+            loader = Vips::vips_foreign_find_load_buffer data, data.length
             raise Vips::Error if loader == nil
 
             Vips::Operation::call loader, [data, opts], option_string
+        end
+
+        def self.matrix_from_array width, height, array
+            ptr = FFI::MemoryPointer.new :double, array.length
+            ptr.write_array_of_double array
+            image = Vips::vips_image_new_matrix_from_array width, height, 
+                ptr, array.length
+            Vips::Image.new image
         end
 
         # Create a new Image from a 1D or 2D array. A 1D array becomes an
@@ -726,7 +738,8 @@ module Vips
                 raise Vips::Error, "No known saver for '#{filename}'."
             end
 
-            buffer = Vips::call saver, [self, opts], option_string
+            buffer = Vips::Operation.call saver, [self, opts], option_string
+            raise Vips::Error if buffer == nil
 
             write_gc
 
@@ -868,37 +881,55 @@ module Vips
 
         # Get image filename, if any.
         #
-        # @return [Symbol] image filename
+        # @return [String] image filename
         def filename
             get "filename"
         end
 
         # Get image xoffset.
         #
-        # @return [Symbol] image xoffset
+        # @return [Integer] image xoffset
         def xoffset
             get "xoffset"
         end
 
         # Get image yoffset.
         #
-        # @return [Symbol] image yoffset
+        # @return [Integer] image yoffset
         def yoffset
             get "yoffset"
         end
 
         # Get image x resolution.
         #
-        # @return [Symbol] image x resolution
+        # @return [Float] image x resolution
         def xres
             get "xres"
         end
 
         # Get image y resolution.
         #
-        # @return [Symbol] image y resolution
+        # @return [Float] image y resolution
         def yres
             get "yres"
+        end
+
+        # Get scale metadata.
+        #
+        # @return [Float] image scale
+        def scale
+            return 1 if get_typeof("scale") == 0
+
+            get "scale"
+        end
+
+        # Get offset metadata.
+        #
+        # @return [Float] image offset
+        def offset
+            return 0 if get_typeof("offset") == 0
+
+            get "offset"
         end
 
         # Get the image size. 
@@ -906,6 +937,11 @@ module Vips
         # @return [Integer, Integer] image width and height
         def size
             [width, height]
+        end
+
+        def copy_memory
+            new_image = Vips::vips_image_copy_memory self
+            Vips::Image.new new_image
         end
 
         # Add an image, constant or array. 
@@ -1430,7 +1466,7 @@ module Vips
                 el = Operation::imageize match_image, el
             end
 
-            Vips::call_base "ifthenelse", self, "", [th, el, opts]
+            Vips::Operation.call "ifthenelse", [self, th, el, opts]
         end
 
         # Scale an image to uchar. This is the vips `scale` operation, but

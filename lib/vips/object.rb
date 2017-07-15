@@ -7,6 +7,16 @@
 require 'ffi'
 
 module Vips
+    private
+
+    # we must init these by hand, since they are usually made on first image
+    # create
+    attach_function :vips_band_format_get_type, [], :GType
+    attach_function :vips_interpretation_get_type, [], :GType
+    attach_function :vips_coding_get_type, [], :GType
+
+    public
+
     # some handy gtypes
     IMAGE_TYPE = GLib::g_type_from_name("VipsImage")
     ARRAY_INT_TYPE = GLib::g_type_from_name("VipsArrayInt")
@@ -15,8 +25,9 @@ module Vips
     REFSTR_TYPE = GLib::g_type_from_name("VipsRefString")
     BLOB_TYPE = GLib::g_type_from_name("VipsBlob")
 
-    FORMAT_TYPE = GLib::g_type_from_name("VipsFormat")
-    INTERPRETATION_TYPE = GLib::g_type_from_name("VipsInterpretation")
+    BAND_FORMAT_TYPE = Vips::vips_band_format_get_type
+    INTERPRETATION_TYPE = Vips::vips_interpretation_get_type
+    CODING_TYPE = Vips::vips_coding_get_type
 
     private
 
@@ -33,16 +44,24 @@ module Vips
     attach_function :vips_value_set_blob, 
         [GLib::GValue.ptr, :free_fn, :pointer, :size_t], :void
 
+    class SizeStruct < FFI::Struct
+        layout :value, :size_t
+    end
+
+    class IntStruct < FFI::Struct
+        layout :value, :int
+    end
+
     attach_function :vips_value_get_ref_string, 
-        [GLib::GValue.ptr, :pointer], :string
+        [GLib::GValue.ptr, SizeStruct.ptr], :string
     attach_function :vips_value_get_array_double, 
-        [GLib::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, IntStruct.ptr], :pointer
     attach_function :vips_value_get_array_int, 
-        [GLib::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, IntStruct.ptr], :pointer
     attach_function :vips_value_get_array_image, 
-        [GLib::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, IntStruct.ptr], :pointer
     attach_function :vips_value_get_blob, 
-        [GLib::GValue.ptr, :pointer], :pointer
+        [GLib::GValue.ptr, SizeStruct.ptr], :pointer
 
     attach_function :type_find, :vips_type_find, [:string, :string], :GType
 

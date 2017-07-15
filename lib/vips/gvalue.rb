@@ -15,6 +15,10 @@ module GLib
             GLib::g_value_unset(ptr) 
         end
 
+        G_FREE_CALLBACK = Proc.new do |ptr|
+            Vips::g_free ptr
+        end
+
         def self.alloc
             # we seem to need the extra cast, I'm not sure why
             memory = FFI::MemoryPointer.new GValue
@@ -47,21 +51,41 @@ module GLib
                 GLib::g_value_set_object self, value
                 GLib::g_object_unref value
             when Vips::ARRAY_INT_TYPE
-                raise "unimplemented"
+                value = [value] if not value.is_a? Array
+
+                Vips::vips_value_set_array_int self, nil, value.length
+                ptr = Vips::vips_value_get_array_int self, nil
+                ptr.write_array_of_int32 value
             when Vips::ARRAY_DOUBLE_TYPE
-                raise "unimplemented"
+                value = [value] if not value.is_a? Array
+
+                # this will allocate an array in the gvalue
+                Vips::vips_value_set_array_double self, nil, value.length
+
+                # pull the array out and fill it
+                ptr = Vips::vips_value_get_array_double self, nil
+
+                ptr.write_array_of_double value
             when Vips::ARRAY_IMAGE_TYPE
-                raise "unimplemented"
+                value = [value] if not value.is_a? Array
+
+                Vips::vips_value_set_array_image self, value.length
+                ptr = Vips::vips_value_get_array_image self, nil
+                ptr.write_array_of_pointer value
+
+                # the gvalue needs a ref on each of the images
+                value.each {|image| GLib::g_object_ref image}
             when Vips::BLOB_TYPE
-                raise "unimplemented"
+                ptr = GLib::g_malloc value.length
+                ptr.write_bytes(value)
+                Vips::vips_value_set_blob self, 
+                    G_FREE_CALLBACK, ptr, value.length
             else
                 case fundamental
                 when GFLAGS_TYPE
                     GLib::g_value_set_flags self, value
                 when GENUM_TYPE
-                    if value.is_a? Symbol
-                        value = value.to_s
-                    end
+                    value = value.to_s if value.is_a? Symbol
 
                     if value.is_a? String
                         value = Vips::vips_enum_from_nick "ruby-vips", 
@@ -98,12 +122,25 @@ module GLib
                 obj = GLib::g_value_get_object self
                 result = Vips::Image.new obj
             when Vips::ARRAY_INT_TYPE
-                raise "unimplemented"
+                len = Vips::IntStruct.new
+                array = Vips::vips_value_get_array_int self, len
+                result = array.get_array_of_int32 0, len[:value]
             when Vips::ARRAY_DOUBLE_TYPE
-                raise "unimplemented"
+                len = Vips::IntStruct.new
+                array = Vips::vips_value_get_array_double self, len
+                result = array.get_array_of_double 0, len[:value]
             when Vips::ARRAY_IMAGE_TYPE
-                raise "unimplemented"
+                len = Vips::IntStruct.new
+                array = Vips::vips_value_get_array_image self, len
+                result = array.get_array_of_pointer 0, len[:value]
+                result.map! do |pointer| 
+                    GLib::g_object_ref pointer
+                    Vips::Image.new pointer
+                end
             when Vips::BLOB_TYPE
+                len = Vips::SizeStruct.new
+                array = Vips::vips_value_get_blob self, len
+                result = array.get_bytes 0, len[:value]
             else
                 case fundamental
                 when GFLAGS_TYPE
