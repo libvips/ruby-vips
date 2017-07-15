@@ -6,14 +6,6 @@
 
 require 'ffi'
 
-# how crude!
-# @private
-def log str 
-    if $vips_debug
-        puts str
-    end
-end
-
 module GLib
     extend FFI::Library
     ffi_lib 'gobject-2.0'
@@ -55,13 +47,21 @@ module Vips
     LOG_DOMAIN = "VIPS"
     GLib::set_log_domain(LOG_DOMAIN)
 
-    $vips_debug = true
+    @@debug = true
 
     # Turn debug logging on and off.
     #
     # @param dbg [Boolean] Set true to print debug log messages
     def self.set_debug dbg 
-        $vips_debug = dbg
+        @@debug = dbg
+    end
+
+    # how crude!
+    # @private
+    def self.log str 
+        if @@debug
+            puts str
+        end
     end
 
     # need to repeat this
@@ -110,13 +110,13 @@ module Vips
     attach_function :vips_leak_set, [:int], :void
 
     def self.showall
-        if $vips_debug
+        if @@debug
             GC.start
             vips_object_print_all
         end
     end
 
-    if $vips_debug
+    if @@debug
         vips_leak_set 1
     end
 

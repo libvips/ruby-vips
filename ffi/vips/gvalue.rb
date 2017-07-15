@@ -27,7 +27,7 @@ module GLib
         end
 
         def set(value)
-            log "GLib::GValue.set: value = #{value}"
+            Vips::log "GLib::GValue.set: value = #{value}"
 
             gtype = self[:gtype]
             fundamental = GLib::g_type_fundamental gtype
@@ -114,7 +114,7 @@ module GLib
                 end
             end
 
-            log "GLib::GValue.get: result = #{result}"
+            Vips::log "GLib::GValue.get: result = #{result}"
 
             return result
         end

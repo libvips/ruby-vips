@@ -52,12 +52,13 @@ module GLib
             include GObjectLayout
 
             def initialize(ptr)
-                log "GLib::GObject::ManagedStruct.new: #{ptr}"
+                Vips::log "GLib::GObject::ManagedStruct.new: #{ptr}"
                 super
             end
 
             def self.release(ptr)
-                log "GLib::GObject::ManagedStruct.release: unreffing #{ptr}"
+                Vips::log "GLib::GObject::ManagedStruct.release: " +
+                    "unreffing #{ptr}"
                 GLib::g_object_unref(ptr) unless ptr.null?
             end
         end
@@ -67,7 +68,7 @@ module GLib
             include GObjectLayout
 
             def initialize(ptr)
-                log "GLib::GObject::Struct.new: #{ptr}"
+                Vips::log "GLib::GObject::Struct.new: #{ptr}"
                 super
             end
 
@@ -79,7 +80,7 @@ module GLib
         # here we use ManagedStruct, not Struct, since this is the ref that will
         # need the unref
         def initialize(ptr)
-            log "GLib::GObject.initialize: ptr = #{ptr}"
+            Vips::log "GLib::GObject.initialize: ptr = #{ptr}"
             @struct = ffi_managed_struct.new(ptr)
         end
 

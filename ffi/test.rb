@@ -90,7 +90,6 @@ puts "x.filename = #{x.filename}"
 puts "x.xres = #{x.xres}"
 puts "x.yres = #{x.yres}"
 x = x.invert
+x.write_to_file "x.jpg"
 x = nil
 puts ""
-
-# x.write_to_file "x.jpg"

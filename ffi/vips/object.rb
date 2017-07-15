@@ -67,7 +67,7 @@ module Vips
             include ObjectLayout
 
             def initialize(ptr)
-                log "Vips::Object::Struct.new: #{ptr}"
+                Vips::log "Vips::Object::Struct.new: #{ptr}"
                 super
             end
 
@@ -77,7 +77,7 @@ module Vips
             include ObjectLayout
 
             def initialize(ptr)
-                log "Vips::Object::ManagedStruct.new: #{ptr}"
+                Vips::log "Vips::Object::ManagedStruct.new: #{ptr}"
                 super
             end
 
@@ -104,13 +104,13 @@ module Vips
             GLib::g_object_get_property self, name, gvalue
             result = gvalue.get
 
-            log "Vips::Object.get(\"#{name}\"): result = #{result}"
+            Vips::log "Vips::Object.get(\"#{name}\"): result = #{result}"
 
             return result
         end
 
         def set(name, value)
-            log "Vips::Object.set: #{name} = #{value}"
+            Vips::log "Vips::Object.set: #{name} = #{value}"
 
             gtype = get_typeof name
             gvalue = GLib::GValue.alloc 

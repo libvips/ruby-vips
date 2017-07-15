@@ -38,7 +38,7 @@ module Vips
             include OperationLayout
 
             def initialize ptr
-                log "Vips::Operation::Struct.new: #{ptr}"
+                Vips::log "Vips::Operation::Struct.new: #{ptr}"
                 super
             end
 
@@ -48,7 +48,7 @@ module Vips
             include OperationLayout
 
             def initialize ptr
-                log "Vips::Operation::ManagedStruct.new: #{ptr}"
+                Vips::log "Vips::Operation::ManagedStruct.new: #{ptr}"
                 super
             end
 
@@ -131,7 +131,7 @@ module Vips
 
                 if gtype == Vips::IMAGE_TYPE 
                     value = Operation::imageize match_image, value
-                elsif gtype == Vips::IMAGE_ARRAY_TYPE
+                elsif gtype == Vips::ARRAY_IMAGE_TYPE
                     value = value.map {|x| Operation::imageize match_image, x}
                 end
             end
@@ -145,14 +145,14 @@ module Vips
         end
 
         def self.call name, supplied, option_string = ""
-            log "Vips::VipsOperation.call: name = #{name}, " + 
+            Vips::log "Vips::VipsOperation.call: name = #{name}, " + 
                 "supplied = #{supplied} option_string = #{option_string}"
 
             op = new_from_name name
             raise Vips::Error if op == nil
 
             # find and classify all the arguments the operator can take
-            log "Vips::Operation.call: analyzing args..."
+            Vips::log "Vips::Operation.call: analyzing args..."
             args = op.get_construct_args
             required_input = [] 
             optional_input = {}
@@ -184,7 +184,7 @@ module Vips
 
             # so we should have been supplied with n_required_input values, or
             # n_required_input + 1 if there's a hash of options at the end
-            log "Vips::VipsOperation.call: checking supplied args ..."
+            Vips::log "Vips::VipsOperation.call: checking supplied args ..."
             if not supplied.is_a? Array
                 raise Vips::Error, "unable to call #{name}: " + 
                     "argument array is not an array"
@@ -221,18 +221,18 @@ module Vips
                 value.is_a? Image
             end
 
-            log "Vips::Operation.call: match_image = #{match_image}"
+            Vips::log "Vips::Operation.call: match_image = #{match_image}"
 
             # set any string args first so they can't be overridden
             if option_string != nil
-                log "Vips::Operation.call: setting string args ..."
+                Vips::log "Vips::Operation.call: setting string args ..."
                 if Vips::vips_object_set_from_string(op, option_string) != 0
                     raise Vips::Error
                 end
             end
 
             # set all required inputs
-            log "Vips::Operation.call: setting required inputs ..."
+            Vips::log "Vips::Operation.call: setting required inputs ..."
             required_input.each_index do |i|
                 arg_name = required_input[i][0]
                 flags = required_input[i][1]
@@ -243,7 +243,7 @@ module Vips
 
             # set all optional inputs
             if supplied_optional
-                log "Vips::Operation.call: setting optional inputs ..."
+                Vips::log "Vips::Operation.call: setting optional inputs ..."
                 supplied_optional.each do |arg_name, value|
                     if optional_input.has_key? arg_name
                         flags = optional_input[arg_name]
@@ -253,11 +253,11 @@ module Vips
                 end
             end
 
-            log "Vips::Operation.call: building ..."
+            Vips::log "Vips::Operation.call: building ..."
             op = op.build
 
             # get all required results, then all optional ones
-            log "Vips::Operation.call: fetching output ..."
+            Vips::log "Vips::Operation.call: fetching output ..."
             result = []
             required_output.each do |arg_name, flags|
                 result << op.get(arg_name)
@@ -282,7 +282,7 @@ module Vips
                 result = nil
             end
 
-            log "Vips::Operation.call: result = #{result}"
+            Vips::log "Vips::Operation.call: result = #{result}"
 
             Vips::vips_object_unref_outputs op
 
