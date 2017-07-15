@@ -122,8 +122,8 @@ module Vips
 
 end
 
-require_relative 'vips/vobject'
-require_relative 'vips/voperation'
-require_relative 'vips/vimage'
+require_relative 'vips/object'
+require_relative 'vips/operation'
+require_relative 'vips/image'
 
 

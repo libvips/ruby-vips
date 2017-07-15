@@ -80,8 +80,17 @@ puts ""
 puts "calling Image::new_from_file"
 x = Vips::Image.new_from_file "/home/john/pics/k2.jpg"
 puts "x = #{x}"
+puts "x.width = #{x.width}"
+puts "x.height = #{x.height}"
+puts "x.bands = #{x.bands}"
+puts "x.format = #{x.format}"
+puts "x.interpretation = #{x.interpretation}"
+puts "x.coding = #{x.coding}"
+puts "x.filename = #{x.filename}"
+puts "x.xres = #{x.xres}"
+puts "x.yres = #{x.yres}"
+x = x.invert
 x = nil
 puts ""
 
-# x = x.invert
 # x.write_to_file "x.jpg"

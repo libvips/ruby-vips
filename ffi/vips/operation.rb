@@ -130,9 +130,9 @@ module Vips
                 gtype = get_typeof name
 
                 if gtype == Vips::IMAGE_TYPE 
-                    value = imageize match_image, value
+                    value = Operation::imageize match_image, value
                 elsif gtype == Vips::IMAGE_ARRAY_TYPE
-                    value = value.map {|x| imageize match_image, x}
+                    value = value.map {|x| Operation::imageize match_image, x}
                 end
             end
 

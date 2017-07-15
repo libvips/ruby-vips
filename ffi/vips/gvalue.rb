@@ -88,7 +88,7 @@ module GLib
                 result = GLib::g_value_get_double(self)
             when GSTR_TYPE
                 # FIXME do we need to strdup here?
-                result = Vips::g_value_get_string self
+                result = GLib::g_value_get_string self
             when Vips::IMAGE_TYPE
                 obj = GLib::g_value_get_object self
                 result = Vips::Image.new obj
@@ -130,7 +130,7 @@ module GLib
     attach_function :g_value_set_enum, [GValue.ptr, :int], :void
     attach_function :g_value_set_flags, [GValue.ptr, :uint], :void
     attach_function :g_value_set_string, [GValue.ptr, :string], :void
-    attach_function :g_value_set_object, [GValue.ptr, GObject.ptr], :void
+    attach_function :g_value_set_object, [GValue.ptr, :pointer], :void
 
     attach_function :g_value_get_boolean, [GValue.ptr], :int
     attach_function :g_value_get_int, [GValue.ptr], :int
