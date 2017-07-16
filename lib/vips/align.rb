@@ -1,6 +1,6 @@
 module Vips
 
-    # Various types of alignment. See {Vips::Image.join}, for example.
+    # Various types of alignment. See {Image#join}, for example.
     #
     # * `:low` Align on the low coordinate edge
     # * `:centre` Align on the centre

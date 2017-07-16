@@ -1,6 +1,6 @@
 module Vips
 
-    # Various fixed 90 degree rotation angles. See {Vips::Image.rot}.
+    # Various fixed 90 degree rotation angles. See {Image#rot}.
     #
     # * `:d0` no rotate
     # * `:d90` 90 degrees clockwise

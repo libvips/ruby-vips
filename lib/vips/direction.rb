@@ -1,6 +1,6 @@
 module Vips
 
-    # Operations like {Vips::Image.flip} need to be told whether to flip 
+    # Operations like {Image#flip} need to be told whether to flip 
     # left-right or top-bottom. 
     #
     # *   `:horizontal` left-right 

@@ -1320,6 +1320,14 @@ module Vips
             Image::run_cmplx(self) {|x| x.complex :conj}
         end
 
+        # Calculate the cross phase of two images.
+        #
+        # @param other [Image, Real, Array<Real>] cross phase with this
+        # @return [Image] cross phase
+        def cross_phase other
+            complex2 other, :cross_phase
+        end
+
         # Return the sine of an image in degrees.
         #
         # @return [Image] sine of each pixel

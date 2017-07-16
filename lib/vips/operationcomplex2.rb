@@ -1,9 +1,9 @@
 module Vips
 
     # The type of binary complex operation to perform on an image. See 
-    # {Vips::Image.complex2}.
+    # {Image#complex2}.
     #
-    # *     ':cross_phase' cross phase
+    # * ':cross_phase' cross phase
 
     class OperationComplex2 < Symbol
     end

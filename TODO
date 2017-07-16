@@ -1,11 +1,11 @@
 # Notes
 
+- regen docs with 8.5
+
 - revise docs ... we have a few undocumented still, they should probably be 
   private
 
 - look over code and use eg. select in thing that searches for match_image
-
-- what about enums like Vips::OperationRelational?
 
 - check VipsInterpolation and affine with bicubic etc. 
 

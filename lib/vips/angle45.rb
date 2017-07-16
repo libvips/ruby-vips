@@ -1,6 +1,6 @@
 module Vips
 
-    # Various fixed 45 degree rotation angles. See {Vips::Image.rot45}.
+    # Various fixed 45 degree rotation angles. See {Image#rot45}.
     #
     # * `:d0` no rotate
     # * `:d45` 45 degrees clockwise 
