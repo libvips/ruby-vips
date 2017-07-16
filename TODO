@@ -1,5 +1,15 @@
 # Notes
 
+- check docs
+
+- look over code and use eg. select in thing that searches for match_image
+
+- rework doc generator
+
+- remove enum classes?
+
+- check VipsInterpolation and affine with bicubic etc. 
+
 - support complex constants, eg. 
 
 	Complex(1, 2)
@@ -22,3 +32,7 @@
 - push new gem to rubygems, tag repository with version
 
   bundle exec rake release
+
+- regenerate docs
+
+  bundle exec rake yard

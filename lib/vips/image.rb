@@ -339,6 +339,8 @@ module Vips
     attach_function :vips_band_format_iscomplex, [:int], :int
     attach_function :vips_band_format_isfloat, [:int], :int
 
+    attach_function :nickname_find, :vips_nickname_find, [:int], :string
+
     public
 
     # This class represents a libvips image. See the {Vips} module documentation
@@ -475,8 +477,8 @@ module Vips
 
         public
 
-        # Invoke a vips operation with {call}, using self as the first 
-        # input argument. 
+        # Invoke a vips operation with {Vips::Operation::call}, using self as 
+        # the first input argument. 
         #
         # @param name [String] vips operation to call
         # @return result of vips operation
@@ -484,7 +486,7 @@ module Vips
             Vips::Operation::call name.to_s, [self] + args
         end
 
-        # Invoke a vips operation with {call}.
+        # Invoke a vips operation with {Vips::Operation::call}.
         def self.method_missing(name, *args)
             Vips::Operation::call name.to_s, args
         end
@@ -517,7 +519,7 @@ module Vips
         # out the header. Pixels will only be decompressed when they are needed.
         #
         # @!macro [new] vips.loadopts
-        #   @param [Hash] opts set of options
+        #   @param opts [Hash] set of options
         #   @option opts [Boolean] :disc (true) Open large images via a 
         #     temporary disc file
         #   @option opts [Vips::Access] :access (:random) Access mode for file
@@ -653,7 +655,7 @@ module Vips
         # You can pass an array to make a many-band image, or a single value to
         # make a one-band image.
         #
-        # @param pixel [Real, Array<Real>] value to put in each pixel
+        # @param value [Real, Array<Real>] value to put in each pixel
         # @return [Image] constant image
         def new_from_image value
             pixel = (Vips::Image.black(1, 1) + value).cast(format)
@@ -686,7 +688,7 @@ module Vips
         # to see all the available options for JPEG save. 
         #
         # @!macro [new] vips.saveopts
-        #   @param [Hash] opts set of options
+        #   @param opts [Hash] set of options
         #   @option opts [Boolean] :strip (false) Strip all metadata from image
         #   @option opts [Array<Float>] :background (0) Background colour to
         #     flatten alpha against, if necessary
@@ -1453,7 +1455,7 @@ module Vips
         #
         # @param th [Image, Real, Array<Real>] true values
         # @param el [Image, Real, Array<Real>] false values
-        # @param [Hash] opts set of options
+        # @param opts [Hash] set of options
         # @option opts [Boolean] :blend (false) Blend smoothly between th and el
         # @return [Image] merged image
         def ifthenelse(th, el, opts = {}) 
@@ -1472,7 +1474,7 @@ module Vips
         # Scale an image to uchar. This is the vips `scale` operation, but
         # renamed to avoid a clash with the `.scale` property.
         #
-        # @param [Hash] opts Set of options
+        # @param opts [Hash] Set of options
         # @return [Vips::Image] Output image
         def scaleimage(opts = {})
             Vips::Image.scale self, opts
@@ -1495,87 +1497,85 @@ module Vips
         # these have hand-written methods, see above
         no_generate = ["scale", "bandjoin", "ifthenelse"]
 
-        generate_operation = lambda do |op|
-            flags = op.flags
-            return if (flags & :deprecated) != 0
-            nickname = Vips::nickname_find op.gtype
-
+        generate_operation = lambda do |gtype, nickname, op|
+            op_flags = op.get_flags
+            return if (op_flags & OPERATION_DEPRECATED) != 0
             return if no_generate.include? nickname
+            description = Vips::vips_object_get_description op
 
-            all_args = op.get_args.select {|arg| not arg.isset}
+            # find and classify all the arguments the operator can take
+            required_input = [] 
+            optional_input = []
+            required_output = [] 
+            optional_output = []
+            member_x = nil
+            argument_map do |pspec, argument_class, argument_instance|
+                arg_flags = argument_class[:flags]
+                next if (arg_flags & ARGUMENT_CONSTRUCT) == 0 
+                next if (arg_flags & ARGUMENT_DEPRECATED) != 0
 
-            # separate args into various categories
- 
-            required_input = all_args.select do |arg|
-                (arg.flags & :input) != 0 and
-                (arg.flags & :required) != 0 
-            end
+                name = pspec[:name]
+                gtype = pspec[:value_type]
+                blurb = GLib::g_param_spec_get_blurb pspec
+                value = {:name => name, 
+                         :flags => arg_flags, 
+                         :gtype => gtype, 
+                         :blurb => blurb}
 
-            optional_input = all_args.select do |arg|
-                (arg.flags & :input) != 0 and
-                (arg.flags & :required) == 0 
-            end
+                if (arg_flags & ARGUMENT_INPUT) != 0 
+                    if (arg_flags & ARGUMENT_REQUIRED) != 0 
+                        # note the first required input image, if any ... we 
+                        # will be a method of this instance
+                        if not member_x and gtype == Vips::IMAGE_TYPE
+                            member_x = value
+                        else
+                            required_input << value
+                        end
+                    else
+                        optional_input << value
+                    end
+                end
 
-            required_output = all_args.select do |arg|
-                (arg.flags & :output) != 0 and
-                (arg.flags & :required) != 0 
-            end
+                # MODIFY INPUT args count as OUTPUT as well
+                if (arg_flags & ARGUMENT_OUTPUT) != 0 or
+                    ((arg_flags & ARGUMENT_INPUT) != 0 and
+                     (arg_flags & ARGUMENT_MODIFY) != 0)
+                    if (arg_flags & ARGUMENT_REQUIRED) != 0 and
+                        required_output << value
+                    else
+                        optional_output << value
+                    end
+                end
 
-            # required input args with :modify are copied and appended to 
-            # output
-            modified_required_input = required_input.select do |arg|
-                (arg.flags & :modify) != 0 
-            end
-            required_output += modified_required_input
-
-            optional_output = all_args.select do |arg|
-                (arg.flags & :output) != 0 and
-                (arg.flags & :required) == 0 
-            end
-
-            # optional input args with :modify are copied and appended to 
-            # output
-            modified_optional_input = optional_input.select do |arg|
-                (arg.flags & :modify) != 0 
-            end
-            optional_output += modified_optional_input
-
-            # find the first input image, if any ... we will be a method of this
-            # instance
-            member_x = required_input.find do |x|
-                x.gtype.type_is_a? GLib::Type["VipsImage"]
-            end
-            if member_x != nil
-                required_input.delete member_x
             end
 
             print "# @!method "
             print "self." if not member_x 
             print "#{nickname}("
-            print required_input.map(&:name).join(", ")
+            print required_input.map(&:first).join(", ")
             print ", " if required_input.length > 0
             puts "opts = {})"
 
-            puts "#   #{op.description.capitalize}."
+            puts "#   #{description.capitalize}."
 
-            required_input.each do |arg| 
-                puts "#   @param #{arg.name} [#{arg.type}] #{arg.blurb}"
+            required_input.each do |name, arg_flags, gtype, blurb|
+                puts "#   @param #{name} [#{arg.type}] #{blurb}"
             end
 
-            puts "#   @param [Hash] opts Set of options"
-            optional_input.each do |arg| 
-                puts "#   @option opts [#{arg.type}] :#{arg.name} #{arg.blurb}"
+            puts "#   @param opts [Hash] Set of options"
+            optional_input.each do |name, arg_flags, gtype, blurb|
+                puts "#   @option opts [#{arg.type}] :#{name} #{blurb}"
             end
-            optional_output.each do |arg| 
-                print "#   @option opts [#{arg.type}] :#{arg.name}"
-                puts " Output #{arg.blurb}"
+            optional_output.each do |name, arg_flags, gtype, blurb|
+                print "#   @option opts [#{arg.type}] :#{name}"
+                puts " Output #{blurb}"
             end
 
             print "#   @return ["
             if required_output.length == 0 
                 print "nil" 
             elsif required_output.length == 1 
-                print required_output[0].type
+                print required_output.first[1]
             elsif 
                 print "Array<" 
                 print required_output.map(&:type).join(", ")
@@ -1596,26 +1596,26 @@ module Vips
         end
 
         generate_class = lambda do |gtype|
-            begin
-                # can fail for abstract types
-                # can't find a way to get to #abstract? from a gtype
-                op = Vips::Operation.new gtype.name
-            rescue
-                op = nil
+            nickname = Vips::nickname_find gtype
+            if nickname
+                begin
+                    # can fail for abstract types
+                    op = Vips::Operation.new nickname
+                rescue
+                    op = nil
+                end
+
+                generate_operation.(gtype, nickname, op) if op
             end
 
-            generate_operation.(op) if op
-
-            gtype.children.each do |x|
-                generate_class.(x)
-            end
+            Vips::vips_type_map gtype, generate_class, nil
         end
 
         puts "module Vips"
         puts "  class Image"
         puts ""
 
-        generate_class.(GLib::Type["VipsOperation"])
+        generate_class.(GLib::g_type_from_name "VipsOperation")
 
         puts "  end"
         puts "end"

@@ -117,6 +117,8 @@ module GLib
                :owner_type, :GType
     end
 
+    attach_function :g_param_spec_get_blurb, [GParamSpec.ptr], :string
+
     attach_function :g_object_ref, [:pointer], :void
     attach_function :g_object_unref, [:pointer], :void
 

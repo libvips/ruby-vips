@@ -23,6 +23,18 @@ module Vips
                                          :argument_map_fn, 
                                          :pointer, :pointer], :pointer
 
+    OPERATION_SEQUENTIAL = 1
+    OPERATION_NOCACHE = 4
+    OPERATION_DEPRECATED = 8
+
+    OPERATION_FLAGS = {
+        :sequential => OPERATION_SEQUENTIAL,
+        :nocache => OPERATION_NOCACHE,
+        :deprecated => OPERATION_DEPRECATED
+    }
+
+    attach_function :vips_operation_get_flags, [:pointer], :int
+
     class Operation < Vips::Object
 
         # the layout of the VipsOperation struct
@@ -77,6 +89,10 @@ module Vips
             end
 
             Vips::vips_argument_map(self, fn, nil, nil)
+        end
+
+        def get_flags
+            Vips::vips_operation_get_flags self
         end
 
         # not quick! try to call this infrequently
