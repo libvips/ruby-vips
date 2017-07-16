@@ -339,7 +339,7 @@ module Vips
     attach_function :vips_band_format_iscomplex, [:int], :int
     attach_function :vips_band_format_isfloat, [:int], :int
 
-    attach_function :nickname_find, :vips_nickname_find, [:int], :string
+    attach_function :nickname_find, :vips_nickname_find, [:GType], :string
 
     public
 
@@ -1497,6 +1497,20 @@ module Vips
         # these have hand-written methods, see above
         no_generate = ["scale", "bandjoin", "ifthenelse"]
 
+        # map gobject's type names to Ruby
+        map_go_to_ruby = {
+            "gboolean" => "Boolean",
+            "gint" => "Integer",
+            "gdouble" => "Float",
+            "gfloat" => "Float",
+            "VipsImage" => "Vips::Image",
+            "VipsInterpolate" => "Vips::Interpolate",
+            "VipsArrayDouble" => "Array<Double>",
+            "VipsArrayInt" => "Array<Integer>",
+            "VipsArrayImage" => "Array<Image>",
+            "VipsArrayString" => "Array<String>",
+        }
+
         generate_operation = lambda do |gtype, nickname, op|
             op_flags = op.get_flags
             return if (op_flags & OPERATION_DEPRECATED) != 0
@@ -1509,17 +1523,28 @@ module Vips
             required_output = [] 
             optional_output = []
             member_x = nil
-            argument_map do |pspec, argument_class, argument_instance|
+            op.argument_map do |pspec, argument_class, argument_instance|
                 arg_flags = argument_class[:flags]
                 next if (arg_flags & ARGUMENT_CONSTRUCT) == 0 
                 next if (arg_flags & ARGUMENT_DEPRECATED) != 0
 
                 name = pspec[:name]
                 gtype = pspec[:value_type]
+                fundamental = GLib::g_type_fundamental gtype
+                type_name = GLib::g_type_name gtype
+                if map_go_to_ruby.include? type_name
+                    type_name = map_go_to_ruby[type_name] 
+                end
+                if fundamental == GLib::GFLAGS_TYPE or 
+                    fundamental == GLib::GENUM_TYPE
+                    type_name =~ /Vips(.*)/
+                    type_name = "Vips::" + $~[1]
+                end
                 blurb = GLib::g_param_spec_get_blurb pspec
                 value = {:name => name, 
                          :flags => arg_flags, 
                          :gtype => gtype, 
+                         :type_name => type_name, 
                          :blurb => blurb}
 
                 if (arg_flags & ARGUMENT_INPUT) != 0 
@@ -1552,40 +1577,41 @@ module Vips
             print "# @!method "
             print "self." if not member_x 
             print "#{nickname}("
-            print required_input.map(&:first).join(", ")
+            print required_input.map{|x| x[:name]}.join(", ")
             print ", " if required_input.length > 0
             puts "opts = {})"
 
             puts "#   #{description.capitalize}."
 
-            required_input.each do |name, arg_flags, gtype, blurb|
-                puts "#   @param #{name} [#{arg.type}] #{blurb}"
+            required_input.each do |arg|
+                puts "#   @param #{name} [#{arg[:type_name]}] #{arg[:blurb]}"
             end
 
             puts "#   @param opts [Hash] Set of options"
-            optional_input.each do |name, arg_flags, gtype, blurb|
-                puts "#   @option opts [#{arg.type}] :#{name} #{blurb}"
+            optional_input.each do |arg|
+                puts "#   @option opts [#{arg[:type_name]}] :#{arg[:name]} " +
+                    "#{arg[:blurb]}"
             end
-            optional_output.each do |name, arg_flags, gtype, blurb|
-                print "#   @option opts [#{arg.type}] :#{name}"
-                puts " Output #{blurb}"
+            optional_output.each do |arg|
+                print "#   @option opts [#{arg[:type]}] :#{arg[:name]}"
+                puts " Output #{arg[:blurb]}"
             end
 
             print "#   @return ["
             if required_output.length == 0 
                 print "nil" 
             elsif required_output.length == 1 
-                print required_output.first[1]
+                print required_output.first[:type_name]
             elsif 
                 print "Array<" 
-                print required_output.map(&:type).join(", ")
+                print required_output.map{|x| x[:type_name]}.join(", ")
                 print ">" 
             end
             if optional_output.length > 0
                 print ", Hash<Symbol => Object>"
             end
             print "] "
-            print required_output.map(&:blurb).join(", ")
+            print required_output.map{|x| x[:blurb]}.join(", ")
             if optional_output.length > 0
                 print ", " if required_output.length > 0
                 print "Hash of optional output items"
@@ -1595,14 +1621,14 @@ module Vips
             puts ""
         end
 
-        generate_class = lambda do |gtype|
+        generate_class = lambda do |gtype, a|
             nickname = Vips::nickname_find gtype
+
             if nickname
                 begin
                     # can fail for abstract types
-                    op = Vips::Operation.new nickname
+                    op = Vips::Operation.new_from_name nickname
                 rescue
-                    op = nil
                 end
 
                 generate_operation.(gtype, nickname, op) if op
@@ -1615,7 +1641,7 @@ module Vips
         puts "  class Image"
         puts ""
 
-        generate_class.(GLib::g_type_from_name "VipsOperation")
+        generate_class.(GLib::g_type_from_name("VipsOperation"), nil)
 
         puts "  end"
         puts "end"

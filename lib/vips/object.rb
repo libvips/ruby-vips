@@ -205,12 +205,8 @@ module Vips
 
     attach_function :vips_object_set_from_string, [:pointer, :string], :int
 
-    callback :class_map_fn, [ObjectClass.ptr
-                             GLib::GParamSpec.ptr, 
-                             ArgumentClass.ptr, 
-                             :pointer, :pointer], :pointer
-    attach_function :vips_class_map_all, [:GType, :class_map_fn, :pointer], 
-        :pointer
+    callback :type_map_fn, [:GType, :pointer], :pointer
+    attach_function :vips_type_map, [:GType, :type_map_fn, :pointer], :pointer
 
     attach_function :vips_object_get_description, [:pointer], :string
 

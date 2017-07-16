@@ -23,6 +23,6 @@ module Vips
     # * `:rgb16` generic 16-bit RGB
     # * `:grey16` generic 16-bit mono
     # * `:matrix` a matrix
-    class Interpretation
+    class Interpretation < Symbol
     end
 end

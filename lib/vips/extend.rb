@@ -17,6 +17,6 @@ module Vips
     #
     # *   `:background` colour set from the @background property
 
-    class Extend
+    class Extend < Symbol
     end
 end

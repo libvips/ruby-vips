@@ -14,7 +14,7 @@ module Vips
     # * `:complex` complex (two floats) format
     # * `:double` double float format
     # * `:dpcomplex` double complex (two double) format
-    class BandFormat
+    class BandFormat < Symbol
     end
 
 end

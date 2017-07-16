@@ -11,6 +11,6 @@ module Vips
     # * `:d270` 90 degrees anti-clockwise
     # * `:d315` 45 degrees anti-clockwise
 
-    class Angle45
+    class Angle45 < Symbol
     end
 end

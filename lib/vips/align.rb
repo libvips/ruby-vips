@@ -6,6 +6,6 @@ module Vips
     # * `:centre` Align on the centre
     # * `:high` Align on the high coordinate edge
 
-    class Align
+    class Align < Symbol
     end
 end

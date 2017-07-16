@@ -4,9 +4,9 @@
 
 - look over code and use eg. select in thing that searches for match_image
 
-- rework doc generator
+- finish doc generator
 
-- remove enum classes?
+- enum classes should all derive from Symbol
 
 - check VipsInterpolation and affine with bicubic etc. 
 

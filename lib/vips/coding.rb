@@ -9,6 +9,6 @@ module Vips
     # * `:none` pixels are not coded
     # * `:labq` pixels encode 3 float CIELAB values as 4 uchar
     # * `:rad` pixels encode 3 float RGB as 4 uchar (Radiance coding)
-    class Coding
+    class Coding < Symbol
     end
 end

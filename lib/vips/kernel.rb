@@ -17,6 +17,6 @@ module Vips
     #  im = im.resize 3, :kernel => :lanczos2
     #  ```
 
-    class Kernel
+    class Kernel < Symbol
     end
 end

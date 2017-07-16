@@ -6,7 +6,8 @@ module Vips
     # * `:both` size both up and down
     # * `:up` only upsize
     # * `:down` only downsize
+    # * `:force` change aspect ratio
 
-    class Size
+    class Size < Symbol
     end
 end
