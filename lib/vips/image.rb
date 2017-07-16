@@ -1530,6 +1530,8 @@ module Vips
                 next if (arg_flags & ARGUMENT_DEPRECATED) != 0
 
                 name = pspec[:name].gsub("-", "_")
+                # 'in' as a param name confuses yard
+                name = "im" if name == "in"
                 gtype = pspec[:value_type]
                 fundamental = GLib::g_type_fundamental gtype
                 type_name = GLib::g_type_name gtype

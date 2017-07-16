@@ -5,7 +5,7 @@ module Vips
 #   Run an external command.
 #   @param cmd_format [String] Command to run
 #   @param opts [Hash] Set of options
-#   @option opts [Array<Image>] :in Array of input images
+#   @option opts [Array<Image>] :im Array of input images
 #   @option opts [String] :out_format Format for output filename
 #   @option opts [String] :in_format Format for input filename
 #   @option opts [Vips::Image] :out Output Output image
@@ -76,9 +76,9 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
-# @!method self.sum(in, opts = {})
+# @!method self.sum(im, opts = {})
 #   Sum an array of images.
-#   @param in [Array<Image>] Array of input images
+#   @param im [Array<Image>] Array of input images
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
@@ -341,9 +341,9 @@ module Vips
 #   @option opts [Vips::Align] :align Align on the low, centre or high coordinate edge
 #   @return [Vips::Image] Output image
 
-# @!method self.arrayjoin(in, opts = {})
+# @!method self.arrayjoin(im, opts = {})
 #   Join an array of images.
-#   @param in [Array<Image>] Array of input images
+#   @param im [Array<Image>] Array of input images
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :across Number of images across grid
 #   @option opts [Integer] :shim Pixels between images
@@ -393,9 +393,9 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
-# @!method self.bandrank(in, opts = {})
+# @!method self.bandrank(im, opts = {})
 #   Band-wise rank of a set of images.
-#   @param in [Array<Image>] Array of input images
+#   @param im [Array<Image>] Array of input images
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :index Select this band element from sorted list
 #   @return [Vips::Image] Output image

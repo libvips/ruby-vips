@@ -1,16 +1,15 @@
 # Notes
 
-- three autodocs still give warnings, eg.
-
-	# @!method self.bandrank(in, opts = {})
-
-- revise docs
+- revise docs ... we have a few undocumented still, they should probably be 
+  private
 
 - look over code and use eg. select in thing that searches for match_image
 
 - what about enums like Vips::OperationRelational?
 
 - check VipsInterpolation and affine with bicubic etc. 
+
+- make Operation.new take a nick, not a pointer
 
 - support complex constants, eg. 
 
