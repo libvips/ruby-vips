@@ -1503,6 +1503,7 @@ module Vips
             "gint" => "Integer",
             "gdouble" => "Float",
             "gfloat" => "Float",
+            "gchararray" => "String",
             "VipsImage" => "Vips::Image",
             "VipsInterpolate" => "Vips::Interpolate",
             "VipsArrayDouble" => "Array<Double>",
@@ -1528,7 +1529,7 @@ module Vips
                 next if (arg_flags & ARGUMENT_CONSTRUCT) == 0 
                 next if (arg_flags & ARGUMENT_DEPRECATED) != 0
 
-                name = pspec[:name]
+                name = pspec[:name].gsub("-", "_")
                 gtype = pspec[:value_type]
                 fundamental = GLib::g_type_fundamental gtype
                 type_name = GLib::g_type_name gtype
@@ -1584,7 +1585,8 @@ module Vips
             puts "#   #{description.capitalize}."
 
             required_input.each do |arg|
-                puts "#   @param #{name} [#{arg[:type_name]}] #{arg[:blurb]}"
+                puts "#   @param #{arg[:name]} [#{arg[:type_name]}] " +
+                    "#{arg[:blurb]}"
             end
 
             puts "#   @param opts [Hash] Set of options"
@@ -1593,7 +1595,7 @@ module Vips
                     "#{arg[:blurb]}"
             end
             optional_output.each do |arg|
-                print "#   @option opts [#{arg[:type]}] :#{arg[:name]}"
+                print "#   @option opts [#{arg[:type_name]}] :#{arg[:name]}"
                 puts " Output #{arg[:blurb]}"
             end
 

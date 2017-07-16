@@ -1,12 +1,14 @@
 # Notes
 
-- check docs
+- three autodocs still give warnings, eg.
+
+	# @!method self.bandrank(in, opts = {})
+
+- revise docs
 
 - look over code and use eg. select in thing that searches for match_image
 
-- finish doc generator
-
-- enum classes should all derive from Symbol
+- what about enums like Vips::OperationRelational?
 
 - check VipsInterpolation and affine with bicubic etc. 
 
