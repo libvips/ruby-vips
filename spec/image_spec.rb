@@ -534,5 +534,15 @@ RSpec.describe Vips::Image do
         expect(image2.avg).to eq(2)
     end
 
+    it 'has a working #to_a' do
+        image = Vips::Image.black(200, 100) 
+        array = image.to_a
+
+        expect(array.length).to eq(100)
+        expect(array[0].length).to eq(200)
+        expect(array[0][0].length).to eq(1)
+        expect(array[0][0][0]).to eq(0)
+    end
+
 end
 

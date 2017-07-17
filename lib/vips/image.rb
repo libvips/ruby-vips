@@ -982,19 +982,40 @@ module Vips
             end
         end
 
-        # Convert to an Array. This will be very slow for large images. 
+        # Convert to an Array. This will be slow for large images. 
         #
         # @return [Array] array of Fixnum
         def to_a
-            ar = Array.new(height)
-            for y in 0...height
-                ar[y] = Array.new(width)
-                    for x in 0...width
-                        ar[y][x] = getpoint(x, y)
-                    end
-            end
+            # we render the image to a big string, then unpack 
+            # as a Ruby array of the correct type
+            memory = write_to_memory.pack('c*')
 
-            return ar
+            # make the template for unpack
+            template = {
+                :char => 'c',
+                :uchar => 'C',
+                :short => 's_',
+                :ushort => 'S_',
+                :int => 'i_',
+                :uint => 'I_',
+                :float => 'f',
+                :double => 'd',
+                :complex => 'f',
+                :dpcomplex => 'd'
+            }[format.nick.to_sym] + '*'
+
+            # and unpack into something like [1, 2, 3, 4 ..]
+            array = memory.unpack(template)
+
+            # gather band elements together
+            pixel_array = []
+            array.each_slice(bands) {|pixel| pixel_array << pixel}
+
+            # build rows 
+            row_array = []
+            pixel_array.each_slice(width) {|row| row_array << row}
+
+            return row_array
         end
 
         # Return the largest integral value not greater than the argument.

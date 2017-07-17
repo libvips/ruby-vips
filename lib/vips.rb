@@ -117,10 +117,6 @@ module Vips
     end
 end
 
-at_exit {
-    Vips::shutdown if Vips.respond_to? :shutdown
-}
-
 # this makes vips keep a list of all active objects which we can print out
 Vips::leak_set true if $vips_debug
 
