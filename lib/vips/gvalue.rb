@@ -6,6 +6,7 @@
 require 'ffi'
 
 module GLib
+
     class GValue < FFI::ManagedStruct
         layout :gtype, :GType, 
                :data, [:ulong_long, 2]
@@ -13,10 +14,6 @@ module GLib
         def self.release ptr
             # Vips::log "GLib::GValue::release ptr = #{ptr}"
             GLib::g_value_unset ptr 
-        end
-
-        G_FREE_CALLBACK = Proc.new do |ptr|
-            Vips::g_free ptr
         end
 
         def self.alloc

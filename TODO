@@ -1,8 +1,8 @@
 # Notes
 
-- speed up to_a, see the issue on this
+- use read_array_of_type for to_a
 
-  change should be in master as well
+	http://www.rubydoc.info/github/ffi/ffi/FFI/Pointer#read_array_of_type-instance_method
 
 - check over docs ... we have a few undocumented still, they should probably be 
   private

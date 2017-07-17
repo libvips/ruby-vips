@@ -13,12 +13,16 @@ module GLib
     # nil being the default
     glib_log_domain = nil
 
-    def self.set_log_domain(domain)
+    def self.set_log_domain domain
         glib_log_domain = domain
     end
 
     attach_function :g_malloc, [:size_t], :pointer
     attach_function :g_free, [:pointer], :void
+
+    G_FREE_CALLBACK = Proc.new do |ptr|
+        Vips::g_free ptr
+    end
 
     # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
     typedef :ulong, :GType
@@ -28,13 +32,13 @@ module GLib
     attach_function :g_type_fundamental, [:GType], :GType
 
     # look up some common gtypes
-    GBOOL_TYPE = g_type_from_name("gboolean")
-    GINT_TYPE = g_type_from_name("gint")
-    GDOUBLE_TYPE = g_type_from_name("gdouble")
-    GENUM_TYPE = g_type_from_name("GEnum")
-    GFLAGS_TYPE = g_type_from_name("GFlags")
-    GSTR_TYPE = g_type_from_name("gchararray")
-    GOBJECT_TYPE = g_type_from_name("GObject")
+    GBOOL_TYPE = g_type_from_name "gboolean"
+    GINT_TYPE = g_type_from_name "gint"
+    GDOUBLE_TYPE = g_type_from_name "gdouble"
+    GENUM_TYPE = g_type_from_name "GEnum"
+    GFLAGS_TYPE = g_type_from_name "GFlags"
+    GSTR_TYPE = g_type_from_name "gchararray"
+    GOBJECT_TYPE = g_type_from_name "GObject"
 end
 
 require 'vips/gobject'
@@ -46,9 +50,12 @@ module Vips
 
     # @private
     LOG_DOMAIN = "VIPS"
-    GLib::set_log_domain(LOG_DOMAIN)
+    GLib::set_log_domain LOG_DOMAIN
 
     @@debug = false
+
+    # allow to skip GI autoload
+    $vips_skip_autoload ||= false
 
     # Turn debug logging on and off.
     #
@@ -75,7 +82,7 @@ module Vips
     class Error < RuntimeError
         # @param msg [String] The error message. If this is not supplied, grab
         #   and clear the vips error buffer and use that. 
-        def initialize(msg = nil)
+        def initialize msg = nil
             if msg
                 @details = msg
             elsif Vips::vips_error_buffer != ""

@@ -331,6 +331,9 @@ module Vips
     attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
     attach_function :vips_foreign_find_save_buffer, [:string], :string
 
+    attach_function :vips_image_write_to_memory, 
+        [:pointer, SizeStruct.ptr], :pointer
+
     attach_function :vips_image_get_typeof, [:pointer, :string], :GType
     attach_function :vips_image_get, [:pointer, :string, GLib::GValue.ptr], :int
     attach_function :vips_image_set, [:pointer, :string, GLib::GValue.ptr], :void
@@ -738,6 +741,19 @@ module Vips
             return buffer
         end
 
+        # Write this image to a large memory buffer.
+        #
+        # @return [String] the pixels as a huge binary string
+        def write_to_memory
+            len = Vips::SizeStruct.new
+            ptr = Vips::vips_image_write_to_memory self, len
+
+            # wrap up as an autopointer
+            ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE_CALLBACK)
+
+            ptr.get_bytes 0, len[:value]
+        end
+
         # Fetch a `GType` from an image. `GType` will be 0 for no such field.
         #
         # @see get
@@ -1131,19 +1147,40 @@ module Vips
             end
         end
 
-        # Convert to an Array. This will be very slow for large images. 
+        # Convert to an Array. This will be slow for large images. 
         #
         # @return [Array] array of Fixnum
         def to_a
-            ar = Array.new height
-            for y in 0...height
-                ar[y] = Array.new width
-                for x in 0...width
-                    ar[y][x] = getpoint x, y
-                end
-            end
+            # we render the image to a big string, then unpack 
+            # as a Ruby array of the correct type
+            memory = write_to_memory
 
-            return ar
+            # make the template for unpack
+            template = {
+                :char => 'c',
+                :uchar => 'C',
+                :short => 's_',
+                :ushort => 'S_',
+                :int => 'i_',
+                :uint => 'I_',
+                :float => 'f',
+                :double => 'd',
+                :complex => 'f',
+                :dpcomplex => 'd'
+            }[format] + '*'
+
+            # and unpack into something like [1, 2, 3, 4 ..]
+            array = memory.unpack(template)
+
+            # gather band elements together
+            pixel_array = []
+            array.each_slice(bands) {|pixel| pixel_array << pixel}
+
+            # build rows 
+            row_array = []
+            pixel_array.each_slice(width) {|row| row_array << row}
+
+            return row_array
         end
 
         # Return the largest integral value not greater than the argument.
