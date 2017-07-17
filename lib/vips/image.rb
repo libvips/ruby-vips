@@ -471,8 +471,8 @@ module Vips
         public
 
         def inspect
-            "#<Image #{width}x#{height} #{format.to_s}, #{bands} bands, " +
-                "#{interpretation.to_s}>"
+            "#<Image #{width}x#{height} #{format}, #{bands} bands, " +
+                "#{interpretation}>"
         end
 
         # Invoke a vips operation with {Vips::Operation::call}, using self as 

@@ -26,7 +26,7 @@ module GLib
             pointer = FFI::Pointer.new GValue, memory
 
             # ... and wrap in a GValue
-            GValue.new pointer
+            return GValue.new pointer
         end
 
         def init gtype
@@ -84,8 +84,8 @@ module GLib
             when Vips::BLOB_TYPE
                 len = value.length
                 ptr = GLib::g_malloc len
-                ptr.write_bytes value
                 Vips::vips_value_set_blob self, G_FREE_CALLBACK, ptr, len
+                ptr.write_bytes value
 
             else
                 case fundamental

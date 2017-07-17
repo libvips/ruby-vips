@@ -1,5 +1,9 @@
 # Notes
 
+- leak audit, esp with blob handling and write_to_memory
+
+- why don't we need to implement refstring?
+
 - check over docs ... we have a few undocumented still, they should probably be 
   private
 
