@@ -2,7 +2,7 @@
 
 # Version 1.0.6
 
-* remove lazy load, fixing a race with fork() [felixbuenemann]
+* remove lazy load, fixing a race with threaded use [felixbuenemann]
 * make `Image#to_a` much faster [John Cupitt]
 * remove the `at_exit` handler [John Cupitt]
 
