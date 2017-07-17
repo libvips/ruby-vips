@@ -32,6 +32,9 @@ module Vips
     # about as crude as you could get
     $vips_debug = false
 
+    # allow to skip GI autoload
+    $vips_skip_autoload ||= false
+
     # Turn debug logging on and off.
     #
     # @param dbg [Boolean] Set true to print debug log messages
@@ -41,38 +44,8 @@ module Vips
 
     class << self
         # @private
-        def const_missing(name)
-            log "Vips::const_missing: #{name}"
-        
-            init()
-            if const_defined?(name)
-                const_get(name)
-            else
-              super
-            end
-        end
-
-        # @private
-        def method_missing(name, *args, &block)
-            log "Vips::method_missing: #{name}, #{args}, #{block}"
-
-            init()
-            if respond_to?(name)
-                __send__(name, *args, &block)
-            else
-                super
-            end
-        end
-
-        # @private
-        def init(*argv)
-            log "Vips::init: #{argv}"
-
-            class << self
-                remove_method(:init)
-                remove_method(:const_missing)
-                remove_method(:method_missing)
-            end
+        def load_gi_module(*argv)
+            log "Vips::load_gi_module: #{argv}"
 
             loader = Loader.new(self, argv)
             begin
@@ -92,6 +65,11 @@ module Vips
             require 'vips/call'
             require 'vips/image'
             require 'vips/version'
+
+            # Make sure we only get called once.
+            def self.load_gi_module; false; end
+
+            true
         end
     end
 
@@ -145,6 +123,9 @@ at_exit {
 
 # this makes vips keep a list of all active objects which we can print out
 Vips::leak_set true if $vips_debug
+
+# Initialize GI
+Vips::load_gi_module unless $vips_skip_autoload
 
 # @private
 def showall 
