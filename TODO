@@ -1,20 +1,7 @@
 # Notes
 
-- use read_array_of_type for to_a
-
-	http://www.rubydoc.info/github/ffi/ffi/FFI/Pointer#read_array_of_type-instance_method
-
 - check over docs ... we have a few undocumented still, they should probably be 
   private
-
-- make inspect output prettier
-
-irb(main):002:0> im = Vips::Image.black(100, 100)
-=> #<Vips::Image:0x005607119ce000 @struct=#<Vips::Image::ManagedStruct:0x005607119cdf88>>
-
-  bit crap
-
-  same for gvalue?
 
 - support complex constants, eg. 
 

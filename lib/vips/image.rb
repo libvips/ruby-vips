@@ -470,6 +470,11 @@ module Vips
 
         public
 
+        def inspect
+            "#<Image #{width}x#{height} #{format.to_s}, #{bands} bands, " +
+                "#{interpretation.to_s}>"
+        end
+
         # Invoke a vips operation with {Vips::Operation::call}, using self as 
         # the first input argument. 
         #
