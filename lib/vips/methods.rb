@@ -1151,7 +1151,6 @@ module Vips
 #   Save image to csv file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :separator Separator characters
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
@@ -1161,7 +1160,6 @@ module Vips
 #   Save image to matrix file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1169,7 +1167,6 @@ module Vips
 # @!method matrixprint(opts = {})
 #   Print matrix.
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1178,7 +1175,6 @@ module Vips
 #   Save image to raw file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1187,7 +1183,6 @@ module Vips
 #   Write raw image to file descriptor.
 #   @param fd [Integer] File descriptor to write to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1196,7 +1191,6 @@ module Vips
 #   Save image to vips file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1205,7 +1199,6 @@ module Vips
 #   Save image to ppm file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :ascii save as ascii
 #   @option opts [Boolean] :squash save as one bit
 #   @option opts [Boolean] :strip Strip all metadata from image
@@ -1216,7 +1209,6 @@ module Vips
 #   Save image to radiance file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1224,7 +1216,6 @@ module Vips
 # @!method radsave_buffer(opts = {})
 #   Save image to radiance buffer.
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [VipsBlob] Buffer to save to
@@ -1235,7 +1226,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [String] :basename Base name to save to
 #   @option opts [Vips::ForeignDzLayout] :layout Directory layout
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :suffix Filename suffix for tiles
 #   @option opts [Integer] :overlap Tile overlap in pixels
 #   @option opts [Integer] :tile_size Tile size in pixels
@@ -1254,7 +1244,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [String] :basename Base name to save to
 #   @option opts [Vips::ForeignDzLayout] :layout Directory layout
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :suffix Filename suffix for tiles
 #   @option opts [Integer] :overlap Tile overlap in pixels
 #   @option opts [Integer] :tile_size Tile size in pixels
@@ -1274,7 +1263,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :compression Compression factor
 #   @option opts [Boolean] :interlace Interlace image
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Vips::ForeignPngFilter] :filter libpng row filter flag(s)
 #   @option opts [Boolean] :strip Strip all metadata from image
@@ -1286,7 +1274,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :compression Compression factor
 #   @option opts [Boolean] :interlace Interlace image
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Vips::ForeignPngFilter] :filter libpng row filter flag(s)
 #   @option opts [Boolean] :strip Strip all metadata from image
@@ -1297,7 +1284,6 @@ module Vips
 #   Save image to jpeg file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Integer] :Q Q factor
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :optimize_coding Compute optimal Huffman coding tables
@@ -1314,7 +1300,6 @@ module Vips
 # @!method jpegsave_buffer(opts = {})
 #   Save image to jpeg buffer.
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Integer] :Q Q factor
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :optimize_coding Compute optimal Huffman coding tables
@@ -1331,7 +1316,6 @@ module Vips
 # @!method jpegsave_mime(opts = {})
 #   Save image to jpeg mime.
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Integer] :Q Q factor
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :optimize_coding Compute optimal Huffman coding tables
@@ -1349,7 +1333,6 @@ module Vips
 #   Save image to webp file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless enable lossless compression
 #   @option opts [Vips::ForeignWebpPreset] :preset Preset for lossy compression
@@ -1363,7 +1346,6 @@ module Vips
 # @!method webpsave_buffer(opts = {})
 #   Save image to webp buffer.
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless enable lossless compression
 #   @option opts [Vips::ForeignWebpPreset] :preset Preset for lossy compression
@@ -1381,7 +1363,6 @@ module Vips
 #   @option opts [Vips::ForeignTiffCompression] :compression Compression for this file
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Vips::ForeignTiffPredictor] :predictor Compression prediction
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :tile Write a tiled tiff
 #   @option opts [Integer] :tile_width Tile width in pixels
@@ -1394,8 +1375,6 @@ module Vips
 #   @option opts [Float] :yres Vertical resolution in pixels/mm
 #   @option opts [Boolean] :bigtiff Write a bigtiff image
 #   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
-#   @option opts [Boolean] :round_up ROund layer sizes up rather than down
-#   @option opts [Boolean] :fancy Downsample with lanczos3
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1406,7 +1385,6 @@ module Vips
 #   @option opts [Vips::ForeignTiffCompression] :compression Compression for this file
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Vips::ForeignTiffPredictor] :predictor Compression prediction
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :tile Write a tiled tiff
 #   @option opts [Integer] :tile_width Tile width in pixels
@@ -1419,8 +1397,6 @@ module Vips
 #   @option opts [Float] :yres Vertical resolution in pixels/mm
 #   @option opts [Boolean] :bigtiff Write a bigtiff image
 #   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
-#   @option opts [Boolean] :round_up ROund layer sizes up rather than down
-#   @option opts [Boolean] :fancy Downsample with lanczos3
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [VipsBlob] Buffer to save to
@@ -1429,7 +1405,6 @@ module Vips
 #   Save image to fits file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1451,19 +1426,6 @@ module Vips
 # @!method self.thumbnail_buffer(buffer, width, opts = {})
 #   Generate thumbnail from buffer.
 #   @param buffer [VipsBlob] Buffer to load from
-#   @param width [Integer] Size to this width
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :height Size to this height
-#   @option opts [Vips::Size] :size Only upsize, only downsize, or both
-#   @option opts [Boolean] :auto_rotate Use orientation tags to rotate image upright
-#   @option opts [Vips::Interesting] :crop Reduce to fill target rectangle, then crop
-#   @option opts [Boolean] :linear Reduce in linear light
-#   @option opts [String] :import_profile Fallback import profile
-#   @option opts [String] :export_profile Fallback export profile
-#   @return [Vips::Image] Output image
-
-# @!method thumbnail_image(width, opts = {})
-#   Generate thumbnail from image.
 #   @param width [Integer] Size to this width
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :height Size to this height

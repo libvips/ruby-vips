@@ -351,7 +351,7 @@ module Vips
 
         # the layout of the VipsImage struct
         module ImageLayout
-            def self.included(base)
+            def self.included base
                 base.class_eval do
                     layout :parent, Vips::Object::Struct
                     # rest opaque
@@ -362,26 +362,16 @@ module Vips
         class Struct < Vips::Object::Struct
             include ImageLayout
 
-            def initialize(ptr)
-                Vips::log "Vips::Image::Struct.new: #{ptr}"
-                super
-            end
-
         end
 
         class ManagedStruct < Vips::Object::ManagedStruct
             include ImageLayout
 
-            def initialize(ptr)
-                Vips::log "Vips::Image::ManagedStruct.new: #{ptr}"
-                super
-            end
-
         end
 
         # handy for overloads ... want to be able to apply a function to an 
         # array or to a scalar
-        def self.smap(x, &block)
+        def self.smap x, &block
             x.is_a?(Array) ? x.map {|y| smap(y, &block)} : block.(x)
         end
 
@@ -400,7 +390,7 @@ module Vips
         # run a complex operation on a complex image, or an image with an even
         # number of bands ... handy for things like running .polar on .index
         # images
-        def self.run_cmplx(image, &block)
+        def self.run_cmplx image, &block
             original_format = image.format
 
             if not Image::complex? image.format
@@ -482,12 +472,12 @@ module Vips
         #
         # @param name [String] vips operation to call
         # @return result of vips operation
-        def method_missing(name, *args)
+        def method_missing name, *args
             Vips::Operation::call name.to_s, [self] + args
         end
 
         # Invoke a vips operation with {Vips::Operation::call}.
-        def self.method_missing(name, *args)
+        def self.method_missing name, *args
             Vips::Operation::call name.to_s, args
         end
 
@@ -527,7 +517,7 @@ module Vips
         # @param name [String] the filename to load from
         # @macro vips.loadopts
         # @return [Image] the loaded image
-        def self.new_from_file(name, opts = {})
+        def self.new_from_file name, opts = {}
             # very common, and Vips::vips_filename_get_filename will segv if we 
             # pass this
             raise Vips::Error, "filename is nil" if name == nil
@@ -659,7 +649,7 @@ module Vips
         # @return [Image] constant image
         def new_from_image value
             pixel = (Vips::Image.black(1, 1) + value).cast(format)
-            image = pixel.embed(0, 0, width, height, :extend => :copy)
+            image = pixel.embed 0, 0, width, height, :extend => :copy
             image.copy :interpretation => interpretation,
                 :xres => xres, :yres => yres,
                 :xoffset => xoffset, :yoffset => yoffset
@@ -950,7 +940,7 @@ module Vips
         #
         # @param other [Image, Real, Array<Real>] Thing to add to self
         # @return [Image] result of addition
-        def +(other)
+        def + other 
             other.is_a?(Vips::Image) ? 
                 add(other) : linear(1, other)
         end
@@ -959,7 +949,7 @@ module Vips
         #
         # @param other [Image, Real, Array<Real>] Thing to subtract from self
         # @return [Image] result of subtraction
-        def -(other)
+        def - other
             other.is_a?(Vips::Image) ? 
                 subtract(other) : linear(1, Image::smap(other) {|x| x * -1})
         end
@@ -968,7 +958,7 @@ module Vips
         #
         # @param other [Image, Real, Array<Real>] Thing to multiply by self
         # @return [Image] result of multiplication
-        def *(other)
+        def * other
             other.is_a?(Vips::Image) ? 
                 multiply(other) : linear(other, 0)
         end
@@ -977,7 +967,7 @@ module Vips
         #
         # @param other [Image, Real, Array<Real>] Thing to divide self by
         # @return [Image] result of division
-        def /(other)
+        def / other
             other.is_a?(Vips::Image) ? 
                 divide(other) : linear(Image::smap(other) {|x| 1.0 / x}, 0)
         end
@@ -986,7 +976,7 @@ module Vips
         #
         # @param other [Image, Real, Array<Real>] self modulo this
         # @return [Image] result of modulo
-        def %(other)
+        def % other
             other.is_a?(Vips::Image) ? 
                 remainder(other) : remainder_const(other)
         end
@@ -995,48 +985,48 @@ module Vips
         #
         # @param other [Image, Real, Array<Real>] self to the power of this
         # @return [Image] result of power
-        def **(other)
-            call_enum("math2", other, :pow)
+        def ** other
+            call_enum "math2", other, :pow
         end
 
         # Integer left shift with an image, constant or array. 
         #
         # @param other [Image, Real, Array<Real>] shift left by this much
         # @return [Image] result of left shift
-        def <<(other)
-            call_enum("boolean", other, :lshift)
+        def << other
+            call_enum "boolean", other, :lshift
         end
 
         # Integer right shift with an image, constant or array. 
         #
         # @param other [Image, Real, Array<Real>] shift right by this much
         # @return [Image] result of right shift
-        def >>(other)
-            call_enum("boolean", other, :rshift)
+        def >> other
+            call_enum "boolean", other, :rshift
         end
 
         # Integer bitwise OR with an image, constant or array. 
         #
         # @param other [Image, Real, Array<Real>] bitwise OR with this
         # @return [Image] result of bitwise OR 
-        def |(other)
-            call_enum("boolean", other, :or)
+        def | other
+            call_enum "boolean", other, :or
         end
 
         # Integer bitwise AND with an image, constant or array. 
         #
         # @param other [Image, Real, Array<Real>] bitwise AND with this
         # @return [Image] result of bitwise AND 
-        def &(other)
-            call_enum("boolean", other, :and)
+        def & other
+            call_enum "boolean", other, :and
         end
 
         # Integer bitwise EOR with an image, constant or array. 
         #
         # @param other [Image, Real, Array<Real>] bitwise EOR with this
         # @return [Image] result of bitwise EOR 
-        def ^(other)
-            call_enum("boolean", other, :eor)
+        def ^ other
+            call_enum "boolean", other, :eor
         end
 
         # Equivalent to image ^ -1
@@ -1069,8 +1059,8 @@ module Vips
         #
         # @param other [Image, Real, Array<Real>] relational less than with this
         # @return [Image] result of less than
-        def <(other)
-            call_enum("relational", other, :less)
+        def < other
+            call_enum "relational", other, :less
         end
 
         # Relational less than or equal to with an image, constant or array. 
@@ -1078,16 +1068,16 @@ module Vips
         # @param other [Image, Real, Array<Real>] relational less than or
         #   equal to with this
         # @return [Image] result of less than or equal to
-        def <=(other)
-            call_enum("relational", other, :lesseq)
+        def <= other
+            call_enum "relational", other, :lesseq
         end
 
         # Relational more than with an image, constant or array. 
         #
         # @param other [Image, Real, Array<Real>] relational more than with this
         # @return [Image] result of more than
-        def >(other)
-            call_enum("relational", other, :more)
+        def > other
+            call_enum "relational", other, :more
         end
 
         # Relational more than or equal to with an image, constant or array. 
@@ -1095,20 +1085,20 @@ module Vips
         # @param other [Image, Real, Array<Real>] relational more than or
         #   equal to with this
         # @return [Image] result of more than or equal to
-        def >=(other)
-            call_enum("relational", other, :moreeq)
+        def >= other
+            call_enum "relational", other, :moreeq
         end
 
         # Compare equality to nil, an image, constant or array.
         #
         # @param other [nil, Image, Real, Array<Real>] test equality to this
         # @return [Image] result of equality
-        def ==(other)
+        def == other
             # for equality, we must allow tests against nil
             if other == nil
                 false
             else
-                call_enum("relational", other, :equal)
+                call_enum "relational", other, :equal
             end
         end
 
@@ -1116,12 +1106,12 @@ module Vips
         #
         # @param other [nil, Image, Real, Array<Real>] test inequality to this
         # @return [Image] result of inequality
-        def !=(other)
+        def != other
             # for equality, we must allow tests against nil
             if other == nil
                 true
             else
-                call_enum("relational", other, :noteq)
+                call_enum "relational", other, :noteq
             end
         end
 
@@ -1129,7 +1119,7 @@ module Vips
         #
         # @param index [Numeric, Range] extract these band(s)
         # @return [Image] extracted band(s)
-        def [](index)
+        def [] index
             if index.is_a? Range
                 n = index.end - index.begin
                 n += 1 if not index.exclude_end?
@@ -1145,12 +1135,12 @@ module Vips
         #
         # @return [Array] array of Fixnum
         def to_a
-            ar = Array.new(height)
+            ar = Array.new height
             for y in 0...height
-                ar[y] = Array.new(width)
-                    for x in 0...width
-                        ar[y][x] = getpoint(x, y)
-                    end
+                ar[y] = Array.new width
+                for x in 0...width
+                    ar[y][x] = getpoint x, y
+                end
             end
 
             return ar
@@ -1209,7 +1199,7 @@ module Vips
         #
         # @param other [Image, Array<Image>, Real, Array<Real>] bands to append
         # @return [Image] many band image
-        def bandjoin(other)
+        def bandjoin other
             if not other.is_a? Array
                 other = [other]
             end
@@ -1251,7 +1241,7 @@ module Vips
         # @param x [Integer] x coordinate to sample
         # @param y [Integer] y coordinate to sample
         # @return [Array<Float>] the pixel values as an array
-        def getpoint(x, y)
+        def getpoint x, y
             # vips has an operation that does this, but we can't call it via
             # gobject-introspection 3.1 since it's missing array double
             # get
@@ -1264,8 +1254,8 @@ module Vips
         #
         # @param size [Integer] size of filter window
         # @return [Image] result of median filter
-        def median(size = 3)
-            rank(size, size, (size * size) / 2)
+        def median size = 3
+            rank size, size, (size * size) / 2
         end
 
         # Return the real part of a complex image.
@@ -1420,7 +1410,7 @@ module Vips
         # @param mask [Image, Array<Real>, Array<Array<Real>>] structuring
         #   element
         # @return [Image] eroded image
-        def erode(mask)
+        def erode mask
             morph mask, :erode
         end
 
@@ -1432,7 +1422,7 @@ module Vips
         # @param mask [Image, Array<Real>, Array<Array<Real>>] structuring
         #   element
         # @return [Image] dilated image
-        def dilate(mask)
+        def dilate mask
             morph mask, :dilate
         end
 
@@ -1484,7 +1474,7 @@ module Vips
         #
         # @param opts [Hash] Set of options
         # @return [Vips::Image] Output image
-        def scaleimage(opts = {})
+        def scaleimage opts = {}
             Vips::Image.scale self, opts
         end
 
@@ -1639,7 +1629,7 @@ module Vips
             if nickname
                 begin
                     # can fail for abstract types
-                    op = Vips::Operation.new_from_name nickname
+                    op = Vips::Operation.new nickname
                 rescue
                 end
 

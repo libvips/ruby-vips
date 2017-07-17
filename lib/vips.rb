@@ -34,6 +34,7 @@ module GLib
     GENUM_TYPE = g_type_from_name("GEnum")
     GFLAGS_TYPE = g_type_from_name("GFlags")
     GSTR_TYPE = g_type_from_name("gchararray")
+    GOBJECT_TYPE = g_type_from_name("GObject")
 end
 
 require 'vips/gobject'
@@ -130,6 +131,7 @@ end
 require 'vips/object'
 require 'vips/operation'
 require 'vips/image'
+require 'vips/interpolate'
 require 'vips/version'
 
 

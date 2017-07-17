@@ -18,12 +18,12 @@ module Vips
     public
 
     # some handy gtypes
-    IMAGE_TYPE = GLib::g_type_from_name("VipsImage")
-    ARRAY_INT_TYPE = GLib::g_type_from_name("VipsArrayInt")
-    ARRAY_DOUBLE_TYPE = GLib::g_type_from_name("VipsArrayDouble")
-    ARRAY_IMAGE_TYPE = GLib::g_type_from_name("VipsArrayImage")
-    REFSTR_TYPE = GLib::g_type_from_name("VipsRefString")
-    BLOB_TYPE = GLib::g_type_from_name("VipsBlob")
+    IMAGE_TYPE = GLib::g_type_from_name "VipsImage"
+    ARRAY_INT_TYPE = GLib::g_type_from_name "VipsArrayInt"
+    ARRAY_DOUBLE_TYPE = GLib::g_type_from_name "VipsArrayDouble"
+    ARRAY_IMAGE_TYPE = GLib::g_type_from_name "VipsArrayImage"
+    REFSTR_TYPE = GLib::g_type_from_name "VipsRefString"
+    BLOB_TYPE = GLib::g_type_from_name "VipsBlob"
 
     BAND_FORMAT_TYPE = Vips::vips_band_format_get_type
     INTERPRETATION_TYPE = Vips::vips_interpretation_get_type
@@ -69,7 +69,7 @@ module Vips
 
         # the layout of the VipsObject struct
         module ObjectLayout
-            def self.included(base)
+            def self.included base
                 base.class_eval do
                     # don't actually need most of these
                     layout :parent, GLib::GObject::Struct, 
@@ -89,51 +89,39 @@ module Vips
         class Struct < GLib::GObject::Struct
             include ObjectLayout
 
-            def initialize(ptr)
-                Vips::log "Vips::Object::Struct.new: #{ptr}"
-                super
-            end
-
         end
 
         class ManagedStruct < GLib::GObject::ManagedStruct
             include ObjectLayout
 
-            def initialize(ptr)
-                Vips::log "Vips::Object::ManagedStruct.new: #{ptr}"
-                super
-            end
-
         end
 
-        def get_typeof(name)
+        def get_typeof name
             pspec = GLib::GParamSpecPtr.new
             argument_class = Vips::ArgumentClassPtr.new
             argument_instance = Vips::ArgumentInstancePtr.new
 
             result = Vips::vips_object_get_argument self, name,
                 pspec, argument_class, argument_instance
-            if result != 0 
-                raise Vips::Error
-            end
+            raise Vips::Error if result != 0 
 
             pspec[:value][:value_type]
         end
 
-        def get(name)
+        def get name
             gtype = get_typeof name
             gvalue = GLib::GValue.alloc 
             gvalue.init gtype
             GLib::g_object_get_property self, name, gvalue
             result = gvalue.get
 
-            Vips::log "Vips::Object.get(\"#{name}\"): result = #{result}"
+            # Vips::log "Vips::Object.get(\"#{name}\"): result = #{result}"
 
             return result
         end
 
-        def set(name, value)
-            Vips::log "Vips::Object.set: #{name} = #{value}"
+        def set name, value
+            # Vips::log "Vips::Object.set: #{name} = #{value}"
 
             gtype = get_typeof name
             gvalue = GLib::GValue.alloc 
@@ -209,7 +197,6 @@ module Vips
     attach_function :vips_type_map, [:GType, :type_map_fn, :pointer], :pointer
 
     attach_function :vips_object_get_description, [:pointer], :string
-
 
 end
 

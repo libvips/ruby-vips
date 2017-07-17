@@ -1,15 +1,20 @@
 # Notes
 
-- regen docs with 8.5
+- speed up to_a, see the issue on this
 
-- revise docs ... we have a few undocumented still, they should probably be 
+  change should be in master as well
+
+- check over docs ... we have a few undocumented still, they should probably be 
   private
 
-- look over code and use eg. select in thing that searches for match_image
+- make inspect output prettier
 
-- check VipsInterpolation and affine with bicubic etc. 
+irb(main):002:0> im = Vips::Image.black(100, 100)
+=> #<Vips::Image:0x005607119ce000 @struct=#<Vips::Image::ManagedStruct:0x005607119cdf88>>
 
-- make Operation.new take a nick, not a pointer
+  bit crap
+
+  same for gvalue?
 
 - support complex constants, eg. 
 

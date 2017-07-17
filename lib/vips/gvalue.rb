@@ -10,9 +10,9 @@ module GLib
         layout :gtype, :GType, 
                :data, [:ulong_long, 2]
 
-        def self.release(ptr)
-            Vips::log "GLib::GValue::release ptr = #{ptr}"
-            GLib::g_value_unset(ptr) 
+        def self.release ptr
+            # Vips::log "GLib::GValue::release ptr = #{ptr}"
+            GLib::g_value_unset ptr 
         end
 
         G_FREE_CALLBACK = Proc.new do |ptr|
@@ -20,18 +20,24 @@ module GLib
         end
 
         def self.alloc
-            # we seem to need the extra cast, I'm not sure why
+            # allocate memory
             memory = FFI::MemoryPointer.new GValue
+
+            # make this alloc autorelease ... we mustn't release in 
+            # GValue::release, since we are used to wrap GValue pointers 
+            # made by other people
             pointer = FFI::Pointer.new GValue, memory
-            GValue.new(pointer)
+
+            # ... and wrap in a GValue
+            GValue.new pointer
         end
 
-        def init(gtype)
-            GLib::g_value_init(self, gtype)
+        def init gtype
+            GLib::g_value_init self, gtype
         end
 
-        def set(value)
-            Vips::log "GLib::GValue.set: value = #{value}"
+        def set value
+            # Vips::log "GLib::GValue.set: value = #{value}"
 
             gtype = self[:gtype]
             fundamental = GLib::g_type_fundamental gtype
@@ -39,23 +45,24 @@ module GLib
             case gtype
             when GBOOL_TYPE
                 GLib::g_value_set_boolean self, (value ? 1 : 0)
+
             when GINT_TYPE
                 GLib::g_value_set_int self, value
+
             when GDOUBLE_TYPE
                 GLib::g_value_set_double self, value
+
             when GSTR_TYPE
                 # set_string takes a copy, no lifetime worries
                 GLib::g_value_set_string self, value
-            when Vips::IMAGE_TYPE
-                # g_value_set_object() will add an extra ref
-                GLib::g_value_set_object self, value
-                GLib::g_object_unref value
+
             when Vips::ARRAY_INT_TYPE
                 value = [value] if not value.is_a? Array
 
                 Vips::vips_value_set_array_int self, nil, value.length
                 ptr = Vips::vips_value_get_array_int self, nil
                 ptr.write_array_of_int32 value
+
             when Vips::ARRAY_DOUBLE_TYPE
                 value = [value] if not value.is_a? Array
 
@@ -66,6 +73,7 @@ module GLib
                 ptr = Vips::vips_value_get_array_double self, nil
 
                 ptr.write_array_of_double value
+
             when Vips::ARRAY_IMAGE_TYPE
                 value = [value] if not value.is_a? Array
 
@@ -75,15 +83,18 @@ module GLib
 
                 # the gvalue needs a ref on each of the images
                 value.each {|image| GLib::g_object_ref image}
+
             when Vips::BLOB_TYPE
-                ptr = GLib::g_malloc value.length
-                ptr.write_bytes(value)
-                Vips::vips_value_set_blob self, 
-                    G_FREE_CALLBACK, ptr, value.length
+                len = value.length
+                ptr = GLib::g_malloc len
+                ptr.write_bytes value
+                Vips::vips_value_set_blob self, G_FREE_CALLBACK, ptr, len
+
             else
                 case fundamental
                 when GFLAGS_TYPE
                     GLib::g_value_set_flags self, value
+
                 when GENUM_TYPE
                     value = value.to_s if value.is_a? Symbol
 
@@ -96,6 +107,12 @@ module GLib
                     end
 
                     GLib::g_value_set_enum self, value
+
+                when GOBJECT_TYPE
+                    # g_value_set_object() will add an extra ref
+                    GLib::g_value_set_object self, value
+                    GLib::g_object_unref value
+
                 else
                     raise Vips::Error, "unimplemented gtype for set: #{gtype}"
                 end
@@ -110,25 +127,27 @@ module GLib
             case gtype
             when GBOOL_TYPE
                 result = GLib::g_value_get_boolean(self) != 0 ? true : false
+
             when GINT_TYPE
-                result = GLib::g_value_get_int(self)
+                result = GLib::g_value_get_int self
+
             when GDOUBLE_TYPE
-                result = GLib::g_value_get_double(self)
+                result = GLib::g_value_get_double self
+
             when GSTR_TYPE
                 # FIXME do we need to strdup here?
                 result = GLib::g_value_get_string self
-            when Vips::IMAGE_TYPE
-                # g_value_get_object() does not add a ref
-                obj = GLib::g_value_get_object self
-                result = Vips::Image.new obj
+
             when Vips::ARRAY_INT_TYPE
                 len = Vips::IntStruct.new
                 array = Vips::vips_value_get_array_int self, len
                 result = array.get_array_of_int32 0, len[:value]
+
             when Vips::ARRAY_DOUBLE_TYPE
                 len = Vips::IntStruct.new
                 array = Vips::vips_value_get_array_double self, len
                 result = array.get_array_of_double 0, len[:value]
+
             when Vips::ARRAY_IMAGE_TYPE
                 len = Vips::IntStruct.new
                 array = Vips::vips_value_get_array_image self, len
@@ -137,16 +156,19 @@ module GLib
                     GLib::g_object_ref pointer
                     Vips::Image.new pointer
                 end
+
             when Vips::BLOB_TYPE
                 len = Vips::SizeStruct.new
                 array = Vips::vips_value_get_blob self, len
                 result = array.get_bytes 0, len[:value]
+
             else
                 case fundamental
                 when GFLAGS_TYPE
-                    result = GLib::g_value_get_flags(self)
+                    result = GLib::g_value_get_flags self
+
                 when GENUM_TYPE
-                    enum_value = GLib::g_value_get_enum(self)
+                    enum_value = GLib::g_value_get_enum self
                     # this returns a static string, no need to worry about 
                     # lifetime
                     enum_name = Vips::vips_enum_nick self[:gtype], enum_value
@@ -154,12 +176,19 @@ module GLib
                         raise Vips::Error
                     end
                     result = enum_name.to_sym
+
+                when GOBJECT_TYPE
+                    # g_value_get_object() does not add a ref
+                    obj = GLib::g_value_get_object self
+                    result = Vips::Image.new obj
+
                 else
                     raise Vips::Error, "unimplemented gtype for get: #{gtype}"
+
                 end
             end
 
-            Vips::log "GLib::GValue.get: result = #{result}"
+            # Vips::log "GLib::GValue.get: result = #{result}"
 
             return result
         end

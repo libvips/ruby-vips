@@ -38,7 +38,7 @@ module GLib
 
         # the layout of the GObject struct
         module GObjectLayout
-            def self.included(base)
+            def self.included base
                 base.class_eval do
                     layout :g_type_instance, :pointer,
                            :ref_count, :uint,
@@ -51,14 +51,9 @@ module GLib
         class ManagedStruct < FFI::ManagedStruct
             include GObjectLayout
 
-            def initialize(ptr)
-                Vips::log "GLib::GObject::ManagedStruct.new: #{ptr}"
-                super
-            end
-
-            def self.release(ptr)
-                Vips::log "GLib::GObject::ManagedStruct.release: " +
-                    "unreffing #{ptr}"
+            def self.release ptr
+                # Vips::log "GLib::GObject::ManagedStruct.release: " +
+                #     "unreffing #{ptr}"
                 GLib::g_object_unref(ptr) unless ptr.null?
             end
         end
@@ -67,11 +62,6 @@ module GLib
         class Struct < FFI::Struct
             include GObjectLayout
 
-            def initialize(ptr)
-                Vips::log "GLib::GObject::Struct.new: #{ptr}"
-                super
-            end
-
         end
 
         # don't allow ptr == nil, we never want to allocate a GObject struct
@@ -79,9 +69,9 @@ module GLib
         #
         # here we use ManagedStruct, not Struct, since this is the ref that will
         # need the unref
-        def initialize(ptr)
-            Vips::log "GLib::GObject.initialize: ptr = #{ptr}"
-            @struct = ffi_managed_struct.new(ptr)
+        def initialize ptr
+            # Vips::log "GLib::GObject.initialize: ptr = #{ptr}"
+            @struct = ffi_managed_struct.new ptr
         end
 
         # access to the casting struct for this class
@@ -91,7 +81,7 @@ module GLib
 
         class << self
             def ffi_struct
-                self.const_get(:Struct)
+                self.const_get :Struct
             end
         end
 
@@ -102,7 +92,7 @@ module GLib
 
         class << self
             def ffi_managed_struct
-                self.const_get(:ManagedStruct)
+                self.const_get :ManagedStruct
             end
         end
 

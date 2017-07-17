@@ -527,5 +527,20 @@ RSpec.describe Vips::Image do
         expect(image2.avg).to eq(2)
     end
 
+    it 'can make interpolate objects' do
+        inter = Vips::Interpolate.new 'bilinear'
+
+        expect(inter).not_to eq(nil)
+    end
+
+    it 'can call affine with a non-default interpolator' do
+        image = Vips::Image.black(200, 100) 
+        inter = Vips::Interpolate.new 'bilinear'
+        result = image.affine [2, 0, 0, 2], :interpolate => inter
+
+        expect(result.width).to eq(400)
+        expect(result.height).to eq(200)
+    end
+
 end
 
