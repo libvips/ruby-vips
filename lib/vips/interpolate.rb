@@ -25,7 +25,8 @@ module Vips
     #  For example:
     #
     #  ```ruby
-    #  im = im.affine [2, 0, 0, 2], :interpolate => Vips::Interpolate.new(:bicubic)
+    #  im = im.affine [2, 0, 0, 2], 
+    #      :interpolate => Vips::Interpolate.new(:bicubic)
     #  ```
 
     class Interpolate < Vips::Object
@@ -43,20 +44,10 @@ module Vips
         class Struct < Vips::Object::Struct
             include InterpolateLayout
 
-            def initialize ptr
-                Vips::log "Vips::Interpolate::Struct.new: #{ptr}"
-                super
-            end
-
         end
 
         class ManagedStruct < Vips::Object::ManagedStruct
             include InterpolateLayout
-
-            def initialize ptr
-                Vips::log "Vips::Interpolate::ManagedStruct.new: #{ptr}"
-                super
-            end
 
         end
 

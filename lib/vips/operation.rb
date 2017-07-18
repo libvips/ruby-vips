@@ -219,8 +219,8 @@ module Vips
         # the constant value 255. 
 
         def self.call name, supplied, option_string = ""
-            Vips::log "Vips::VipsOperation.call: name = #{name}, " + 
-                "supplied = #{supplied} option_string = #{option_string}"
+            #Vips::log "Vips::VipsOperation.call: name = #{name}, " + 
+            #    "supplied = #{supplied} option_string = #{option_string}"
 
             op = Operation.new name
 
@@ -353,7 +353,7 @@ module Vips
                 result = nil
             end
 
-            Vips::log "Vips::Operation.call: result = #{result}"
+            # Vips::log "Vips::Operation.call: result = #{result}"
 
             Vips::vips_object_unref_outputs op
 
