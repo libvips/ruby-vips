@@ -340,9 +340,6 @@ module Vips
 
     @@debug = false
 
-    # allow to skip GI autoload
-    $vips_skip_autoload ||= false
-
     # Turn debug logging on and off.
     #
     # @param dbg [Boolean] Set true to print debug log messages

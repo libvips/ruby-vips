@@ -1,8 +1,5 @@
 # Notes
 
-- check over docs ... we have a few undocumented still, they should probably be 
-  private
-
 - support complex constants, eg. 
 
 	Complex(1, 2)
