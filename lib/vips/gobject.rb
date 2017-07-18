@@ -8,12 +8,14 @@ require 'ffi'
 require 'forwardable'
 
 module GLib
-    # we have a set of things we need to inherit in different ways:
+
+    # we have a number of things we need to inherit in different ways:
     #
-    # - we want to be able to subclass GObject in a simple way
-    # - the layouts of the nested structs
-    # - casting between structs which share a base
-    # - gobject refcounting
+    # - we want to be able to subclass GObject in Ruby in a simple way
+    # - the layouts of the nested structs need to inherit
+    # - we need to be able to cast between structs which share a base struct
+    #   without creating new wrappers or messing up refcounting
+    # - we need automatic gobject refcounting
     #
     # the solution is to split the class into four areas which we treat
     # differently:
@@ -85,7 +87,7 @@ module GLib
             end
         end
 
-        # access to the lifetime managed struct for this class
+        # access to the managed struct for this class
         def ffi_managed_struct
             self.class.ffi_managed_struct
         end

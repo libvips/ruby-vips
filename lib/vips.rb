@@ -68,7 +68,8 @@ require 'vips/gvalue'
 # mask = Vips::Image.new_from_array [
 #         [-1, -1, -1],
 #         [-1, 16, -1],
-#         [-1, -1, -1]], 8
+#         [-1, -1, -1]
+#        ], 8
 # im = im.conv mask
 #
 # im.write_to_file ARGV[1]
@@ -109,7 +110,8 @@ require 'vips/gvalue'
 # mask = Vips::Image.new_from_array [
 #         [-1, -1, -1],
 #         [-1, 16, -1],
-#         [-1, -1, -1]], 8
+#         [-1, -1, -1]
+#        ], 8
 # im = im.conv mask
 # ```
 #
@@ -132,7 +134,8 @@ require 'vips/gvalue'
 # # How it works
 #
 # The binding uses [ruby-ffi](https://github.com/ffi/ffi) to open the libvips
-# shared library. When you call a method on the image class, it searches the
+# shared library. When you call a method on the image class, it uses libvips
+# introspection system (based on GObject) to search the
 # library for an operation of that name, transforms the arguments to a form
 # libvips can digest, and runs the operation. 
 #

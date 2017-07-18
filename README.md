@@ -65,11 +65,9 @@ vips-8.2.1
 Check your package manager and see if the libvips on your system is new enough.
 `ruby-vips` needs libvips 8.2 or later. 
 
-If it's too old, you'll need to build libvips from source. 
-Download a tarball from the 
-[libvips website](https://jcupitt.github.io/libvips), or build
-from [the git repository](https://github.com/jcupitt/libvips) and see the
-README.
+If it's too old, you'll need to build libvips from source.  Download a tarball
+from the [libvips website](https://jcupitt.github.io/libvips), or build from
+[the git repository](https://github.com/jcupitt/libvips) and see the README.
 
 ## Installing the gem.
 
@@ -145,10 +143,8 @@ very useful new features:
   the API is still there, but now just a thin compatibility layer over vips8.
   New features may well not get added to the vips7 API.
 
-* No C required. Thanks to
-  [ffi](https://github.com/ffi/ffi)
-  the whole binding is now written in Ruby. This
-  makes it a lot smaller and more portable. 
+* No C required. Thanks to [ffi](https://github.com/ffi/ffi) the whole
+  binding is now written in Ruby. This makes it a lot smaller and more portable.
 
 There are some more minor pluses as well:
 
@@ -160,10 +156,10 @@ There are some more minor pluses as well:
   will automatically reuse results when it can. This can give a huge speedup
   in some cases.
 
-* vips8 is much simpler and more regular. For example, 
-  ruby-vips had to work hard to offer a nice loader system, but that's all
-  built into vips8. It can do things like load and save formatted images to 
-  and from memory buffers as well, which just wasn't possible before. 
+* vips8 is much simpler and more regular. For example, ruby-vips had to work 
+  hard to offer a nice loader system, but that's all built into vips8. It
+  can do things like load and save formatted images to and from memory
+  buffers as well, which just wasn't possible before.
 
 This binding adds some extra useful features over the old `ruby-vips` binding.
 
@@ -178,9 +174,9 @@ This binding adds some extra useful features over the old `ruby-vips` binding.
 
 * `VIPS::` becomes `Vips::`
 
-* `VIPS::Image.new(filename)` becomes `Vips::Image.new_from_file(filename)`. 
-  `VIPS::Image.jpeg(filename)` also becomes 
-  `Vips::Image.new_from_file(filename)`, similarly for other formats.  
+* `VIPS::Image.new(filename)` becomes `Vips::Image.new_from_file(filename)`.
+  `VIPS::Image.jpeg(filename)` also becomes
+  `Vips::Image.new_from_file(filename)`, similarly for other formats.
 
 * `#write(filename)` becomes `#write_to_file(filename)`. `#png(filename)` also
   becomes `#write_to_file(filename)`, same for all other

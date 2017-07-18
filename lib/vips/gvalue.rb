@@ -7,6 +7,18 @@ require 'ffi'
 
 module GLib
 
+    # Represent a GValue. Example use:
+    #
+    # ```ruby
+    # gvalue = GValue::alloc
+    # gvalue.init GLib::GDOUBLE_TYPE
+    # gvalue.set 3.1415
+    # value = gvalue.get
+    # ```
+    #
+    # Lifetime is managed automatically. It doesn't know about all GType values,
+    # but it does know the ones that libvips uses. 
+
     class GValue < FFI::ManagedStruct
         layout :gtype, :GType, 
                :data, [:ulong_long, 2]
@@ -16,6 +28,11 @@ module GLib
             GLib::g_value_unset ptr 
         end
 
+        # Allocate memory for a GValue and return a class wrapper. Memory will
+        # be freed automatically when it goes out of scope. The GValue is inited
+        # to 0, use {GValue.init} to set a type.
+        #
+        # @return [GValue] a new gvalue set to 0
         def self.alloc
             # allocate memory
             memory = FFI::MemoryPointer.new GValue
@@ -29,10 +46,17 @@ module GLib
             return GValue.new pointer
         end
 
+        # Set the type of thing a gvalue can hold.
+        #
+        # @param gtype [GType] the type of thing this GValue can hold.
         def init gtype
             GLib::g_value_init self, gtype
         end
 
+        # Set the value of a GValue. The value is converted to the type of the
+        # GValue, if possible.
+        #
+        # @param value [Any] The value to set
         def set value
             # Vips::log "GLib::GValue.set: value = #{value.inspect[0..50]}"
 
@@ -114,6 +138,10 @@ module GLib
             end
         end
 
+        # Get the value of a GValue. The value is converted to a Ruby type in
+        # the obvious way. 
+        #
+        # @return [Any] the value held by the GValue
         def get
             gtype = self[:gtype]
             fundamental = GLib::g_type_fundamental gtype
