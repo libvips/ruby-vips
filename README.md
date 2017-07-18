@@ -12,25 +12,22 @@ operations building on a source image. When the end of the pipe is connected
 to a destination, the whole pipeline executes at once, streaming the image
 in parallel from source to destination a section at a time. 
 
-Because `ruby-vips` is very parallel, it's quick, and because it doesn't need
-to keep entire images in memory, it's light. 
-For example, the benchmark at 
-[vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a large
-image, crops, shrinks, sharpens and saves again, and repeats 10 times. 
+Because `ruby-vips` is parallel, it's quick, and because it doesn't need to
+keep entire images in memory, it's light.  For example, the benchmark at
+[vips-benchmarks](https://github.com/stanislaw/vips-benchmarks) loads a
+large image, crops, shrinks, sharpens and saves again, and repeats 10 times.
 
 ```text
 real time in seconds, fastest of three runs
-benchmark       tiff	jpeg
-ruby-vips.rb    2.97	3.29	
-image-magick    8.18	9.71	
-rmagick.rb      9.22	10.06	
-image_sci.rb    9.39	7.20	
+benchmark       tiff    jpeg
+ruby-vips.rb    0.66    0.44
+image-magick    1.10    1.50
+rmagick.rb      1.63    2.16
 
 peak memory use in bytes
 benchmark       peak RSS
-ruby-vips.rb    117604
-image_sci.rb    146536
-rmagick.rb      3352020
+ruby-vips.rb    58696
+rmagick.rb      787564
 ```
 
 See also [benchmarks at the official libvips
@@ -41,14 +38,16 @@ which gives some more background.
 
 ## Requirements
 
-  * OS X or Linux
-  * libvips 8.2 and later
+  * OS X and Linux tested, Windows should work
+  * libvips 8.2 or later
+  * [ruby-ffi](https://github.com/ffi/ffi) 1.9 or later
+  * Ruby or JRuby
 
 ## Installation prerequisites
 
 ### OS X 
 
-Install [homebrew](http://mxcl.github.com/homebrew) and enter:
+Install [homebrew](https://brew.sh/) and enter:
 
 ```bash
 $ brew install vips
@@ -142,14 +141,14 @@ very useful new features:
   get the new thing immediately. With vips7, whenever libvips was changed, all
   the bindings needed to be changed too.
 
-* No C required. Thanks to
-  [gobject-introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
-  you can write the binding in Ruby itself, there's no need for any C. This
-  makes it a lot smaller and more portable. 
-
 * vips7 probably won't get new features. vips7 doesn't really exist any more:
   the API is still there, but now just a thin compatibility layer over vips8.
   New features may well not get added to the vips7 API.
+
+* No C required. Thanks to
+  [ffi](https://github.com/ffi/ffi)
+  the whole binding is now written in Ruby. This
+  makes it a lot smaller and more portable. 
 
 There are some more minor pluses as well:
 
