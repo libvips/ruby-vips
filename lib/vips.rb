@@ -18,11 +18,10 @@ module GLib
     end
 
     attach_function :g_malloc, [:size_t], :pointer
-    attach_function :g_free, [:pointer], :void
 
-    G_FREE_CALLBACK = Proc.new do |ptr|
-        Vips::g_free ptr
-    end
+    # save the FFI:Function that attach will return ... we can use it directly
+    # as a param for callbacks
+    G_FREE = attach_function :g_free, [:pointer], :void
 
     # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
     typedef :ulong, :GType

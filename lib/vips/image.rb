@@ -754,7 +754,7 @@ module Vips
             ptr = Vips::vips_image_write_to_memory self, len
 
             # wrap up as an autopointer
-            ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE_CALLBACK)
+            ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)
 
             ptr.get_bytes 0, len[:value]
         end

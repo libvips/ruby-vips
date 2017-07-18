@@ -54,7 +54,7 @@ module GLib
             def self.release ptr
                 # Vips::log "GLib::GObject::ManagedStruct.release: " +
                 #     "unreffing #{ptr}"
-                GLib::g_object_unref(ptr) unless ptr.null?
+                GLib::g_object_unref ptr
             end
         end
 

@@ -34,7 +34,7 @@ module GLib
         end
 
         def set value
-            # Vips::log "GLib::GValue.set: value = #{value}"
+            # Vips::log "GLib::GValue.set: value = #{value.inspect[0..50]}"
 
             gtype = self[:gtype]
             fundamental = GLib::g_type_fundamental gtype
@@ -84,7 +84,7 @@ module GLib
             when Vips::BLOB_TYPE
                 len = value.length
                 ptr = GLib::g_malloc len
-                Vips::vips_value_set_blob self, G_FREE_CALLBACK, ptr, len
+                Vips::vips_value_set_blob self, G_FREE, ptr, len
                 ptr.write_bytes value
 
             else
@@ -106,9 +106,7 @@ module GLib
                     GLib::g_value_set_enum self, value
 
                 when GOBJECT_TYPE
-                    # g_value_set_object() will add an extra ref
                     GLib::g_value_set_object self, value
-                    GLib::g_object_unref value
 
                 else
                     raise Vips::Error, "unimplemented gtype for set: #{gtype}"
@@ -175,8 +173,10 @@ module GLib
                     result = enum_name.to_sym
 
                 when GOBJECT_TYPE
-                    # g_value_get_object() does not add a ref
                     obj = GLib::g_value_get_object self
+                    # g_value_get_object() does not add a ref ... we need to add
+                    # one to match the unref in gobject release
+                    GLib::g_object_ref obj
                     result = Vips::Image.new obj
 
                 else
@@ -185,7 +185,7 @@ module GLib
                 end
             end
 
-            # Vips::log "GLib::GValue.get: result = #{result}"
+            # Vips::log "GLib::GValue.get: result = #{result.inspect[0..50]}"
 
             return result
         end
@@ -193,7 +193,10 @@ module GLib
     end
 
     attach_function :g_value_init, [GValue.ptr, :GType], :void
-    attach_function :g_value_unset, [GValue.ptr], :void
+
+    # we must use a plain :pointer here, since we call this from #release, which
+    # just gives us the unwrapped pointer, not the ruby class
+    attach_function :g_value_unset, [:pointer], :void
 
     attach_function :g_value_set_boolean, [GValue.ptr, :int], :void
     attach_function :g_value_set_int, [GValue.ptr, :int], :void
