@@ -9,17 +9,14 @@ env:
     - PATH=$HOME/vips/bin:$PATH
     - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
     - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
-    - PYTHONPATH=$HOME/vips/lib/python2.7/site-packages:$PYTHONPATH
-    - GI_TYPELIB_PATH=$HOME/vips/lib/girepository-1.0:$GI_TYPELIB_PATH
 
 dist: trusty
 
 addons:
   apt:
     packages:
-      - libxml2-dev
+      - libexpat1-dev
       - gettext
-      - python-dev
       - liblcms1-dev
       - libmagickwand-dev
       - libopenexr-dev
@@ -41,7 +38,6 @@ cache:
 
 language: ruby
 rvm:
-  - 1.9
   - 2.0
   - 2.1
   - 2.2

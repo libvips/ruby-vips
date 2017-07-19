@@ -155,7 +155,7 @@ module Vips
         # any vips operation, for example:
         #
         # ```ruby
-        # out = Vips::Operation.call "black", 100, 100, :bands => 12
+        # out = Vips::Operation.call "black", [100, 100], {:bands => 12}
         # ```
         #
         # will call the C function 
@@ -169,7 +169,7 @@ module Vips
         # write:
         #
         # ```ruby
-        # out = Vips::Image.black 100, 100, :bands => 12
+        # out = Vips::Image.black 100, 100, bands: 12
         # ```
         #
         # Or perhaps:
@@ -190,7 +190,7 @@ module Vips
         # `x * a + b` where `a` and `b` are vector constants, you can write:
         #
         # ```ruby
-        # x = Vips::Image.black 100, 100, :bands => 3
+        # x = Vips::Image.black 100, 100, bands: 3
         # y = x.linear 1, 2
         # y = x.linear [1], 4
         # y = x.linear [1, 2, 3], 4
@@ -200,7 +200,7 @@ module Vips
         # support all the variations on:
         #
         # ```ruby
-        # x = Vips::Image.black 100, 100, :bands => 3
+        # x = Vips::Image.black 100, 100, bands: 3
         # y = x * 2
         # y = x + [1,2,3]
         # y = x % [1]
@@ -211,16 +211,17 @@ module Vips
         # argument. For example, you can write:
         #
         # ```
-        # x = Vips::Image.black 100, 100, :bands => 3
+        # x = Vips::Image.black 100, 100, bands: 3
         # y = x.bandjoin 255
         # ```
         #
         # to add an extra band to the image where each pixel in the new band has 
         # the constant value 255. 
 
-        def self.call name, supplied, option_string = ""
+        def self.call name, supplied, optional = {}, option_string = ""
             #Vips::log "Vips::VipsOperation.call: name = #{name}, " + 
-            #    "supplied = #{supplied} option_string = #{option_string}"
+            #    "supplied = #{supplied} optional = #{optional} " +
+            #    "option_string = #{option_string}"
 
             op = Operation.new name
 
@@ -259,13 +260,12 @@ module Vips
             if not supplied.is_a? Array
                 raise Vips::Error, "unable to call #{name}: " + 
                     "argument array is not an array"
-            elsif supplied.length == required_input.length 
-                supplied_optional = nil
-            elsif supplied.length == required_input.length + 1 and
-                supplied.last.is_a? Hash
-                supplied_optional = supplied.last
-                supplied.delete_at -1
-            else
+            end
+            if not optional.is_a? Hash
+                raise Vips::Error, "unable to call #{name}: " + 
+                    "optional arguments are not a hash"
+            end
+            if supplied.length != required_input.length 
                 raise Vips::Error, "unable to call #{name}: " + 
                     "you supplied #{supplied.length} arguments, " +
                     "but operation needs #{required_input.length}."
@@ -273,15 +273,13 @@ module Vips
 
             # very that all supplied_optional keys are in optional_input or
             # optional_output
-            if supplied_optional
-                supplied_optional.each do |key, value|
-                    arg_name = key.to_s
+            optional.each do |key, value|
+                arg_name = key.to_s
 
-                    if not optional_input.has_key? arg_name and
-                        not optional_output.has_key? arg_name 
-                        raise Vips::Error, "unable to call #{name}: " + 
-                            "unknown option #{arg_name}"
-                    end
+                if not optional_input.has_key? arg_name and
+                    not optional_output.has_key? arg_name 
+                    raise Vips::Error, "unable to call #{name}: " + 
+                        "unknown option #{arg_name}"
                 end
             end
 
@@ -311,15 +309,13 @@ module Vips
             end
 
             # set all optional inputs
-            if supplied_optional
-                supplied_optional.each do |key, value|
-                    arg_name = key.to_s
+            optional.each do |key, value|
+                arg_name = key.to_s
 
-                    if optional_input.has_key? arg_name
-                        flags = optional_input[arg_name]
+                if optional_input.has_key? arg_name
+                    flags = optional_input[arg_name]
 
-                        op.set arg_name, value, match_image, flags
-                    end
+                    op.set arg_name, value, match_image, flags
                 end
             end
 
@@ -333,15 +329,13 @@ module Vips
 
             # fetch all optional ones
             optional_results = {}
-            if supplied_optional
-                supplied_optional.each do |key, value|
-                    arg_name = key.to_s
+            optional.each do |key, value|
+                arg_name = key.to_s
 
-                    if optional_output.has_key? arg_name
-                        flags = optional_output[arg_name]
+                if optional_output.has_key? arg_name
+                    flags = optional_output[arg_name]
 
-                        optional_results[arg_name] = op.get arg_name
-                    end
+                    optional_results[arg_name] = op.get arg_name
                 end
             end
 

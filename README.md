@@ -41,7 +41,7 @@ which gives some more background.
   * OS X and Linux tested, Windows should work
   * libvips 8.2 or later
   * [ruby-ffi](https://github.com/ffi/ffi) 1.9 or later
-  * Ruby or JRuby
+  * Ruby 2.0+, JRuby should work
 
 ## Installation prerequisites
 
@@ -95,7 +95,7 @@ im = Vips::Image.new_from_file filename
 # make the other pixels in the image by mirroring im up / down / 
 # left / right, see
 # https://jcupitt.github.io/libvips/API/current/libvips-conversion.html#vips-embed
-im = im.embed 100, 100, 3000, 3000, :extend => :mirror
+im = im.embed 100, 100, 3000, 3000, extend: :mirror
 
 # multiply the green (middle) band by 2, leave the other two alone
 im *= [1, 2, 1]
@@ -105,7 +105,7 @@ mask = Vips::Image.new_from_array [
     [-1, -1, -1],
     [-1, 16, -1],
     [-1, -1, -1]], 8
-im = im.conv mask
+im = im.conv mask, precision: :integer
 
 # finally, write the result back to a file on disk
 im.write_to_file output_filename
