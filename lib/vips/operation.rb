@@ -96,7 +96,11 @@ module Vips
             argument_map do |pspec, argument_class, argument_instance|
                 flags = argument_class[:flags]
                 if (flags & ARGUMENT_CONSTRUCT) != 0 
-                    args << [pspec[:name], flags] 
+                    # names can include - as punctuation, but we always use _ in
+                    # Ruby
+                    name = pspec[:name].gsub("-", "_")
+
+                    args << [name, flags] 
                 end
             end
 

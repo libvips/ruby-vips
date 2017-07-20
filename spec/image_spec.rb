@@ -560,5 +560,13 @@ RSpec.describe Vips::Image do
         expect(image.bands).to eq(12)
     end
 
+    if has_jpeg?
+        it 'works with arguments containing -' do
+            image = Vips::Image.black(16, 16) + 128
+            buffer = image.write_to_buffer ".jpg", optimize_coding: true
+            expect(buffer.length).to be > 100
+        end
+    end
+
 end
 
