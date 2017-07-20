@@ -98,16 +98,14 @@ module Vips
                 end
 
                 new_format = image.format == :double ? :dpcomplex : :complex
-                image = image.copy :format => new_format, 
-                    :bands => image.bands / 2
+                image = image.copy format: new_format, bands: image.bands / 2
             end
 
             image = block.(image)
 
             if not Image::complex? original_format
                 new_format = image.format == :dpcomplex ? :double : :float
-                image = image.copy :format => new_format, 
-                    :bands => image.bands * 2
+                image = image.copy format: new_format, bands: image.bands * 2
             end
 
             image
@@ -167,18 +165,26 @@ module Vips
                 "#{interpretation}>"
         end
 
-        # Invoke a vips operation with {Vips::Operation::call}, using self as 
+        # To support keyword args, we need to tell Ruby that final image
+        # arguments cannot be hashes of keywords. 
+        #
+        # https://makandracards.com/makandra/36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
+        def to_hash
+            nil
+        end
+
+        # Invoke a vips operation with {Vips::Operation.call}, using self as 
         # the first input argument. 
         #
         # @param name [String] vips operation to call
         # @return result of vips operation
-        def method_missing name, *args
-            Vips::Operation::call name.to_s, [self] + args
+        def method_missing name, *args, **options
+            Vips::Operation.call name.to_s, [self, *args], options
         end
 
-        # Invoke a vips operation with {Vips::Operation::call}.
-        def self.method_missing name, *args
-            Vips::Operation::call name.to_s, args
+        # Invoke a vips operation with {Vips::Operation.call}.
+        def self.method_missing name, *args, **options
+            Vips::Operation.call name.to_s, args, options
         end
 
         # Return a new {Image} for a file on disc. This method can load
@@ -192,7 +198,7 @@ module Vips
         # You can also supply options as a hash, for example:
         #
         # ```
-        # image = Vips::new_from_file "fred.jpg", :shrink => 2
+        # image = Vips::new_from_file "fred.jpg", shrink: 2
         # ```
         #
         # The full set of options available depend upon the load operation that 
@@ -227,7 +233,7 @@ module Vips
             loader = Vips::vips_foreign_find_load filename
             raise Vips::Error if loader == nil
 
-            Operation::call loader, [filename, opts], option_string
+            Operation.call loader, [filename], opts, option_string
         end
 
         # Create a new {Image} for an image encoded, in a format such as
@@ -241,7 +247,7 @@ module Vips
         # or alternatively:
         #
         # ```
-        # image = Vips::new_from_from_buffer memory_buffer, "", :shrink => 2
+        # image = Vips::new_from_from_buffer memory_buffer, "", shrink: 2
         # ```
         #
         # The options available depend on the file format. Try something like:
@@ -265,7 +271,7 @@ module Vips
             loader = Vips::vips_foreign_find_load_buffer data, data.length
             raise Vips::Error if loader == nil
 
-            Vips::Operation::call loader, [data, opts], option_string
+            Vips::Operation.call loader, [data], opts, option_string
         end
 
         def self.matrix_from_array width, height, array
@@ -349,10 +355,9 @@ module Vips
         # @return [Image] constant image
         def new_from_image value
             pixel = (Vips::Image.black(1, 1) + value).cast(format)
-            image = pixel.embed 0, 0, width, height, :extend => :copy
-            image.copy :interpretation => interpretation,
-                :xres => xres, :yres => yres,
-                :xoffset => xoffset, :yoffset => yoffset
+            image = pixel.embed 0, 0, width, height, extend: :copy
+            image.copy interpretation: interpretation,
+                xres: xres, yres: yres, xoffset: xoffset, yoffset: yoffset
         end
 
         # Write this image to a file. Save options may be encoded in the
@@ -365,7 +370,7 @@ module Vips
         # or equivalently:
         #
         # ```
-        # image.write_to_file "fred.jpg", :Q => 90
+        # image.write_to_file "fred.jpg", Q: 90
         # ```
         #
         # The full set of save options depend on the selected saver. Try 
@@ -392,7 +397,7 @@ module Vips
                 raise Vips::Error, "No known saver for '#{filename}'."
             end
 
-            Vips::Operation::call saver, [self, filename, opts]
+            Vips::Operation.call saver, [self, filename], opts, option_string
 
             write_gc
         end
@@ -407,7 +412,7 @@ module Vips
         # or equivalently:
         #
         # ```
-        # image.write_to_buffer ".jpg", :Q => 90
+        # image.write_to_buffer ".jpg", Q: 90
         # ```
         #
         # The full set of save options depend on the selected saver. Try 
@@ -430,7 +435,7 @@ module Vips
                 raise Vips::Error, "No known saver for '#{filename}'."
             end
 
-            buffer = Vips::Operation.call saver, [self, opts], option_string
+            buffer = Vips::Operation.call saver, [self], opts, option_string
             raise Vips::Error if buffer == nil
 
             write_gc
@@ -836,7 +841,7 @@ module Vips
             if index.is_a? Range
                 n = index.end - index.begin
                 n += 1 if not index.exclude_end?
-                extract_band index.begin, :n => n
+                extract_band index.begin, n: n
             elsif index.is_a? Numeric
                 extract_band index 
             else
@@ -953,7 +958,7 @@ module Vips
         # @return [Real, Real, Real] maximum value, x coordinate of maximum, y
         #   coordinate of maximum
         def maxpos
-            v, opts = max :x => true, :y => true
+            v, opts = max x: true, y: true
             x = opts['x']
             y = opts['y']
             return v, x, y
@@ -964,7 +969,7 @@ module Vips
         # @return [Real, Real, Real] minimum value, x coordinate of minimum, y
         #   coordinate of minimum
         def minpos
-            v, opts = min :x => true, :y => true
+            v, opts = min x: true, y: true
             x = opts['x']
             y = opts['y']
             return v, x, y
@@ -1194,13 +1199,13 @@ module Vips
             match_image = [th, el, self].find {|x| x.is_a? Vips::Image}
 
             if not th.is_a? Vips::Image
-                th = Operation::imageize match_image, th
+                th = Operation.imageize match_image, th
             end
             if not el.is_a? Vips::Image
-                el = Operation::imageize match_image, el
+                el = Operation.imageize match_image, el
             end
 
-            Vips::Operation.call "ifthenelse", [self, th, el, opts]
+            Vips::Operation.call "ifthenelse", [self, th, el], opts
         end
 
         # Scale an image to uchar. This is the vips `scale` operation, but

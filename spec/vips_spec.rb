@@ -11,15 +11,7 @@ RSpec.describe Vips do
         end
 
         it 'can take an optional argument' do
-            image = Vips::Operation.call "black", [200, 200, :bands => 12]
-
-            expect(image.width).to eq(200)
-            expect(image.height).to eq(200)
-            expect(image.bands).to eq(12)
-        end
-
-        it 'can take an optional argument' do
-            image = Vips::Operation.call "black", [200, 200, :bands => 12]
+            image = Vips::Operation.call "black", [200, 200], {:bands => 12}
 
             expect(image.width).to eq(200)
             expect(image.height).to eq(200)
@@ -28,8 +20,8 @@ RSpec.describe Vips do
 
         it 'can handle enum arguments' do
             black = Vips::Operation.call "black", [200, 200]
-            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500, 
-                :extend => :mirror]
+            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500], 
+                {:extend => :mirror}
 
             expect(embed.width).to eq(500)
             expect(embed.height).to eq(500)
@@ -38,8 +30,8 @@ RSpec.describe Vips do
 
         it 'enum arguments can be strings' do
             black = Vips::Operation.call "black", [200, 200]
-            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500, 
-                :extend => "mirror"]
+            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500], 
+               {:extend => "mirror"}
 
             expect(embed.width).to eq(500)
             expect(embed.height).to eq(500)
@@ -48,10 +40,10 @@ RSpec.describe Vips do
 
         it 'can return optional output args' do
             point = Vips::Operation.call "black", [1, 1]
-            test = Vips::Operation.call "embed", [point, 20, 10, 100, 100, 
-                :extend => :white]
-            value, opts = Vips::Operation.call "min", [test, 
-                :x => true, :y => true]
+            test = Vips::Operation.call "embed", [point, 20, 10, 100, 100],  
+                {:extend => :white}
+            value, opts = Vips::Operation.call "min", [test],  
+                {:x => true, :y => true}
 
             expect(value).to eq(0)
             expect(opts['x']).to eq(20)

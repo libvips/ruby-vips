@@ -552,5 +552,13 @@ RSpec.describe Vips::Image do
         expect(array[0][0][0]).to eq(0)
     end
 
+    it 'supports keyword arguments' do
+        image = Vips::Image.black 200, 200, bands: 12
+
+        expect(image.width).to eq(200)
+        expect(image.height).to eq(200)
+        expect(image.bands).to eq(12)
+    end
+
 end
 

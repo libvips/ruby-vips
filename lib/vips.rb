@@ -61,7 +61,7 @@ require 'vips/gvalue'
 #     raise "usage: #{$PROGRAM_NAME}: input-file output-file"
 # end
 #
-# im = Vips::Image.new_from_file ARGV[0], :access => :sequential
+# im = Vips::Image.new_from_file ARGV[0], access: :sequential
 #
 # im *= [1, 2, 1]
 #
@@ -70,7 +70,7 @@ require 'vips/gvalue'
 #         [-1, 16, -1],
 #         [-1, -1, -1]
 #        ], 8
-# im = im.conv mask
+# im = im.conv mask, precision: :integer
 #
 # im.write_to_file ARGV[1]
 # ```
@@ -81,7 +81,7 @@ require 'vips/gvalue'
 # Reading this example line by line, we have:
 #
 # ```ruby
-# im = Vips::Image.new_from_file ARGV[0], :access => :sequential
+# im = Vips::Image.new_from_file ARGV[0], access: :sequential
 # ```
 #
 # {Image.new_from_file} can load any image file supported by vips. In this
@@ -90,7 +90,9 @@ require 'vips/gvalue'
 # default mode is `:random`, this allows for full random access to image pixels,
 # but is slower and needs more memory. See {Access}
 # for full details
-# on the various modes available. You can also load formatted images from 
+# on the various modes available. 
+#
+# You can also load formatted images from 
 # memory buffers, create images that wrap C-style memory arrays, or make images
 # from constants.
 #
@@ -112,13 +114,17 @@ require 'vips/gvalue'
 #         [-1, 16, -1],
 #         [-1, -1, -1]
 #        ], 8
-# im = im.conv mask
+# im = im.conv mask, precision: :integer
 # ```
 #
 # {Image.new_from_array} creates an image from an array constant. The 8 at
 # the end sets the scale: the amount to divide the image by after 
-# integer convolution. See the libvips API docs for `vips_conv()` (the operation
-# invoked by {Image#conv}) for details on the convolution operator. 
+# integer convolution. 
+#
+# See the libvips API docs for `vips_conv()` (the operation
+# invoked by {Image#conv}) for details on the convolution operator. By default,
+# it computes with a float mask, but `:integer` is fine for this case, and is 
+# much faster. 
 #
 # Finally:
 #
@@ -152,8 +158,10 @@ require 'vips/gvalue'
 # image is set to the value of `self`. Operations which do not take an input 
 # image, such as {Image.black}, appear as class methods. The remainder of
 # the arguments you supply in the function call are used to set the other
-# required input arguments. If the final supplied argument is a hash, it is used
-# to set any optional input arguments. The result is the required output 
+# required input arguments. Any trailing keyword arguments are used to set
+# options on the operation.
+# 
+# The result is the required output 
 # argument if there is only one result, or an array of values if the operation
 # produces several results. If the operation has optional output objects, they
 # are returned as a final hash.
@@ -169,7 +177,7 @@ require 'vips/gvalue'
 # You can ask it to return the position of the minimum with `:x` and `:y`.
 #   
 # ```ruby
-# min_value, opts = min :x => true, :y => true
+# min_value, opts = min x: true, y: true
 # x_pos = opts['x']
 # y_pos = opts['y']
 # ```
@@ -180,7 +188,7 @@ require 'vips/gvalue'
 # You can also ask for the top *n* minimum, for example:
 #
 # ```ruby
-# min_value, opts = min :size => 10, :x_array => true, :y_array => true
+# min_value, opts = min size: 10, x_array: true, y_array: true
 # x_pos = opts['x_array']
 # y_pos = opts['y_array']
 # ```
