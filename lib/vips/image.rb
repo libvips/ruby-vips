@@ -39,7 +39,7 @@ module Vips
     public
 
     # This class represents a libvips image. See the {Vips} module documentation
-    # for an introduction to using this module.
+    # for an introduction to using this class.
 
     class Image < Vips::Object
         private
