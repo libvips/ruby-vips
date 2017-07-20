@@ -169,8 +169,9 @@ module Vips
         # arguments cannot be hashes of keywords. 
         #
         # https://makandracards.com/makandra/36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
-        def to_hash
-            nil
+        def respond_to? name, include_all = false
+            return false if name == :to_hash
+            super
         end
 
         # Invoke a vips operation with {Vips::Operation.call}, using self as 
