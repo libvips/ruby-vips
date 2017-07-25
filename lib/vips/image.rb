@@ -165,12 +165,23 @@ module Vips
                 "#{interpretation}>"
         end
 
-        # To support keyword args, we need to tell Ruby that final image
-        # arguments cannot be hashes of keywords. 
-        #
-        # https://makandracards.com/makandra/36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
         def respond_to? name, include_all = false
+            # To support keyword args, we need to tell Ruby that final image
+            # arguments cannot be hashes of keywords. 
+            #
+            # https://makandracards.com/makandra/36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
             return false if name == :to_hash
+
+            # respond to all vips operations by nickname
+            return true if Vips::type_find("VipsOperation", name.to_s) != 0
+
+            super
+        end
+
+        def self.respond_to? name, include_all = false
+            # respond to all vips operations by nickname
+            return true if Vips::type_find("VipsOperation", name.to_s) != 0
+
             super
         end
 
