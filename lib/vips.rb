@@ -11,7 +11,17 @@ require 'ffi'
 
 module GLib
     extend FFI::Library
-    ffi_lib 'gobject-2.0'
+
+    if FFI::Platform.windows?
+        glib_libname = 'libglib-2.0-0.dll'
+        gobject_libname = 'libgobject-2.0-0.dll'
+    else
+        glib_libname = nil 
+        gobject_libname = 'gobject-2.0'
+    end
+
+    ffi_lib glib_libname if glib_libname
+    ffi_lib gobject_libname
 
     # nil being the default
     glib_log_domain = nil
@@ -344,7 +354,14 @@ require 'vips/gvalue'
 
 module Vips
     extend FFI::Library
-    ffi_lib 'vips'
+
+    if FFI::Platform.windows?
+        vips_libname = 'libvips-42.dll'
+    else
+        vips_libname = 'vips'
+    end
+
+    ffi_lib vips_libname
 
     LOG_DOMAIN = "VIPS"
     GLib::set_log_domain LOG_DOMAIN
