@@ -5,13 +5,13 @@
 
 require 'ffi'
 
-module GLib
+module GObject
 
     # Represent a GValue. Example use:
     #
     # ```ruby
     # gvalue = GValue::alloc
-    # gvalue.init GLib::GDOUBLE_TYPE
+    # gvalue.init GObject::GDOUBLE_TYPE
     # gvalue.set 3.1415
     # value = gvalue.get
     # ```
@@ -24,8 +24,8 @@ module GLib
                :data, [:ulong_long, 2]
 
         def self.release ptr
-            # Vips::log "GLib::GValue::release ptr = #{ptr}"
-            GLib::g_value_unset ptr 
+            # Vips::log "GObject::GValue::release ptr = #{ptr}"
+            ::GObject::g_value_unset ptr 
         end
 
         # Allocate memory for a GValue and return a class wrapper. Memory will
@@ -50,7 +50,7 @@ module GLib
         #
         # @param gtype [GType] the type of thing this GValue can hold.
         def init gtype
-            GLib::g_value_init self, gtype
+            ::GObject::g_value_init self, gtype
         end
 
         # Set the value of a GValue. The value is converted to the type of the
@@ -58,24 +58,24 @@ module GLib
         #
         # @param value [Any] The value to set
         def set value
-            # Vips::log "GLib::GValue.set: value = #{value.inspect[0..50]}"
+            # Vips::log "GObject::GValue.set: value = #{value.inspect[0..50]}"
 
             gtype = self[:gtype]
-            fundamental = GLib::g_type_fundamental gtype
+            fundamental = ::GObject::g_type_fundamental gtype
 
             case gtype
             when GBOOL_TYPE
-                GLib::g_value_set_boolean self, (value ? 1 : 0)
+                ::GObject::g_value_set_boolean self, (value ? 1 : 0)
 
             when GINT_TYPE
-                GLib::g_value_set_int self, value
+                ::GObject::g_value_set_int self, value
 
             when GDOUBLE_TYPE
-                GLib::g_value_set_double self, value
+                ::GObject::g_value_set_double self, value
 
             when GSTR_TYPE
                 # set_string takes a copy, no lifetime worries
-                GLib::g_value_set_string self, value
+                ::GObject::g_value_set_string self, value
 
             when Vips::ARRAY_INT_TYPE
                 value = [value] if not value.is_a? Array
@@ -103,18 +103,18 @@ module GLib
                 ptr.write_array_of_pointer value
 
                 # the gvalue needs a ref on each of the images
-                value.each {|image| GLib::g_object_ref image}
+                value.each {|image| ::GObject::g_object_ref image}
 
             when Vips::BLOB_TYPE
                 len = value.length
                 ptr = GLib::g_malloc len
-                Vips::vips_value_set_blob self, G_FREE, ptr, len
+                Vips::vips_value_set_blob self, GLib::G_FREE, ptr, len
                 ptr.write_bytes value
 
             else
                 case fundamental
                 when GFLAGS_TYPE
-                    GLib::g_value_set_flags self, value
+                    ::GObject::g_value_set_flags self, value
 
                 when GENUM_TYPE
                     value = value.to_s if value.is_a? Symbol
@@ -127,10 +127,10 @@ module GLib
                         end
                     end
 
-                    GLib::g_value_set_enum self, value
+                    ::GObject::g_value_set_enum self, value
 
                 when GOBJECT_TYPE
-                    GLib::g_value_set_object self, value
+                    ::GObject::g_value_set_object self, value
 
                 else
                     raise Vips::Error, "unimplemented gtype for set: #{gtype}"
@@ -144,22 +144,22 @@ module GLib
         # @return [Any] the value held by the GValue
         def get
             gtype = self[:gtype]
-            fundamental = GLib::g_type_fundamental gtype
+            fundamental = ::GObject::g_type_fundamental gtype
             result = nil
 
             case gtype
             when GBOOL_TYPE
-                result = GLib::g_value_get_boolean(self) != 0 ? true : false
+                result = ::GObject::g_value_get_boolean(self) != 0 ? true : false
 
             when GINT_TYPE
-                result = GLib::g_value_get_int self
+                result = ::GObject::g_value_get_int self
 
             when GDOUBLE_TYPE
-                result = GLib::g_value_get_double self
+                result = ::GObject::g_value_get_double self
 
             when GSTR_TYPE
                 # FIXME do we need to strdup here?
-                result = GLib::g_value_get_string self
+                result = ::GObject::g_value_get_string self
 
             when Vips::ARRAY_INT_TYPE
                 len = Vips::IntStruct.new
@@ -176,7 +176,7 @@ module GLib
                 array = Vips::vips_value_get_array_image self, len
                 result = array.get_array_of_pointer 0, len[:value]
                 result.map! do |pointer| 
-                    GLib::g_object_ref pointer
+                    ::GObject::g_object_ref pointer
                     Vips::Image.new pointer
                 end
 
@@ -188,10 +188,10 @@ module GLib
             else
                 case fundamental
                 when GFLAGS_TYPE
-                    result = GLib::g_value_get_flags self
+                    result = ::GObject::g_value_get_flags self
 
                 when GENUM_TYPE
-                    enum_value = GLib::g_value_get_enum self
+                    enum_value = ::GObject::g_value_get_enum self
                     # this returns a static string, no need to worry about 
                     # lifetime
                     enum_name = Vips::vips_enum_nick self[:gtype], enum_value
@@ -201,10 +201,10 @@ module GLib
                     result = enum_name.to_sym
 
                 when GOBJECT_TYPE
-                    obj = GLib::g_value_get_object self
+                    obj = ::GObject::g_value_get_object self
                     # g_value_get_object() does not add a ref ... we need to add
                     # one to match the unref in gobject release
-                    GLib::g_object_ref obj
+                    ::GObject::g_object_ref obj
                     result = Vips::Image.new obj
 
                 else
@@ -213,7 +213,7 @@ module GLib
                 end
             end
 
-            # Vips::log "GLib::GValue.get: result = #{result.inspect[0..50]}"
+            # Vips::log "GObject::GValue.get: result = #{result.inspect[0..50]}"
 
             return result
         end

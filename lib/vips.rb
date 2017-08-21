@@ -14,14 +14,11 @@ module GLib
 
     if FFI::Platform.windows?
         glib_libname = 'libglib-2.0-0.dll'
-        gobject_libname = 'libgobject-2.0-0.dll'
     else
-        glib_libname = nil 
-        gobject_libname = 'gobject-2.0'
+        glib_libname = 'glib-2.0' 
     end
 
-    ffi_lib glib_libname if glib_libname
-    ffi_lib gobject_libname
+    ffi_lib glib_libname 
 
     # nil being the default
     glib_log_domain = nil
@@ -35,6 +32,19 @@ module GLib
     # save the FFI::Function that attach will return ... we can use it directly
     # as a param for callbacks
     G_FREE = attach_function :g_free, [:pointer], :void
+
+end
+
+module GObject
+    extend FFI::Library
+
+    if FFI::Platform.windows?
+        gobject_libname = 'libgobject-2.0-0.dll'
+    else
+        gobject_libname = 'gobject-2.0'
+    end
+
+    ffi_lib gobject_libname
 
     # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
     typedef :ulong, :GType

@@ -27,8 +27,10 @@ module Vips
         [:pointer, SizeStruct.ptr], :pointer
 
     attach_function :vips_image_get_typeof, [:pointer, :string], :GType
-    attach_function :vips_image_get, [:pointer, :string, GLib::GValue.ptr], :int
-    attach_function :vips_image_set, [:pointer, :string, GLib::GValue.ptr], :void
+    attach_function :vips_image_get, 
+        [:pointer, :string, GObject::GValue.ptr], :int
+    attach_function :vips_image_set, 
+        [:pointer, :string, GObject::GValue.ptr], :void
     attach_function :vips_image_remove, [:pointer, :string], :void
 
     attach_function :vips_band_format_iscomplex, [:int], :int
@@ -350,8 +352,8 @@ module Vips
             raise Vips::Error if image == nil
 
             # be careful to set them as double
-            image.set_type GLib::GDOUBLE_TYPE, 'scale', scale.to_f
-            image.set_type GLib::GDOUBLE_TYPE, 'offset', offset.to_f
+            image.set_type GObject::GDOUBLE_TYPE, 'scale', scale.to_f
+            image.set_type GObject::GDOUBLE_TYPE, 'offset', offset.to_f
 
             return image
         end
@@ -491,7 +493,7 @@ module Vips
         # @param name [String] Metadata field to get
         # @return [Object] Value of field
         def get name
-            gvalue = GLib::GValue.alloc
+            gvalue = GObject::GValue.alloc
             result = Vips::vips_image_get self, name, gvalue
             if result != 0 
                 raise Vips::Error
@@ -517,7 +519,7 @@ module Vips
         # @param name [String] Metadata field to set
         # @param value [Object] Value to set
         def set_type gtype, name, value
-            gvalue = GLib::GValue.alloc
+            gvalue = GObject::GValue.alloc
             gvalue.init gtype
             gvalue.set value
             Vips::vips_image_set self, name, gvalue
@@ -1282,17 +1284,17 @@ module Vips
                 # 'in' as a param name confuses yard
                 name = "im" if name == "in"
                 gtype = pspec[:value_type]
-                fundamental = GLib::g_type_fundamental gtype
-                type_name = GLib::g_type_name gtype
+                fundamental = GObject::g_type_fundamental gtype
+                type_name = GObject::g_type_name gtype
                 if map_go_to_ruby.include? type_name
                     type_name = map_go_to_ruby[type_name] 
                 end
-                if fundamental == GLib::GFLAGS_TYPE or 
-                    fundamental == GLib::GENUM_TYPE
+                if fundamental == GObject::GFLAGS_TYPE or 
+                    fundamental == GObject::GENUM_TYPE
                     type_name =~ /Vips(.*)/
                     type_name = "Vips::" + $~[1]
                 end
-                blurb = GLib::g_param_spec_get_blurb pspec
+                blurb = GObject::g_param_spec_get_blurb pspec
                 value = {:name => name, 
                          :flags => arg_flags, 
                          :gtype => gtype, 
@@ -1394,7 +1396,7 @@ module Vips
         puts "  class Image"
         puts ""
 
-        generate_class.(GLib::g_type_from_name("VipsOperation"), nil)
+        generate_class.(GObject::g_type_from_name("VipsOperation"), nil)
 
         puts "  end"
         puts "end"

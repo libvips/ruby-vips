@@ -1,4 +1,4 @@
-# This module provides an interface to the top level bits of GLib
+# This module provides an interface to the top level bits of libvips
 # via ruby-ffi.
 #
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
@@ -15,7 +15,7 @@ module Vips
     attach_function :vips_object_unref_outputs, [:pointer], :void
 
     callback :argument_map_fn, [:pointer,
-                                GLib::GParamSpec.ptr, 
+                                GObject::GParamSpec.ptr, 
                                 ArgumentClass.ptr, 
                                 ArgumentInstance.ptr, 
                                 :pointer, :pointer], :pointer

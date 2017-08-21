@@ -1,4 +1,4 @@
-# This module provides an interface to the top level bits of GLib
+# This module provides an interface to the top level bits of GObject
 # via ruby-ffi.
 #
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
@@ -7,7 +7,7 @@
 require 'ffi'
 require 'forwardable'
 
-module GLib
+module GObject
 
     # we have a number of things we need to inherit in different ways:
     #
@@ -54,9 +54,9 @@ module GLib
             include GObjectLayout
 
             def self.release ptr
-                # Vips::log "GLib::GObject::ManagedStruct.release: " +
+                # Vips::log "GObject::GObject::ManagedStruct.release: " +
                 #     "unreffing #{ptr}"
-                GLib::g_object_unref ptr
+                GObject::g_object_unref ptr
             end
         end
 
@@ -72,7 +72,7 @@ module GLib
         # here we use ManagedStruct, not Struct, since this is the ref that will
         # need the unref
         def initialize ptr
-            # Vips::log "GLib::GObject.initialize: ptr = #{ptr}"
+            # Vips::log "GObject::GObject.initialize: ptr = #{ptr}"
             @struct = ffi_managed_struct.new ptr
         end
 

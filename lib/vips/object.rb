@@ -1,4 +1,4 @@
-# This module provides an interface to the top level bits of GLib
+# This module provides an interface to the top level bits of libvips
 # via ruby-ffi.
 #
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
@@ -18,12 +18,12 @@ module Vips
     public
 
     # some handy gtypes
-    IMAGE_TYPE = GLib::g_type_from_name "VipsImage"
-    ARRAY_INT_TYPE = GLib::g_type_from_name "VipsArrayInt"
-    ARRAY_DOUBLE_TYPE = GLib::g_type_from_name "VipsArrayDouble"
-    ARRAY_IMAGE_TYPE = GLib::g_type_from_name "VipsArrayImage"
-    REFSTR_TYPE = GLib::g_type_from_name "VipsRefString"
-    BLOB_TYPE = GLib::g_type_from_name "VipsBlob"
+    IMAGE_TYPE = GObject::g_type_from_name "VipsImage"
+    ARRAY_INT_TYPE = GObject::g_type_from_name "VipsArrayInt"
+    ARRAY_DOUBLE_TYPE = GObject::g_type_from_name "VipsArrayDouble"
+    ARRAY_IMAGE_TYPE = GObject::g_type_from_name "VipsArrayImage"
+    REFSTR_TYPE = GObject::g_type_from_name "VipsRefString"
+    BLOB_TYPE = GObject::g_type_from_name "VipsBlob"
 
     BAND_FORMAT_TYPE = Vips::vips_band_format_get_type
     INTERPRETATION_TYPE = Vips::vips_interpretation_get_type
@@ -35,14 +35,14 @@ module Vips
     attach_function :vips_enum_nick, [:GType, :int], :string
 
     attach_function :vips_value_set_array_double, 
-        [GLib::GValue.ptr, :pointer, :int], :void
+        [GObject::GValue.ptr, :pointer, :int], :void
     attach_function :vips_value_set_array_int, 
-        [GLib::GValue.ptr, :pointer, :int], :void
+        [GObject::GValue.ptr, :pointer, :int], :void
     attach_function :vips_value_set_array_image, 
-        [GLib::GValue.ptr, :int], :void
+        [GObject::GValue.ptr, :int], :void
     callback :free_fn, [:pointer], :void
     attach_function :vips_value_set_blob, 
-        [GLib::GValue.ptr, :free_fn, :pointer, :size_t], :void
+        [GObject::GValue.ptr, :free_fn, :pointer, :size_t], :void
 
     class SizeStruct < FFI::Struct
         layout :value, :size_t
@@ -53,26 +53,26 @@ module Vips
     end
 
     attach_function :vips_value_get_ref_string, 
-        [GLib::GValue.ptr, SizeStruct.ptr], :string
+        [GObject::GValue.ptr, SizeStruct.ptr], :string
     attach_function :vips_value_get_array_double, 
-        [GLib::GValue.ptr, IntStruct.ptr], :pointer
+        [GObject::GValue.ptr, IntStruct.ptr], :pointer
     attach_function :vips_value_get_array_int, 
-        [GLib::GValue.ptr, IntStruct.ptr], :pointer
+        [GObject::GValue.ptr, IntStruct.ptr], :pointer
     attach_function :vips_value_get_array_image, 
-        [GLib::GValue.ptr, IntStruct.ptr], :pointer
+        [GObject::GValue.ptr, IntStruct.ptr], :pointer
     attach_function :vips_value_get_blob, 
-        [GLib::GValue.ptr, SizeStruct.ptr], :pointer
+        [GObject::GValue.ptr, SizeStruct.ptr], :pointer
 
     attach_function :type_find, :vips_type_find, [:string, :string], :GType
 
-    class Object < GLib::GObject
+    class Object < GObject::GObject
 
         # the layout of the VipsObject struct
         module ObjectLayout
             def self.included base
                 base.class_eval do
                     # don't actually need most of these
-                    layout :parent, GLib::GObject::Struct, 
+                    layout :parent, GObject::GObject::Struct, 
                        :constructed, :int,
                        :static_object, :int,
                        :argument_table, :pointer,
@@ -86,18 +86,18 @@ module Vips
             end
         end
 
-        class Struct < GLib::GObject::Struct
+        class Struct < GObject::GObject::Struct
             include ObjectLayout
 
         end
 
-        class ManagedStruct < GLib::GObject::ManagedStruct
+        class ManagedStruct < GObject::GObject::ManagedStruct
             include ObjectLayout
 
         end
 
         def get_typeof name
-            pspec = GLib::GParamSpecPtr.new
+            pspec = GObject::GParamSpecPtr.new
             argument_class = Vips::ArgumentClassPtr.new
             argument_instance = Vips::ArgumentInstancePtr.new
 
@@ -110,9 +110,9 @@ module Vips
 
         def get name
             gtype = get_typeof name
-            gvalue = GLib::GValue.alloc 
+            gvalue = GObject::GValue.alloc 
             gvalue.init gtype
-            GLib::g_object_get_property self, name, gvalue
+            GObject::g_object_get_property self, name, gvalue
             result = gvalue.get
 
             # Vips::log "Vips::Object.get(\"#{name}\"): result = #{result}"
@@ -124,10 +124,10 @@ module Vips
             # Vips::log "Vips::Object.set: #{name} = #{value}"
 
             gtype = get_typeof name
-            gvalue = GLib::GValue.alloc 
+            gvalue = GObject::GValue.alloc 
             gvalue.init gtype
             gvalue.set value
-            GLib::g_object_set_property self, name, gvalue
+            GObject::g_object_set_property self, name, gvalue
         end
 
     end
@@ -137,7 +137,7 @@ module Vips
     end
 
     class Argument < FFI::Struct
-        layout :pspec, GLib::GParamSpec.ptr
+        layout :pspec, GObject::GParamSpec.ptr
     end
 
     class ArgumentInstance < Argument
@@ -186,7 +186,8 @@ module Vips
     # subclasses
     attach_function :vips_object_get_argument, 
         [:pointer, :string, 
-         GLib::GParamSpecPtr.ptr, ArgumentClassPtr.ptr, ArgumentInstancePtr.ptr],
+         GObject::GParamSpecPtr.ptr, 
+         ArgumentClassPtr.ptr, ArgumentInstancePtr.ptr],
         :int
 
     attach_function :vips_object_print_all, [], :void
