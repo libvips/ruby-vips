@@ -23,7 +23,7 @@ module Spec
 
     module Helpers
         def reset_working!
-            FileUtils.rm Dir[tmp.join('*.*')]
+            FileUtils.rm Dir[tmp.join('*.*')], :force => true
             FileUtils.mkdir_p(tmp)
         end
     end
