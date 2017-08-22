@@ -61,7 +61,7 @@ gem 'ruby-vips'
 ```
 
 On Windows, you'll need to set the `RUBY_DLL_PATH` environment variable to 
-point to the libvips bin.
+point to the libvips bin directory.
 
 Take a look in `examples/`. There is full yard documentation, take a look
 there too.
@@ -97,8 +97,8 @@ im.write_to_file output_filename
 
 There are two older versions of this gem.
 
-The `0.3-stable` branch is written in C, and supports a different API. It still
-works, but is only supported for compatibility.
+The `0.3-stable` branch is written in C and supports a different API. It still
+works, but is only maintained for compatibility.
 
 The `1.0-stable` branch is based on `gobject-introspection` rather than
 `ffi`. It supports the same API as the current version, but is harder to
