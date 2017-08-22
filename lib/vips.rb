@@ -71,10 +71,8 @@ end
 require 'vips/gobject'
 require 'vips/gvalue'
 
-# This module provides a binding for the [vips image processing 
+# This module provides a binding for the [libvips image processing 
 # library](https://jcupitt.github.io/libvips/).
-#
-# It needs vips-8.2 or later to be installed. 
 #
 # # Example
 #
@@ -111,7 +109,7 @@ require 'vips/gvalue'
 # {Image.new_from_file} can load any image file supported by vips. In this
 # example, we will be accessing pixels top-to-bottom as we sweep through the
 # image reading and writing, so `:sequential` access mode is best for us. The
-# default mode is `:random`, this allows for full random access to image pixels,
+# default mode is `:random`: this allows for full random access to image pixels,
 # but is slower and needs more memory. See {Access}
 # for full details
 # on the various modes available. 

@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/ruby-vips.svg)](https://badge.fury.io/rb/ruby-vips)
 [![Build Status](https://travis-ci.org/jcupitt/ruby-vips.svg?branch=master)](https://travis-ci.org/jcupitt/ruby-vips)
 
-This gem provides a Ruby binding for the [vips image processing
+This gem provides a Ruby binding for the [libvips image processing
 library](https://jcupitt.github.io/libvips).
 
 Programs that use `ruby-vips` don't
