@@ -2,7 +2,7 @@
 
 # Version 2.0.0
 
-* rewrite on top of 'ffi' [John Cupitt]
+* rewrite on top of 'ffi' [John Cupitt, Kleis Auke Wolthuizen]
 
 # Version 1.0.6
 
