@@ -113,22 +113,12 @@ module Vips
             image
         end
 
-        # libvips 8.4 and earlier had a bug which swapped the args to the _const
-        # enum operations
-        def swap_const_args
-            Vips::version(0) < 8 or 
-                (Vips::version(0) == 8 and Vips::version(1) <= 4)
-        end
-
         # handy for expanding enum operations
         def call_enum(name, other, enum)
             if other.is_a?(Vips::Image)
                 Vips::Operation.call name.to_s, [self, other, enum]
             else
-                args = swap_const_args ? 
-                    [self, other, enum] : [self, enum, other]
-
-                Vips::Operation.call name.to_s + "_const", args
+                Vips::Operation.call name.to_s + "_const", [self, enum, other]
             end
         end
 
