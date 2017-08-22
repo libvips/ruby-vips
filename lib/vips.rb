@@ -46,8 +46,12 @@ module GObject
 
     ffi_lib gobject_libname
 
-    # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
-    typedef :ulong, :GType
+    # we can't just use ulong, windows has different int sizing rules
+    if FFI::Platform::ADDRESS_SIZE == 64
+        typedef :uint64, :GType
+    else
+        typedef :uint32, :GType
+    end
 
     attach_function :g_type_name, [:GType], :string
     attach_function :g_type_from_name, [:string], :GType
