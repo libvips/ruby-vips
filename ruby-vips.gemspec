@@ -8,7 +8,6 @@ Gem::Specification.new do |spec|
   spec.name = "ruby-vips"
   spec.version = Vips::VERSION
   spec.authors = ["John Cupitt"]
-  spec.date = "2017-07-15"
   spec.email = "jcupitt@gmail.com"
 
   spec.summary = "Ruby extension for the vips image processing library."
