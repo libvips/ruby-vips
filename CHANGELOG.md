@@ -1,5 +1,9 @@
 # master 
 
+# Version 2.0.1
+
+* add support for VipsRefStr in gvalue, thanks tomasc
+
 # Version 2.0.0
 
 * rewrite on top of 'ffi' [John Cupitt, Kleis Auke Wolthuizen]

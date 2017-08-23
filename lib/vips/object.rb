@@ -34,6 +34,8 @@ module Vips
     attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
     attach_function :vips_enum_nick, [:GType, :int], :string
 
+    attach_function :vips_value_set_ref_string, 
+        [GObject::GValue.ptr, :string], :void
     attach_function :vips_value_set_array_double, 
         [GObject::GValue.ptr, :pointer, :int], :void
     attach_function :vips_value_set_array_int, 

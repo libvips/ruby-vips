@@ -74,8 +74,10 @@ module GObject
                 ::GObject::g_value_set_double self, value
 
             when GSTR_TYPE
-                # set_string takes a copy, no lifetime worries
                 ::GObject::g_value_set_string self, value
+
+            when Vips::REFSTR_TYPE
+                ::Vips::vips_value_set_ref_string self, value
 
             when Vips::ARRAY_INT_TYPE
                 value = [value] if not value.is_a? Array
@@ -133,7 +135,9 @@ module GObject
                     ::GObject::g_value_set_object self, value
 
                 else
-                    raise Vips::Error, "unimplemented gtype for set: #{gtype}"
+                    raise Vips::Error, "unimplemented gtype for set: " +
+                        "#{::GObject::g_type_name gtype} (#{gtype})"
+
                 end
             end
         end
@@ -158,8 +162,11 @@ module GObject
                 result = ::GObject::g_value_get_double self
 
             when GSTR_TYPE
-                # FIXME do we need to strdup here?
                 result = ::GObject::g_value_get_string self
+
+            when Vips::REFSTR_TYPE
+                len = Vips::SizeStruct.new
+                result = ::Vips::vips_value_get_ref_string self, len
 
             when Vips::ARRAY_INT_TYPE
                 len = Vips::IntStruct.new
@@ -208,7 +215,8 @@ module GObject
                     result = Vips::Image.new obj
 
                 else
-                    raise Vips::Error, "unimplemented gtype for get: #{gtype}"
+                    raise Vips::Error, "unimplemented gtype for get: " +
+                        "#{::GObject::g_type_name gtype} (#{gtype})"
 
                 end
             end
@@ -216,6 +224,7 @@ module GObject
             # Vips::log "GObject::GValue.get: result = #{result.inspect[0..50]}"
 
             return result
+
         end
 
     end

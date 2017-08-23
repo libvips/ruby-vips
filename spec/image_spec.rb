@@ -568,5 +568,14 @@ RSpec.describe Vips::Image do
         end
     end
 
+    if has_jpeg?
+        it 'can read exif tags' do
+            x = Vips::Image.new_from_file simg "huge.jpg" 
+            orientation = x.get "exif-ifd0-Orientation"
+            expect(orientation.length).to be > 20
+            expect(orientation.split[0]).to eq("1")
+        end
+    end
+
 end
 
