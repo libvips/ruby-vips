@@ -1,20 +1,22 @@
-# master 
+# Changelog
 
-# Version 2.0.1
+## master 
+
+## Version 2.0.1 (2017-08-23)
 
 * add support for VipsRefStr in gvalue, thanks tomasc
 
-# Version 2.0.0
+## Version 2.0.0 (2017-08-22)
 
 * rewrite on top of 'ffi' [John Cupitt, Kleis Auke Wolthuizen]
 
-# Version 1.0.6
+## Version 1.0.6 (2017-07-17)
 
 * remove lazy load, fixing a race with multi-threading [felixbuenemann]
 * make `Image#to_a` much faster [John Cupitt]
 * remove the `at_exit` handler [John Cupitt]
 
-# Version 1.0.5
+## Version 1.0.5 (2017-04-29)
 
 * fix `_const` for libvips 8.5 [John Cupitt]
 * add `scaleimage`, the scale operation renamed to avoid a clash with the
@@ -24,7 +26,7 @@
 * update generated docs for libvips 8.5 [John Cupitt]
 * added docs for new libvips 8.5 enums [John Cupitt]
 
-# Version 1.0.4
+## Version 1.0.4 (2017-02-07)
 
 * remove stray comma from some docs lines [John Cupitt]
 * update generated docs for libvips 8.5 [John Cupitt]
@@ -32,7 +34,7 @@
 * update for gobject-introspection 3.1 [John Cupitt]
 * support ruby 2.4 [John Cupitt]
 
-# Version 1.0.3
+## Version 1.0.3 (2016-08-18)
 
 * doc improvements [John Cupitt]
 * add #size to get [width, height] [John Cupitt]
@@ -41,43 +43,43 @@
 * detect operation build fail correctly [John Cupitt]
 * lock gobject-introspection at 3.0.8 to avoid breakage [John Cupitt]
 
-# Version 1.0.2
+## Version 1.0.2 (2016-07-07)
 
 * add .yardopts to fix ruby-gems docs [John Cupitt]
 
-# Version 1.0.1
+## Version 1.0.1 (2016-07-07)
 
 * simplify gemspec [sandstrom]
 * remove jeweler dependency [John Cupitt]
 * add `.to_a` to Image [John Cupitt]
 
-# Version 1.0.0
+## Version 1.0.0 (2016-06-07)
 
 * complete rewrite, API break [John Cupitt]
 
-# Version 0.3.14
+## Version 0.3.14
 
 * more GC tuning [felixbuenemann]
 * add `write.rb` example program [felixbuenemann]
 
-# Version 0.3.13
+## Version 0.3.13
 
 * don't use generational GC options on old Rubys [John Cupitt]
 
-# Version 0.3.12
+## Version 0.3.12
 
 * incremental GC every 10 writes [felixbuenemann]
 * updated bundle [John Cupitt]
 
-# Version 0.3.11
+## Version 0.3.11
 
 * added magick load from buffer [John Cupitt]
 
-# Version 0.3.10
+## Version 0.3.10
 
 * added webp write [John Cupitt]
 
-# Version 0.3.9
+## Version 0.3.9
 
 * removed a stray file from gemspec [Alessandro Tagliapietra]
 * updated bundle [John Cupitt]
@@ -89,16 +91,16 @@
 * add .size, see issue #58 [John Cupitt]
 * add rdoc-data dep, maybe it will help ruby-gems docs [John Cupitt]
 
-# Version 0.3.8
+## Version 0.3.8
 
 * add VIPS::thread_shutdown(), must be called on foreign thread exit [John Cupitt]
 
-# Version 0.3.7
+## Version 0.3.7
 
 * update build dependencies [John Cupitt]
 * README updated [John Cupitt]
 
-# Version 0.3.6
+## Version 0.3.6
 
 * add png and jpg load from memory buffer [John Cupitt]
 * README updated to include buffer read/write example [John Cupitt]
@@ -107,30 +109,30 @@
 * fix rdoc build to include C sources [John Cupitt]
 * better compat with older libvips [John Cupitt]
 
-# Version 0.3.5
+## Version 0.3.5
 
 * rb_raise() in mask.c no longer passes a string pointer as the fmt arg, stopping gcc bailing out on some platforms [John Cupitt]
 * Image.magick() now calls im_magick2vips() directly rather than relying on libvips file type sniffing [John Cupitt]
 
-# Version 0.3.4
+## Version 0.3.4
 
 * Update specs for lcms changes, thanks Stanislaw [John Cupitt]
 * VIPS::Reader supports .exif() / .exif?() methods for better back compat, thanks Jeremy [John Cupitt]
 * VIPS::Reader fallbacks load the image if its not been loaded [John Cupitt]
 * VIPS::Reader no longer allows VIPS::Header methods [John Cupitt]
 
-# Version 0.3.3
+## Version 0.3.3
 
 * Typo in workaround in 0.3.2 [John Cupitt]
 
-# Version 0.3.2
+## Version 0.3.2
 
 ### Fixed
 
 * Workaround helps ruby-vips compile (and run) against 7.26.3 [John Cupitt and 
 James Harrison]
 
-# Version 0.3.1
+## Version 0.3.1
 
 ### Fixed
 
@@ -139,7 +141,7 @@ James Harrison]
 * Image read now runs GC and retries on fail [John Cupitt]
 * Image write GCs every 100 images [John Cupitt]
 
-# Version 0.3.0
+## Version 0.3.0
 
 Release date: 2012-07-20
 
@@ -161,7 +163,7 @@ Release date: 2012-07-20
 * Now passes rspec test suite cleanly in valgrind [John Cupitt]
 * Fixed check of sequential mode support [Stanislaw Pankevich]
 
-# Version 0.2.0
+## Version 0.2.0
 
 Release date: 2012-06-29
 
@@ -183,7 +185,7 @@ Release date: 2012-06-29
 
 * #8: Memory allocation-free issues [Grigoriy Chudnov]
 
-# Version 0.1.1
+## Version 0.1.1
 
 Release date: 2012-06-22
 
@@ -197,6 +199,6 @@ Release date: 2012-06-22
 * Added Gemfile with the only 'rspec' dependency. [Stanislaw Pankevich]
 * Added Jeweler Rakefile contents to release ruby-vips as a gem. [Stanislaw Pankevich]
 
-# Before (initial unreleased version 0.1.0)
+## Before (initial unreleased version 0.1.0)
 
 Long-long history here undocumented...
