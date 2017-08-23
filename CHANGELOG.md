@@ -4,7 +4,7 @@
 
 ## Version 2.0.1 (2017-08-23)
 
-* add support for VipsRefStr in gvalue, thanks tomasc
+* add support for `VipsRefStr` in gvalue, thanks tomasc
 
 ## Version 2.0.0 (2017-08-22)
 
@@ -37,15 +37,15 @@
 ## Version 1.0.3 (2016-08-18)
 
 * doc improvements [John Cupitt]
-* add #size to get [width, height] [John Cupitt]
+* add `Image#size` to get `[width, height]` [John Cupitt]
 * only ask for ruby 2.0 to help OS X [John Cupitt]
-* break up Image.call to make it easier to understand [John Cupitt]
+* break up `Image.call` to make it easier to understand [John Cupitt]
 * detect operation build fail correctly [John Cupitt]
 * lock gobject-introspection at 3.0.8 to avoid breakage [John Cupitt]
 
 ## Version 1.0.2 (2016-07-07)
 
-* add .yardopts to fix ruby-gems docs [John Cupitt]
+* add `.yardopts` to fix ruby-gems docs [John Cupitt]
 
 ## Version 1.0.1 (2016-07-07)
 
