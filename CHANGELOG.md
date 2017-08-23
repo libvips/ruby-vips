@@ -1,6 +1,6 @@
 # Changelog
 
-## master 
+## master
 
 ## Version 2.0.1 (2017-08-23)
 
@@ -38,8 +38,8 @@
 
 * doc improvements [John Cupitt]
 * add #size to get [width, height] [John Cupitt]
-* only ask for ruby 2.0 to help OS X [John Cupitt] 
-* break up Image.call to make it easier to understand [John Cupitt] 
+* only ask for ruby 2.0 to help OS X [John Cupitt]
+* break up Image.call to make it easier to understand [John Cupitt]
 * detect operation build fail correctly [John Cupitt]
 * lock gobject-introspection at 3.0.8 to avoid breakage [John Cupitt]
 
@@ -57,29 +57,29 @@
 
 * complete rewrite, API break [John Cupitt]
 
-## Version 0.3.14
+## Version 0.3.14 (2016-01-25)
 
 * more GC tuning [felixbuenemann]
 * add `write.rb` example program [felixbuenemann]
 
-## Version 0.3.13
+## Version 0.3.13 (2016-01-18)
 
 * don't use generational GC options on old Rubys [John Cupitt]
 
-## Version 0.3.12
+## Version 0.3.12 (2016-01-17)
 
 * incremental GC every 10 writes [felixbuenemann]
 * updated bundle [John Cupitt]
 
-## Version 0.3.11
+## Version 0.3.11 (2015-10-15)
 
 * added magick load from buffer [John Cupitt]
 
-## Version 0.3.10
+## Version 0.3.10 (2015-06-24)
 
 * added webp write [John Cupitt]
 
-## Version 0.3.9
+## Version 0.3.9 (2014-07-17)
 
 * removed a stray file from gemspec [Alessandro Tagliapietra]
 * updated bundle [John Cupitt]
@@ -91,16 +91,16 @@
 * add .size, see issue #58 [John Cupitt]
 * add rdoc-data dep, maybe it will help ruby-gems docs [John Cupitt]
 
-## Version 0.3.8
+## Version 0.3.8 (2014-05-11)
 
 * add VIPS::thread_shutdown(), must be called on foreign thread exit [John Cupitt]
 
-## Version 0.3.7
+## Version 0.3.7 (2014-02-04)
 
 * update build dependencies [John Cupitt]
 * README updated [John Cupitt]
 
-## Version 0.3.6
+## Version 0.3.6 (2013-06-25)
 
 * add png and jpg load from memory buffer [John Cupitt]
 * README updated to include buffer read/write example [John Cupitt]
@@ -109,30 +109,30 @@
 * fix rdoc build to include C sources [John Cupitt]
 * better compat with older libvips [John Cupitt]
 
-## Version 0.3.5
+## Version 0.3.5 (2013-01-15)
 
 * rb_raise() in mask.c no longer passes a string pointer as the fmt arg, stopping gcc bailing out on some platforms [John Cupitt]
 * Image.magick() now calls im_magick2vips() directly rather than relying on libvips file type sniffing [John Cupitt]
 
-## Version 0.3.4
+## Version 0.3.4 (2012-09-11)
 
 * Update specs for lcms changes, thanks Stanislaw [John Cupitt]
 * VIPS::Reader supports .exif() / .exif?() methods for better back compat, thanks Jeremy [John Cupitt]
 * VIPS::Reader fallbacks load the image if its not been loaded [John Cupitt]
 * VIPS::Reader no longer allows VIPS::Header methods [John Cupitt]
 
-## Version 0.3.3
+## Version 0.3.3 (2012-08-31)
 
 * Typo in workaround in 0.3.2 [John Cupitt]
 
-## Version 0.3.2
+## Version 0.3.2 (2012-08-31)
 
 ### Fixed
 
 * Workaround helps ruby-vips compile (and run) against 7.26.3 [John Cupitt and 
 James Harrison]
 
-## Version 0.3.1
+## Version 0.3.1 (2012-08-30)
 
 ### Fixed
 
@@ -141,9 +141,7 @@ James Harrison]
 * Image read now runs GC and retries on fail [John Cupitt]
 * Image write GCs every 100 images [John Cupitt]
 
-## Version 0.3.0
-
-Release date: 2012-07-20
+## Version 0.3.0 (2012-07-20)
 
 ### Added
 
@@ -163,9 +161,7 @@ Release date: 2012-07-20
 * Now passes rspec test suite cleanly in valgrind [John Cupitt]
 * Fixed check of sequential mode support [Stanislaw Pankevich]
 
-## Version 0.2.0
-
-Release date: 2012-06-29
+## Version 0.2.0 (2012-06-29)
 
 ### Added
 
@@ -185,9 +181,7 @@ Release date: 2012-06-29
 
 * #8: Memory allocation-free issues [Grigoriy Chudnov]
 
-## Version 0.1.1
-
-Release date: 2012-06-22
+## Version 0.1.1 (2012-06-22)
 
 ### Changed
 
