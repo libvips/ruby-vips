@@ -66,7 +66,7 @@ module GLib
     @glib_log_handler_id = 0
 
     # module-level, so it's not GCd away
-    log_handler = Proc.new do |domain, level, message, user_data|
+    LOG_HANDLER = Proc.new do |domain, level, message, user_data|
         @logger.send(GLIB_TO_SEVERITY[level], domain) {message}
     end
 
@@ -92,7 +92,7 @@ module GLib
                 LOG_LEVEL_ERROR | 
                 LOG_LEVEL_CRITICAL | 
                 LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
-                log_handler, nil
+                LOG_HANDLER, nil
 
             # we must remove any handlers on exit, since libvips may log stuff 
             # on shutdown and we don't want LOG_HANDLER to be invoked 
