@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.2 (2017-08-26)
+
+* switch to `logger` for all logging output
+
 ## Version 2.0.1 (2017-08-23)
 
 * add support for `VipsRefStr` in gvalue, thanks tomasc

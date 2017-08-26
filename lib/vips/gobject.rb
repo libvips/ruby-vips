@@ -54,8 +54,9 @@ module GObject
             include GObjectLayout
 
             def self.release ptr
-                # Vips::log "GObject::GObject::ManagedStruct.release: " +
-                #     "unreffing #{ptr}"
+                GLib::logger.debug("GObject::GObject::ManagedStruct.release") {
+                    "unreffing #{ptr}"
+                }
                 GObject::g_object_unref ptr
             end
         end
@@ -72,7 +73,7 @@ module GObject
         # here we use ManagedStruct, not Struct, since this is the ref that will
         # need the unref
         def initialize ptr
-            # Vips::log "GObject::GObject.initialize: ptr = #{ptr}"
+            GLib::logger.debug("GObject::GObject.initialize") {"ptr = #{ptr}"}
             @struct = ffi_managed_struct.new ptr
         end
 

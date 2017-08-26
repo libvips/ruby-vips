@@ -5,11 +5,18 @@
 # License::   MIT
 
 require 'ffi'
+require 'logger'
 
 # This module uses FFI to make a simple layer over the glib and gobject 
 # libraries. 
 
 module GLib
+    class << self
+        attr_accessor :logger
+    end
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::WARN
+
     extend FFI::Library
 
     if FFI::Platform.windows?
@@ -20,18 +27,82 @@ module GLib
 
     ffi_lib glib_libname 
 
-    # nil being the default
-    glib_log_domain = nil
-
-    def self.set_log_domain domain
-        glib_log_domain = domain
-    end
-
     attach_function :g_malloc, [:size_t], :pointer
 
     # save the FFI::Function that attach will return ... we can use it directly
     # as a param for callbacks
     G_FREE = attach_function :g_free, [:pointer], :void
+
+    callback :g_log_func, [:string, :int, :string, :pointer], :void
+    attach_function :g_log_set_handler, 
+        [:string, :int, :g_log_func, :pointer], :int
+    attach_function :g_log_remove_handler, [:string, :int], :void
+
+    # log flags 
+    LOG_FLAG_RECURSION          = 1 << 0
+    LOG_FLAG_FATAL              = 1 << 1
+
+    # GLib log levels 
+    LOG_LEVEL_ERROR             = 1 << 2       # always fatal 
+    LOG_LEVEL_CRITICAL          = 1 << 3
+    LOG_LEVEL_WARNING           = 1 << 4
+    LOG_LEVEL_MESSAGE           = 1 << 5
+    LOG_LEVEL_INFO              = 1 << 6
+    LOG_LEVEL_DEBUG             = 1 << 7
+
+    # map glib levels to Logger::Severity
+    GLIB_TO_SEVERITY = {
+        LOG_LEVEL_ERROR => :error,
+        LOG_LEVEL_CRITICAL => :fatal,
+        LOG_LEVEL_WARNING => :warn,
+        LOG_LEVEL_MESSAGE => :unknown,
+        LOG_LEVEL_INFO => :info,
+        LOG_LEVEL_DEBUG => :debug
+    }
+    GLIB_TO_SEVERITY.default = :unknown
+
+    # nil being the default
+    @glib_log_domain = nil
+    @glib_log_handler_id = 0
+
+    # module-level, so it's not GCd away
+    log_handler = Proc.new do |domain, level, message, user_data|
+        @logger.send(GLIB_TO_SEVERITY[level], domain) {message}
+    end
+
+    def self.remove_log_handler
+        if @glib_log_handler_id and @glib_log_domain
+            g_log_remove_handler @glib_log_domain, @glib_log_handler_id
+            @glib_log_handler_id = nil
+        end
+    end
+
+    def self.set_log_domain domain
+        GLib::remove_log_handler
+
+        @glib_log_domain = domain
+
+        # forward all glib logging output from this domain to a Ruby logger
+        if @glib_log_domain
+            @glib_log_handler_id = g_log_set_handler @glib_log_domain,
+                LOG_LEVEL_DEBUG | 
+                LOG_LEVEL_INFO | 
+                LOG_LEVEL_MESSAGE | 
+                LOG_LEVEL_WARNING | 
+                LOG_LEVEL_ERROR | 
+                LOG_LEVEL_CRITICAL | 
+                LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
+                log_handler, nil
+
+            # we must remove any handlers on exit, since libvips may log stuff 
+            # on shutdown and we don't want LOG_HANDLER to be invoked 
+            # after Ruby has gone
+            at_exit {
+                GLib::remove_log_handler
+            }
+        end
+
+    end
 
 end
 
@@ -378,22 +449,6 @@ module Vips
     LOG_DOMAIN = "VIPS"
     GLib::set_log_domain LOG_DOMAIN
 
-    @@debug = false
-
-    # Turn debug logging on and off.
-    #
-    # @param dbg [Boolean] Set true to print debug log messages
-    def self.set_debug dbg 
-        @@debug = dbg
-    end
-
-    # Print a log message to the output. See {Vips::set_debug}.
-    def self.log str 
-        if @@debug
-            puts str
-        end
-    end
-
     typedef :ulong, :GType
 
     attach_function :vips_error_buffer, [], :string
@@ -439,14 +494,8 @@ module Vips
     attach_function :vips_leak_set, [:int], :void
 
     def self.showall
-        if @@debug
-            GC.start
-            vips_object_print_all
-        end
-    end
-
-    if @@debug
-        vips_leak_set 1
+        GC.start
+        vips_object_print_all
     end
 
     attach_function :version, :vips_version, [:int], :int

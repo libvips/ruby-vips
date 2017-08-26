@@ -24,7 +24,7 @@ module GObject
                :data, [:ulong_long, 2]
 
         def self.release ptr
-            # Vips::log "GObject::GValue::release ptr = #{ptr}"
+            GLib::logger.debug("GObject::GValue::release") {"ptr = #{ptr}"}
             ::GObject::g_value_unset ptr 
         end
 
@@ -58,7 +58,9 @@ module GObject
         #
         # @param value [Any] The value to set
         def set value
-            # Vips::log "GObject::GValue.set: value = #{value.inspect[0..50]}"
+            GLib::logger.debug("GObject::GValue.set") {
+                "value = #{value.inspect[0..50]}"
+            }
 
             gtype = self[:gtype]
             fundamental = ::GObject::g_type_fundamental gtype
@@ -221,7 +223,9 @@ module GObject
                 end
             end
 
-            # Vips::log "GObject::GValue.get: result = #{result.inspect[0..50]}"
+            GLib::logger.debug("GObject::GValue.get") {
+                "result = #{result.inspect[0..50]}"
+            }
 
             return result
 
