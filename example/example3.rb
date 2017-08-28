@@ -3,13 +3,13 @@
 require 'vips'
 
 # this makes vips keep a list of all active objects 
-# Vips::leak_set true
+Vips::leak_set true
 
 # disable the operation cache
-# Vips::cache_set_max 0
+Vips::cache_set_max 0
 
 # turn on debug logging
-#Vips.set_debug true
+# Vips.set_debug true
 
 10000.times do |i|
     puts "loop #{i} ..."

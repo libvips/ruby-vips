@@ -52,14 +52,14 @@ module GLib
 
     # map glib levels to Logger::Severity
     GLIB_TO_SEVERITY = {
-        LOG_LEVEL_ERROR => :error,
-        LOG_LEVEL_CRITICAL => :fatal,
-        LOG_LEVEL_WARNING => :warn,
-        LOG_LEVEL_MESSAGE => :unknown,
-        LOG_LEVEL_INFO => :info,
-        LOG_LEVEL_DEBUG => :debug
+        LOG_LEVEL_ERROR => Logger::ERROR,
+        LOG_LEVEL_CRITICAL => Logger::FATAL,
+        LOG_LEVEL_WARNING => Logger::WARN,
+        LOG_LEVEL_MESSAGE => Logger::UNKNOWN,
+        LOG_LEVEL_INFO => Logger::INFO,
+        LOG_LEVEL_DEBUG => Logger::DEBUG
     }
-    GLIB_TO_SEVERITY.default = :unknown
+    GLIB_TO_SEVERITY.default = Logger::UNKNOWN
 
     # nil being the default
     @glib_log_domain = nil
@@ -67,7 +67,7 @@ module GLib
 
     # module-level, so it's not GCd away
     LOG_HANDLER = Proc.new do |domain, level, message, user_data|
-        @logger.send(GLIB_TO_SEVERITY[level], domain) {message}
+        @logger.log(GLIB_TO_SEVERITY[level], message, domain) 
     end
 
     def self.remove_log_handler
@@ -363,6 +363,19 @@ require 'vips/gvalue'
 # ```
 #
 # and so on. 
+#
+# # Logging
+#
+# The wrapper uses `logger` to log debug, info, warning, and error messages. By
+# default, it will send messages of level `Logger::WARN` and above to `STDOUT`.
+#
+# You can use the {GLib::logger} accessor to change the log level, or to
+# redirect logging somewhere else. For example:
+#
+# ```ruby
+# GLib.logger.level = Logger::ERROR
+# GLib.logger = Rails.logger
+# ```
 # 
 # # Automatic YARD documentation
 #
@@ -496,6 +509,48 @@ module Vips
     def self.showall
         GC.start
         vips_object_print_all
+    end
+
+    # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
+    # very useful for user code. 
+    def self.leak_set leak
+        if leak
+            vips_leak_set 1
+        else
+            vips_leak_set 0
+        end
+    end
+
+    attach_function :vips_cache_set_max, [:int], :void
+    attach_function :vips_cache_set_max_mem, [:int], :void
+    attach_function :vips_cache_set_max_files, [:int], :void
+
+    # Set the maximum number of operations that libvips should cache. Set 0 to
+    # disable the operation cache. The default is 1000. 
+    def self.cache_set_max size
+        vips_cache_set_max size
+    end
+
+    # Set the maximum amount of memory that libvips should use for the operation
+    # cache. Set 0 to disable the operation cache. The default is 100mb.
+    def self.cache_set_max_mem size
+        vips_cache_set_max_mem size
+    end
+
+    # Set the maximum number of files libvips should keep open in the 
+    # operation cache. Set 0 to disable the operation cache. The default is 
+    # 100.
+    def self.cache_set_max_files size
+        vips_cache_set_max_files size
+    end
+
+    # Deprecated compatibility function.
+    #
+    # Don't use this, instead change {GLib::logger.level}.
+    def self.set_debug debug
+        if debug
+            GLib::logger.level = Logger::DEBUG
+        end
     end
 
     attach_function :version, :vips_version, [:int], :int

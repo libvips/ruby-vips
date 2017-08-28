@@ -5,6 +5,7 @@
 ## Version 2.0.2 (2017-08-26)
 
 * switch to `logger` for all logging output
+* add libvips cache control functions `Vips::cache_set_max()` etc.
 
 ## Version 2.0.1 (2017-08-23)
 
