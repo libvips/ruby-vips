@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 
+require 'logger'
 require 'vips'
 
 puts ""
@@ -11,7 +12,9 @@ Vips::leak_set true
 # disable the operation cache
 Vips::cache_set_max 0
 
-n = 1
+# GLib::logger.level = Logger::DEBUG
+
+n = 10000
 
 n.times do |i|
     puts ""

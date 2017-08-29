@@ -76,7 +76,7 @@ module Vips
         # debugging ruby-vips. 
         def self.print_all
             GC.start
-            vips_object_print_all
+            Vips::vips_object_print_all
         end
 
         # the layout of the VipsObject struct

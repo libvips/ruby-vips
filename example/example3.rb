@@ -6,21 +6,14 @@ require 'vips'
 Vips::leak_set true
 
 # disable the operation cache
-Vips::cache_set_max 0
+# Vips::cache_set_max 0
 
 # turn on debug logging
-# Vips.set_debug true
+GLib::logger.level = Logger::DEBUG
 
 1.times do |i|
     puts "loop #{i} ..."
     im = Vips::Image.new_from_file ARGV[0]
-    # im = im.embed 100, 100, 3000, 3000, :extend => :mirror
+    im = im.embed 100, 100, 3000, 3000, :extend => :mirror
     im.write_to_file "x.v"
 end
-
-im = nil
-GC.start
-GC.start
-GC.start
-GC.start
-GC.start

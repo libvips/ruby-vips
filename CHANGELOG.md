@@ -6,6 +6,7 @@
 
 * switch to `logger` for all logging output
 * add libvips cache control functions `Vips::cache_set_max()` etc.
+* fix a ref leak
 
 ## Version 2.0.1 (2017-08-23)
 
