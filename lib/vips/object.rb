@@ -9,6 +9,9 @@ require 'ffi'
 module Vips
     private
 
+    # debugging support
+    attach_function :vips_object_print_all, [], :void
+
     # we must init these by hand, since they are usually made on first image
     # create
     attach_function :vips_band_format_get_type, [], :GType
@@ -68,6 +71,13 @@ module Vips
     attach_function :type_find, :vips_type_find, [:string, :string], :GType
 
     class Object < GObject::GObject
+
+        # print all active VipsObjects, with their reference counts. Handy for
+        # debugging ruby-vips. 
+        def self.print_all
+            GC.start
+            vips_object_print_all
+        end
 
         # the layout of the VipsObject struct
         module ObjectLayout

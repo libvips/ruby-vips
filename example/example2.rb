@@ -11,12 +11,12 @@ Vips::leak_set true
 # disable the operation cache
 Vips::cache_set_max 0
 
-n = 100
+n = 1
 
 n.times do |i|
     puts ""
     puts "call #{i} ..."
-    out = Vips::call "black", 200, 300
+    out = Vips::Operation.call "black", [200, 300]
     if out.width != 200 or out.height != 300
         puts "bad image result from black"
     end

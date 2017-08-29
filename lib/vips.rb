@@ -503,22 +503,12 @@ module Vips
     # don't use at_exit to call vips_shutdown, it causes problems with fork, and
     # in any case libvips does this for us
 
-    attach_function :vips_object_print_all, [], :void
     attach_function :vips_leak_set, [:int], :void
-
-    def self.showall
-        GC.start
-        vips_object_print_all
-    end
 
     # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
     # very useful for user code. 
     def self.leak_set leak
-        if leak
-            vips_leak_set 1
-        else
-            vips_leak_set 0
-        end
+        vips_leak_set (leak ? 1 : 0)
     end
 
     attach_function :vips_cache_set_max, [:int], :void
