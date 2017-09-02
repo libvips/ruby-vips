@@ -51,7 +51,7 @@ which gives some more background.
 It's just:
 
 ```
-	$ gem install ruby-vips
+$ gem install ruby-vips
 ```
 
 or include it in `Gemfile`:
