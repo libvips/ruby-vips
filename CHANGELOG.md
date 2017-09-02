@@ -2,6 +2,8 @@
 
 ## master
 
+## Version 2.0.6 (2017-09-02)
+
 ## Version 2.0.5 (2017-09-02)
 
 * fix get() with older libvipses

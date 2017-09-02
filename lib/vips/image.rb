@@ -473,19 +473,14 @@ module Vips
         # @param name [String] Metadata field to fetch
         # @return [Integer] GType
         def get_typeof name
-            # libvips 8.5+ has a fast path for this
-            if Vips::version(0) > 8 or Vips::version(1) > 4
-                Vips::vips_image_get_typeof self, name
-            else
-                # with older libvips, we have to look in properties first, then
-                # fall back to metadata
+            # on libvips before 8.5, property types must be searched first,
+            # since vips_image_get_typeof returned built-in enums as int
+            if Vips::version(0) == 8 and Vips::version(1) < 4
                 gtype = get_typeof_property name
-                if gtype != 0
-                    gtype
-                else
-                    Vips::vips_image_get_typeof self, name
-                end
+                return gtype if gtype != 0
             end
+
+            Vips::vips_image_get_typeof self, name
         end
 
         # Get a metadata item from an image. Ruby types are constructed 
@@ -504,12 +499,8 @@ module Vips
         def get name
             # with old libvips, we must fetch properties (as opposed to
             # metadata) via VipsObject
-            unless Vips::version(0) > 8 or Vips::version(1) > 4
-                gtype = get_typeof_property name
-                if gtype != 0
-                    # found a property
-                    return super
-                end
+            if Vips::version(0) == 8 and Vips::version(1) < 4
+                return super if get_typeof_property(name) != 0
             end
 
             gvalue = GObject::GValue.alloc
