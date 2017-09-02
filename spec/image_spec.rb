@@ -577,7 +577,8 @@ RSpec.describe Vips::Image do
         end
     end
 
-    if Vips::HAS_IMAGE_GET_FIELDS
+    # added in 8.5
+    if Vips.respond_to? :vips_image_get_fields
         it 'can read field names' do
             x = Vips::Image.black 100, 100
             y = x.get_fields

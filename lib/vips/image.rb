@@ -33,9 +33,7 @@ module Vips
     # vips_image_get_fields was added in libvips 8.5
     begin
         attach_function :vips_image_get_fields, [:pointer], :pointer
-        HAS_IMAGE_GET_FIELDS = true
     rescue FFI::NotFoundError
-        HAS_IMAGE_GET_FIELDS = false
     end
 
     attach_function :vips_image_set, 
@@ -475,7 +473,19 @@ module Vips
         # @param name [String] Metadata field to fetch
         # @return [Integer] GType
         def get_typeof name
-            Vips::vips_image_get_typeof self, name
+            # libvips 8.5+ has a fast path for this
+            if Vips::version(0) > 8 or Vips::version(1) > 4
+                Vips::vips_image_get_typeof self, name
+            else
+                # with older libvips, we have to look in properties first, then
+                # fall back to metadata
+                gtype = get_typeof_property name
+                if gtype != 0
+                    gtype
+                else
+                    Vips::vips_image_get_typeof self, name
+                end
+            end
         end
 
         # Get a metadata item from an image. Ruby types are constructed 
@@ -492,6 +502,16 @@ module Vips
         # @param name [String] Metadata field to get
         # @return [Object] Value of field
         def get name
+            # with old libvips, we must fetch properties (as opposed to
+            # metadata) via VipsObject
+            unless Vips::version(0) > 8 or Vips::version(1) > 4
+                gtype = get_typeof_property name
+                if gtype != 0
+                    # found a property
+                    return super
+                end
+            end
+
             gvalue = GObject::GValue.alloc
             result = Vips::vips_image_get self, name, gvalue
             if result != 0 
@@ -507,7 +527,7 @@ module Vips
         # @return [[String]] array of field names 
         def get_fields
             # vips_image_get_fields() was added in libvips 8.5
-            if not Vips::HAS_IMAGE_GET_FIELDS
+            if not Vips.respond_to? :vips_image_get_fields
                 return []
             end
 

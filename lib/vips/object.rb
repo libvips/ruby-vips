@@ -108,20 +108,24 @@ module Vips
 
         end
 
-        def get_typeof name
+        def get_typeof_property name
             pspec = GObject::GParamSpecPtr.new
             argument_class = Vips::ArgumentClassPtr.new
             argument_instance = Vips::ArgumentInstancePtr.new
 
             result = Vips::vips_object_get_argument self, name,
                 pspec, argument_class, argument_instance
-            raise Vips::Error if result != 0 
+            return 0 if result != 0 
 
             pspec[:value][:value_type]
         end
 
+        def get_typeof name
+            get_typeof_property name 
+        end
+
         def get name
-            gtype = get_typeof name
+            gtype = get_typeof_property name
             gvalue = GObject::GValue.alloc 
             gvalue.init gtype
             GObject::g_object_get_property self, name, gvalue
@@ -135,7 +139,7 @@ module Vips
         def set name, value
             GLib::logger.debug("Vips::Object.set") {"#{name} = #{value}"}
 
-            gtype = get_typeof name
+            gtype = get_typeof_property name
             gvalue = GObject::GValue.alloc 
             gvalue.init gtype
             gvalue.set value
