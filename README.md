@@ -18,16 +18,16 @@ keep entire images in memory, it's light.  For example, the benchmark at
 large image, crops, shrinks, sharpens and saves again, and repeats 10 times.
 
 ```text
-real time in seconds, fastest of three runs
+real time in seconds, fastest of five runs
 benchmark       tiff    jpeg
-ruby-vips.rb    0.66    0.44
-image-magick    1.10    1.50
-rmagick.rb      1.63    2.16
+ruby-vips.rb	0.85	0.78	
+image-magick	2.03	2.44	
+rmagick.rb	3.87	3.89	
 
-peak memory use in bytes
-benchmark       peak RSS
-ruby-vips.rb    58696
-rmagick.rb      787564
+peak memory use in kb
+benchmark	peak RES
+ruby-vips.rb	43864
+rmagick.rb	788768
 ```
 
 See also [benchmarks at the official libvips
@@ -63,8 +63,8 @@ gem 'ruby-vips'
 On Windows, you'll need to set the `RUBY_DLL_PATH` environment variable to 
 point to the libvips bin directory.
 
-Take a look in `examples/`. There is full yard documentation, take a look
-there too.
+Take a look in `examples/`. There is [full API
+documentation](http://www.rubydoc.info/gems/ruby-vips). 
 
 # Example
 
