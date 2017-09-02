@@ -29,6 +29,7 @@ module Vips
     attach_function :vips_image_get_typeof, [:pointer, :string], :GType
     attach_function :vips_image_get, 
         [:pointer, :string, GObject::GValue.ptr], :int
+    attach_function :vips_image_get_fields, [:pointer], :pointer
     attach_function :vips_image_set, 
         [:pointer, :string, GObject::GValue.ptr], :void
     attach_function :vips_image_remove, [:pointer, :string], :void
@@ -490,6 +491,25 @@ module Vips
             end
 
             return gvalue.get
+        end
+
+        # Get the names of all fields on an image. Use this to loop over all
+        # image metadata. 
+        #
+        # @return [[String]] array of field names 
+        def get_fields
+            array = Vips::vips_image_get_fields self
+
+            names = []
+            p = array
+            until ((q = p.read_pointer).null?)
+                names << q.read_string
+                GLib::g_free q
+                p += FFI::Type::POINTER.size
+            end
+            GLib::g_free array
+
+            return names
         end
 
         # Create a metadata item on an image, of the specifed type. Ruby types 

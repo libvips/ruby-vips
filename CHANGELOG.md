@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.3 (2017-09-02)
+
+* add `get_fields`
+
 ## Version 2.0.2 (2017-08-26)
 
 * switch to `logger` for all logging output
