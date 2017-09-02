@@ -8,8 +8,8 @@ module Vips
     class Image
         def wobble
             # this makes an image where pixel (0, 0) (at the top-left) has 
-            # value [0, 0], and pixel (image.width, image.height) at the 
-            # bottom-right has value [image.width, image.height]
+            # value [0, 0], and pixel (image.width - 1, image.height - 1) at the 
+            # bottom-right has value [image.width - 1, image.height - 1]
             index = Vips::Image.xyz width, height 
 
             # make a version with (0, 0) at the centre, negative values up 
