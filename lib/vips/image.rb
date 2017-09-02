@@ -29,7 +29,15 @@ module Vips
     attach_function :vips_image_get_typeof, [:pointer, :string], :GType
     attach_function :vips_image_get, 
         [:pointer, :string, GObject::GValue.ptr], :int
-    attach_function :vips_image_get_fields, [:pointer], :pointer
+
+    # vips_image_get_fields was added in libvips 8.5
+    begin
+        attach_function :vips_image_get_fields, [:pointer], :pointer
+        HAS_IMAGE_GET_FIELDS = true
+    rescue FFI::NotFoundError
+        HAS_IMAGE_GET_FIELDS = false
+    end
+
     attach_function :vips_image_set, 
         [:pointer, :string, GObject::GValue.ptr], :void
     attach_function :vips_image_remove, [:pointer, :string], :void
@@ -498,6 +506,11 @@ module Vips
         #
         # @return [[String]] array of field names 
         def get_fields
+            # vips_image_get_fields() was added in libvips 8.5
+            if not Vips::HAS_IMAGE_GET_FIELDS
+                return []
+            end
+
             array = Vips::vips_image_get_fields self
 
             names = []

@@ -577,11 +577,13 @@ RSpec.describe Vips::Image do
         end
     end
 
-    it 'can read field names' do
-        x = Vips::Image.black 100, 100
-        y = x.get_fields
-        expect(y.length).to be > 10
-        expect(y[0]).to eq("width")
+    if Vips::HAS_IMAGE_GET_FIELDS
+        it 'can read field names' do
+            x = Vips::Image.black 100, 100
+            y = x.get_fields
+            expect(y.length).to be > 10
+            expect(y[0]).to eq("width")
+        end
     end
 
 end

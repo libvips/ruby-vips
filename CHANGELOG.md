@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.4 (2017-09-02)
+
+* add a test for `get_fields`, since it appeared in libvips 8.5 (thanks zverok)
+
 ## Version 2.0.3 (2017-09-02)
 
 * add `get_fields`
