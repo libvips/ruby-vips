@@ -51,6 +51,8 @@ module Vips
     # for an introduction to using this class.
 
     class Image < Vips::Object
+        alias_method :parent_get_typeof, :get_typeof
+
         private
 
         # the layout of the VipsImage struct
@@ -475,8 +477,8 @@ module Vips
         def get_typeof name
             # on libvips before 8.5, property types must be searched first,
             # since vips_image_get_typeof returned built-in enums as int
-            if Vips::version(0) == 8 and Vips::version(1) < 4
-                gtype = get_typeof_property name
+            if not Vips::at_least_libvips?(8, 5)
+                gtype = parent_get_typeof name
                 return gtype if gtype != 0
             end
 
@@ -499,15 +501,13 @@ module Vips
         def get name
             # with old libvips, we must fetch properties (as opposed to
             # metadata) via VipsObject
-            if Vips::version(0) == 8 and Vips::version(1) < 4
-                return super if get_typeof_property(name) != 0
+            if not Vips::at_least_libvips?(8, 5)
+                return super if parent_get_typeof(name) != 0
             end
 
             gvalue = GObject::GValue.alloc
             result = Vips::vips_image_get self, name, gvalue
-            if result != 0 
-                raise Vips::Error
-            end
+            raise Vips::Error if result != 0 
 
             return gvalue.get
         end
@@ -518,9 +518,7 @@ module Vips
         # @return [[String]] array of field names 
         def get_fields
             # vips_image_get_fields() was added in libvips 8.5
-            if not Vips.respond_to? :vips_image_get_fields
-                return []
-            end
+            return [] if not Vips.respond_to? :vips_image_get_fields
 
             array = Vips::vips_image_get_fields self
 

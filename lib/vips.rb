@@ -546,6 +546,14 @@ module Vips
     attach_function :version, :vips_version, [:int], :int
     attach_function :version_string, :vips_version_string, [], :string
 
+    # True if this is at least libvips x.y
+    def self.at_least_libvips?(x, y)
+        major = version(0)
+        minor = version(1)
+
+        major > x or (major == x and minor >= y)
+    end
+
     LIBRARY_VERSION = Vips::version_string
 
 end

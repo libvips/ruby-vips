@@ -108,24 +108,41 @@ module Vips
 
         end
 
-        def get_typeof_property name
+        # return a pspec, or nil ... nil wil leave a message in the error log
+        # which you must clear
+        def get_pspec name
             pspec = GObject::GParamSpecPtr.new
             argument_class = Vips::ArgumentClassPtr.new
             argument_instance = Vips::ArgumentInstancePtr.new
 
             result = Vips::vips_object_get_argument self, name,
                 pspec, argument_class, argument_instance
-            return 0 if result != 0 
+            return nil if result != 0 
+
+            pspec
+        end
+
+        # return a gtype, raise an error on not found
+        def get_typeof_error name
+            pspec = get_pspec name
+            raise Vips::Error if not pspec
 
             pspec[:value][:value_type]
         end
 
+        # return a gtype, 0 on not found
         def get_typeof name
-            get_typeof_property name 
+            pspec = get_pspec name
+            if not pspec
+                Vips::vips_error_clear 
+                return 0
+            end
+
+            pspec[:value][:value_type]
         end
 
         def get name
-            gtype = get_typeof_property name
+            gtype = get_typeof_error name
             gvalue = GObject::GValue.alloc 
             gvalue.init gtype
             GObject::g_object_get_property self, name, gvalue
@@ -139,7 +156,7 @@ module Vips
         def set name, value
             GLib::logger.debug("Vips::Object.set") {"#{name} = #{value}"}
 
-            gtype = get_typeof_property name
+            gtype = get_typeof_error name
             gvalue = GObject::GValue.alloc 
             gvalue.init gtype
             gvalue.set value
