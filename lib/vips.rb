@@ -71,7 +71,7 @@ module GLib
     end
 
     def self.remove_log_handler
-        if @glib_log_handler_id and @glib_log_domain
+        if @glib_log_handler_id != 0 and @glib_log_domain
             g_log_remove_handler @glib_log_domain, @glib_log_handler_id
             @glib_log_handler_id = nil
         end
@@ -84,15 +84,25 @@ module GLib
 
         # forward all glib logging output from this domain to a Ruby logger
         if @glib_log_domain
-            @glib_log_handler_id = g_log_set_handler @glib_log_domain,
-                LOG_LEVEL_DEBUG | 
-                LOG_LEVEL_INFO | 
-                LOG_LEVEL_MESSAGE | 
-                LOG_LEVEL_WARNING | 
-                LOG_LEVEL_ERROR | 
-                LOG_LEVEL_CRITICAL | 
-                LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
-                LOG_HANDLER, nil
+            # disable this feature for now
+            #
+            # libvips background worker threads can issue warnings, and 
+            # since the main thread is blocked waiting for libvips to come back
+            # from an ffi call, you get a deadlock on the GIL
+            #
+            # to fix this, we need a way for g_log() calls from libvips workers 
+            # to be returned via the main thread
+            #
+
+#             @glib_log_handler_id = g_log_set_handler @glib_log_domain,
+#                 LOG_LEVEL_DEBUG | 
+#                 LOG_LEVEL_INFO | 
+#                 LOG_LEVEL_MESSAGE | 
+#                 LOG_LEVEL_WARNING | 
+#                 LOG_LEVEL_ERROR | 
+#                 LOG_LEVEL_CRITICAL | 
+#                 LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
+#                 LOG_HANDLER, nil
 
             # we must remove any handlers on exit, since libvips may log stuff 
             # on shutdown and we don't want LOG_HANDLER to be invoked 
@@ -366,17 +376,18 @@ require 'vips/gvalue'
 #
 # # Logging
 #
-# The wrapper uses `logger` to log debug, info, warning, and error messages. By
-# default, it will send messages of level `Logger::WARN` and above to `STDOUT`.
+# Libvips uses g_log() to log warning, debug, info and (some) error messages. 
 #
-# You can use the {GLib::logger} accessor to change the log level, or to
-# redirect logging somewhere else. For example:
+# https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 #
-# ```ruby
-# GLib.logger.level = Logger::ERROR
-# GLib.logger = Rails.logger
-# ```
-# 
+# You can disable wanrings by defining the `VIPS_WARNING` environment variable.
+# You can enable info output by defining `VIPS_INFO`. 
+#
+# # Exceptions
+#
+# The wrapper spots errors from vips operations and raises the {Vips::Error}
+# exception. You can catch it in the usual way. 
+#
 # # Automatic YARD documentation
 #
 # The bulk of these API docs are generated automatically by 
@@ -387,11 +398,6 @@ require 'vips/gvalue'
 # Use the [C API 
 # docs](https://jcupitt.github.io/libvips/API/current) 
 # for more detail.
-#
-# # Exceptions
-#
-# The wrapper spots errors from vips operations and raises the {Vips::Error}
-# exception. You can catch it in the usual way. 
 #
 # # Enums
 #

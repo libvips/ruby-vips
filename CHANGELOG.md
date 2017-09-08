@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.7 (2017-09-08)
+
+* disable the logging for now, it could deadlock
+
 ## Version 2.0.6 (2017-09-02)
 
 * improve get() behaviour on error with older libvipses
