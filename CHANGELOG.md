@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.8 (2017-09-14)
+
+* add `thumb.rb` example, and verify we run stably and in constant memory 
+
 ## Version 2.0.7 (2017-09-08)
 
 * disable the logging for now, it could deadlock
