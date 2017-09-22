@@ -1318,7 +1318,7 @@ module Vips
                 if map_go_to_ruby.include? type_name
                     type_name = map_go_to_ruby[type_name] 
                 end
-                if fundamental == GObject::GFLAGS_TYPE or 
+                if fundamental == GObject::GFLAGS_TYPE ||
                     fundamental == GObject::GENUM_TYPE
                     type_name = "Vips::" + type_name[/Vips(.*)/, 1]
                 end
