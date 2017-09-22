@@ -98,7 +98,7 @@ module Vips
                 if (flags & ARGUMENT_CONSTRUCT) != 0 
                     # names can include - as punctuation, but we always use _ in
                     # Ruby
-                    name = pspec[:name].gsub("-", "_")
+                    name = pspec[:name].tr("-", "_")
 
                     args << [name, flags] 
                 end
@@ -125,7 +125,8 @@ module Vips
 
             # 2D array values become tiny 2D images
             # if there's nothing to match to, we also make a 2D image
-            if (value.is_a? Array and value[0].is_a? Array) or match_image == nil
+            if (value.is_a?(Array) && value[0].is_a?(Array)) || 
+                match_image == nil
                 return Image.new_from_array value
             else
                 # we have a 1D array ... use that as a pixel constant and
@@ -240,7 +241,7 @@ module Vips
                 next if (flags & ARGUMENT_DEPRECATED) != 0
 
                 if (flags & ARGUMENT_INPUT) != 0 
-                    if (flags & ARGUMENT_REQUIRED) != 0 and
+                    if (flags & ARGUMENT_REQUIRED) != 0 
                         required_input << [name, flags]
                     else
                         optional_input[name] = flags
@@ -248,10 +249,10 @@ module Vips
                 end
 
                 # MODIFY INPUT args count as OUTPUT as well
-                if (flags & ARGUMENT_OUTPUT) != 0 or
-                    ((flags & ARGUMENT_INPUT) != 0 and
+                if (flags & ARGUMENT_OUTPUT) != 0 ||
+                    ((flags & ARGUMENT_INPUT) != 0 &&
                      (flags & ARGUMENT_MODIFY) != 0)
-                    if (flags & ARGUMENT_REQUIRED) != 0 and
+                    if (flags & ARGUMENT_REQUIRED) != 0
                         required_output << [name, flags]
                     else
                         optional_output[name] = flags
@@ -281,8 +282,8 @@ module Vips
             optional.each do |key, value|
                 arg_name = key.to_s
 
-                if not optional_input.has_key? arg_name and
-                    not optional_output.has_key? arg_name 
+                if !optional_input.has_key?(arg_name) &&
+                    !optional_output.has_key?(arg_name)
                     raise Vips::Error, "unable to call #{name}: " + 
                         "unknown option #{arg_name}"
                 end

@@ -974,7 +974,7 @@ module Vips
         #
         # @return [Array<Image>] Array of n one-band images
         def bandsplit
-            (0...bands).map {|i| extract_band(i)}
+            (0...bands).map {|i| extract_band i}
         end
 
         # Join a set of images bandwise.
@@ -987,12 +987,12 @@ module Vips
             end
 
             # if other is just Numeric, we can use bandjoin_const
-            not_all_real = !other.all?{ |x| x.is_a? Numeric }
+            not_all_real = !other.all?{|x| x.is_a? Numeric}
 
             if not_all_real
                 Vips::Image.bandjoin([self] + other)
             else
-                bandjoin_const(other)
+                bandjoin_const other
             end
         end
 
@@ -1333,7 +1333,7 @@ module Vips
                     if (arg_flags & ARGUMENT_REQUIRED) != 0 
                         # note the first required input image, if any ... we 
                         # will be a method of this instance
-                        if not member_x and gtype == Vips::IMAGE_TYPE
+                        if not member_x && gtype == Vips::IMAGE_TYPE
                             member_x = value
                         else
                             required_input << value

@@ -71,7 +71,7 @@ module GLib
     end
 
     def self.remove_log_handler
-        if @glib_log_handler_id != 0 and @glib_log_domain
+        if @glib_log_handler_id != 0 && @glib_log_domain
             g_log_remove_handler @glib_log_domain, @glib_log_handler_id
             @glib_log_handler_id = nil
         end
@@ -557,7 +557,7 @@ module Vips
         major = version(0)
         minor = version(1)
 
-        major > x or (major == x and minor >= y)
+        major > x || (major == x && minor >= y)
     end
 
     LIBRARY_VERSION = Vips::version_string
