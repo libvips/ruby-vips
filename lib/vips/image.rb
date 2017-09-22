@@ -1348,10 +1348,10 @@ module Vips
                 end
 
                 # MODIFY INPUT args count as OUTPUT as well
-                if (arg_flags & ARGUMENT_OUTPUT) != 0 or
-                    ((arg_flags & ARGUMENT_INPUT) != 0 and
+                if (arg_flags & ARGUMENT_OUTPUT) != 0 ||
+                    ((arg_flags & ARGUMENT_INPUT) != 0 &&
                      (arg_flags & ARGUMENT_MODIFY) != 0)
-                    if (arg_flags & ARGUMENT_REQUIRED) != 0 and
+                    if (arg_flags & ARGUMENT_REQUIRED) != 0
                         required_output << value
                     else
                         optional_output << value
