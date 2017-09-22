@@ -885,8 +885,7 @@ module Vips
         # @return [Image] extracted band(s)
         def [] index
             if index.is_a? Range
-                n = index.end - index.begin
-                n += 1 if not index.exclude_end?
+                n = index.size
                 extract_band index.begin, n: n
             elsif index.is_a? Numeric
                 extract_band index 
@@ -921,12 +920,10 @@ module Vips
             array = memory.unpack(template)
 
             # gather band elements together
-            pixel_array = []
-            array.each_slice(bands) {|pixel| pixel_array << pixel}
+            pixel_array = array.each_slice(bands).to_a
 
             # build rows 
-            row_array = []
-            pixel_array.each_slice(width) {|row| row_array << row}
+            row_array = pixel_array.each_slice(width).to_a
 
             return row_array
         end
@@ -990,7 +987,7 @@ module Vips
             end
 
             # if other is just Numeric, we can use bandjoin_const
-            not_all_real = (other.map {|x| not x.is_a?(Numeric)}).include?(true)
+            not_all_real = !other.all?{ |x| x.is_a? Numeric }
 
             if not_all_real
                 Vips::Image.bandjoin([self] + other)
@@ -1312,7 +1309,7 @@ module Vips
                 next if (arg_flags & ARGUMENT_CONSTRUCT) == 0 
                 next if (arg_flags & ARGUMENT_DEPRECATED) != 0
 
-                name = pspec[:name].gsub("-", "_")
+                name = pspec[:name].tr("-", "_")
                 # 'in' as a param name confuses yard
                 name = "im" if name == "in"
                 gtype = pspec[:value_type]
@@ -1321,10 +1318,9 @@ module Vips
                 if map_go_to_ruby.include? type_name
                     type_name = map_go_to_ruby[type_name] 
                 end
-                if fundamental == GObject::GFLAGS_TYPE or 
+                if fundamental == GObject::GFLAGS_TYPE ||
                     fundamental == GObject::GENUM_TYPE
-                    type_name =~ /Vips(.*)/
-                    type_name = "Vips::" + $~[1]
+                    type_name = "Vips::" + type_name[/Vips(.*)/, 1]
                 end
                 blurb = GObject::g_param_spec_get_blurb pspec
                 value = {:name => name, 
