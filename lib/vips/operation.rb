@@ -263,11 +263,11 @@ module Vips
 
             # so we should have been supplied with n_required_input values, or
             # n_required_input + 1 if there's a hash of options at the end
-            if not supplied.is_a? Array
+            unless supplied.is_a? Array
                 raise Vips::Error, "unable to call #{name}: " + 
                     "argument array is not an array"
             end
-            if not optional.is_a? Hash
+            unless optional.is_a? Hash
                 raise Vips::Error, "unable to call #{name}: " + 
                     "optional arguments are not a hash"
             end
@@ -282,8 +282,8 @@ module Vips
             optional.each do |key, value|
                 arg_name = key.to_s
 
-                if !optional_input.has_key?(arg_name) &&
-                    !optional_output.has_key?(arg_name)
+                unless optional_input.has_key?(arg_name) ||
+                    optional_output.has_key?(arg_name)
                     raise Vips::Error, "unable to call #{name}: " + 
                         "unknown option #{arg_name}"
                 end

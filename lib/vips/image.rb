@@ -99,12 +99,12 @@ module Vips
         def self.run_cmplx image, &block
             original_format = image.format
 
-            if not Image::complex? image.format
+            unless Image::complex? image.format
                 if image.bands % 2 != 0
                     raise Error, "not an even number of bands"
                 end
 
-                if not Image::float? image.format
+                unless Image::float? image.format
                     image = image.cast :float 
                 end
 
@@ -114,7 +114,7 @@ module Vips
 
             image = block.(image)
 
-            if not Image::complex? original_format
+            unless Image::complex? original_format
                 new_format = image.format == :dpcomplex ? :double : :float
                 image = image.copy format: new_format, bands: image.bands * 2
             end
@@ -324,17 +324,17 @@ module Vips
         def self.new_from_array array, scale = 1, offset = 0
             # we accept a 1D array and assume height == 1, or a 2D array
             # and check all lines are the same length
-            if not array.is_a? Array
+            unless array.is_a? Array
                 raise Vips::Error, "Argument is not an array."
             end
 
             if array[0].is_a? Array
                 height = array.length
                 width = array[0].length
-                if not array.all? {|x| x.is_a? Array}
+                unless array.all? {|x| x.is_a? Array}
                     raise Vips::Error, "Not a 2D array."
                 end
-                if not array.all? {|x| x.length == width}
+                unless array.all? {|x| x.length == width}
                     raise Vips::Error, "Array not rectangular."
                 end
                 array = array.flatten
@@ -343,7 +343,7 @@ module Vips
                 width = array.length
             end
 
-            if not array.all? {|x| x.is_a? Numeric}
+            unless array.all? {|x| x.is_a? Numeric}
                 raise Vips::Error, "Not all array elements are Numeric."
             end
 
@@ -477,7 +477,7 @@ module Vips
         def get_typeof name
             # on libvips before 8.5, property types must be searched first,
             # since vips_image_get_typeof returned built-in enums as int
-            if not Vips::at_least_libvips?(8, 5)
+            unless Vips::at_least_libvips?(8, 5)
                 gtype = parent_get_typeof name
                 return gtype if gtype != 0
             end
@@ -501,7 +501,7 @@ module Vips
         def get name
             # with old libvips, we must fetch properties (as opposed to
             # metadata) via VipsObject
-            if not Vips::at_least_libvips?(8, 5)
+            unless Vips::at_least_libvips?(8, 5)
                 return super if parent_get_typeof(name) != 0
             end
 
@@ -518,7 +518,7 @@ module Vips
         # @return [[String]] array of field names 
         def get_fields
             # vips_image_get_fields() was added in libvips 8.5
-            return [] if not Vips.respond_to? :vips_image_get_fields
+            return [] unless Vips.respond_to? :vips_image_get_fields
 
             array = Vips::vips_image_get_fields self
 
@@ -982,7 +982,7 @@ module Vips
         # @param other [Image, Array<Image>, Real, Array<Real>] bands to append
         # @return [Image] many band image
         def bandjoin other
-            if not other.is_a? Array
+            unless other.is_a? Array
                 other = [other]
             end
 
@@ -1241,10 +1241,10 @@ module Vips
         def ifthenelse(th, el, opts = {}) 
             match_image = [th, el, self].find {|x| x.is_a? Vips::Image}
 
-            if not th.is_a? Vips::Image
+            unless th.is_a? Vips::Image
                 th = Operation.imageize match_image, th
             end
-            if not el.is_a? Vips::Image
+            unless el.is_a? Vips::Image
                 el = Operation.imageize match_image, el
             end
 
@@ -1333,7 +1333,7 @@ module Vips
                     if (arg_flags & ARGUMENT_REQUIRED) != 0 
                         # note the first required input image, if any ... we 
                         # will be a method of this instance
-                        if not member_x && gtype == Vips::IMAGE_TYPE
+                        if !member_x && gtype == Vips::IMAGE_TYPE
                             member_x = value
                         else
                             required_input << value
@@ -1357,7 +1357,7 @@ module Vips
             end
 
             print "# @!method "
-            print "self." if not member_x 
+            print "self." unless member_x 
             print "#{nickname}("
             print required_input.map{|x| x[:name]}.join(", ")
             print ", " if required_input.length > 0

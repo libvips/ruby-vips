@@ -125,7 +125,7 @@ module Vips
         # return a gtype, raise an error on not found
         def get_typeof_error name
             pspec = get_pspec name
-            raise Vips::Error if not pspec
+            raise Vips::Error unless pspec
 
             pspec[:value][:value_type]
         end
@@ -133,7 +133,7 @@ module Vips
         # return a gtype, 0 on not found
         def get_typeof name
             pspec = get_pspec name
-            if not pspec
+            unless pspec
                 Vips::vips_error_clear 
                 return 0
             end

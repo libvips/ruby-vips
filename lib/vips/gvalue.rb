@@ -82,14 +82,14 @@ module GObject
                 ::Vips::vips_value_set_ref_string self, value
 
             when Vips::ARRAY_INT_TYPE
-                value = [value] if not value.is_a? Array
+                value = [value] unless value.is_a? Array
 
                 Vips::vips_value_set_array_int self, nil, value.length
                 ptr = Vips::vips_value_get_array_int self, nil
                 ptr.write_array_of_int32 value
 
             when Vips::ARRAY_DOUBLE_TYPE
-                value = [value] if not value.is_a? Array
+                value = [value] unless value.is_a? Array
 
                 # this will allocate an array in the gvalue
                 Vips::vips_value_set_array_double self, nil, value.length
@@ -100,7 +100,7 @@ module GObject
                 ptr.write_array_of_double value
 
             when Vips::ARRAY_IMAGE_TYPE
-                value = [value] if not value.is_a? Array
+                value = [value] unless value.is_a? Array
 
                 Vips::vips_value_set_array_image self, value.length
                 ptr = Vips::vips_value_get_array_image self, nil
