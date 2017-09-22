@@ -885,8 +885,7 @@ module Vips
         # @return [Image] extracted band(s)
         def [] index
             if index.is_a? Range
-                n = index.end - index.begin
-                n += 1 if not index.exclude_end?
+                n = index.size
                 extract_band index.begin, n: n
             elsif index.is_a? Numeric
                 extract_band index 
