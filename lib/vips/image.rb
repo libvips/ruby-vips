@@ -996,6 +996,33 @@ module Vips
             end
         end
 
+        # Composite a set of images with a set of blend modes.
+        #
+        # @param other [Image, Array<Image>, Real, Array<Real>] bands to append
+        # @return [Image] many band image
+        def composite other, mode, opts = {}
+            unless other.is_a? Array
+                other = [other]
+            end
+            unless mode.is_a? Array
+                mode = [mode]
+            end
+
+            mode = mode.map do |x|
+                if x.is_a?(String) || x.is_a?(Symbol)
+                    x = Vips::vips_enum_from_nick "ruby-vips", 
+                        Vips::BLEND_MODE_TYPE, x.to_s
+                    if x == -1
+                        raise Vips::Error
+                    end
+                end
+
+                x
+            end
+
+            Vips::Image.composite([self] + other, mode, opts)
+        end
+
         # Return the coordinates of the image maximum.
         #
         # @return [Real, Real, Real] maximum value, x coordinate of maximum, y
@@ -1275,7 +1302,7 @@ module Vips
 
     def self.generate_yard
         # these have hand-written methods, see above
-        no_generate = ["scale", "bandjoin", "ifthenelse"]
+        no_generate = ["scale", "bandjoin", "composite", "ifthenelse"]
 
         # map gobject's type names to Ruby
         map_go_to_ruby = {

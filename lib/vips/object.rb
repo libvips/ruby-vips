@@ -32,6 +32,13 @@ module Vips
     INTERPRETATION_TYPE = Vips::vips_interpretation_get_type
     CODING_TYPE = Vips::vips_coding_get_type
 
+    if Vips::at_least_libvips?(8, 6)
+        attach_function :vips_blend_mode_get_type, [], :GType
+        BLEND_MODE_TYPE = Vips::vips_blend_mode_get_type
+    else
+        BLEND_MODE_TYPE = nil
+    end
+
     private
 
     attach_function :vips_enum_from_nick, [:string, :GType, :string], :int

@@ -310,6 +310,22 @@ RSpec.describe Vips::Image do
 
     end
 
+    if Vips::at_least_libvips?(8, 6)
+        it 'can composite' do
+            image = Vips::Image.black(16, 16, :bands => 3) + [100, 128, 130]
+            base = image + 10
+            overlay = image.bandjoin 128
+            comb = overlay.composite base, :over
+            pixel = comb.getpoint(0, 0)
+
+            expect(pixel[0]).to be_within(0.1).of(105)
+            expect(pixel[1]).to be_within(0.1).of(133)
+            expect(pixel[2]).to be_within(0.1).of(135)
+            expect(pixel[3]).to eq(255)
+
+        end
+    end
+
     it 'has minpos/maxpos' do
         image = Vips::Image.black(16, 16) + 128
         image = image.draw_rect 255, 10, 12, 1, 1

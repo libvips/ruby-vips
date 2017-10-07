@@ -6,6 +6,7 @@
 
 * add `thumb.rb` example, and verify we run stably and in constant memory 
 * cleanups and polish [Nakilon]
+* add `composite` convenience method 
 
 ## Version 2.0.7 (2017-09-08)
 
