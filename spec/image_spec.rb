@@ -315,7 +315,7 @@ RSpec.describe Vips::Image do
             image = Vips::Image.black(16, 16, :bands => 3) + [100, 128, 130]
             base = image + 10
             overlay = image.bandjoin 128
-            comb = overlay.composite base, :over
+            comb = base.composite overlay, :over
             pixel = comb.getpoint(0, 0)
 
             expect(pixel[0]).to be_within(0.1).of(105)
