@@ -82,14 +82,12 @@ module Vips
         end
 
         def self.complex? format
-            format_number = Vips::vips_enum_from_nick "complex?", 
-                BAND_FORMAT_TYPE, format.to_s
+            format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
             Vips::vips_band_format_iscomplex(format_number) != 0
         end
 
         def self.float? format
-            format_number = Vips::vips_enum_from_nick "float?", 
-                BAND_FORMAT_TYPE, format.to_s
+            format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
             Vips::vips_band_format_isfloat(format_number) != 0
         end
 
@@ -1009,15 +1007,7 @@ module Vips
             end
 
             mode = mode.map do |x|
-                if x.is_a?(String) || x.is_a?(Symbol)
-                    x = Vips::vips_enum_from_nick "ruby-vips", 
-                        Vips::BLEND_MODE_TYPE, x.to_s
-                    if x == -1
-                        raise Vips::Error
-                    end
-                end
-
-                x
+                GObject::GValue.from_nick Vips::BLEND_MODE_TYPE, x
             end
 
             Vips::Image.composite([self] + other, mode, opts)

@@ -23,6 +23,30 @@ module GObject
         layout :gtype, :GType, 
                :data, [:ulong_long, 2]
 
+        # convert an enum value (str/symb/int) into an int ready for libvips
+        def self.from_nick(gtype, value)
+            value = value.to_s if value.is_a? Symbol
+
+            if value.is_a? String
+                value = Vips::vips_enum_from_nick "ruby-vips", gtype, value
+                if value == -1
+                    raise Vips::Error
+                end
+            end
+
+            value
+        end
+
+        # convert an int enum back into a symbol
+        def self.to_nick(gtype, enum_value)
+            enum_name = Vips::vips_enum_nick gtype, enum_value
+            if enum_name == nil
+                raise Vips::Error
+            end
+
+            enum_name.to_sym
+        end
+
         def self.release ptr
             # GLib::logger.debug("GObject::GValue::release") {"ptr = #{ptr}"}
             ::GObject::g_value_unset ptr 
@@ -121,17 +145,8 @@ module GObject
                     ::GObject::g_value_set_flags self, value
 
                 when GENUM_TYPE
-                    value = value.to_s if value.is_a? Symbol
-
-                    if value.is_a? String
-                        value = Vips::vips_enum_from_nick "ruby-vips", 
-                            self[:gtype], value
-                        if value == -1
-                            raise Vips::Error
-                        end
-                    end
-
-                    ::GObject::g_value_set_enum self, value
+                    enum_value = GValue.from_nick(self[:gtype], value)
+                    ::GObject::g_value_set_enum self, enum_value
 
                 when GOBJECT_TYPE
                     ::GObject::g_value_set_object self, value
@@ -200,14 +215,8 @@ module GObject
                     result = ::GObject::g_value_get_flags self
 
                 when GENUM_TYPE
-                    enum_value = ::GObject::g_value_get_enum self
-                    # this returns a static string, no need to worry about 
-                    # lifetime
-                    enum_name = Vips::vips_enum_nick self[:gtype], enum_value
-                    if enum_name == nil
-                        raise Vips::Error
-                    end
-                    result = enum_name.to_sym
+                    enum_value = ::GObject::g_value_get_enum(self)
+                    result = GValue.to_nick self[:gtype], enum_value
 
                 when GOBJECT_TYPE
                     obj = ::GObject::g_value_get_object self
