@@ -1,6 +1,37 @@
 require 'spec_helper.rb'
 
 RSpec.describe Vips do
+    describe 'Vips' do
+        it 'can set concurrency' do
+            Vips::concurrency_set 12
+        end
+
+        it 'can set SIMD' do
+            Vips::vector_set true
+        end
+
+        it 'can enable leak testing' do
+            Vips::leak_set true
+            Vips::leak_set false
+        end
+
+        it 'can set the operation cache size' do
+            Vips::cache_set_max 0
+            Vips::cache_set_max 100
+        end
+
+        it 'can set the operation cache memory limit' do
+            Vips::cache_set_max_mem 0
+            Vips::cache_set_max_mem 10000000
+        end
+
+        it 'can set the operation cache file limit' do
+            Vips::cache_set_max_files 0
+            Vips::cache_set_max_files 100
+        end
+
+    end
+
     describe '#call' do
         it 'can make a black image' do
             image = Vips::Operation.call "black", [200, 200]

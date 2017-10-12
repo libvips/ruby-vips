@@ -510,6 +510,8 @@ module Vips
     # in any case libvips does this for us
 
     attach_function :vips_leak_set, [:int], :void
+    attach_function :vips_vector_set_enabled, [:int], :void
+    attach_function :vips_concurrency_set, [:int], :void
 
     # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
     # very useful for user code. 
@@ -538,6 +540,19 @@ module Vips
     # 100.
     def self.cache_set_max_files size
         vips_cache_set_max_files size
+    end
+
+    # Set the size of the libvips worker pool. This defaults to the number of
+    # hardware threads on your computer. Set to 1 to disable threading. 
+    def self.concurrency_set n
+        vips_concurrency_set n
+    end
+
+    # Enable or disable SIMD and the run-time compiler. This can give a nice
+    # speed-up, but can also be unstable on some systems or with some versions
+    # of the run-time compiler. 
+    def self.vector_set enabled
+        vips_vector_set_enabled(enabled ? 1 : 0)
     end
 
     # Deprecated compatibility function.

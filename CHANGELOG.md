@@ -7,6 +7,7 @@
 * add `thumb.rb` example, and verify we run stably and in constant memory 
 * cleanups and polish [Nakilon]
 * add `composite` convenience method 
+* add `Vips::concurrency_set` and `Vips::vector_set`
 
 ## Version 2.0.7 (2017-09-08)
 
