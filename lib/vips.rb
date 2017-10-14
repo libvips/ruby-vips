@@ -21,6 +21,8 @@ module GLib
 
     if FFI::Platform.windows?
         glib_libname = 'libglib-2.0-0.dll'
+    elsif FFI::Platform.mac? and FileTest.exists?('/opt/local/lib/libglib-2.0.dylib')
+        glib_libname = '/opt/local/lib/libglib-2.0.dylib'
     else
         glib_libname = 'glib-2.0' 
     end
@@ -121,6 +123,8 @@ module GObject
 
     if FFI::Platform.windows?
         gobject_libname = 'libgobject-2.0-0.dll'
+    elsif FFI::Platform.mac? and FileTest.exists?('/opt/local/lib/libgobject-2.0.dylib')
+        gobject_libname = '/opt/local/lib/libgobject-2.0.dylib'
     else
         gobject_libname = 'gobject-2.0'
     end
@@ -459,6 +463,8 @@ module Vips
 
     if FFI::Platform.windows?
         vips_libname = 'libvips-42.dll'
+    elsif FFI::Platform.mac? and FileTest.exists?('/opt/local/lib/libvips.dylib')
+        vips_libname = '/opt/local/lib/libvips.dylib'
     else
         vips_libname = 'vips'
     end
