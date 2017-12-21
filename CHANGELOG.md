@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.9 (2017-12-21)
+
+* update docs for libvips 8.6
+
 ## Version 2.0.8 (2017-09-14)
 
 * add `thumb.rb` example, and verify we run stably and in constant memory 

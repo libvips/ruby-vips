@@ -557,7 +557,7 @@ module Vips
 
     # Deprecated compatibility function.
     #
-    # Don't use this, instead change {GLib::logger.level}.
+    # Don't use this, instead change GLib::logger.level.
     def self.set_debug debug
         if debug
             GLib::logger.level = Logger::DEBUG
