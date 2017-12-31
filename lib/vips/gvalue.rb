@@ -96,6 +96,9 @@ module GObject
             when GINT_TYPE
                 ::GObject::g_value_set_int self, value
 
+            when GUINT64_TYPE
+                ::GObject::g_value_set_uint64 self, value
+
             when GDOUBLE_TYPE
                 ::GObject::g_value_set_double self, value
 
@@ -175,6 +178,9 @@ module GObject
             when GINT_TYPE
                 result = ::GObject::g_value_get_int self
 
+            when GUINT64_TYPE
+                result = ::GObject::g_value_get_uint64 self
+
             when GDOUBLE_TYPE
                 result = ::GObject::g_value_get_double self
 
@@ -250,6 +256,7 @@ module GObject
 
     attach_function :g_value_set_boolean, [GValue.ptr, :int], :void
     attach_function :g_value_set_int, [GValue.ptr, :int], :void
+    attach_function :g_value_set_uint64, [GValue.ptr, :uint64], :void
     attach_function :g_value_set_double, [GValue.ptr, :double], :void
     attach_function :g_value_set_enum, [GValue.ptr, :int], :void
     attach_function :g_value_set_flags, [GValue.ptr, :uint], :void
@@ -258,6 +265,7 @@ module GObject
 
     attach_function :g_value_get_boolean, [GValue.ptr], :int
     attach_function :g_value_get_int, [GValue.ptr], :int
+    attach_function :g_value_get_uint64, [GValue.ptr], :uint64
     attach_function :g_value_get_double, [GValue.ptr], :double
     attach_function :g_value_get_enum, [GValue.ptr], :int
     attach_function :g_value_get_flags, [GValue.ptr], :int

@@ -141,6 +141,7 @@ module GObject
     # look up some common gtypes
     GBOOL_TYPE = g_type_from_name "gboolean"
     GINT_TYPE = g_type_from_name "gint"
+    GUINT64_TYPE = g_type_from_name "guint64"
     GDOUBLE_TYPE = g_type_from_name "gdouble"
     GENUM_TYPE = g_type_from_name "GEnum"
     GFLAGS_TYPE = g_type_from_name "GFlags"
