@@ -5,6 +5,7 @@
 ## Version 2.0.10 (2017-12-21)
 
 * add support for uint64 parameters
+* add `draw_point` convenience method
 
 ## Version 2.0.9 (2017-12-21)
 

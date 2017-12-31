@@ -693,9 +693,25 @@ module Vips
             [width, height]
         end
 
+        # Copy an image to a memory area.
+        #
+        # This can be useful for reusing results, but can obviously use a lot of
+        # memory for large images. See {Image#tilecache} for a way of caching 
+        # parts of an image. 
+        #
+        # @return [Image] new memory image
         def copy_memory
             new_image = Vips::vips_image_copy_memory self
             Vips::Image.new new_image
+        end
+
+        # Draw a point on an image.
+        #
+        # See {Image#draw_rect}.
+        #
+        # @return [Image] modified image
+        def draw_point ink, left, top, opts = {}
+            draw_rect ink, left, top, 1, 1, opts
         end
 
         # Add an image, constant or array. 
