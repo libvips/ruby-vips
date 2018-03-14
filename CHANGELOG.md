@@ -6,6 +6,7 @@
 
 * add support for uint64 parameters
 * add `draw_point` convenience method
+* add docs for `CompassDirection` [janko-m]
 
 ## Version 2.0.9 (2017-12-21)
 
