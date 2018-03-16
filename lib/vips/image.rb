@@ -539,7 +539,7 @@ module Vips
         # For example, you can use this to set an image's ICC profile:
         #
         # ```
-        # x = y.set Vips::BLOB_TYPE, "icc-profile-data", profile
+        # x = y.set_type Vips::BLOB_TYPE, "icc-profile-data", profile
         # ```
         #
         # where `profile` is an ICC profile held as a binary string object.
