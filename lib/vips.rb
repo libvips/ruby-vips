@@ -578,6 +578,10 @@ module Vips
 
     LIBRARY_VERSION = Vips::version_string
 
+    # libvips has this arbitrary number as a sanity-check upper bound on image
+    # size. It's sometimes useful for know whan calculating image ratios.
+    MAX_COORD = 10000000
+
 end
 
 require 'vips/object'
