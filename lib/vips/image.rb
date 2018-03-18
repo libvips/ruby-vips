@@ -252,13 +252,13 @@ module Vips
         # strings or appended as a hash. For example:
         #
         # ```
-        # image = Vips::new_from_from_buffer memory_buffer, "shrink=2"
+        # image = Vips::Image.new_from_buffer memory_buffer, "shrink=2"
         # ```
         # 
         # or alternatively:
         #
         # ```
-        # image = Vips::new_from_from_buffer memory_buffer, "", shrink: 2
+        # image = Vips::Image.new_from_buffer memory_buffer, "", shrink: 2
         # ```
         #
         # The options available depend on the file format. Try something like:
