@@ -137,7 +137,7 @@ module GObject
                 value.each {|image| ::GObject::g_object_ref image}
 
             when Vips::BLOB_TYPE
-                len = value.length
+                len = value.bytesize
                 ptr = GLib::g_malloc len
                 Vips::vips_value_set_blob self, GLib::G_FREE, ptr, len
                 ptr.write_bytes value

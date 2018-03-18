@@ -279,7 +279,7 @@ module Vips
         # @macro vips.loadopts
         # @return [Image] the loaded image
         def self.new_from_buffer data, option_string, opts = {}
-            loader = Vips::vips_foreign_find_load_buffer data, data.length
+            loader = Vips::vips_foreign_find_load_buffer data, data.bytesize
             raise Vips::Error if loader == nil
 
             Vips::Operation.call loader, [data], opts, option_string
