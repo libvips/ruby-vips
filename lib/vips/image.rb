@@ -16,7 +16,6 @@ module Vips
 
     attach_function :vips_filename_get_filename, [:string], :string
     attach_function :vips_filename_get_options, [:string], :string
-    attach_function :vips_filename_get_options, [:string], :string
 
     attach_function :vips_foreign_find_load, [:string], :string
     attach_function :vips_foreign_find_save, [:string], :string
