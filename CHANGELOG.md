@@ -8,6 +8,8 @@
 * add `draw_point` convenience method
 * add docs for `CompassDirection` [janko-m]
 * add `MAX_COORD` constant
+* doc fixes [janko-m]
+* remove duplicate function attach [janko-m]
 
 ## Version 2.0.9 (2017-12-21)
 
