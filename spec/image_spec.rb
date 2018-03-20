@@ -1,13 +1,13 @@
 require 'spec_helper.rb'
 
 def has_jpeg?
-    Vips::type_find("VipsOperation", "jpegload") != nil
+    Vips::type_find('VipsOperation', 'jpegload') != nil
 end
 
 RSpec.describe Vips::Image do
 
     it 'can save an image to a file' do
-        filename = timg "x.v"
+        filename = timg 'x.v'
 
         image = Vips::Image.black(16, 16) + 128
         image.write_to_file filename
@@ -16,7 +16,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'can load an image from a file' do
-        filename = timg "x.v"
+        filename = timg 'x.v'
 
         image = Vips::Image.black(16, 16) + 128
         image.write_to_file(filename)
@@ -31,7 +31,7 @@ RSpec.describe Vips::Image do
     if has_jpeg?
         it 'can save an image to a buffer' do
             image = Vips::Image.black(16, 16) + 128
-            buffer = image.write_to_buffer ".jpg"
+            buffer = image.write_to_buffer '.jpg'
             expect(buffer.length).to be > 100
         end
     end
@@ -39,8 +39,8 @@ RSpec.describe Vips::Image do
     if has_jpeg?
         it 'can load an image from a buffer' do
             image = Vips::Image.black(16, 16) + 128
-            buffer = image.write_to_buffer ".jpg"
-            x = Vips::Image.new_from_buffer buffer, ""
+            buffer = image.write_to_buffer '.jpg'
+            x = Vips::Image.new_from_buffer buffer, ''
             expect(x.width).to eq(16)
             expect(x.height).to eq(16)
         end
@@ -106,8 +106,30 @@ RSpec.describe Vips::Image do
     end
 
     if has_jpeg?
-        it 'can load a sample jpg image' do
-            x = Vips::Image.new_from_file simg("wagon.jpg")
+        it 'can load a sample jpg image file' do
+            x = Vips::Image.new_from_file simg('wagon.jpg')
+            expect(x.width).to eq(685)
+            expect(x.height).to eq(478)
+            expect(x.bands).to eq(3)
+            expect(x.avg).to be_within(0.001).of(109.789)
+        end
+    end
+
+    if has_jpeg?
+        it 'can load a sample jpg image buffer' do
+            str = File.open(simg('wagon.jpg'), 'rb').read
+            x = Vips::Image.new_from_buffer str, ''
+            expect(x.width).to eq(685)
+            expect(x.height).to eq(478)
+            expect(x.bands).to eq(3)
+            expect(x.avg).to be_within(0.001).of(109.789)
+        end
+    end
+
+    if has_jpeg?
+        it 'can load a sample jpg image utf-8 buffer' do
+            str = File.open(simg('wagon.jpg'), 'r').read
+            x = Vips::Image.new_from_buffer str, ''
             expect(x.width).to eq(685)
             expect(x.height).to eq(478)
             expect(x.bands).to eq(3)
@@ -117,13 +139,13 @@ RSpec.describe Vips::Image do
 
     if has_jpeg?
         it 'can extract an ICC profile from a jpg image' do
-            x = Vips::Image.new_from_file simg("icc.jpg")
+            x = Vips::Image.new_from_file simg('icc.jpg')
             expect(x.width).to eq(2800)
             expect(x.height).to eq(2100)
             expect(x.bands).to eq(3)
             expect(x.avg).to be_within(0.001).of(109.189)
 
-            profile = x.get_value "icc-profile-data"
+            profile = x.get_value 'icc-profile-data'
             expect(profile.class).to eq(String)
             expect(profile.length).to eq(2360)
         end
@@ -131,18 +153,18 @@ RSpec.describe Vips::Image do
 
     if has_jpeg?
         it 'can set an ICC profile on a jpg image' do
-            x = Vips::Image.new_from_file simg("icc.jpg")
-            profile = File.open(simg("lcd.icc"), "rb").read
-            x.set_value "icc-profile-data", profile
-            x.write_to_file(timg("x.jpg"))
+            x = Vips::Image.new_from_file simg('icc.jpg')
+            profile = File.open(simg('lcd.icc'), 'rb').read
+            x.set_value 'icc-profile-data', profile
+            x.write_to_file(timg('x.jpg'))
 
-            x = Vips::Image.new_from_file timg("x.jpg")
+            x = Vips::Image.new_from_file timg('x.jpg')
             expect(x.width).to eq(2800)
             expect(x.height).to eq(2100)
             expect(x.bands).to eq(3)
             expect(x.avg).to be_within(0.1).of(109.189)
 
-            profile = x.get_value "icc-profile-data"
+            profile = x.get_value 'icc-profile-data'
             expect(profile.class).to eq(String)
             expect(profile.length).to eq(3048)
         end
@@ -150,7 +172,7 @@ RSpec.describe Vips::Image do
 
     if has_jpeg?
         it 'can load a sample jpg image' do
-            x = Vips::Image.new_from_file simg("wagon.jpg")
+            x = Vips::Image.new_from_file simg('wagon.jpg')
             expect(x.width).to eq(685)
             expect(x.height).to eq(478)
             expect(x.bands).to eq(3)
@@ -579,17 +601,17 @@ RSpec.describe Vips::Image do
     if has_jpeg?
         it 'works with arguments containing -' do
             image = Vips::Image.black(16, 16) + 128
-            buffer = image.write_to_buffer ".jpg", optimize_coding: true
+            buffer = image.write_to_buffer '.jpg', optimize_coding: true
             expect(buffer.length).to be > 100
         end
     end
 
     if has_jpeg?
         it 'can read exif tags' do
-            x = Vips::Image.new_from_file simg "huge.jpg" 
-            orientation = x.get "exif-ifd0-Orientation"
+            x = Vips::Image.new_from_file simg 'huge.jpg' 
+            orientation = x.get 'exif-ifd0-Orientation'
             expect(orientation.length).to be > 20
-            expect(orientation.split[0]).to eq("1")
+            expect(orientation.split[0]).to eq('1')
         end
     end
 
@@ -599,7 +621,7 @@ RSpec.describe Vips::Image do
             x = Vips::Image.black 100, 100
             y = x.get_fields
             expect(y.length).to be > 10
-            expect(y[0]).to eq("width")
+            expect(y[0]).to eq('width')
         end
     end
 

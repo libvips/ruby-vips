@@ -10,6 +10,7 @@
 * add `MAX_COORD` constant
 * doc fixes [janko-m]
 * remove duplicate function attach [janko-m]
+* fix a crash with `new_from_buffer` with a UTF-8 string [janko-m]
 
 ## Version 2.0.9 (2017-12-21)
 
