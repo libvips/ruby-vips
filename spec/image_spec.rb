@@ -626,5 +626,9 @@ RSpec.describe Vips::Image do
         end
     end
 
+    it 'can has_alpha?' do
+        x = Vips::Image.new_from_file './spec/samples/alpha.png'
+        expect(x.has_alpha?).to be true
+    end
 end
 

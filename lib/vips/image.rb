@@ -35,7 +35,9 @@ module Vips
     rescue FFI::NotFoundError
     end
 
-    attach_function :vips_image_set, 
+    attach_function :vips_image_hasalpha, [:pointer], :int
+
+    attach_function :vips_image_set,
         [:pointer, :string, GObject::GValue.ptr], :void
     attach_function :vips_image_remove, [:pointer, :string], :void
 
@@ -690,6 +692,13 @@ module Vips
         # @return [Integer, Integer] image width and height
         def size
             [width, height]
+        end
+
+        # Detect if image has an alpha channel
+        #
+        # @return [Boolean] true if image has an alpha channel.
+        def has_alpha?
+            return Vips::vips_image_hasalpha(self) != 0
         end
 
         # Copy an image to a memory area.
