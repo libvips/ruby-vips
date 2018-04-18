@@ -35,6 +35,7 @@ module Vips
     rescue FFI::NotFoundError
     end
 
+    attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
     attach_function :vips_image_hasalpha, [:pointer], :int
 
     attach_function :vips_image_set,
@@ -76,7 +77,11 @@ module Vips
 
         end
 
-        # handy for overloads ... want to be able to apply a function to an 
+        class GenericPtr < FFI::Struct
+            layout :value, :pointer
+        end
+
+        # handy for overloads ... want to be able to apply a function to an
         # array or to a scalar
         def self.smap x, &block
             x.is_a?(Array) ? x.map {|y| smap(y, &block)} : block.(x)
@@ -699,6 +704,17 @@ module Vips
         # @return [Boolean] true if image has an alpha channel.
         def has_alpha?
             return Vips::vips_image_hasalpha(self) != 0
+        end
+
+        # Append an alpha channel to an image.
+        #
+        # @return [Image] new memory image
+        def add_alpha
+            ptr = GenericPtr.new
+            result = Vips::vips_addalpha self, ptr
+            raise Vips::Error if result != 0
+
+            Vips::Image.new ptr[:value]
         end
 
         # Copy an image to a memory area.
