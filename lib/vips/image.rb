@@ -35,7 +35,10 @@ module Vips
     rescue FFI::NotFoundError
     end
 
-    attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
+    # vips_addalpha was added in libvips 8.6
+    if Vips::at_least_libvips?(8, 6)
+        attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
+    end
     attach_function :vips_image_hasalpha, [:pointer], :int
 
     attach_function :vips_image_set,
