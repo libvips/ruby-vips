@@ -631,11 +631,13 @@ RSpec.describe Vips::Image do
         expect(x.has_alpha?).to be true
     end
 
-    it 'can add_alpha' do
-        x = Vips::Image.new_from_file './spec/samples/no_alpha.png'
-        expect(x.has_alpha?).to be false
-        y = x.add_alpha
-        expect(y.has_alpha?).to be true
+    if Vips::at_least_libvips?(8, 6)
+        it 'can add_alpha' do
+            x = Vips::Image.new_from_file './spec/samples/no_alpha.png'
+            expect(x.has_alpha?).to be false
+            y = x.add_alpha
+            expect(y.has_alpha?).to be true
+        end
     end
 end
 
