@@ -709,15 +709,18 @@ module Vips
             return Vips::vips_image_hasalpha(self) != 0
         end
 
-        # Append an alpha channel to an image.
-        #
-        # @return [Image] new memory image
-        def add_alpha
-            ptr = GenericPtr.new
-            result = Vips::vips_addalpha self, ptr
-            raise Vips::Error if result != 0
+        # vips_addalpha was added in libvips 8.6
+        if Vips::at_least_libvips?(8, 6)
+            # Append an alpha channel to an image.
+            #
+            # @return [Image] new memory image
+            def add_alpha
+                ptr = GenericPtr.new
+                result = Vips::vips_addalpha self, ptr
+                raise Vips::Error if result != 0
 
-            Vips::Image.new ptr[:value]
+                Vips::Image.new ptr[:value]
+            end
         end
 
         # Copy an image to a memory area.
