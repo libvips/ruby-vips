@@ -5,6 +5,7 @@
 ## Version 2.0.11 (2018-4-23)
 
 * fix init with older glib [lsat12357]
+* add `Vips::Image#has_alpha?` and `#add_alpha` [aried3r]
 
 ## Version 2.0.10 (2017-12-21)
 

@@ -713,7 +713,7 @@ module Vips
         if Vips::at_least_libvips?(8, 6)
             # Append an alpha channel to an image.
             #
-            # @return [Image] new memory image
+            # @return [Image] new image
             def add_alpha
                 ptr = GenericPtr.new
                 result = Vips::vips_addalpha self, ptr
