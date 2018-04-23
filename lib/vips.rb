@@ -134,9 +134,13 @@ module GObject
         typedef :uint32, :GType
     end
 
+    attach_function :g_type_init, [], :void
     attach_function :g_type_name, [:GType], :string
     attach_function :g_type_from_name, [:string], :GType
     attach_function :g_type_fundamental, [:GType], :GType
+
+    # glib before 2.36 needed this, does nothing in current glib
+    g_type_init
 
     # look up some common gtypes
     GBOOL_TYPE = g_type_from_name "gboolean"

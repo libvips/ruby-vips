@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.11 (2018-4-23)
+
+* fix init with older glib [lsat12357]
+
 ## Version 2.0.10 (2017-12-21)
 
 * add support for uint64 parameters
