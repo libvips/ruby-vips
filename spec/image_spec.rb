@@ -335,6 +335,7 @@ RSpec.describe Vips::Image do
     if Vips::at_least_libvips?(8, 6)
         it 'can composite' do
             image = Vips::Image.black(16, 16, :bands => 3) + [100, 128, 130]
+            image = image.copy interpretation: :srgb
             base = image + 10
             overlay = image.bandjoin 128
             comb = base.composite overlay, :over
