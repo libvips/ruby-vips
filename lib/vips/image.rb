@@ -39,7 +39,9 @@ module Vips
     if Vips::at_least_libvips?(8, 6)
         attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
     end
-    attach_function :vips_image_hasalpha, [:pointer], :int
+    if Vips::at_least_libvips?(8, 5)
+        attach_function :vips_image_hasalpha, [:pointer], :int
+    end
 
     attach_function :vips_image_set,
         [:pointer, :string, GObject::GValue.ptr], :void
@@ -702,11 +704,13 @@ module Vips
             [width, height]
         end
 
-        # Detect if image has an alpha channel
-        #
-        # @return [Boolean] true if image has an alpha channel.
-        def has_alpha?
-            return Vips::vips_image_hasalpha(self) != 0
+        if Vips::at_least_libvips?(8, 5)
+            # Detect if image has an alpha channel
+            #
+            # @return [Boolean] true if image has an alpha channel.
+            def has_alpha?
+                return Vips::vips_image_hasalpha(self) != 0
+            end
         end
 
         # vips_addalpha was added in libvips 8.6
