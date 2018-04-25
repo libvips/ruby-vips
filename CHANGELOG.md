@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.12 (2018-4-25)
+
+* fix `Vips::Image#has_alpha?` with older libvips [larskanis]
+
 ## Version 2.0.11 (2018-4-23)
 
 * fix init with older glib [lsat12357]
