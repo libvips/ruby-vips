@@ -35,9 +35,10 @@ rvm:
   - 2.6
 
 before_script:
-  - rake build
+  - bundle exec rake build
 
-script: "bundle exec rake"
+script: 
+  - bundle exec rake
 
 gemfile:
   - Gemfile
