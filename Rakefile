@@ -5,7 +5,7 @@ RSpec::Core::RakeTask.new(:test)
 
 task :default => :test
 
-task :build do
+task :ext do
 	Dir.chdir "ext" do
 		sh "rake"
 	end

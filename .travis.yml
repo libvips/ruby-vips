@@ -38,7 +38,7 @@ rvm:
 before_script:
   - gem update --system
   - gem install bundler
-  - bundle exec rake build
+  - bundle exec rake ext
 
 script: 
   - bundle exec rake
