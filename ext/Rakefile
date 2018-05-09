@@ -1,0 +1,35 @@
+
+require_relative '../lib/vips/version'
+
+version = Vips::VERSION[/\d+\.\d+\.\d+/]
+archive_path = "vips-#{version}.tar.gz"
+source_path = "vips-#{version}"
+prefix = ENV['PREFIX'] || File.dirname(__dir__)
+
+task :fetch do
+	url = "https://github.com/jcupitt/libvips/releases/download/v#{version}/#{archive_path}"
+	
+	unless File.exist? archive_path
+		sh "wget #{url}"
+	end
+end
+
+task :extract do
+	unless File.exist? source_path
+		sh "tar -xvf #{archive_path}"
+	end
+end
+
+task :build do
+	Dir.chdir source_path do
+		sh "./configure --prefix=#{prefix} --exec-prefix=#{prefix}"
+		sh "make install"
+	end
+end
+
+task :clean do
+	FileUtils.rm_rf archive_path
+	FileUtils.rm_rf source_path
+end
+
+task :default => [:fetch, :extract, :build]
