@@ -25,7 +25,8 @@ addons:
       - libglib2.0-dev
 
 cache:
-  - bundler
+  bundler: true
+  directories: $HOME/vips/ext
 
 language: ruby
 rvm:
@@ -35,6 +36,8 @@ rvm:
   - 2.6
 
 before_script:
+  - gem update --system
+  - gem install bundler
   - bundle exec rake build
 
 script: 
