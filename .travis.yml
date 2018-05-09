@@ -1,17 +1,5 @@
 sudo: false
 
-env:
-  global:
-    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-    - VIPS_VERSION_MAJOR=8
-    - VIPS_VERSION_MINOR=5
-    - VIPS_VERSION_MICRO=7
-    - PATH=$HOME/vips/bin:$PATH
-    - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
-    - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
-
-dist: trusty
-
 addons:
   apt:
     packages:
@@ -37,23 +25,19 @@ addons:
       - libglib2.0-dev
 
 cache:
-  directories:
-    - $HOME/vips
+  - bundler
 
 language: ruby
 rvm:
-  - 2.0
-  - 2.1
-  - 2.2
   - 2.3
   - 2.4
   - 2.5
+  - 2.6
+
+before_script:
+  - rake build
 
 script: "bundle exec rake"
 
 gemfile:
   - Gemfile
-
-before_install:
-  - uname -a
-  - bash install-vips.sh --without-python

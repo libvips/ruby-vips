@@ -5,6 +5,12 @@ RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
 
+task :build do
+	Dir.chdir "ext" do
+		sh "rake"
+	end
+end
+
 task :console do
 	require 'pry'
 	
