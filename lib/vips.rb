@@ -22,7 +22,7 @@ module GLib
     if FFI::Platform.windows?
         glib_libname = 'libglib-2.0-0.dll'
     else
-        glib_libname = 'glib-2.0' 
+        glib_libname = 'glib-2.0'
     end
 
     ffi_lib glib_libname 
@@ -465,7 +465,7 @@ module Vips
     if FFI::Platform.windows?
         vips_libname = 'libvips-42.dll'
     else
-        vips_libname = File.expand_path('libvips.so', __dir__)
+        vips_libname = File.expand_path(FFI::map_library_name('vips'), __dir__)
     end
 
     ffi_lib vips_libname
