@@ -22,9 +22,13 @@ Or install it yourself as:
 
 	$ gem install vips
 
+You'll still need to install `glib` and `gobject-introspection`.
+
 ## Usage
 
-Exactly the same way as `ruby-vips`. You'll still need to install `glib` and `gobject-introspection`.
+Exactly the same way as [ruby-vips].
+
+[ruby-vips]: https://github.com/jcupitt/ruby-vips
 
 ## Contributing
 
