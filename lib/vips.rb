@@ -138,13 +138,18 @@ module GObject
         typedef :uint32, :GType
     end
 
+    attach_function :g_type_init, [], :void
     attach_function :g_type_name, [:GType], :string
     attach_function :g_type_from_name, [:string], :GType
     attach_function :g_type_fundamental, [:GType], :GType
 
+    # glib before 2.36 needed this, does nothing in current glib
+    g_type_init
+
     # look up some common gtypes
     GBOOL_TYPE = g_type_from_name "gboolean"
     GINT_TYPE = g_type_from_name "gint"
+    GUINT64_TYPE = g_type_from_name "guint64"
     GDOUBLE_TYPE = g_type_from_name "gdouble"
     GENUM_TYPE = g_type_from_name "GEnum"
     GFLAGS_TYPE = g_type_from_name "GFlags"
@@ -563,7 +568,7 @@ module Vips
 
     # Deprecated compatibility function.
     #
-    # Don't use this, instead change {GLib::logger.level}.
+    # Don't use this, instead change GLib::logger.level.
     def self.set_debug debug
         if debug
             GLib::logger.level = Logger::DEBUG
@@ -582,6 +587,10 @@ module Vips
     end
 
     LIBRARY_VERSION = Vips::version_string
+
+    # libvips has this arbitrary number as a sanity-check upper bound on image
+    # size. It's sometimes useful for know whan calculating image ratios.
+    MAX_COORD = 10000000
 
 end
 

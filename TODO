@@ -9,20 +9,28 @@
 
 - version bump
 
-  edit lib/vips/version.rb and VERSION
+	edit lib/vips/version.rb 
+	edit VERSION
 
 - reinstall local copy of gem after a change
 
-  bundle exec rake install
+	bundle exec rake install
 
 - run test suite
 
-  bundle exec rake 
+	bundle exec rake 
 
-- push new gem to rubygems, tag repository with version
+- regenerate autodocs
 
-  bundle exec rake release
+	cd lib/vips
+	ruby > methods.rb
+	require 'vips'; Vips::generate_yard
+	^D
 
 - regenerate docs
 
-  bundle exec rake yard
+	bundle exec rake yard
+
+- push new gem to rubygems, tag repository with version
+
+	bundle exec rake release

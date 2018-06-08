@@ -2,6 +2,29 @@
 
 ## master
 
+## Version 2.0.12 (2018-4-25)
+
+* fix `Vips::Image#has_alpha?` with older libvips [larskanis]
+
+## Version 2.0.11 (2018-4-23)
+
+* fix init with older glib [lsat12357]
+* add `Vips::Image#has_alpha?` and `#add_alpha` [aried3r]
+
+## Version 2.0.10 (2017-12-21)
+
+* add support for uint64 parameters
+* add `draw_point` convenience method
+* add docs for `CompassDirection` [janko-m]
+* add `MAX_COORD` constant
+* doc fixes [janko-m]
+* remove duplicate function attach [janko-m]
+* fix a crash with `new_from_buffer` with a UTF-8 string [janko-m]
+
+## Version 2.0.9 (2017-12-21)
+
+* update docs for libvips 8.6
+
 ## Version 2.0.8 (2017-09-14)
 
 * add `thumb.rb` example, and verify we run stably and in constant memory 

@@ -16,7 +16,6 @@ module Vips
 
     attach_function :vips_filename_get_filename, [:string], :string
     attach_function :vips_filename_get_options, [:string], :string
-    attach_function :vips_filename_get_options, [:string], :string
 
     attach_function :vips_foreign_find_load, [:string], :string
     attach_function :vips_foreign_find_save, [:string], :string
@@ -36,7 +35,15 @@ module Vips
     rescue FFI::NotFoundError
     end
 
-    attach_function :vips_image_set, 
+    # vips_addalpha was added in libvips 8.6
+    if Vips::at_least_libvips?(8, 6)
+        attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
+    end
+    if Vips::at_least_libvips?(8, 5)
+        attach_function :vips_image_hasalpha, [:pointer], :int
+    end
+
+    attach_function :vips_image_set,
         [:pointer, :string, GObject::GValue.ptr], :void
     attach_function :vips_image_remove, [:pointer, :string], :void
 
@@ -75,7 +82,11 @@ module Vips
 
         end
 
-        # handy for overloads ... want to be able to apply a function to an 
+        class GenericPtr < FFI::Struct
+            layout :value, :pointer
+        end
+
+        # handy for overloads ... want to be able to apply a function to an
         # array or to a scalar
         def self.smap x, &block
             x.is_a?(Array) ? x.map {|y| smap(y, &block)} : block.(x)
@@ -252,13 +263,13 @@ module Vips
         # strings or appended as a hash. For example:
         #
         # ```
-        # image = Vips::new_from_from_buffer memory_buffer, "shrink=2"
+        # image = Vips::Image.new_from_buffer memory_buffer, "shrink=2"
         # ```
         # 
         # or alternatively:
         #
         # ```
-        # image = Vips::new_from_from_buffer memory_buffer, "", shrink: 2
+        # image = Vips::Image.new_from_buffer memory_buffer, "", shrink: 2
         # ```
         #
         # The options available depend on the file format. Try something like:
@@ -279,7 +290,7 @@ module Vips
         # @macro vips.loadopts
         # @return [Image] the loaded image
         def self.new_from_buffer data, option_string, opts = {}
-            loader = Vips::vips_foreign_find_load_buffer data, data.length
+            loader = Vips::vips_foreign_find_load_buffer data, data.bytesize
             raise Vips::Error if loader == nil
 
             Vips::Operation.call loader, [data], opts, option_string
@@ -539,7 +550,7 @@ module Vips
         # For example, you can use this to set an image's ICC profile:
         #
         # ```
-        # x = y.set Vips::BLOB_TYPE, "icc-profile-data", profile
+        # x = y.set_type Vips::BLOB_TYPE, "icc-profile-data", profile
         # ```
         #
         # where `profile` is an ICC profile held as a binary string object.
@@ -693,9 +704,48 @@ module Vips
             [width, height]
         end
 
+        if Vips::at_least_libvips?(8, 5)
+            # Detect if image has an alpha channel
+            #
+            # @return [Boolean] true if image has an alpha channel.
+            def has_alpha?
+                return Vips::vips_image_hasalpha(self) != 0
+            end
+        end
+
+        # vips_addalpha was added in libvips 8.6
+        if Vips::at_least_libvips?(8, 6)
+            # Append an alpha channel to an image.
+            #
+            # @return [Image] new image
+            def add_alpha
+                ptr = GenericPtr.new
+                result = Vips::vips_addalpha self, ptr
+                raise Vips::Error if result != 0
+
+                Vips::Image.new ptr[:value]
+            end
+        end
+
+        # Copy an image to a memory area.
+        #
+        # This can be useful for reusing results, but can obviously use a lot of
+        # memory for large images. See {Image#tilecache} for a way of caching 
+        # parts of an image. 
+        #
+        # @return [Image] new memory image
         def copy_memory
             new_image = Vips::vips_image_copy_memory self
             Vips::Image.new new_image
+        end
+
+        # Draw a point on an image.
+        #
+        # See {Image#draw_rect}.
+        #
+        # @return [Image] modified image
+        def draw_point ink, left, top, opts = {}
+            draw_rect ink, left, top, 1, 1, opts
         end
 
         # Add an image, constant or array. 
