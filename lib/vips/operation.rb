@@ -316,6 +316,8 @@ module Vips
 
             # set all optional inputs
             optional.each do |key, value|
+                next if value.nil?
+
                 arg_name = key.to_s
 
                 if optional_input.has_key? arg_name
