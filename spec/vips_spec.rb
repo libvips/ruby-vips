@@ -49,6 +49,14 @@ RSpec.describe Vips do
             expect(image.bands).to eq(12)
         end
 
+        it 'ignores optional arguments with nil values' do
+            image = Vips::Operation.call "black", [200, 200], { bands: nil }
+
+            expect(image.width).to eq(200)
+            expect(image.height).to eq(200)
+            expect(image.bands).to eq(1)
+        end
+
         it 'can handle enum arguments' do
             black = Vips::Operation.call "black", [200, 200]
             embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500], 
