@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.13 (2018-6-15)
+
+* allow optional args to have `nil` as a value [janko-m]
+
 ## Version 2.0.12 (2018-4-25)
 
 * fix `Vips::Image#has_alpha?` with older libvips [larskanis]
