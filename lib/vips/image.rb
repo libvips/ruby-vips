@@ -1047,7 +1047,7 @@ module Vips
         # Composite a set of images with a set of blend modes.
         #
         # @param other [Image, Array<Image>] images to composite
-        # @param mode [Symbol, Array<Symbol>] blend modes to use
+        # @param mode [BlendMode, Array<BlendMode>] blend modes to use
         # @return [Image] blended image
         def composite other, mode, opts = {}
             unless other.is_a? Array
