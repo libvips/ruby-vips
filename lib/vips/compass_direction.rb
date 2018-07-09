@@ -7,10 +7,10 @@ module Vips
     # * `:east`
     # * `:south`
     # * `:west`
-    # * `:north-east`
-    # * `"south-east`
-    # * `:south-west`
-    # * `:north-west`
+    # * `:"north-east"`
+    # * `:"south-east"`
+    # * `:"south-west"`
+    # * `:"north-west"`
 
     class CompassDirection < Symbol
     end
