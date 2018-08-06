@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.13 (2018-8-6)
+
+* fix five small memleaks [kleisauke]
+
 ## Version 2.0.12 (2018-4-25)
 
 * fix `Vips::Image#has_alpha?` with older libvips [larskanis]

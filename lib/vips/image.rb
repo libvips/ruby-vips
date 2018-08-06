@@ -14,8 +14,8 @@ module Vips
 
     attach_function :vips_image_copy_memory, [:pointer], :pointer
 
-    attach_function :vips_filename_get_filename, [:string], :string
-    attach_function :vips_filename_get_options, [:string], :string
+    attach_function :vips_filename_get_filename, [:string], :pointer
+    attach_function :vips_filename_get_options, [:string], :pointer
 
     attach_function :vips_foreign_find_load, [:string], :string
     attach_function :vips_foreign_find_save, [:string], :string
@@ -51,6 +51,12 @@ module Vips
     attach_function :vips_band_format_isfloat, [:int], :int
 
     attach_function :nickname_find, :vips_nickname_find, [:GType], :string
+
+    # turn a raw pointer that must be freed into a self-freeing Ruby string
+    def self.p2str(pointer)
+        pointer = FFI::AutoPointer.new(pointer, GLib::G_FREE)
+        pointer.read_string
+    end
 
     public
 
@@ -250,8 +256,8 @@ module Vips
             # pass this
             raise Vips::Error, "filename is nil" if name == nil
 
-            filename = Vips::vips_filename_get_filename name
-            option_string = Vips::vips_filename_get_options name
+            filename = Vips::p2str(Vips::vips_filename_get_filename name)
+            option_string = Vips::p2str(Vips::vips_filename_get_options name)
             loader = Vips::vips_foreign_find_load filename
             raise Vips::Error if loader == nil
 
@@ -412,15 +418,15 @@ module Vips
         #
         # @param name [String] filename to write to
         def write_to_file name, opts = {}
-            filename = Vips::vips_filename_get_filename name
-            option_string = Vips::vips_filename_get_options name
+            filename = Vips::p2str(Vips::vips_filename_get_filename name)
+            option_string = Vips::p2str(Vips::vips_filename_get_options name)
             saver = Vips::vips_foreign_find_save filename
             if saver == nil
                 raise Vips::Error, "No known saver for '#{filename}'."
             end
 
             Vips::Operation.call saver, [self, filename], opts, option_string
-
+ 
             write_gc
         end
 
@@ -450,8 +456,10 @@ module Vips
         # @macro vips.saveopts
         # @return [String] the image saved in the specified format
         def write_to_buffer format_string, opts = {}
-            filename = Vips::vips_filename_get_filename format_string
-            option_string = Vips::vips_filename_get_options format_string
+            filename = 
+                Vips::p2str(Vips::vips_filename_get_filename format_string)
+            option_string = 
+                Vips::p2str(Vips::vips_filename_get_options format_string)
             saver = Vips::vips_foreign_find_save_buffer filename
             if saver == nil
                 raise Vips::Error, "No known saver for '#{filename}'."
