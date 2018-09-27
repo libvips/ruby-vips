@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Ruby extension for the vips image processing library."
   spec.description = "ruby-vips is a binding for the vips image processing library. It is extremely fast and it can process huge images without loading the whole image in memory."
-  spec.homepage = "http://github.com/jcupitt/ruby-vips"
+  spec.homepage = "http://github.com/libvips/ruby-vips"
   spec.licenses = ["MIT"]
 
   spec.require_paths = ["lib"]

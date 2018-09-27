@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-vips_site=https://github.com/jcupitt/libvips/releases/download
+vips_site=https://github.com/libvips/libvips/releases/download
 version=$VIPS_VERSION_MAJOR.$VIPS_VERSION_MINOR.$VIPS_VERSION_MICRO
 
 set -e

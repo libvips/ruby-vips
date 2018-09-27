@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.14 (2018-8-6)
+
+* update links for new home [jcupitt]
+
 ## Version 2.0.13 (2018-8-6)
 
 * allow optional args to have `nil` as a value [janko-m]
