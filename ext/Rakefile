@@ -7,7 +7,7 @@ source_path = "vips-#{version}"
 prefix = ENV['PREFIX'] || File.dirname(__dir__)
 
 task :fetch do
-	url = "https://github.com/jcupitt/libvips/releases/download/v#{version}/#{archive_path}"
+	url = "https://github.com/libvips/libvips/releases/download/v#{version}/#{archive_path}"
 	
 	unless File.exist? archive_path
 		sh "wget #{url}"
