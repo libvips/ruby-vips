@@ -45,7 +45,9 @@ rvm:
   - 2.4
   - 2.5
 
-script: "bundle exec rake"
+script:
+  - bundle exec rake spec
+  - bundle exec rake rubocop
 
 gemfile:
   - Gemfile
