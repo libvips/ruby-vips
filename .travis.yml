@@ -45,13 +45,17 @@ rvm:
   - 2.4
   - 2.5
 
-script:
-  - bundle exec rake spec
-  - bundle exec rake rubocop
+script: bundle exec rake spec
 
 gemfile:
   - Gemfile
 
 before_install:
   - uname -a
-  - bash install-vips.sh 
+  - bash install-vips.sh
+
+jobs:
+  include:
+    - stage: Lint
+      rvm: 2.5
+      script: bundle exec rake rubocop
