@@ -27,3 +27,6 @@ require "yard/rake/yardoc_task"
 
 YARD::Rake::YardocTask.new do |yard|
 end
+
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
