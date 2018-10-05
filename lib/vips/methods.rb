@@ -189,7 +189,7 @@ module Vips
 #   @return [Float] Output value
 
 # @!method stats(opts = {})
-#   Find image average.
+#   Find many image stats.
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output array of statistics
 
@@ -506,6 +506,12 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
+# @!method transpose3d(opts = {})
+#   Transpose3d an image.
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :page_height Height of each input page
+#   @return [Vips::Image] Output image
+
 # @!method wrap(opts = {})
 #   Wrap image origin.
 #   @param opts [Hash] Set of options
@@ -555,6 +561,8 @@ module Vips
 #   @param overlay [Vips::Image] Overlay image
 #   @param mode [Vips::BlendMode] VipsBlendMode to join with
 #   @param opts [Hash] Set of options
+#   @option opts [Integer] :x x position of overlay
+#   @option opts [Integer] :y y position of overlay
 #   @option opts [Vips::Interpretation] :compositing_space Composite images in this colour space
 #   @option opts [Boolean] :premultiplied Images have premultiplied alpha
 #   @return [Vips::Image] Output image
@@ -586,6 +594,7 @@ module Vips
 #   @option opts [Vips::Align] :align Align on the low, centre or high edge
 #   @option opts [Integer] :dpi DPI to render at
 #   @option opts [Integer] :spacing Line spacing
+#   @option opts [String] :fontfile Load this font file
 #   @option opts [Integer] :autofit_dpi Output DPI selected by autofit
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -938,6 +947,7 @@ module Vips
 #   @option opts [Boolean] :fail Fail on first error
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
+#   @option opts [Array<Double>] :background Background value
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -952,6 +962,7 @@ module Vips
 #   @option opts [Boolean] :fail Fail on first error
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
+#   @option opts [Array<Double>] :background Background value
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
@@ -1176,6 +1187,16 @@ module Vips
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
+# @!method self.niftiload(filename, opts = {})
+#   Load a nifti image.
+#   @param filename [String] Filename to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :fail Fail on first error
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
 # @!method csvsave(filename, opts = {})
 #   Save image to csv file.
 #   @param filename [String] Filename to save to
@@ -1274,6 +1295,7 @@ module Vips
 #   @option opts [Vips::ForeignDzContainer] :container Pyramid container type
 #   @option opts [Boolean] :properties Write a properties file to the output directory
 #   @option opts [Integer] :compression ZIP deflate compression level
+#   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1293,6 +1315,7 @@ module Vips
 #   @option opts [Vips::ForeignDzContainer] :container Pyramid container type
 #   @option opts [Boolean] :properties Write a properties file to the output directory
 #   @option opts [Integer] :compression ZIP deflate compression level
+#   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [VipsBlob] Buffer to save to
@@ -1306,6 +1329,10 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Vips::ForeignPngFilter] :filter libpng row filter flag(s)
+#   @option opts [Boolean] :palette Quantise to 8bpp palette
+#   @option opts [Integer] :colours Max number of palette colours
+#   @option opts [Integer] :Q Quantisation quality
+#   @option opts [Float] :dither Amount of dithering
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1318,6 +1345,10 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [String] :profile ICC profile to embed
 #   @option opts [Vips::ForeignPngFilter] :filter libpng row filter flag(s)
+#   @option opts [Boolean] :palette Quantise to 8bpp palette
+#   @option opts [Integer] :colours Max number of palette colours
+#   @option opts [Integer] :Q Quantisation quality
+#   @option opts [Float] :dither Amount of dithering
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [VipsBlob] Buffer to save to
@@ -1423,6 +1454,7 @@ module Vips
 #   @option opts [Float] :yres Vertical resolution in pixels/mm
 #   @option opts [Boolean] :bigtiff Write a bigtiff image
 #   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
+#   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [nil] 
@@ -1446,12 +1478,43 @@ module Vips
 #   @option opts [Float] :yres Vertical resolution in pixels/mm
 #   @option opts [Boolean] :bigtiff Write a bigtiff image
 #   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
+#   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
+#   @option opts [Boolean] :strip Strip all metadata from image
+#   @option opts [Array<Double>] :background Background value
+#   @return [VipsBlob] Buffer to save to
+
+# @!method magicksave(filename, opts = {})
+#   Save file with imagemagick.
+#   @param filename [String] Filename to save to
+#   @param opts [Hash] Set of options
+#   @option opts [String] :format Format to save in
+#   @option opts [Integer] :quality Quality to use
+#   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [Boolean] :strip Strip all metadata from image
+#   @option opts [Array<Double>] :background Background value
+#   @return [nil] 
+
+# @!method magicksave_buffer(opts = {})
+#   Save image to magick buffer.
+#   @param opts [Hash] Set of options
+#   @option opts [String] :format Format to save in
+#   @option opts [Integer] :quality Quality to use
+#   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @return [VipsBlob] Buffer to save to
 
 # @!method fitssave(filename, opts = {})
 #   Save image to fits file.
+#   @param filename [String] Filename to save to
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [Boolean] :strip Strip all metadata from image
+#   @option opts [Array<Double>] :background Background value
+#   @return [nil] 
+
+# @!method niftisave(filename, opts = {})
+#   Save image to nifti file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1578,10 +1641,22 @@ module Vips
 # @!method similarity(opts = {})
 #   Similarity transform of an image.
 #   @param opts [Hash] Set of options
-#   @option opts [Array<Double>] :background Background value
-#   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
 #   @option opts [Float] :scale Scale by this factor
 #   @option opts [Float] :angle Rotate anticlockwise by this many degrees
+#   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
+#   @option opts [Array<Double>] :background Background value
+#   @option opts [Float] :odx Horizontal output displacement
+#   @option opts [Float] :ody Vertical output displacement
+#   @option opts [Float] :idx Horizontal input displacement
+#   @option opts [Float] :idy Vertical input displacement
+#   @return [Vips::Image] Output image
+
+# @!method rotate(angle, opts = {})
+#   Rotate an image by a number of degrees.
+#   @param angle [Float] Rotate anticlockwise by this many degrees
+#   @param opts [Hash] Set of options
+#   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
+#   @option opts [Array<Double>] :background Background value
 #   @option opts [Float] :odx Horizontal output displacement
 #   @option opts [Float] :ody Vertical output displacement
 #   @option opts [Float] :idx Horizontal input displacement
@@ -1929,6 +2004,18 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :min_ampl Minimum amplitude of Gaussian
 #   @option opts [Vips::Precision] :precision Convolve with this precision
+#   @return [Vips::Image] Output image
+
+# @!method canny(opts = {})
+#   Canny edge detector.
+#   @param opts [Hash] Set of options
+#   @option opts [Float] :sigma Sigma of Gaussian
+#   @option opts [Vips::Precision] :precision Convolve with this precision
+#   @return [Vips::Image] Output image
+
+# @!method sobel(opts = {})
+#   Sobel edge detector.
+#   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
 # @!method fwfft(opts = {})

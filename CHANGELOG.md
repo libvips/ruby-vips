@@ -2,9 +2,11 @@
 
 ## master
 
-## Version 2.0.14 (2018-8-6)
+## Version 2.0.14 (2018-10-3)
 
 * update links for new home [jcupitt]
+* various doc fixes [janko-m]
+* update docs for 8.7 [jcupitt]
 
 ## Version 2.0.13 (2018-8-6)
 
