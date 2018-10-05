@@ -1054,11 +1054,15 @@ module Vips
 
         # Composite a set of images with a set of blend modes.
         #
-        # @param other [Image, Array<Image>, Real, Array<Real>] bands to append
-        # @return [Image] many band image
-        def composite other, mode, opts = {}
-            unless other.is_a? Array
-                other = [other]
+        # @param overlay [Image, Array<Image>] images to composite
+        # @param mode [BlendMode, Array<BlendMode>] blend modes to use
+        # @param opts [Hash] Set of options
+        # @option opts [Vips::Interpretation] :compositing_space Composite images in this colour space
+        # @option opts [Boolean] :premultiplied Images have premultiplied alpha
+        # @return [Image] blended image
+        def composite overlay, mode, opts = {}
+            unless overlay.is_a? Array
+                overlay = [overlay]
             end
             unless mode.is_a? Array
                 mode = [mode]
@@ -1068,7 +1072,7 @@ module Vips
                 GObject::GValue.from_nick Vips::BLEND_MODE_TYPE, x
             end
 
-            Vips::Image.composite([self] + other, mode, opts)
+            Vips::Image.composite([self] + overlay, mode, opts)
         end
 
         # Return the coordinates of the image maximum.
