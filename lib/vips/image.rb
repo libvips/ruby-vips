@@ -265,7 +265,7 @@ module Vips
         end
 
         # Create a new {Image} for an image encoded, in a format such as
-        # JPEG, in a memory string. Load options may be passed as
+        # JPEG, in a binary string. Load options may be passed as
         # strings or appended as a hash. For example:
         #
         # ```
@@ -486,7 +486,8 @@ module Vips
             ptr.get_bytes 0, len[:value]
         end
 
-        # Fetch a `GType` from an image. `GType` will be 0 for no such field.
+        # Get the `GType` of a metadata field. The result is 0 if no such field
+        # exists.
         #
         # @see get
         # @param name [String] Metadata field to fetch
@@ -551,9 +552,8 @@ module Vips
             return names
         end
 
-        # Create a metadata item on an image, of the specifed type. Ruby types 
-        # are automatically
-        # transformed into the matching `GType`, if possible. 
+        # Create a metadata item on an image of the specifed type. Ruby types 
+        # are automatically transformed into the matching `GType`, if possible. 
         #
         # For example, you can use this to set an image's ICC profile:
         #
@@ -575,8 +575,8 @@ module Vips
         end
 
         # Set the value of a metadata item on an image. The metadata item must 
-        # already exist. Ruby types are automatically
-        # transformed into the matching `GValue`, if possible. 
+        # already exist. Ruby types are automatically transformed into the 
+        # matching `GValue`, if possible. 
         #
         # For example, you can use this to set an image's ICC profile:
         #
@@ -1095,20 +1095,6 @@ module Vips
             x = opts['x']
             y = opts['y']
             return v, x, y
-        end
-
-        # get the value of a pixel as an array
-        #
-        # @param x [Integer] x coordinate to sample
-        # @param y [Integer] y coordinate to sample
-        # @return [Array<Float>] the pixel values as an array
-        def getpoint x, y
-            # vips has an operation that does this, but we can't call it via
-            # gobject-introspection 3.1 since it's missing array double
-            # get
-            #
-            # remove this def when gobject-introspection updates
-            crop(x, y, 1, 1).bandsplit.map(&:avg)
         end
 
         # a median filter
