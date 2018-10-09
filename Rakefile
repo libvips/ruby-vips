@@ -27,3 +27,9 @@ require "yard/rake/yardoc_task"
 
 YARD::Rake::YardocTask.new do |yard|
 end
+
+# RuboCop requires Ruby >= 2.2
+if Gem.ruby_version >= Gem::Version.new("2.2.0")
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new
+end
