@@ -79,18 +79,18 @@ module Vips
 
     class Object < GObject::GObject
   
-        # print all active VipsObjects, with their reference counts. Handy for
-        # debugging ruby-vips.
+      # print all active VipsObjects, with their reference counts. Handy for
+      # debugging ruby-vips.
       def self.print_all
         GC.start
         Vips::vips_object_print_all
       end
   
-        # the layout of the VipsObject struct
+      # the layout of the VipsObject struct
       module ObjectLayout
         def self.included base
           base.class_eval do
-              # don't actually need most of these
+            # don't actually need most of these
             layout :parent, GObject::GObject::Struct,
                :constructed, :int,
                :static_object, :int,
@@ -115,8 +115,8 @@ module Vips
   
       end
   
-        # return a pspec, or nil ... nil wil leave a message in the error log
-        # which you must clear
+      # return a pspec, or nil ... nil wil leave a message in the error log
+      # which you must clear
       def get_pspec name
         pspec = GObject::GParamSpecPtr.new
         argument_class = Vips::ArgumentClassPtr.new
@@ -129,7 +129,7 @@ module Vips
         pspec
       end
   
-        # return a gtype, raise an error on not found
+      # return a gtype, raise an error on not found
       def get_typeof_error name
         pspec = get_pspec name
         raise Vips::Error unless pspec
@@ -137,7 +137,7 @@ module Vips
         pspec[:value][:value_type]
       end
   
-        # return a gtype, 0 on not found
+      # return a gtype, 0 on not found
       def get_typeof name
         pspec = get_pspec name
         unless pspec
@@ -173,7 +173,7 @@ module Vips
     end
 
     class ObjectClass < FFI::Struct
-        # opaque
+      # opaque
     end
 
     class Argument < FFI::Struct
@@ -182,7 +182,7 @@ module Vips
 
     class ArgumentInstance < Argument
       layout :parent, Argument
-        # rest opaque
+      # rest opaque
     end
 
     # enum VipsArgumentFlags

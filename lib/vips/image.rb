@@ -68,12 +68,12 @@ module Vips
   
         private
   
-        # the layout of the VipsImage struct
+      # the layout of the VipsImage struct
       module ImageLayout
         def self.included base
           base.class_eval do
             layout :parent, Vips::Object::Struct
-              # rest opaque
+            # rest opaque
           end
         end
       end
@@ -92,8 +92,8 @@ module Vips
         layout :value, :pointer
       end
   
-        # handy for overloads ... want to be able to apply a function to an
-        # array or to a scalar
+      # handy for overloads ... want to be able to apply a function to an
+      # array or to a scalar
       def self.smap x, &block
         x.is_a?(Array) ? x.map {|y| smap(y, &block)} : block.(x)
       end
@@ -108,9 +108,9 @@ module Vips
         Vips::vips_band_format_isfloat(format_number) != 0
       end
   
-        # run a complex operation on a complex image, or an image with an even
-        # number of bands ... handy for things like running .polar on .index
-        # images
+      # run a complex operation on a complex image, or an image with an even
+      # number of bands ... handy for things like running .polar on .index
+      # images
       def self.run_cmplx image, &block
         original_format = image.format
   
@@ -137,7 +137,7 @@ module Vips
         image
       end
   
-        # handy for expanding enum operations
+      # handy for expanding enum operations
       def call_enum(name, other, enum)
         if other.is_a?(Vips::Image)
           Vips::Operation.call name.to_s, [self, other, enum]
@@ -146,16 +146,16 @@ module Vips
         end
       end
   
-        # Write can fail due to no file descriptors and memory can fill if
-        # large objects are not collected fairly soon. We can't try a
-        # write and GC and retry on fail, since the write may take a
-        # long time and may not be repeatable.
-        #
-        # GCing before every write would have a horrible effect on
-        # performance, so as a compromise we GC every @@gc_interval writes.
-        #
-        # ruby2.1 introduced a generational GC which is fast enough to be
-        # able to GC on every write.
+      # Write can fail due to no file descriptors and memory can fill if
+      # large objects are not collected fairly soon. We can't try a
+      # write and GC and retry on fail, since the write may take a
+      # long time and may not be repeatable.
+      #
+      # GCing before every write would have a horrible effect on
+      # performance, so as a compromise we GC every @@gc_interval writes.
+      #
+      # ruby2.1 introduced a generational GC which is fast enough to be
+      # able to GC on every write.
   
       @@generational_gc = RUBY_ENGINE == "ruby" && RUBY_VERSION.to_f >= 2.1
   
@@ -182,78 +182,78 @@ module Vips
       end
   
       def respond_to? name, include_all = false
-          # To support keyword args, we need to tell Ruby that final image
-          # arguments cannot be hashes of keywords.
-          #
-          # https://makandracards.com/makandra/36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
+        # To support keyword args, we need to tell Ruby that final image
+        # arguments cannot be hashes of keywords.
+        #
+        # https://makandracards.com/makandra/36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
         return false if name == :to_hash
   
-          # respond to all vips operations by nickname
+        # respond to all vips operations by nickname
         return true if Vips::type_find("VipsOperation", name.to_s) != 0
   
         super
       end
   
       def self.respond_to? name, include_all = false
-          # respond to all vips operations by nickname
+        # respond to all vips operations by nickname
         return true if Vips::type_find("VipsOperation", name.to_s) != 0
   
         super
       end
   
-        # Invoke a vips operation with {Vips::Operation.call}, using self as
-        # the first input argument.
-        #
-        # @param name [String] vips operation to call
-        # @return result of vips operation
+      # Invoke a vips operation with {Vips::Operation.call}, using self as
+      # the first input argument.
+      #
+      # @param name [String] vips operation to call
+      # @return result of vips operation
       def method_missing name, *args, **options
         Vips::Operation.call name.to_s, [self, *args], options
       end
   
-        # Invoke a vips operation with {Vips::Operation.call}.
+      # Invoke a vips operation with {Vips::Operation.call}.
       def self.method_missing name, *args, **options
         Vips::Operation.call name.to_s, args, options
       end
   
-        # Return a new {Image} for a file on disc. This method can load
-        # images in any format supported by vips. The filename can include
-        # load options, for example:
-        #
-        # ```
-        # image = Vips::new_from_file "fred.jpg[shrink=2]"
-        # ```
-        #
-        # You can also supply options as a hash, for example:
-        #
-        # ```
-        # image = Vips::new_from_file "fred.jpg", shrink: 2
-        # ```
-        #
-        # The full set of options available depend upon the load operation that
-        # will be executed. Try something like:
-        #
-        # ```
-        # $ vips jpegload
-        # ```
-        #
-        # at the command-line to see a summary of the available options for the
-        # JPEG loader.
-        #
-        # Loading is fast: only enough of the image is loaded to be able to fill
-        # out the header. Pixels will only be decompressed when they are needed.
-        #
-        # @!macro [new] vips.loadopts
-        #   @param opts [Hash] set of options
-        #   @option opts [Boolean] :disc (true) Open large images via a
-        #     temporary disc file
-        #   @option opts [Vips::Access] :access (:random) Access mode for file
-        #
-        # @param name [String] the filename to load from
-        # @macro vips.loadopts
-        # @return [Image] the loaded image
+      # Return a new {Image} for a file on disc. This method can load
+      # images in any format supported by vips. The filename can include
+      # load options, for example:
+      #
+      # ```
+      # image = Vips::new_from_file "fred.jpg[shrink=2]"
+      # ```
+      #
+      # You can also supply options as a hash, for example:
+      #
+      # ```
+      # image = Vips::new_from_file "fred.jpg", shrink: 2
+      # ```
+      #
+      # The full set of options available depend upon the load operation that
+      # will be executed. Try something like:
+      #
+      # ```
+      # $ vips jpegload
+      # ```
+      #
+      # at the command-line to see a summary of the available options for the
+      # JPEG loader.
+      #
+      # Loading is fast: only enough of the image is loaded to be able to fill
+      # out the header. Pixels will only be decompressed when they are needed.
+      #
+      # @!macro [new] vips.loadopts
+      #   @param opts [Hash] set of options
+      #   @option opts [Boolean] :disc (true) Open large images via a
+      #     temporary disc file
+      #   @option opts [Vips::Access] :access (:random) Access mode for file
+      #
+      # @param name [String] the filename to load from
+      # @macro vips.loadopts
+      # @return [Image] the loaded image
       def self.new_from_file name, opts = {}
-          # very common, and Vips::vips_filename_get_filename will segv if we
-          # pass this
+        # very common, and Vips::vips_filename_get_filename will segv if we
+        # pass this
         raise Vips::Error, "filename is nil" if name == nil
   
         filename = Vips::p2str(Vips::vips_filename_get_filename name)
@@ -264,37 +264,37 @@ module Vips
         Operation.call loader, [filename], opts, option_string
       end
   
-        # Create a new {Image} for an image encoded, in a format such as
-        # JPEG, in a binary string. Load options may be passed as
-        # strings or appended as a hash. For example:
-        #
-        # ```
-        # image = Vips::Image.new_from_buffer memory_buffer, "shrink=2"
-        # ```
-        #
-        # or alternatively:
-        #
-        # ```
-        # image = Vips::Image.new_from_buffer memory_buffer, "", shrink: 2
-        # ```
-        #
-        # The options available depend on the file format. Try something like:
-        #
-        # ```
-        # $ vips jpegload_buffer
-        # ```
-        #
-        # at the command-line to see the available options. Not all loaders
-        # support load from buffer, but at least JPEG, PNG and
-        # TIFF images will work.
-        #
-        # Loading is fast: only enough of the image is loaded to be able to fill
-        # out the header. Pixels will only be decompressed when they are needed.
-        #
-        # @param data [String] the data to load from
-        # @param option_string [String] load options as a string
-        # @macro vips.loadopts
-        # @return [Image] the loaded image
+      # Create a new {Image} for an image encoded, in a format such as
+      # JPEG, in a binary string. Load options may be passed as
+      # strings or appended as a hash. For example:
+      #
+      # ```
+      # image = Vips::Image.new_from_buffer memory_buffer, "shrink=2"
+      # ```
+      #
+      # or alternatively:
+      #
+      # ```
+      # image = Vips::Image.new_from_buffer memory_buffer, "", shrink: 2
+      # ```
+      #
+      # The options available depend on the file format. Try something like:
+      #
+      # ```
+      # $ vips jpegload_buffer
+      # ```
+      #
+      # at the command-line to see the available options. Not all loaders
+      # support load from buffer, but at least JPEG, PNG and
+      # TIFF images will work.
+      #
+      # Loading is fast: only enough of the image is loaded to be able to fill
+      # out the header. Pixels will only be decompressed when they are needed.
+      #
+      # @param data [String] the data to load from
+      # @param option_string [String] load options as a string
+      # @macro vips.loadopts
+      # @return [Image] the loaded image
       def self.new_from_buffer data, option_string, opts = {}
         loader = Vips::vips_foreign_find_load_buffer data, data.bytesize
         raise Vips::Error if loader == nil
@@ -310,35 +310,35 @@ module Vips
         Vips::Image.new image
       end
   
-        # Create a new Image from a 1D or 2D array. A 1D array becomes an
-        # image with height 1. Use `scale` and `offset` to set the scale and
-        # offset fields in the header. These are useful for integer
-        # convolutions.
-        #
-        # For example:
-        #
-        # ```
-        # image = Vips::new_from_array [1, 2, 3]
-        # ```
-        #
-        # or
-        #
-        # ```
-        # image = Vips::new_from_array [
-        #     [-1, -1, -1],
-        #     [-1, 16, -1],
-        #     [-1, -1, -1]], 8
-        # ```
-        #
-        # for a simple sharpening mask.
-        #
-        # @param array [Array] the pixel data as an array of numbers
-        # @param scale [Real] the convolution scale
-        # @param offset [Real] the convolution offset
-        # @return [Image] the image
+      # Create a new Image from a 1D or 2D array. A 1D array becomes an
+      # image with height 1. Use `scale` and `offset` to set the scale and
+      # offset fields in the header. These are useful for integer
+      # convolutions.
+      #
+      # For example:
+      #
+      # ```
+      # image = Vips::new_from_array [1, 2, 3]
+      # ```
+      #
+      # or
+      #
+      # ```
+      # image = Vips::new_from_array [
+      #     [-1, -1, -1],
+      #     [-1, 16, -1],
+      #     [-1, -1, -1]], 8
+      # ```
+      #
+      # for a simple sharpening mask.
+      #
+      # @param array [Array] the pixel data as an array of numbers
+      # @param scale [Real] the convolution scale
+      # @param offset [Real] the convolution offset
+      # @return [Image] the image
       def self.new_from_array array, scale = 1, offset = 0
-          # we accept a 1D array and assume height == 1, or a 2D array
-          # and check all lines are the same length
+        # we accept a 1D array and assume height == 1, or a 2D array
+        # and check all lines are the same length
         unless array.is_a? Array
           raise Vips::Error, "Argument is not an array."
         end
@@ -365,22 +365,22 @@ module Vips
         image = Vips::Image.matrix_from_array width, height, array
         raise Vips::Error if image == nil
   
-          # be careful to set them as double
+        # be careful to set them as double
         image.set_type GObject::GDOUBLE_TYPE, 'scale', scale.to_f
         image.set_type GObject::GDOUBLE_TYPE, 'offset', offset.to_f
   
         return image
       end
   
-        # A new image is created with the same width, height, format,
-        # interpretation, resolution and offset as self, but with every pixel
-        # set to the specified value.
-        #
-        # You can pass an array to make a many-band image, or a single value to
-        # make a one-band image.
-        #
-        # @param value [Real, Array<Real>] value to put in each pixel
-        # @return [Image] constant image
+      # A new image is created with the same width, height, format,
+      # interpretation, resolution and offset as self, but with every pixel
+      # set to the specified value.
+      #
+      # You can pass an array to make a many-band image, or a single value to
+      # make a one-band image.
+      #
+      # @param value [Real, Array<Real>] value to put in each pixel
+      # @return [Image] constant image
       def new_from_image value
         pixel = (Vips::Image.black(1, 1) + value).cast(format)
         image = pixel.embed 0, 0, width, height, extend: :copy
@@ -388,35 +388,35 @@ module Vips
             xres: xres, yres: yres, xoffset: xoffset, yoffset: yoffset
       end
   
-        # Write this image to a file. Save options may be encoded in the
-        # filename or given as a hash. For example:
-        #
-        # ```
-        # image.write_to_file "fred.jpg[Q=90]"
-        # ```
-        #
-        # or equivalently:
-        #
-        # ```
-        # image.write_to_file "fred.jpg", Q: 90
-        # ```
-        #
-        # The full set of save options depend on the selected saver. Try
-        # something like:
-        #
-        # ```
-        # $ vips jpegsave
-        # ```
-        #
-        # to see all the available options for JPEG save.
-        #
-        # @!macro [new] vips.saveopts
-        #   @param opts [Hash] set of options
-        #   @option opts [Boolean] :strip (false) Strip all metadata from image
-        #   @option opts [Array<Float>] :background (0) Background colour to
-        #     flatten alpha against, if necessary
-        #
-        # @param name [String] filename to write to
+      # Write this image to a file. Save options may be encoded in the
+      # filename or given as a hash. For example:
+      #
+      # ```
+      # image.write_to_file "fred.jpg[Q=90]"
+      # ```
+      #
+      # or equivalently:
+      #
+      # ```
+      # image.write_to_file "fred.jpg", Q: 90
+      # ```
+      #
+      # The full set of save options depend on the selected saver. Try
+      # something like:
+      #
+      # ```
+      # $ vips jpegsave
+      # ```
+      #
+      # to see all the available options for JPEG save.
+      #
+      # @!macro [new] vips.saveopts
+      #   @param opts [Hash] set of options
+      #   @option opts [Boolean] :strip (false) Strip all metadata from image
+      #   @option opts [Array<Float>] :background (0) Background colour to
+      #     flatten alpha against, if necessary
+      #
+      # @param name [String] filename to write to
       def write_to_file name, opts = {}
         filename = Vips::p2str(Vips::vips_filename_get_filename name)
         option_string = Vips::p2str(Vips::vips_filename_get_options name)
@@ -430,31 +430,31 @@ module Vips
         write_gc
       end
   
-        # Write this image to a memory buffer. Save options may be encoded in
-        # the format_string or given as a hash. For example:
-        #
-        # ```
-        # buffer = image.write_to_buffer ".jpg[Q=90]"
-        # ```
-        #
-        # or equivalently:
-        #
-        # ```
-        # image.write_to_buffer ".jpg", Q: 90
-        # ```
-        #
-        # The full set of save options depend on the selected saver. Try
-        # something like:
-        #
-        # ```
-        # $ vips jpegsave
-        # ```
-        #
-        # to see all the available options for JPEG save.
-        #
-        # @param format_string [String] save format plus options
-        # @macro vips.saveopts
-        # @return [String] the image saved in the specified format
+      # Write this image to a memory buffer. Save options may be encoded in
+      # the format_string or given as a hash. For example:
+      #
+      # ```
+      # buffer = image.write_to_buffer ".jpg[Q=90]"
+      # ```
+      #
+      # or equivalently:
+      #
+      # ```
+      # image.write_to_buffer ".jpg", Q: 90
+      # ```
+      #
+      # The full set of save options depend on the selected saver. Try
+      # something like:
+      #
+      # ```
+      # $ vips jpegsave
+      # ```
+      #
+      # to see all the available options for JPEG save.
+      #
+      # @param format_string [String] save format plus options
+      # @macro vips.saveopts
+      # @return [String] the image saved in the specified format
       def write_to_buffer format_string, opts = {}
         filename =
             Vips::p2str(Vips::vips_filename_get_filename format_string)
@@ -473,28 +473,28 @@ module Vips
         return buffer
       end
   
-        # Write this image to a large memory buffer.
-        #
-        # @return [String] the pixels as a huge binary string
+      # Write this image to a large memory buffer.
+      #
+      # @return [String] the pixels as a huge binary string
       def write_to_memory
         len = Vips::SizeStruct.new
         ptr = Vips::vips_image_write_to_memory self, len
   
-          # wrap up as an autopointer
+        # wrap up as an autopointer
         ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)
   
         ptr.get_bytes 0, len[:value]
       end
   
-        # Get the `GType` of a metadata field. The result is 0 if no such field
-        # exists.
-        #
-        # @see get
-        # @param name [String] Metadata field to fetch
-        # @return [Integer] GType
+      # Get the `GType` of a metadata field. The result is 0 if no such field
+      # exists.
+      #
+      # @see get
+      # @param name [String] Metadata field to fetch
+      # @return [Integer] GType
       def get_typeof name
-          # on libvips before 8.5, property types must be searched first,
-          # since vips_image_get_typeof returned built-in enums as int
+        # on libvips before 8.5, property types must be searched first,
+        # since vips_image_get_typeof returned built-in enums as int
         unless Vips::at_least_libvips?(8, 5)
           gtype = parent_get_typeof name
           return gtype if gtype != 0
@@ -503,22 +503,22 @@ module Vips
         Vips::vips_image_get_typeof self, name
       end
   
-        # Get a metadata item from an image. Ruby types are constructed
-        # automatically from the `GValue`, if possible.
-        #
-        # For example, you can read the ICC profile from an image like this:
-        #
-        # ```
-        # profile = image.get "icc-profile-data"
-        # ```
-        #
-        # and profile will be an array containing the profile.
-        #
-        # @param name [String] Metadata field to get
-        # @return [Object] Value of field
+      # Get a metadata item from an image. Ruby types are constructed
+      # automatically from the `GValue`, if possible.
+      #
+      # For example, you can read the ICC profile from an image like this:
+      #
+      # ```
+      # profile = image.get "icc-profile-data"
+      # ```
+      #
+      # and profile will be an array containing the profile.
+      #
+      # @param name [String] Metadata field to get
+      # @return [Object] Value of field
       def get name
-          # with old libvips, we must fetch properties (as opposed to
-          # metadata) via VipsObject
+        # with old libvips, we must fetch properties (as opposed to
+        # metadata) via VipsObject
         unless Vips::at_least_libvips?(8, 5)
           return super if parent_get_typeof(name) != 0
         end
@@ -530,12 +530,12 @@ module Vips
         return gvalue.get
       end
   
-        # Get the names of all fields on an image. Use this to loop over all
-        # image metadata.
-        #
-        # @return [[String]] array of field names
+      # Get the names of all fields on an image. Use this to loop over all
+      # image metadata.
+      #
+      # @return [[String]] array of field names
       def get_fields
-          # vips_image_get_fields() was added in libvips 8.5
+        # vips_image_get_fields() was added in libvips 8.5
         return [] unless Vips.respond_to? :vips_image_get_fields
   
         array = Vips::vips_image_get_fields self
@@ -552,21 +552,21 @@ module Vips
         return names
       end
   
-        # Create a metadata item on an image of the specifed type. Ruby types
-        # are automatically transformed into the matching `GType`, if possible.
-        #
-        # For example, you can use this to set an image's ICC profile:
-        #
-        # ```
-        # x = y.set_type Vips::BLOB_TYPE, "icc-profile-data", profile
-        # ```
-        #
-        # where `profile` is an ICC profile held as a binary string object.
-        #
-        # @see set
-        # @param gtype [Integer] GType of item
-        # @param name [String] Metadata field to set
-        # @param value [Object] Value to set
+      # Create a metadata item on an image of the specifed type. Ruby types
+      # are automatically transformed into the matching `GType`, if possible.
+      #
+      # For example, you can use this to set an image's ICC profile:
+      #
+      # ```
+      # x = y.set_type Vips::BLOB_TYPE, "icc-profile-data", profile
+      # ```
+      #
+      # where `profile` is an ICC profile held as a binary string object.
+      #
+      # @see set
+      # @param gtype [Integer] GType of item
+      # @param name [String] Metadata field to set
+      # @param value [Object] Value to set
       def set_type gtype, name, value
         gvalue = GObject::GValue.alloc
         gvalue.init gtype
@@ -574,158 +574,158 @@ module Vips
         Vips::vips_image_set self, name, gvalue
       end
   
-        # Set the value of a metadata item on an image. The metadata item must
-        # already exist. Ruby types are automatically transformed into the
-        # matching `GValue`, if possible.
-        #
-        # For example, you can use this to set an image's ICC profile:
-        #
-        # ```
-        # x = y.set "icc-profile-data", profile
-        # ```
-        #
-        # where `profile` is an ICC profile held as a binary string object.
-        #
-        # @see set_type
-        # @param name [String] Metadata field to set
-        # @param value [Object] Value to set
+      # Set the value of a metadata item on an image. The metadata item must
+      # already exist. Ruby types are automatically transformed into the
+      # matching `GValue`, if possible.
+      #
+      # For example, you can use this to set an image's ICC profile:
+      #
+      # ```
+      # x = y.set "icc-profile-data", profile
+      # ```
+      #
+      # where `profile` is an ICC profile held as a binary string object.
+      #
+      # @see set_type
+      # @param name [String] Metadata field to set
+      # @param value [Object] Value to set
       def set name, value
         set_type get_typeof(name), name, value
       end
   
-        # Remove a metadata item from an image.
-        #
-        # @param name [String] Metadata field to remove
+      # Remove a metadata item from an image.
+      #
+      # @param name [String] Metadata field to remove
       def remove name
         Vips::vips_image_remove self, name
       end
   
-        # compatibility: old name for get
+      # compatibility: old name for get
       def get_value name
         get name
       end
   
-        # compatibility: old name for set
+      # compatibility: old name for set
       def set_value name, value
         set name, value
       end
   
-        # Get image width, in pixels.
-        #
-        # @return [Integer] image width, in pixels
+      # Get image width, in pixels.
+      #
+      # @return [Integer] image width, in pixels
       def width
         get "width"
       end
   
-        # Get image height, in pixels.
-        #
-        # @return [Integer] image height, in pixels
+      # Get image height, in pixels.
+      #
+      # @return [Integer] image height, in pixels
       def height
         get "height"
       end
   
-        # Get number of image bands.
-        #
-        # @return [Integer] number of image bands
+      # Get number of image bands.
+      #
+      # @return [Integer] number of image bands
       def bands
         get "bands"
       end
   
-        # Get image format.
-        #
-        # @return [Symbol] image format
+      # Get image format.
+      #
+      # @return [Symbol] image format
       def format
         get "format"
       end
   
-        # Get image interpretation.
-        #
-        # @return [Symbol] image interpretation
+      # Get image interpretation.
+      #
+      # @return [Symbol] image interpretation
       def interpretation
         get "interpretation"
       end
   
-        # Get image coding.
-        #
-        # @return [Symbol] image coding
+      # Get image coding.
+      #
+      # @return [Symbol] image coding
       def coding
         get "coding"
       end
   
-        # Get image filename, if any.
-        #
-        # @return [String] image filename
+      # Get image filename, if any.
+      #
+      # @return [String] image filename
       def filename
         get "filename"
       end
   
-        # Get image xoffset.
-        #
-        # @return [Integer] image xoffset
+      # Get image xoffset.
+      #
+      # @return [Integer] image xoffset
       def xoffset
         get "xoffset"
       end
   
-        # Get image yoffset.
-        #
-        # @return [Integer] image yoffset
+      # Get image yoffset.
+      #
+      # @return [Integer] image yoffset
       def yoffset
         get "yoffset"
       end
   
-        # Get image x resolution.
-        #
-        # @return [Float] image x resolution
+      # Get image x resolution.
+      #
+      # @return [Float] image x resolution
       def xres
         get "xres"
       end
   
-        # Get image y resolution.
-        #
-        # @return [Float] image y resolution
+      # Get image y resolution.
+      #
+      # @return [Float] image y resolution
       def yres
         get "yres"
       end
   
-        # Get scale metadata.
-        #
-        # @return [Float] image scale
+      # Get scale metadata.
+      #
+      # @return [Float] image scale
       def scale
         return 1 if get_typeof("scale") == 0
   
         get "scale"
       end
   
-        # Get offset metadata.
-        #
-        # @return [Float] image offset
+      # Get offset metadata.
+      #
+      # @return [Float] image offset
       def offset
         return 0 if get_typeof("offset") == 0
   
         get "offset"
       end
   
-        # Get the image size.
-        #
-        # @return [Integer, Integer] image width and height
+      # Get the image size.
+      #
+      # @return [Integer, Integer] image width and height
       def size
         [width, height]
       end
   
       if Vips::at_least_libvips?(8, 5)
-          # Detect if image has an alpha channel
-          #
-          # @return [Boolean] true if image has an alpha channel.
+        # Detect if image has an alpha channel
+        #
+        # @return [Boolean] true if image has an alpha channel.
         def has_alpha?
           return Vips::vips_image_hasalpha(self) != 0
         end
       end
   
-        # vips_addalpha was added in libvips 8.6
+      # vips_addalpha was added in libvips 8.6
       if Vips::at_least_libvips?(8, 6)
-          # Append an alpha channel to an image.
-          #
-          # @return [Image] new image
+        # Append an alpha channel to an image.
+        #
+        # @return [Image] new image
         def add_alpha
           ptr = GenericPtr.new
           result = Vips::vips_addalpha self, ptr
@@ -735,186 +735,186 @@ module Vips
         end
       end
   
-        # Copy an image to a memory area.
-        #
-        # This can be useful for reusing results, but can obviously use a lot of
-        # memory for large images. See {Image#tilecache} for a way of caching
-        # parts of an image.
-        #
-        # @return [Image] new memory image
+      # Copy an image to a memory area.
+      #
+      # This can be useful for reusing results, but can obviously use a lot of
+      # memory for large images. See {Image#tilecache} for a way of caching
+      # parts of an image.
+      #
+      # @return [Image] new memory image
       def copy_memory
         new_image = Vips::vips_image_copy_memory self
         Vips::Image.new new_image
       end
   
-        # Draw a point on an image.
-        #
-        # See {Image#draw_rect}.
-        #
-        # @return [Image] modified image
+      # Draw a point on an image.
+      #
+      # See {Image#draw_rect}.
+      #
+      # @return [Image] modified image
       def draw_point ink, left, top, opts = {}
         draw_rect ink, left, top, 1, 1, opts
       end
   
-        # Add an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] Thing to add to self
-        # @return [Image] result of addition
+      # Add an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] Thing to add to self
+      # @return [Image] result of addition
       def + other
         other.is_a?(Vips::Image) ?
             add(other) : linear(1, other)
       end
   
-        # Subtract an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] Thing to subtract from self
-        # @return [Image] result of subtraction
+      # Subtract an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] Thing to subtract from self
+      # @return [Image] result of subtraction
       def - other
         other.is_a?(Vips::Image) ?
             subtract(other) : linear(1, Image::smap(other) {|x| x * -1})
       end
   
-        # Multiply an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] Thing to multiply by self
-        # @return [Image] result of multiplication
+      # Multiply an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] Thing to multiply by self
+      # @return [Image] result of multiplication
       def * other
         other.is_a?(Vips::Image) ?
             multiply(other) : linear(other, 0)
       end
   
-        # Divide an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] Thing to divide self by
-        # @return [Image] result of division
+      # Divide an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] Thing to divide self by
+      # @return [Image] result of division
       def / other
         other.is_a?(Vips::Image) ?
             divide(other) : linear(Image::smap(other) {|x| 1.0 / x}, 0)
       end
   
-        # Remainder after integer division with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] self modulo this
-        # @return [Image] result of modulo
+      # Remainder after integer division with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] self modulo this
+      # @return [Image] result of modulo
       def % other
         other.is_a?(Vips::Image) ?
             remainder(other) : remainder_const(other)
       end
   
-        # Raise to power of an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] self to the power of this
-        # @return [Image] result of power
+      # Raise to power of an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] self to the power of this
+      # @return [Image] result of power
       def ** other
         call_enum "math2", other, :pow
       end
   
-        # Integer left shift with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] shift left by this much
-        # @return [Image] result of left shift
+      # Integer left shift with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] shift left by this much
+      # @return [Image] result of left shift
       def << other
         call_enum "boolean", other, :lshift
       end
   
-        # Integer right shift with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] shift right by this much
-        # @return [Image] result of right shift
+      # Integer right shift with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] shift right by this much
+      # @return [Image] result of right shift
       def >> other
         call_enum "boolean", other, :rshift
       end
   
-        # Integer bitwise OR with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] bitwise OR with this
-        # @return [Image] result of bitwise OR
+      # Integer bitwise OR with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] bitwise OR with this
+      # @return [Image] result of bitwise OR
       def | other
         call_enum "boolean", other, :or
       end
   
-        # Integer bitwise AND with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] bitwise AND with this
-        # @return [Image] result of bitwise AND
+      # Integer bitwise AND with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] bitwise AND with this
+      # @return [Image] result of bitwise AND
       def & other
         call_enum "boolean", other, :and
       end
   
-        # Integer bitwise EOR with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] bitwise EOR with this
-        # @return [Image] result of bitwise EOR
+      # Integer bitwise EOR with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] bitwise EOR with this
+      # @return [Image] result of bitwise EOR
       def ^ other
         call_enum "boolean", other, :eor
       end
   
-        # Equivalent to image ^ -1
-        #
-        # @return [Image] image with bits flipped
+      # Equivalent to image ^ -1
+      #
+      # @return [Image] image with bits flipped
       def !
         self ^ -1
       end
   
-        # Equivalent to image ^ -1
-        #
-        # @return [Image] image with bits flipped
+      # Equivalent to image ^ -1
+      #
+      # @return [Image] image with bits flipped
       def ~
         self ^ -1
       end
   
-        # @return [Image] image
+      # @return [Image] image
       def +@
         self
       end
   
-        # Equivalent to image * -1
-        #
-        # @return [Image] negative of image
+      # Equivalent to image * -1
+      #
+      # @return [Image] negative of image
       def -@
         self * -1
       end
   
-        # Relational less than with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] relational less than with this
-        # @return [Image] result of less than
+      # Relational less than with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] relational less than with this
+      # @return [Image] result of less than
       def < other
         call_enum "relational", other, :less
       end
   
-        # Relational less than or equal to with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] relational less than or
-        #   equal to with this
-        # @return [Image] result of less than or equal to
+      # Relational less than or equal to with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] relational less than or
+      #   equal to with this
+      # @return [Image] result of less than or equal to
       def <= other
         call_enum "relational", other, :lesseq
       end
   
-        # Relational more than with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] relational more than with this
-        # @return [Image] result of more than
+      # Relational more than with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] relational more than with this
+      # @return [Image] result of more than
       def > other
         call_enum "relational", other, :more
       end
   
-        # Relational more than or equal to with an image, constant or array.
-        #
-        # @param other [Image, Real, Array<Real>] relational more than or
-        #   equal to with this
-        # @return [Image] result of more than or equal to
+      # Relational more than or equal to with an image, constant or array.
+      #
+      # @param other [Image, Real, Array<Real>] relational more than or
+      #   equal to with this
+      # @return [Image] result of more than or equal to
       def >= other
         call_enum "relational", other, :moreeq
       end
   
-        # Compare equality to nil, an image, constant or array.
-        #
-        # @param other [nil, Image, Real, Array<Real>] test equality to this
-        # @return [Image] result of equality
+      # Compare equality to nil, an image, constant or array.
+      #
+      # @param other [nil, Image, Real, Array<Real>] test equality to this
+      # @return [Image] result of equality
       def == other
-          # for equality, we must allow tests against nil
+        # for equality, we must allow tests against nil
         if other == nil
           false
         else
@@ -922,12 +922,12 @@ module Vips
         end
       end
   
-        # Compare inequality to nil, an image, constant or array.
-        #
-        # @param other [nil, Image, Real, Array<Real>] test inequality to this
-        # @return [Image] result of inequality
+      # Compare inequality to nil, an image, constant or array.
+      #
+      # @param other [nil, Image, Real, Array<Real>] test inequality to this
+      # @return [Image] result of inequality
       def != other
-          # for equality, we must allow tests against nil
+        # for equality, we must allow tests against nil
         if other == nil
           true
         else
@@ -935,10 +935,10 @@ module Vips
         end
       end
   
-        # Fetch bands using a number or a range
-        #
-        # @param index [Numeric, Range] extract these band(s)
-        # @return [Image] extracted band(s)
+      # Fetch bands using a number or a range
+      #
+      # @param index [Numeric, Range] extract these band(s)
+      # @return [Image] extracted band(s)
       def [] index
         if index.is_a? Range
           n = index.size
@@ -950,15 +950,15 @@ module Vips
         end
       end
   
-        # Convert to an Array. This will be slow for large images.
-        #
-        # @return [Array] array of Fixnum
+      # Convert to an Array. This will be slow for large images.
+      #
+      # @return [Array] array of Fixnum
       def to_a
-          # we render the image to a big string, then unpack
-          # as a Ruby array of the correct type
+        # we render the image to a big string, then unpack
+        # as a Ruby array of the correct type
         memory = write_to_memory
   
-          # make the template for unpack
+        # make the template for unpack
         template = {
             :char => 'c',
             :uchar => 'C',
@@ -972,77 +972,77 @@ module Vips
             :dpcomplex => 'd'
         }[format] + '*'
   
-          # and unpack into something like [1, 2, 3, 4 ..]
+        # and unpack into something like [1, 2, 3, 4 ..]
         array = memory.unpack(template)
   
-          # gather band elements together
+        # gather band elements together
         pixel_array = array.each_slice(bands).to_a
   
-          # build rows
+        # build rows
         row_array = pixel_array.each_slice(width).to_a
   
         return row_array
       end
   
-        # Return the largest integral value not greater than the argument.
-        #
-        # @return [Image] floor of image
+      # Return the largest integral value not greater than the argument.
+      #
+      # @return [Image] floor of image
       def floor
         round :floor
       end
   
-        # Return the smallest integral value not less than the argument.
-        #
-        # @return [Image] ceil of image
+      # Return the smallest integral value not less than the argument.
+      #
+      # @return [Image] ceil of image
       def ceil
         round :ceil
       end
   
-        # Return the nearest integral value.
-        #
-        # @return [Image] rint of image
+      # Return the nearest integral value.
+      #
+      # @return [Image] rint of image
       def rint
         round :rint
       end
   
-        # AND the bands of an image together
-        #
-        # @return [Image] all bands ANDed together
+      # AND the bands of an image together
+      #
+      # @return [Image] all bands ANDed together
       def bandand
         bandbool :and
       end
   
-        # OR the bands of an image together
-        #
-        # @return [Image] all bands ORed together
+      # OR the bands of an image together
+      #
+      # @return [Image] all bands ORed together
       def bandor
         bandbool :or
       end
   
-        # EOR the bands of an image together
-        #
-        # @return [Image] all bands EORed together
+      # EOR the bands of an image together
+      #
+      # @return [Image] all bands EORed together
       def bandeor
         bandbool :eor
       end
   
-        # Split an n-band image into n separate images.
-        #
-        # @return [Array<Image>] Array of n one-band images
+      # Split an n-band image into n separate images.
+      #
+      # @return [Array<Image>] Array of n one-band images
       def bandsplit
         (0...bands).map {|i| extract_band i}
       end
   
-        # Join a set of images bandwise.
-        #
-        # @param other [Image, Array<Image>, Real, Array<Real>] bands to append
-        # @return [Image] many band image
+      # Join a set of images bandwise.
+      #
+      # @param other [Image, Array<Image>, Real, Array<Real>] bands to append
+      # @return [Image] many band image
       def bandjoin other
         unless other.is_a? Array
           other = [other]
         end
   
-          # if other is just Numeric, we can use bandjoin_const
+        # if other is just Numeric, we can use bandjoin_const
         not_all_real = !other.all?{|x| x.is_a? Numeric}
   
         if not_all_real
@@ -1052,14 +1052,14 @@ module Vips
         end
       end
   
-        # Composite a set of images with a set of blend modes.
-        #
-        # @param overlay [Image, Array<Image>] images to composite
-        # @param mode [BlendMode, Array<BlendMode>] blend modes to use
-        # @param opts [Hash] Set of options
-        # @option opts [Vips::Interpretation] :compositing_space Composite images in this colour space
-        # @option opts [Boolean] :premultiplied Images have premultiplied alpha
-        # @return [Image] blended image
+      # Composite a set of images with a set of blend modes.
+      #
+      # @param overlay [Image, Array<Image>] images to composite
+      # @param mode [BlendMode, Array<BlendMode>] blend modes to use
+      # @param opts [Hash] Set of options
+      # @option opts [Vips::Interpretation] :compositing_space Composite images in this colour space
+      # @option opts [Boolean] :premultiplied Images have premultiplied alpha
+      # @return [Image] blended image
       def composite overlay, mode, opts = {}
         unless overlay.is_a? Array
           overlay = [overlay]
@@ -1075,10 +1075,10 @@ module Vips
         Vips::Image.composite([self] + overlay, mode, opts)
       end
   
-        # Return the coordinates of the image maximum.
-        #
-        # @return [Real, Real, Real] maximum value, x coordinate of maximum, y
-        #   coordinate of maximum
+      # Return the coordinates of the image maximum.
+      #
+      # @return [Real, Real, Real] maximum value, x coordinate of maximum, y
+      #   coordinate of maximum
       def maxpos
         v, opts = max x: true, y: true
         x = opts['x']
@@ -1086,10 +1086,10 @@ module Vips
         return v, x, y
       end
   
-        # Return the coordinates of the image minimum.
-        #
-        # @return [Real, Real, Real] minimum value, x coordinate of minimum, y
-        #   coordinate of minimum
+      # Return the coordinates of the image minimum.
+      #
+      # @return [Real, Real, Real] minimum value, x coordinate of minimum, y
+      #   coordinate of minimum
       def minpos
         v, opts = min x: true, y: true
         x = opts['x']
@@ -1097,212 +1097,212 @@ module Vips
         return v, x, y
       end
   
-        # a median filter
-        #
-        # @param size [Integer] size of filter window
-        # @return [Image] result of median filter
+      # a median filter
+      #
+      # @param size [Integer] size of filter window
+      # @return [Image] result of median filter
       def median size = 3
         rank size, size, (size * size) / 2
       end
   
-        # Return the real part of a complex image.
-        #
-        # @return [Image] real part of complex image
+      # Return the real part of a complex image.
+      #
+      # @return [Image] real part of complex image
       def real
         complexget :real
       end
   
-        # Return the imaginary part of a complex image.
-        #
-        # @return [Image] imaginary part of complex image
+      # Return the imaginary part of a complex image.
+      #
+      # @return [Image] imaginary part of complex image
       def imag
         complexget :imag
       end
   
-        # Return an image with rectangular pixels converted to polar.
-        #
-        # The image
-        # can be complex, in which case the return image will also be complex,
-        # or must have an even number of bands, in which case pairs of
-        # bands are treated as (x, y) coordinates.
-        #
-        # @see xyz
-        # @return [Image] image converted to polar coordinates
+      # Return an image with rectangular pixels converted to polar.
+      #
+      # The image
+      # can be complex, in which case the return image will also be complex,
+      # or must have an even number of bands, in which case pairs of
+      # bands are treated as (x, y) coordinates.
+      #
+      # @see xyz
+      # @return [Image] image converted to polar coordinates
       def polar
         Image::run_cmplx(self) {|x| x.complex :polar}
       end
   
-        # Return an image with polar pixels converted to rectangular.
-        #
-        # The image
-        # can be complex, in which case the return image will also be complex,
-        # or must have an even number of bands, in which case pairs of
-        # bands are treated as (x, y) coordinates.
-        #
-        # @see xyz
-        # @return [Image] image converted to rectangular coordinates
+      # Return an image with polar pixels converted to rectangular.
+      #
+      # The image
+      # can be complex, in which case the return image will also be complex,
+      # or must have an even number of bands, in which case pairs of
+      # bands are treated as (x, y) coordinates.
+      #
+      # @see xyz
+      # @return [Image] image converted to rectangular coordinates
       def rect
         Image::run_cmplx(self) {|x| x.complex :rect}
       end
   
-        # Return the complex conjugate of an image.
-        #
-        # The image
-        # can be complex, in which case the return image will also be complex,
-        # or must have an even number of bands, in which case pairs of
-        # bands are treated as (x, y) coordinates.
-        #
-        # @return [Image] complex conjugate
+      # Return the complex conjugate of an image.
+      #
+      # The image
+      # can be complex, in which case the return image will also be complex,
+      # or must have an even number of bands, in which case pairs of
+      # bands are treated as (x, y) coordinates.
+      #
+      # @return [Image] complex conjugate
       def conj
         Image::run_cmplx(self) {|x| x.complex :conj}
       end
   
-        # Calculate the cross phase of two images.
-        #
-        # @param other [Image, Real, Array<Real>] cross phase with this
-        # @return [Image] cross phase
+      # Calculate the cross phase of two images.
+      #
+      # @param other [Image, Real, Array<Real>] cross phase with this
+      # @return [Image] cross phase
       def cross_phase other
         complex2 other, :cross_phase
       end
   
-        # Return the sine of an image in degrees.
-        #
-        # @return [Image] sine of each pixel
+      # Return the sine of an image in degrees.
+      #
+      # @return [Image] sine of each pixel
       def sin
         math :sin
       end
   
-        # Return the cosine of an image in degrees.
-        #
-        # @return [Image] cosine of each pixel
+      # Return the cosine of an image in degrees.
+      #
+      # @return [Image] cosine of each pixel
       def cos
         math :cos
       end
   
-        # Return the tangent of an image in degrees.
-        #
-        # @return [Image] tangent of each pixel
+      # Return the tangent of an image in degrees.
+      #
+      # @return [Image] tangent of each pixel
       def tan
         math :tan
       end
   
-        # Return the inverse sine of an image in degrees.
-        #
-        # @return [Image] inverse sine of each pixel
+      # Return the inverse sine of an image in degrees.
+      #
+      # @return [Image] inverse sine of each pixel
       def asin
         math :asin
       end
   
-        # Return the inverse cosine of an image in degrees.
-        #
-        # @return [Image] inverse cosine of each pixel
+      # Return the inverse cosine of an image in degrees.
+      #
+      # @return [Image] inverse cosine of each pixel
       def acos
         math :acos
       end
   
-        # Return the inverse tangent of an image in degrees.
-        #
-        # @return [Image] inverse tangent of each pixel
+      # Return the inverse tangent of an image in degrees.
+      #
+      # @return [Image] inverse tangent of each pixel
       def atan
         math :atan
       end
   
-        # Return the natural log of an image.
-        #
-        # @return [Image] natural log of each pixel
+      # Return the natural log of an image.
+      #
+      # @return [Image] natural log of each pixel
       def log
         math :log
       end
   
-        # Return the log base 10 of an image.
-        #
-        # @return [Image] base 10 log of each pixel
+      # Return the log base 10 of an image.
+      #
+      # @return [Image] base 10 log of each pixel
       def log10
         math :log10
       end
   
-        # Return e ** pixel.
-        #
-        # @return [Image] e ** pixel
+      # Return e ** pixel.
+      #
+      # @return [Image] e ** pixel
       def exp
         math :exp
       end
   
-        # Return 10 ** pixel.
-        #
-        # @return [Image] 10 ** pixel
+      # Return 10 ** pixel.
+      #
+      # @return [Image] 10 ** pixel
       def exp10
         math :exp10
       end
   
-        # Flip horizontally.
-        #
-        # @return [Image] image flipped horizontally
+      # Flip horizontally.
+      #
+      # @return [Image] image flipped horizontally
       def fliphor
         flip :horizontal
       end
   
-        # Flip vertically.
-        #
-        # @return [Image] image flipped vertically
+      # Flip vertically.
+      #
+      # @return [Image] image flipped vertically
       def flipver
         flip :vertical
       end
   
-        # Erode with a structuring element.
-        #
-        # The structuring element must be an array with 0 for black, 255 for
-        # white and 128 for don't care.
-        #
-        # @param mask [Image, Array<Real>, Array<Array<Real>>] structuring
-        #   element
-        # @return [Image] eroded image
+      # Erode with a structuring element.
+      #
+      # The structuring element must be an array with 0 for black, 255 for
+      # white and 128 for don't care.
+      #
+      # @param mask [Image, Array<Real>, Array<Array<Real>>] structuring
+      #   element
+      # @return [Image] eroded image
       def erode mask
         morph mask, :erode
       end
   
-        # Dilate with a structuring element.
-        #
-        # The structuring element must be an array with 0 for black, 255 for
-        # white and 128 for don't care.
-        #
-        # @param mask [Image, Array<Real>, Array<Array<Real>>] structuring
-        #   element
-        # @return [Image] dilated image
+      # Dilate with a structuring element.
+      #
+      # The structuring element must be an array with 0 for black, 255 for
+      # white and 128 for don't care.
+      #
+      # @param mask [Image, Array<Real>, Array<Array<Real>>] structuring
+      #   element
+      # @return [Image] dilated image
       def dilate mask
         morph mask, :dilate
       end
   
-        # Rotate by 90 degrees clockwise.
-        #
-        # @return [Image] rotated image
+      # Rotate by 90 degrees clockwise.
+      #
+      # @return [Image] rotated image
       def rot90
         rot :d90
       end
   
-        # Rotate by 180 degrees clockwise.
-        #
-        # @return [Image] rotated image
+      # Rotate by 180 degrees clockwise.
+      #
+      # @return [Image] rotated image
       def rot180
         rot :d180
       end
   
-        # Rotate by 270 degrees clockwise.
-        #
-        # @return [Image] rotated image
+      # Rotate by 270 degrees clockwise.
+      #
+      # @return [Image] rotated image
       def rot270
         rot :d270
       end
   
-        # Select pixels from `th` if `self` is non-zero and from `el` if
-        # `self` is zero. Use the `:blend` option to fade smoothly
-        # between `th` and `el`.
-        #
-        # @param th [Image, Real, Array<Real>] true values
-        # @param el [Image, Real, Array<Real>] false values
-        # @param opts [Hash] set of options
-        # @option opts [Boolean] :blend (false) Blend smoothly between th and el
-        # @return [Image] merged image
+      # Select pixels from `th` if `self` is non-zero and from `el` if
+      # `self` is zero. Use the `:blend` option to fade smoothly
+      # between `th` and `el`.
+      #
+      # @param th [Image, Real, Array<Real>] true values
+      # @param el [Image, Real, Array<Real>] false values
+      # @param opts [Hash] set of options
+      # @option opts [Boolean] :blend (false) Blend smoothly between th and el
+      # @return [Image] merged image
       def ifthenelse(th, el, opts = {})
         match_image = [th, el, self].find {|x| x.is_a? Vips::Image}
   
@@ -1316,11 +1316,11 @@ module Vips
         Vips::Operation.call "ifthenelse", [self, th, el], opts
       end
   
-        # Scale an image to uchar. This is the vips `scale` operation, but
-        # renamed to avoid a clash with the `.scale` property.
-        #
-        # @param opts [Hash] Set of options
-        # @return [Vips::Image] Output image
+      # Scale an image to uchar. This is the vips `scale` operation, but
+      # renamed to avoid a clash with the `.scale` property.
+      #
+      # @param opts [Hash] Set of options
+      # @return [Vips::Image] Output image
       def scaleimage opts = {}
         Vips::Image.scale self, opts
       end
@@ -1339,10 +1339,10 @@ module Vips
     # ```
 
     def self.generate_yard
-        # these have hand-written methods, see above
+      # these have hand-written methods, see above
       no_generate = ["scale", "bandjoin", "composite", "ifthenelse"]
   
-        # map gobject's type names to Ruby
+      # map gobject's type names to Ruby
       map_go_to_ruby = {
           "gboolean" => "Boolean",
           "gint" => "Integer",
@@ -1363,7 +1363,7 @@ module Vips
         return if no_generate.include? nickname
         description = Vips::vips_object_get_description op
 
-          # find and classify all the arguments the operator can take
+        # find and classify all the arguments the operator can take
         required_input = []
         optional_input = []
         required_output = []
@@ -1375,7 +1375,7 @@ module Vips
           next if (arg_flags & ARGUMENT_DEPRECATED) != 0
 
           name = pspec[:name].tr("-", "_")
-            # 'in' as a param name confuses yard
+          # 'in' as a param name confuses yard
           name = "im" if name == "in"
           gtype = pspec[:value_type]
           fundamental = GObject::g_type_fundamental gtype
@@ -1396,8 +1396,8 @@ module Vips
 
           if (arg_flags & ARGUMENT_INPUT) != 0
             if (arg_flags & ARGUMENT_REQUIRED) != 0
-                # note the first required input image, if any ... we
-                # will be a method of this instance
+              # note the first required input image, if any ... we
+              # will be a method of this instance
               if !member_x && gtype == Vips::IMAGE_TYPE
                 member_x = value
               else
@@ -1408,7 +1408,7 @@ module Vips
             end
           end
 
-            # MODIFY INPUT args count as OUTPUT as well
+          # MODIFY INPUT args count as OUTPUT as well
           if (arg_flags & ARGUMENT_OUTPUT) != 0 ||
               ((arg_flags & ARGUMENT_INPUT) != 0 &&
                (arg_flags & ARGUMENT_MODIFY) != 0)
@@ -1474,7 +1474,7 @@ module Vips
 
         if nickname
           begin
-              # can fail for abstract types
+            # can fail for abstract types
             op = Vips::Operation.new nickname
         rescue
           end

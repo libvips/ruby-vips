@@ -7,23 +7,23 @@ require 'ffi'
 
 module GObject
 
-    # Represent a GValue. Example use:
-    #
-    # ```ruby
-    # gvalue = GValue::alloc
-    # gvalue.init GObject::GDOUBLE_TYPE
-    # gvalue.set 3.1415
-    # value = gvalue.get
-    # ```
-    #
-    # Lifetime is managed automatically. It doesn't know about all GType values,
-    # but it does know the ones that libvips uses.
+  # Represent a GValue. Example use:
+  #
+  # ```ruby
+  # gvalue = GValue::alloc
+  # gvalue.init GObject::GDOUBLE_TYPE
+  # gvalue.set 3.1415
+  # value = gvalue.get
+  # ```
+  #
+  # Lifetime is managed automatically. It doesn't know about all GType values,
+  # but it does know the ones that libvips uses.
 
   class GValue < FFI::ManagedStruct
     layout :gtype, :GType,
            :data, [:ulong_long, 2]
 
-      # convert an enum value (str/symb/int) into an int ready for libvips
+    # convert an enum value (str/symb/int) into an int ready for libvips
     def self.from_nick(gtype, value)
       value = value.to_s if value.is_a? Symbol
 
@@ -37,7 +37,7 @@ module GObject
       value
     end
 
-      # convert an int enum back into a symbol
+    # convert an int enum back into a symbol
     def self.to_nick(gtype, enum_value)
       enum_name = Vips::vips_enum_nick gtype, enum_value
       if enum_name == nil
@@ -48,43 +48,43 @@ module GObject
     end
 
     def self.release ptr
-        # GLib::logger.debug("GObject::GValue::release") {"ptr = #{ptr}"}
+      # GLib::logger.debug("GObject::GValue::release") {"ptr = #{ptr}"}
       ::GObject::g_value_unset ptr
     end
 
-      # Allocate memory for a GValue and return a class wrapper. Memory will
-      # be freed automatically when it goes out of scope. The GValue is inited
-      # to 0, use {GValue.init} to set a type.
-      #
-      # @return [GValue] a new gvalue set to 0
+    # Allocate memory for a GValue and return a class wrapper. Memory will
+    # be freed automatically when it goes out of scope. The GValue is inited
+    # to 0, use {GValue.init} to set a type.
+    #
+    # @return [GValue] a new gvalue set to 0
     def self.alloc
-        # allocate memory
+      # allocate memory
       memory = FFI::MemoryPointer.new GValue
 
-        # make this alloc autorelease ... we mustn't release in
-        # GValue::release, since we are used to wrap GValue pointers
-        # made by other people
+      # make this alloc autorelease ... we mustn't release in
+      # GValue::release, since we are used to wrap GValue pointers
+      # made by other people
       pointer = FFI::Pointer.new GValue, memory
 
-        # ... and wrap in a GValue
+      # ... and wrap in a GValue
       return GValue.new pointer
     end
 
-      # Set the type of thing a gvalue can hold.
-      #
-      # @param gtype [GType] the type of thing this GValue can hold.
+    # Set the type of thing a gvalue can hold.
+    #
+    # @param gtype [GType] the type of thing this GValue can hold.
     def init gtype
       ::GObject::g_value_init self, gtype
     end
 
-      # Set the value of a GValue. The value is converted to the type of the
-      # GValue, if possible.
-      #
-      # @param value [Any] The value to set
+    # Set the value of a GValue. The value is converted to the type of the
+    # GValue, if possible.
+    #
+    # @param value [Any] The value to set
     def set value
-        # GLib::logger.debug("GObject::GValue.set") {
-        #     "value = #{value.inspect[0..50]}"
-        # }
+      # GLib::logger.debug("GObject::GValue.set") {
+      #     "value = #{value.inspect[0..50]}"
+      # }
 
       gtype = self[:gtype]
       fundamental = ::GObject::g_type_fundamental gtype
@@ -118,10 +118,10 @@ module GObject
       when Vips::ARRAY_DOUBLE_TYPE
         value = [value] unless value.is_a? Array
 
-          # this will allocate an array in the gvalue
+        # this will allocate an array in the gvalue
         Vips::vips_value_set_array_double self, nil, value.length
 
-          # pull the array out and fill it
+        # pull the array out and fill it
         ptr = Vips::vips_value_get_array_double self, nil
 
         ptr.write_array_of_double value
@@ -133,7 +133,7 @@ module GObject
         ptr = Vips::vips_value_get_array_image self, nil
         ptr.write_array_of_pointer value
 
-          # the gvalue needs a ref on each of the images
+        # the gvalue needs a ref on each of the images
         value.each {|image| ::GObject::g_object_ref image}
 
       when Vips::BLOB_TYPE
@@ -162,10 +162,10 @@ module GObject
       end
     end
 
-      # Get the value of a GValue. The value is converted to a Ruby type in
-      # the obvious way.
-      #
-      # @return [Any] the value held by the GValue
+    # Get the value of a GValue. The value is converted to a Ruby type in
+    # the obvious way.
+    #
+    # @return [Any] the value held by the GValue
     def get
       gtype = self[:gtype]
       fundamental = ::GObject::g_type_fundamental gtype
@@ -226,8 +226,8 @@ module GObject
 
         when GOBJECT_TYPE
           obj = ::GObject::g_value_get_object self
-            # g_value_get_object() does not add a ref ... we need to add
-            # one to match the unref in gobject release
+          # g_value_get_object() does not add a ref ... we need to add
+          # one to match the unref in gobject release
           ::GObject::g_object_ref obj
           result = Vips::Image.new obj
 
@@ -238,9 +238,9 @@ module GObject
         end
       end
 
-        # GLib::logger.debug("GObject::GValue.get") {
-        #     "result = #{result.inspect[0..50]}"
-        # }
+      # GLib::logger.debug("GObject::GValue.get") {
+      #     "result = #{result.inspect[0..50]}"
+      # }
 
       return result
 
@@ -250,8 +250,8 @@ module GObject
 
   attach_function :g_value_init, [GValue.ptr, :GType], :void
 
-    # we must use a plain :pointer here, since we call this from #release, which
-    # just gives us the unwrapped pointer, not the ruby class
+  # we must use a plain :pointer here, since we call this from #release, which
+  # just gives us the unwrapped pointer, not the ruby class
   attach_function :g_value_unset, [:pointer], :void
 
   attach_function :g_value_set_boolean, [GValue.ptr, :int], :void
@@ -272,7 +272,7 @@ module GObject
   attach_function :g_value_get_string, [GValue.ptr], :string
   attach_function :g_value_get_object, [GValue.ptr], :pointer
 
-    # use :pointer rather than GObject.ptr to avoid casting later
+  # use :pointer rather than GObject.ptr to avoid casting later
   attach_function :g_object_set_property,
       [:pointer, :string, GValue.ptr], :void
   attach_function :g_object_get_property,

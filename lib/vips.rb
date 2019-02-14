@@ -29,8 +29,8 @@ module GLib
 
   attach_function :g_malloc, [:size_t], :pointer
 
-    # save the FFI::Function that attach will return ... we can use it directly
-    # as a param for callbacks
+  # save the FFI::Function that attach will return ... we can use it directly
+  # as a param for callbacks
   G_FREE = attach_function :g_free, [:pointer], :void
 
   callback :g_log_func, [:string, :int, :string, :pointer], :void
@@ -38,11 +38,11 @@ module GLib
       [:string, :int, :g_log_func, :pointer], :int
   attach_function :g_log_remove_handler, [:string, :int], :void
 
-    # log flags
+  # log flags
   LOG_FLAG_RECURSION          = 1 << 0
   LOG_FLAG_FATAL              = 1 << 1
 
-    # GLib log levels
+  # GLib log levels
   LOG_LEVEL_ERROR             = 1 << 2       # always fatal
   LOG_LEVEL_CRITICAL          = 1 << 3
   LOG_LEVEL_WARNING           = 1 << 4
@@ -50,7 +50,7 @@ module GLib
   LOG_LEVEL_INFO              = 1 << 6
   LOG_LEVEL_DEBUG             = 1 << 7
 
-    # map glib levels to Logger::Severity
+  # map glib levels to Logger::Severity
   GLIB_TO_SEVERITY = {
       LOG_LEVEL_ERROR => Logger::ERROR,
       LOG_LEVEL_CRITICAL => Logger::FATAL,
@@ -61,11 +61,11 @@ module GLib
   }
   GLIB_TO_SEVERITY.default = Logger::UNKNOWN
 
-    # nil being the default
+  # nil being the default
   @glib_log_domain = nil
   @glib_log_handler_id = 0
 
-    # module-level, so it's not GCd away
+  # module-level, so it's not GCd away
   LOG_HANDLER = Proc.new do |domain, level, message, user_data|
     @logger.log(GLIB_TO_SEVERITY[level], message, domain)
   end
@@ -82,31 +82,31 @@ module GLib
 
     @glib_log_domain = domain
 
-      # forward all glib logging output from this domain to a Ruby logger
+    # forward all glib logging output from this domain to a Ruby logger
     if @glib_log_domain
-        # disable this feature for now
-        #
-        # libvips background worker threads can issue warnings, and
-        # since the main thread is blocked waiting for libvips to come back
-        # from an ffi call, you get a deadlock on the GIL
-        #
-        # to fix this, we need a way for g_log() calls from libvips workers
-        # to be returned via the main thread
-        #
+      # disable this feature for now
+      #
+      # libvips background worker threads can issue warnings, and
+      # since the main thread is blocked waiting for libvips to come back
+      # from an ffi call, you get a deadlock on the GIL
+      #
+      # to fix this, we need a way for g_log() calls from libvips workers
+      # to be returned via the main thread
+      #
 
-#             @glib_log_handler_id = g_log_set_handler @glib_log_domain,
-#                 LOG_LEVEL_DEBUG |
-#                 LOG_LEVEL_INFO |
-#                 LOG_LEVEL_MESSAGE |
-#                 LOG_LEVEL_WARNING |
-#                 LOG_LEVEL_ERROR |
-#                 LOG_LEVEL_CRITICAL |
-#                 LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
-#                 LOG_HANDLER, nil
+      #             @glib_log_handler_id = g_log_set_handler @glib_log_domain,
+      #                 LOG_LEVEL_DEBUG |
+      #                 LOG_LEVEL_INFO |
+      #                 LOG_LEVEL_MESSAGE |
+      #                 LOG_LEVEL_WARNING |
+      #                 LOG_LEVEL_ERROR |
+      #                 LOG_LEVEL_CRITICAL |
+      #                 LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
+      #                 LOG_HANDLER, nil
 
-        # we must remove any handlers on exit, since libvips may log stuff
-        # on shutdown and we don't want LOG_HANDLER to be invoked
-        # after Ruby has gone
+      # we must remove any handlers on exit, since libvips may log stuff
+      # on shutdown and we don't want LOG_HANDLER to be invoked
+      # after Ruby has gone
       at_exit {
         GLib::remove_log_handler
       }
@@ -127,7 +127,7 @@ module GObject
 
   ffi_lib gobject_libname
 
-    # we can't just use ulong, windows has different int sizing rules
+  # we can't just use ulong, windows has different int sizing rules
   if FFI::Platform::ADDRESS_SIZE == 64
     typedef :uint64, :GType
   else
@@ -139,10 +139,10 @@ module GObject
   attach_function :g_type_from_name, [:string], :GType
   attach_function :g_type_fundamental, [:GType], :GType
 
-    # glib before 2.36 needed this, does nothing in current glib
+  # glib before 2.36 needed this, does nothing in current glib
   g_type_init
 
-    # look up some common gtypes
+  # look up some common gtypes
   GBOOL_TYPE = g_type_from_name "gboolean"
   GINT_TYPE = g_type_from_name "gint"
   GUINT64_TYPE = g_type_from_name "guint64"
@@ -478,10 +478,10 @@ module Vips
   attach_function :vips_error_buffer, [], :string
   attach_function :vips_error_clear, [], :void
 
-    # The ruby-vips error class.
+  # The ruby-vips error class.
   class Error < RuntimeError
-      # @param msg [String] The error message. If this is not supplied, grab
-      #   and clear the vips error buffer and use that.
+    # @param msg [String] The error message. If this is not supplied, grab
+    #   and clear the vips error buffer and use that.
     def initialize msg = nil
       if msg
         @details = msg
@@ -493,9 +493,9 @@ module Vips
       end
     end
 
-      # Pretty-print a {Vips::Error}.
-      #
-      # @return [String] The error message
+    # Pretty-print a {Vips::Error}.
+    #
+    # @return [String] The error message
     def to_s
       if @details != nil
         @details
@@ -511,15 +511,15 @@ module Vips
     throw Vips::get_error
   end
 
-    # don't use at_exit to call vips_shutdown, it causes problems with fork, and
-    # in any case libvips does this for us
+  # don't use at_exit to call vips_shutdown, it causes problems with fork, and
+  # in any case libvips does this for us
 
   attach_function :vips_leak_set, [:int], :void
   attach_function :vips_vector_set_enabled, [:int], :void
   attach_function :vips_concurrency_set, [:int], :void
 
-    # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
-    # very useful for user code.
+  # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
+  # very useful for user code.
   def self.leak_set leak
     vips_leak_set (leak ? 1 : 0)
   end
@@ -528,41 +528,41 @@ module Vips
   attach_function :vips_cache_set_max_mem, [:int], :void
   attach_function :vips_cache_set_max_files, [:int], :void
 
-    # Set the maximum number of operations that libvips should cache. Set 0 to
-    # disable the operation cache. The default is 1000.
+  # Set the maximum number of operations that libvips should cache. Set 0 to
+  # disable the operation cache. The default is 1000.
   def self.cache_set_max size
     vips_cache_set_max size
   end
 
-    # Set the maximum amount of memory that libvips should use for the operation
-    # cache. Set 0 to disable the operation cache. The default is 100mb.
+  # Set the maximum amount of memory that libvips should use for the operation
+  # cache. Set 0 to disable the operation cache. The default is 100mb.
   def self.cache_set_max_mem size
     vips_cache_set_max_mem size
   end
 
-    # Set the maximum number of files libvips should keep open in the
-    # operation cache. Set 0 to disable the operation cache. The default is
-    # 100.
+  # Set the maximum number of files libvips should keep open in the
+  # operation cache. Set 0 to disable the operation cache. The default is
+  # 100.
   def self.cache_set_max_files size
     vips_cache_set_max_files size
   end
 
-    # Set the size of the libvips worker pool. This defaults to the number of
-    # hardware threads on your computer. Set to 1 to disable threading.
+  # Set the size of the libvips worker pool. This defaults to the number of
+  # hardware threads on your computer. Set to 1 to disable threading.
   def self.concurrency_set n
     vips_concurrency_set n
   end
 
-    # Enable or disable SIMD and the run-time compiler. This can give a nice
-    # speed-up, but can also be unstable on some systems or with some versions
-    # of the run-time compiler.
+  # Enable or disable SIMD and the run-time compiler. This can give a nice
+  # speed-up, but can also be unstable on some systems or with some versions
+  # of the run-time compiler.
   def self.vector_set enabled
     vips_vector_set_enabled(enabled ? 1 : 0)
   end
 
-    # Deprecated compatibility function.
-    #
-    # Don't use this, instead change GLib::logger.level.
+  # Deprecated compatibility function.
+  #
+  # Don't use this, instead change GLib::logger.level.
   def self.set_debug debug
     if debug
       GLib::logger.level = Logger::DEBUG
@@ -572,7 +572,7 @@ module Vips
   attach_function :version, :vips_version, [:int], :int
   attach_function :version_string, :vips_version_string, [], :string
 
-    # True if this is at least libvips x.y
+  # True if this is at least libvips x.y
   def self.at_least_libvips?(x, y)
     major = version(0)
     minor = version(1)
@@ -582,8 +582,8 @@ module Vips
 
   LIBRARY_VERSION = Vips::version_string
 
-    # libvips has this arbitrary number as a sanity-check upper bound on image
-    # size. It's sometimes useful for know whan calculating image ratios.
+  # libvips has this arbitrary number as a sanity-check upper bound on image
+  # size. It's sometimes useful for know whan calculating image ratios.
   MAX_COORD = 10000000
 
 end

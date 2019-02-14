@@ -33,8 +33,8 @@ if im.bands == 4
 end
 
 begin
-    # import to XYZ with lcms
-    # if there's no profile there, we'll fall back to the thing below
+  # import to XYZ with lcms
+  # if there's no profile there, we'll fall back to the thing below
   xyz = im.icc_import :embedded => true, :pcs => :xyz
 rescue Vips::Error
   # nope .. use the built-in converter instead

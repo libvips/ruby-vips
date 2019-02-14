@@ -291,7 +291,7 @@ RSpec.describe Vips::Image do
   end
 
   it 'has rounding members' do
-      # need to avoid rounding down to 0.499999
+    # need to avoid rounding down to 0.499999
     image = Vips::Image.black(16, 16) + 0.500001
 
     expect(image.floor.avg).to eq(0)
@@ -616,7 +616,7 @@ RSpec.describe Vips::Image do
     end
   end
 
-    # added in 8.5
+  # added in 8.5
   if Vips.respond_to? :vips_image_get_fields
     it 'can read field names' do
       x = Vips::Image.black 100, 100

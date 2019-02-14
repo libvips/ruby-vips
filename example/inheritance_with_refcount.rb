@@ -31,33 +31,33 @@ module GLib
   extend FFI::Library
   ffi_lib 'gobject-2.0'
 
-    # nil being the default
+  # nil being the default
   glib_log_domain = nil
 
   def self.set_log_domain(domain)
     glib_log_domain = domain
   end
 
-    # we have a set of things we need to inherit in different ways:
-    #
-    # - we want to be able to subclass GObject in a simple way
-    # - the layouts of the nested structs
-    # - casting between structs which share a base
-    # - gobject refcounting
-    #
-    # the solution is to split the class into four areas which we treat
-    # differently:
-    #
-    # - we have a "wrapper" Ruby class to allow easy subclassing ... this has a
-    #   @struct member which holds the actual pointer
-    # - we use "forwardable" to forward the various ffi methods on to the
-    #   @struct member ... we arrange things so that subclasses do not need to
-    #   do the forwarding themselves
-    # - we have two versions of the struct: a plain one which we can use for
-    #   casting that will not change the refcounts
-    # - and a managed one with an unref which we just use for .new
-    # - we separate the struct layout into a separate module to avoid repeating
-    #   ourselves
+  # we have a set of things we need to inherit in different ways:
+  #
+  # - we want to be able to subclass GObject in a simple way
+  # - the layouts of the nested structs
+  # - casting between structs which share a base
+  # - gobject refcounting
+  #
+  # the solution is to split the class into four areas which we treat
+  # differently:
+  #
+  # - we have a "wrapper" Ruby class to allow easy subclassing ... this has a
+  #   @struct member which holds the actual pointer
+  # - we use "forwardable" to forward the various ffi methods on to the
+  #   @struct member ... we arrange things so that subclasses do not need to
+  #   do the forwarding themselves
+  # - we have two versions of the struct: a plain one which we can use for
+  #   casting that will not change the refcounts
+  # - and a managed one with an unref which we just use for .new
+  # - we separate the struct layout into a separate module to avoid repeating
+  #   ourselves
 
   class GObject
     extend Forwardable
@@ -66,7 +66,7 @@ module GLib
     def_instance_delegators :@struct, :[], :to_ptr
     def_single_delegators :ffi_struct, :ptr
 
-      # the layout of the GObject struct
+    # the layout of the GObject struct
     module GObjectLayout
       def self.included(base)
         base.class_eval do
@@ -77,7 +77,7 @@ module GLib
       end
     end
 
-      # the struct with unref ... manage object lifetime with this
+    # the struct with unref ... manage object lifetime with this
     class ManagedStruct < FFI::ManagedStruct
       include GObjectLayout
 
@@ -93,7 +93,7 @@ module GLib
 
     end
 
-      # the plain struct ... cast with this
+    # the plain struct ... cast with this
     class Struct < FFI::Struct
       include GObjectLayout
 
@@ -104,17 +104,17 @@ module GLib
 
     end
 
-      # don't allow ptr == nil, we never want to allocate a GObject struct
-      # ourselves, we just want to wrap GLib-allocated GObjects
-      #
-      # here we use ManagedStruct, not Struct, since this is the ref that will
-      # need the unref
+    # don't allow ptr == nil, we never want to allocate a GObject struct
+    # ourselves, we just want to wrap GLib-allocated GObjects
+    #
+    # here we use ManagedStruct, not Struct, since this is the ref that will
+    # need the unref
     def initialize(ptr)
       log "GLib::GObject.initialize: ptr = #{ptr}"
       @struct = ffi_managed_struct.new(ptr)
     end
 
-      # access to the cast struct for this class
+    # access to the cast struct for this class
     def ffi_struct
       self.class.ffi_struct
     end
@@ -125,7 +125,7 @@ module GLib
       end
     end
 
-      # access to the lifetime managed struct for this class
+    # access to the lifetime managed struct for this class
     def ffi_managed_struct
       self.class.ffi_managed_struct
     end
@@ -138,7 +138,7 @@ module GLib
 
   end
 
-    # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
+  # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
   typedef :ulong, :GType
 
 end
@@ -150,7 +150,7 @@ module Vips
   LOG_DOMAIN = "VIPS"
   GLib::set_log_domain(LOG_DOMAIN)
 
-    # need to repeat this
+  # need to repeat this
   typedef :ulong, :GType
 
   attach_function :vips_init, [:string], :int
@@ -190,11 +190,11 @@ module Vips
 
   class VipsObject < GLib::GObject
 
-      # the layout of the VipsObject struct
+    # the layout of the VipsObject struct
     module VipsObjectLayout
       def self.included(base)
         base.class_eval do
-            # don't actually need most of these, remove them later
+          # don't actually need most of these, remove them later
           layout :parent, GLib::GObject::Struct,
              :constructed, :int,
              :static_object, :int,
@@ -233,12 +233,12 @@ module Vips
 
   class VipsImage < VipsObject
 
-      # the layout of the VipsImage struct
+    # the layout of the VipsImage struct
     module VipsImageLayout
       def self.included(base)
         base.class_eval do
           layout :parent, VipsObject::Struct
-            # rest opaque
+          # rest opaque
         end
       end
     end
