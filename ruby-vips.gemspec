@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
 
   # RuboCop requires Ruby >= 2.2
   if Gem.ruby_version >= Gem::Version.new("2.2")
-    spec.add_development_dependency "rubocop", ["~> 0.59.2"]
+    spec.add_development_dependency "rubocop", ["~> 0.64"]
   end
 end
 
