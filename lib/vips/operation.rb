@@ -15,12 +15,12 @@ module Vips
   attach_function :vips_object_unref_outputs, [:pointer], :void
 
   callback :argument_map_fn, [:pointer,
-                              GObject::GParamSpec.ptr, 
-                              ArgumentClass.ptr, 
-                              ArgumentInstance.ptr, 
+                              GObject::GParamSpec.ptr,
+                              ArgumentClass.ptr,
+                              ArgumentInstance.ptr,
                               :pointer, :pointer], :pointer
   attach_function :vips_argument_map, [:pointer,
-                                       :argument_map_fn, 
+                                       :argument_map_fn,
                                        :pointer, :pointer], :pointer
 
   OPERATION_SEQUENTIAL = 1
@@ -68,8 +68,8 @@ module Vips
         super value
     end
 
-    def build 
-      op = Vips::vips_cache_operation_build self 
+    def build
+      op = Vips::vips_cache_operation_build self
         if op == nil
           raise Vips::Error
         end
@@ -95,12 +95,12 @@ module Vips
 
         argument_map do |pspec, argument_class, argument_instance|
           flags = argument_class[:flags]
-            if (flags & ARGUMENT_CONSTRUCT) != 0 
+            if (flags & ARGUMENT_CONSTRUCT) != 0
                 # names can include - as punctuation, but we always use _ in
                 # Ruby
               name = pspec[:name].tr("-", "_")
 
-                args << [name, flags] 
+                args << [name, flags]
             end
         end
 
@@ -125,7 +125,7 @@ module Vips
 
         # 2D array values become tiny 2D images
         # if there's nothing to match to, we also make a 2D image
-        if (value.is_a?(Array) && value[0].is_a?(Array)) || 
+        if (value.is_a?(Array) && value[0].is_a?(Array)) ||
             match_image == nil
           return Image.new_from_array value
         else
@@ -140,7 +140,7 @@ module Vips
     def set name, value, match_image = nil, flags = 0
       gtype = get_typeof name
 
-        if gtype == IMAGE_TYPE 
+        if gtype == IMAGE_TYPE
           value = Operation::imageize match_image, value
 
             if (flags & ARGUMENT_MODIFY) != 0
@@ -163,14 +163,14 @@ module Vips
       # out = Vips::Operation.call "black", [100, 100], {:bands => 12}
       # ```
       #
-      # will call the C function 
+      # will call the C function
       #
       # ```C
       # vips_black( &out, 100, 100, "bands", 12, NULL );
       # ```
-      # 
-      # There are {Image#method_missing} hooks which will run {call} for you 
-      # on {Image} for undefined instance or class methods. So you can also 
+      #
+      # There are {Image#method_missing} hooks which will run {call} for you
+      # on {Image} for undefined instance or class methods. So you can also
       # write:
       #
       # ```ruby
@@ -186,12 +186,12 @@ module Vips
       #
       # to run the `vips_invert()` operator.
       #
-      # There are also a set of operator overloads and some convenience 
-      # functions, see {Image}. 
+      # There are also a set of operator overloads and some convenience
+      # functions, see {Image}.
       #
-      # If the operator needs a vector constant, {call} will turn a scalar 
+      # If the operator needs a vector constant, {call} will turn a scalar
       # into a
-      # vector for you. So for `x.linear a, b`, which calculates 
+      # vector for you. So for `x.linear a, b`, which calculates
       # `x * a + b` where `a` and `b` are vector constants, you can write:
       #
       # ```ruby
@@ -220,8 +220,8 @@ module Vips
       # y = x.bandjoin 255
       # ```
       #
-      # to add an extra band to the image where each pixel in the new band has 
-      # the constant value 255. 
+      # to add an extra band to the image where each pixel in the new band has
+      # the constant value 255.
 
     def self.call name, supplied, optional = {}, option_string = ""
       GLib::logger.debug("Vips::VipsOperation.call") {
@@ -233,15 +233,15 @@ module Vips
 
         # find and classify all the arguments the operator can take
         args = op.get_construct_args
-        required_input = [] 
+        required_input = []
         optional_input = {}
-        required_output = [] 
+        required_output = []
         optional_output = {}
         args.each do |name, flags|
           next if (flags & ARGUMENT_DEPRECATED) != 0
 
-            if (flags & ARGUMENT_INPUT) != 0 
-              if (flags & ARGUMENT_REQUIRED) != 0 
+            if (flags & ARGUMENT_INPUT) != 0
+              if (flags & ARGUMENT_REQUIRED) != 0
                 required_input << [name, flags]
               else
                 optional_input[name] = flags
@@ -264,15 +264,15 @@ module Vips
         # so we should have been supplied with n_required_input values, or
         # n_required_input + 1 if there's a hash of options at the end
         unless supplied.is_a? Array
-          raise Vips::Error, "unable to call #{name}: " + 
+          raise Vips::Error, "unable to call #{name}: " +
               "argument array is not an array"
         end
         unless optional.is_a? Hash
-          raise Vips::Error, "unable to call #{name}: " + 
+          raise Vips::Error, "unable to call #{name}: " +
               "optional arguments are not a hash"
         end
-        if supplied.length != required_input.length 
-          raise Vips::Error, "unable to call #{name}: " + 
+        if supplied.length != required_input.length
+          raise Vips::Error, "unable to call #{name}: " +
               "you supplied #{supplied.length} arguments, " +
               "but operation needs #{required_input.length}."
         end
@@ -284,7 +284,7 @@ module Vips
 
             unless optional_input.has_key?(arg_name) ||
                 optional_output.has_key?(arg_name)
-              raise Vips::Error, "unable to call #{name}: " + 
+              raise Vips::Error, "unable to call #{name}: " +
                   "unknown option #{arg_name}"
             end
         end

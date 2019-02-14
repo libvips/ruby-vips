@@ -2,7 +2,7 @@ module Vips
 
   attach_function :vips_interpolate_new, [:string], :pointer
 
-    # An interpolator. One of these can be given to operations like 
+    # An interpolator. One of these can be given to operations like
     # {Image#affine} or {Image#mapim} to select the type of pixel interpolation
     # to use.
     #
@@ -25,7 +25,7 @@ module Vips
     #  For example:
     #
     #  ```ruby
-    #  im = im.affine [2, 0, 0, 2], 
+    #  im = im.affine [2, 0, 0, 2],
     #      :interpolate => Vips::Interpolate.new(:bicubic)
     #  ```
 

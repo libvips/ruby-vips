@@ -44,16 +44,16 @@ module Vips
   attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
   attach_function :vips_enum_nick, [:GType, :int], :string
 
-  attach_function :vips_value_set_ref_string, 
+  attach_function :vips_value_set_ref_string,
       [GObject::GValue.ptr, :string], :void
-  attach_function :vips_value_set_array_double, 
+  attach_function :vips_value_set_array_double,
       [GObject::GValue.ptr, :pointer, :int], :void
-  attach_function :vips_value_set_array_int, 
+  attach_function :vips_value_set_array_int,
       [GObject::GValue.ptr, :pointer, :int], :void
-  attach_function :vips_value_set_array_image, 
+  attach_function :vips_value_set_array_image,
       [GObject::GValue.ptr, :int], :void
   callback :free_fn, [:pointer], :void
-  attach_function :vips_value_set_blob, 
+  attach_function :vips_value_set_blob,
       [GObject::GValue.ptr, :free_fn, :pointer, :size_t], :void
 
   class SizeStruct < FFI::Struct
@@ -64,15 +64,15 @@ module Vips
     layout :value, :int
   end
 
-  attach_function :vips_value_get_ref_string, 
+  attach_function :vips_value_get_ref_string,
       [GObject::GValue.ptr, SizeStruct.ptr], :string
-  attach_function :vips_value_get_array_double, 
+  attach_function :vips_value_get_array_double,
       [GObject::GValue.ptr, IntStruct.ptr], :pointer
-  attach_function :vips_value_get_array_int, 
+  attach_function :vips_value_get_array_int,
       [GObject::GValue.ptr, IntStruct.ptr], :pointer
-  attach_function :vips_value_get_array_image, 
+  attach_function :vips_value_get_array_image,
       [GObject::GValue.ptr, IntStruct.ptr], :pointer
-  attach_function :vips_value_get_blob, 
+  attach_function :vips_value_get_blob,
       [GObject::GValue.ptr, SizeStruct.ptr], :pointer
 
   attach_function :type_find, :vips_type_find, [:string, :string], :GType
@@ -80,7 +80,7 @@ module Vips
   class Object < GObject::GObject
 
       # print all active VipsObjects, with their reference counts. Handy for
-      # debugging ruby-vips. 
+      # debugging ruby-vips.
     def self.print_all
       GC.start
         Vips::vips_object_print_all
@@ -91,7 +91,7 @@ module Vips
       def self.included base
         base.class_eval do
             # don't actually need most of these
-          layout :parent, GObject::GObject::Struct, 
+          layout :parent, GObject::GObject::Struct,
              :constructed, :int,
              :static_object, :int,
              :argument_table, :pointer,
@@ -124,7 +124,7 @@ module Vips
 
         result = Vips::vips_object_get_argument self, name,
             pspec, argument_class, argument_instance
-        return nil if result != 0 
+        return nil if result != 0
 
         pspec
     end
@@ -141,7 +141,7 @@ module Vips
     def get_typeof name
       pspec = get_pspec name
         unless pspec
-          Vips::vips_error_clear 
+          Vips::vips_error_clear
             return 0
         end
 
@@ -150,7 +150,7 @@ module Vips
 
     def get name
       gtype = get_typeof_error name
-        gvalue = GObject::GValue.alloc 
+        gvalue = GObject::GValue.alloc
         gvalue.init gtype
         GObject::g_object_get_property self, name, gvalue
         result = gvalue.get
@@ -164,7 +164,7 @@ module Vips
       GLib::logger.debug("Vips::Object.set") {"#{name} = #{value}"}
 
         gtype = get_typeof_error name
-        gvalue = GObject::GValue.alloc 
+        gvalue = GObject::GValue.alloc
         gvalue.init gtype
         gvalue.set value
         GObject::g_object_set_property self, name, gvalue
@@ -185,7 +185,7 @@ module Vips
       # rest opaque
   end
 
-    # enum VipsArgumentFlags 
+    # enum VipsArgumentFlags
   ARGUMENT_REQUIRED = 1
   ARGUMENT_CONSTRUCT = 2
   ARGUMENT_SET_ONCE = 4
@@ -224,9 +224,9 @@ module Vips
 
     # just use :pointer, not VipsObject.ptr, to avoid casting gobject
     # subclasses
-  attach_function :vips_object_get_argument, 
-      [:pointer, :string, 
-       GObject::GParamSpecPtr.ptr, 
+  attach_function :vips_object_get_argument,
+      [:pointer, :string,
+       GObject::GParamSpecPtr.ptr,
        ArgumentClassPtr.ptr, ArgumentInstancePtr.ptr],
       :int
 

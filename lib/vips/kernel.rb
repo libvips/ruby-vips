@@ -1,7 +1,7 @@
 module Vips
 
-    # A resizing kernel. One of these can be given to operations like 
-    # {Image#reduceh} or {Image#resize} to select the resizing kernel to use. 
+    # A resizing kernel. One of these can be given to operations like
+    # {Image#reduceh} or {Image#resize} to select the resizing kernel to use.
     #
     # At least these should be available:
     #

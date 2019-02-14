@@ -63,11 +63,11 @@ RSpec.describe Vips::Image do
     end
 
     it 'can use array consts for image args' do
-      r = Vips::Image.black(16, 16) 
+      r = Vips::Image.black(16, 16)
         r = r.draw_rect 255, 10, 12, 1, 1
-        g = Vips::Image.black(16, 16) 
+        g = Vips::Image.black(16, 16)
         g = g.draw_rect 255, 10, 11, 1, 1
-        b = Vips::Image.black(16, 16) 
+        b = Vips::Image.black(16, 16)
         b = b.draw_rect 255, 10, 10, 1, 1
         im = r.bandjoin([g, b])
 
@@ -197,7 +197,7 @@ RSpec.describe Vips::Image do
         image &= 32
         image ^= 128
 
-        expect(image.avg).to eq(128) 
+        expect(image.avg).to eq(128)
     end
 
     it 'has binary arithmetic operator overloads with array constants' do
@@ -217,7 +217,7 @@ RSpec.describe Vips::Image do
         image &= [64, 128, 256]
         image ^= [64 + 128, 0, 256 + 128]
 
-        expect(image.avg).to eq(128) 
+        expect(image.avg).to eq(128)
     end
 
     it 'has binary arithmetic operator overloads with image args' do
@@ -234,40 +234,40 @@ RSpec.describe Vips::Image do
         x &= image
         x ^= image
 
-        expect(image.avg).to eq(128) 
+        expect(image.avg).to eq(128)
     end
 
     it 'has relational operator overloads with constants' do
       image = Vips::Image.black(16, 16) + 128
 
-        expect((image > 128).avg).to eq(0) 
-        expect((image >= 128).avg).to eq(255) 
-        expect((image < 128).avg).to eq(0) 
-        expect((image <= 128).avg).to eq(255) 
-        expect((image == 128).avg).to eq(255) 
-        expect((image != 128).avg).to eq(0) 
+        expect((image > 128).avg).to eq(0)
+        expect((image >= 128).avg).to eq(255)
+        expect((image < 128).avg).to eq(0)
+        expect((image <= 128).avg).to eq(255)
+        expect((image == 128).avg).to eq(255)
+        expect((image != 128).avg).to eq(0)
     end
 
     it 'has relational operator overloads with array constants' do
       image = Vips::Image.black(16, 16, :bands => 3) + [100, 128, 130]
 
-        expect((image > [100, 128, 130]).avg).to eq(0) 
-        expect((image >= [100, 128, 130]).avg).to eq(255) 
-        expect((image < [100, 128, 130]).avg).to eq(0) 
-        expect((image <= [100, 128, 130]).avg).to eq(255) 
-        expect((image == [100, 128, 130]).avg).to eq(255) 
-        expect((image != [100, 128, 130]).avg).to eq(0) 
+        expect((image > [100, 128, 130]).avg).to eq(0)
+        expect((image >= [100, 128, 130]).avg).to eq(255)
+        expect((image < [100, 128, 130]).avg).to eq(0)
+        expect((image <= [100, 128, 130]).avg).to eq(255)
+        expect((image == [100, 128, 130]).avg).to eq(255)
+        expect((image != [100, 128, 130]).avg).to eq(0)
     end
 
     it 'has relational operator overloads with image args' do
       image = Vips::Image.black(16, 16) + 128
 
-        expect((image > image).avg).to eq(0) 
-        expect((image >= image).avg).to eq(255) 
-        expect((image < image).avg).to eq(0) 
-        expect((image <= image).avg).to eq(255) 
-        expect((image == image).avg).to eq(255) 
-        expect((image != image).avg).to eq(0) 
+        expect((image > image).avg).to eq(0)
+        expect((image >= image).avg).to eq(255)
+        expect((image < image).avg).to eq(0)
+        expect((image <= image).avg).to eq(255)
+        expect((image == image).avg).to eq(255)
+        expect((image != image).avg).to eq(0)
     end
 
     it 'has band extract with numeric arg' do
@@ -371,7 +371,7 @@ RSpec.describe Vips::Image do
     it 'can form complex images' do
       r = Vips::Image.black(16, 16) + 128
         i = Vips::Image.black(16, 16) + 12
-        cmplx = r.complexform i 
+        cmplx = r.complexform i
         re = cmplx.real
         im = cmplx.imag
 
@@ -382,7 +382,7 @@ RSpec.describe Vips::Image do
     it 'can convert complex polar <-> rectangular' do
       r = Vips::Image.black(16, 16) + 128
         i = Vips::Image.black(16, 16) + 12
-        cmplx = r.complexform i 
+        cmplx = r.complexform i
 
         cmplx = cmplx.rect.polar
 
@@ -393,7 +393,7 @@ RSpec.describe Vips::Image do
     it 'can take complex conjugate' do
       r = Vips::Image.black(16, 16) + 128
         i = Vips::Image.black(16, 16) + 12
-        cmplx = r.complexform i 
+        cmplx = r.complexform i
 
         cmplx = cmplx.conj
 
@@ -419,25 +419,25 @@ RSpec.describe Vips::Image do
     end
 
     it 'can flip' do
-      a = Vips::Image.black(16, 16) 
+      a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 12, 1, 1
-        b = Vips::Image.black(16, 16) 
+        b = Vips::Image.black(16, 16)
         b = b.draw_rect 255, 15 - 10, 12, 1, 1
 
         expect((a - b.fliphor).abs.max).to eq(0.0)
 
-        a = Vips::Image.black(16, 16) 
+        a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 15 - 12, 1, 1
-        b = Vips::Image.black(16, 16) 
+        b = Vips::Image.black(16, 16)
         b = b.draw_rect 255, 10, 12, 1, 1
 
         expect((a - b.flipver).abs.max).to eq(0.0)
     end
 
     it 'can getpoint' do
-      a = Vips::Image.black(16, 16) 
+      a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 12, 1, 1
-        b = Vips::Image.black(16, 16) 
+        b = Vips::Image.black(16, 16)
         b = b.draw_rect 255, 10, 10, 1, 1
         im = a.bandjoin(b)
 
@@ -446,7 +446,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'can median' do
-      a = Vips::Image.black(16, 16) 
+      a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 12, 1, 1
         im = a.median
 
@@ -454,7 +454,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'can erode' do
-      a = Vips::Image.black(16, 16) 
+      a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 12, 1, 1
         mask = Vips::Image.new_from_array [
             [128, 255, 128],
@@ -467,7 +467,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'can dilate' do
-      a = Vips::Image.black(16, 16) 
+      a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 12, 1, 1
         mask = Vips::Image.new_from_array [
             [128, 255, 128],
@@ -482,7 +482,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'can rot' do
-      a = Vips::Image.black(16, 16) 
+      a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 12, 1, 1
 
         im = a.rot90.rot90.rot90.rot90
@@ -496,9 +496,9 @@ RSpec.describe Vips::Image do
     end
 
     it 'can bandbool' do
-      a = Vips::Image.black(16, 16) 
+      a = Vips::Image.black(16, 16)
         a = a.draw_rect 255, 10, 12, 1, 1
-        b = Vips::Image.black(16, 16) 
+        b = Vips::Image.black(16, 16)
         b = b.draw_rect 255, 10, 10, 1, 1
         im = a.bandjoin(b)
 
@@ -508,9 +508,9 @@ RSpec.describe Vips::Image do
     end
 
     it 'ifthenelse with image arguments' do
-      image = Vips::Image.black(16, 16) 
+      image = Vips::Image.black(16, 16)
         image = image.draw_rect 255, 10, 12, 1, 1
-        black = Vips::Image.black(16, 16) 
+        black = Vips::Image.black(16, 16)
         white = Vips::Image.black(16, 16) + 255
 
         result = image.ifthenelse black, white
@@ -523,7 +523,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'ifthenelse with constant arguments' do
-      image = Vips::Image.black(16, 16) 
+      image = Vips::Image.black(16, 16)
         image = image.draw_rect 255, 10, 12, 1, 1
 
         result = image.ifthenelse 0, 255
@@ -536,7 +536,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'ifthenelse with vector arguments' do
-      image = Vips::Image.black(16, 16) 
+      image = Vips::Image.black(16, 16)
         image = image.draw_rect 255, 10, 12, 1, 1
         white = Vips::Image.black(16, 16) + 255
 
@@ -550,12 +550,12 @@ RSpec.describe Vips::Image do
     end
 
     it 'has a #size method' do
-      image = Vips::Image.black(200, 100) 
+      image = Vips::Image.black(200, 100)
         expect(image.size).to eq([image.width, image.height])
     end
 
     it 'has #new_from_image method' do
-      image = Vips::Image.black(200, 100) 
+      image = Vips::Image.black(200, 100)
 
         image2 = image.new_from_image 12
         expect(image2.bands).to eq(1)
@@ -573,7 +573,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'can call affine with a non-default interpolator' do
-      image = Vips::Image.black(200, 100) 
+      image = Vips::Image.black(200, 100)
         inter = Vips::Interpolate.new 'bilinear'
         result = image.affine [2, 0, 0, 2], :interpolate => inter
 
@@ -582,7 +582,7 @@ RSpec.describe Vips::Image do
     end
 
     it 'has a working #to_a' do
-      image = Vips::Image.black(200, 100) 
+      image = Vips::Image.black(200, 100)
         array = image.to_a
 
         expect(array.length).to eq(100)
@@ -609,7 +609,7 @@ RSpec.describe Vips::Image do
 
     if has_jpeg?
       it 'can read exif tags' do
-        x = Vips::Image.new_from_file simg 'huge.jpg' 
+        x = Vips::Image.new_from_file simg 'huge.jpg'
           orientation = x.get 'exif-ifd0-Orientation'
           expect(orientation.length).to be > 20
           expect(orientation.split[0]).to eq('1')

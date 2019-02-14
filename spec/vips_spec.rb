@@ -59,7 +59,7 @@ RSpec.describe Vips do
 
         it 'can handle enum arguments' do
           black = Vips::Operation.call "black", [200, 200]
-            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500], 
+            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500],
                 {:extend => :mirror}
 
             expect(embed.width).to eq(500)
@@ -69,7 +69,7 @@ RSpec.describe Vips do
 
         it 'enum arguments can be strings' do
           black = Vips::Operation.call "black", [200, 200]
-            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500], 
+            embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500],
                {:extend => "mirror"}
 
             expect(embed.width).to eq(500)
@@ -79,9 +79,9 @@ RSpec.describe Vips do
 
         it 'can return optional output args' do
           point = Vips::Operation.call "black", [1, 1]
-            test = Vips::Operation.call "embed", [point, 20, 10, 100, 100],  
+            test = Vips::Operation.call "embed", [point, 20, 10, 100, 100],
                 {:extend => :white}
-            value, opts = Vips::Operation.call "min", [test],  
+            value, opts = Vips::Operation.call "min", [test],
                 {:x => true, :y => true}
 
             expect(value).to eq(0)

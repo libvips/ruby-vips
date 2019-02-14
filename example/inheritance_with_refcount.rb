@@ -195,7 +195,7 @@ module Vips
       def self.included(base)
         base.class_eval do
             # don't actually need most of these, remove them later
-          layout :parent, GLib::GObject::Struct, 
+          layout :parent, GLib::GObject::Struct,
              :constructed, :int,
              :static_object, :int,
              :argument_table, :pointer,
@@ -275,7 +275,7 @@ end
 
 puts "creating image"
 begin
-  x = Vips::VipsImage.new_partial 
+  x = Vips::VipsImage.new_partial
     puts "x = #{x}"
     puts ""
     puts "x[:parent] = #{x[:parent]}"

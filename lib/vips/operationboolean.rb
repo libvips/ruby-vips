@@ -1,6 +1,6 @@
 module Vips
 
-    # The type of boolean operation to perform on an image. See 
+    # The type of boolean operation to perform on an image. See
     # {Image#boolean}.
     #
     # * ':and' bitwise and

@@ -8,8 +8,8 @@ module Vips
     # * ':asin' asin(), angles in degrees
     # * ':acos' acos(), angles in degrees
     # * ':atan' atan(), angles in degrees
-    # * ':log' log base e 
-    # * ':log10' log base 10 
+    # * ':log' log base e
+    # * ':log10' log base 10
     # * ':exp' e to the something
     # * ':exp10' 10 to the something
 

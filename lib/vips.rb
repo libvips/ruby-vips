@@ -7,8 +7,8 @@
 require 'ffi'
 require 'logger'
 
-# This module uses FFI to make a simple layer over the glib and gobject 
-# libraries. 
+# This module uses FFI to make a simple layer over the glib and gobject
+# libraries.
 
 module GLib
   class << self
@@ -22,10 +22,10 @@ module GLib
   if FFI::Platform.windows?
     glib_libname = 'libglib-2.0-0.dll'
   else
-    glib_libname = 'glib-2.0' 
+    glib_libname = 'glib-2.0'
   end
 
-  ffi_lib glib_libname 
+  ffi_lib glib_libname
 
   attach_function :g_malloc, [:size_t], :pointer
 
@@ -34,16 +34,16 @@ module GLib
   G_FREE = attach_function :g_free, [:pointer], :void
 
   callback :g_log_func, [:string, :int, :string, :pointer], :void
-  attach_function :g_log_set_handler, 
+  attach_function :g_log_set_handler,
       [:string, :int, :g_log_func, :pointer], :int
   attach_function :g_log_remove_handler, [:string, :int], :void
 
-    # log flags 
+    # log flags
   LOG_FLAG_RECURSION          = 1 << 0
   LOG_FLAG_FATAL              = 1 << 1
 
-    # GLib log levels 
-  LOG_LEVEL_ERROR             = 1 << 2       # always fatal 
+    # GLib log levels
+  LOG_LEVEL_ERROR             = 1 << 2       # always fatal
   LOG_LEVEL_CRITICAL          = 1 << 3
   LOG_LEVEL_WARNING           = 1 << 4
   LOG_LEVEL_MESSAGE           = 1 << 5
@@ -67,7 +67,7 @@ module GLib
 
     # module-level, so it's not GCd away
   LOG_HANDLER = Proc.new do |domain, level, message, user_data|
-    @logger.log(GLIB_TO_SEVERITY[level], message, domain) 
+    @logger.log(GLIB_TO_SEVERITY[level], message, domain)
   end
 
   def self.remove_log_handler
@@ -86,26 +86,26 @@ module GLib
       if @glib_log_domain
           # disable this feature for now
           #
-          # libvips background worker threads can issue warnings, and 
+          # libvips background worker threads can issue warnings, and
           # since the main thread is blocked waiting for libvips to come back
           # from an ffi call, you get a deadlock on the GIL
           #
-          # to fix this, we need a way for g_log() calls from libvips workers 
+          # to fix this, we need a way for g_log() calls from libvips workers
           # to be returned via the main thread
           #
 
 #             @glib_log_handler_id = g_log_set_handler @glib_log_domain,
-#                 LOG_LEVEL_DEBUG | 
-#                 LOG_LEVEL_INFO | 
-#                 LOG_LEVEL_MESSAGE | 
-#                 LOG_LEVEL_WARNING | 
-#                 LOG_LEVEL_ERROR | 
-#                 LOG_LEVEL_CRITICAL | 
+#                 LOG_LEVEL_DEBUG |
+#                 LOG_LEVEL_INFO |
+#                 LOG_LEVEL_MESSAGE |
+#                 LOG_LEVEL_WARNING |
+#                 LOG_LEVEL_ERROR |
+#                 LOG_LEVEL_CRITICAL |
 #                 LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
 #                 LOG_HANDLER, nil
 
-          # we must remove any handlers on exit, since libvips may log stuff 
-          # on shutdown and we don't want LOG_HANDLER to be invoked 
+          # we must remove any handlers on exit, since libvips may log stuff
+          # on shutdown and we don't want LOG_HANDLER to be invoked
           # after Ruby has gone
         at_exit {
           GLib::remove_log_handler
@@ -157,7 +157,7 @@ end
 require 'vips/gobject'
 require 'vips/gvalue'
 
-# This module provides a binding for the [libvips image processing 
+# This module provides a binding for the [libvips image processing
 # library](https://jcupitt.github.io/libvips/).
 #
 # # Example
@@ -183,8 +183,8 @@ require 'vips/gvalue'
 # im.write_to_file ARGV[1]
 # ```
 #
-# This example loads a file, boosts the green channel (I'm not sure why), 
-# sharpens the image, and saves it back to disc again. 
+# This example loads a file, boosts the green channel (I'm not sure why),
+# sharpens the image, and saves it back to disc again.
 #
 # Reading this example line by line, we have:
 #
@@ -198,9 +198,9 @@ require 'vips/gvalue'
 # default mode is `:random`: this allows for full random access to image pixels,
 # but is slower and needs more memory. See {Access}
 # for full details
-# on the various modes available. 
+# on the various modes available.
 #
-# You can also load formatted images from 
+# You can also load formatted images from
 # memory buffers, create images that wrap C-style memory arrays, or make images
 # from constants.
 #
@@ -226,13 +226,13 @@ require 'vips/gvalue'
 # ```
 #
 # {Image.new_from_array} creates an image from an array constant. The 8 at
-# the end sets the scale: the amount to divide the image by after 
-# integer convolution. 
+# the end sets the scale: the amount to divide the image by after
+# integer convolution.
 #
 # See the libvips API docs for `vips_conv()` (the operation
 # invoked by {Image#conv}) for details on the convolution operator. By default,
-# it computes with a float mask, but `:integer` is fine for this case, and is 
-# much faster. 
+# it computes with a float mask, but `:integer` is fine for this case, and is
+# much faster.
 #
 # Finally:
 #
@@ -240,10 +240,10 @@ require 'vips/gvalue'
 # im.write_to_file ARGV[1]
 # ```
 #
-# {Image#write_to_file} writes an image back to the filesystem. It can 
-# write any format supported by vips: the file type is set from the filename 
-# suffix. You can also write formatted images to memory buffers, or dump 
-# image data to a raw memory array. 
+# {Image#write_to_file} writes an image back to the filesystem. It can
+# write any format supported by vips: the file type is set from the filename
+# suffix. You can also write formatted images to memory buffers, or dump
+# image data to a raw memory array.
 #
 # # How it works
 #
@@ -251,30 +251,30 @@ require 'vips/gvalue'
 # shared library. When you call a method on the image class, it uses libvips
 # introspection system (based on GObject) to search the
 # library for an operation of that name, transforms the arguments to a form
-# libvips can digest, and runs the operation. 
+# libvips can digest, and runs the operation.
 #
 # This means ruby-vips always presents the API implemented by the libvips shared
-# library. It should update itself as new features are added. 
+# library. It should update itself as new features are added.
 #
 # # Automatic wrapping
 #
 # `ruby-vips` adds a {Image.method_missing} handler to {Image} and uses
 # it to look up vips operations. For example, the libvips operation `add`, which
-# appears in C as `vips_add()`, appears in Ruby as {Image#add}. 
+# appears in C as `vips_add()`, appears in Ruby as {Image#add}.
 #
-# The operation's list of required arguments is searched and the first input 
-# image is set to the value of `self`. Operations which do not take an input 
+# The operation's list of required arguments is searched and the first input
+# image is set to the value of `self`. Operations which do not take an input
 # image, such as {Image.black}, appear as class methods. The remainder of
 # the arguments you supply in the function call are used to set the other
 # required input arguments. Any trailing keyword arguments are used to set
 # options on the operation.
-# 
-# The result is the required output 
+#
+# The result is the required output
 # argument if there is only one result, or an array of values if the operation
 # produces several results. If the operation has optional output objects, they
 # are returned as a final hash.
 #
-# For example, {Image#min}, the vips operation that searches an image for 
+# For example, {Image#min}, the vips operation that searches an image for
 # the minimum value, has a large number of optional arguments. You can use it to
 # find the minimum value like this:
 #
@@ -283,14 +283,14 @@ require 'vips/gvalue'
 # ```
 #
 # You can ask it to return the position of the minimum with `:x` and `:y`.
-#   
+#
 # ```ruby
 # min_value, opts = min x: true, y: true
 # x_pos = opts['x']
 # y_pos = opts['y']
 # ```
 #
-# Now `x_pos` and `y_pos` will have the coordinates of the minimum value. 
+# Now `x_pos` and `y_pos` will have the coordinates of the minimum value.
 # There's actually a convenience method for this, {Image#minpos}.
 #
 # You can also ask for the top *n* minimum, for example:
@@ -301,7 +301,7 @@ require 'vips/gvalue'
 # y_pos = opts['y_array']
 # ```
 #
-# Now `x_pos` and `y_pos` will be 10-element arrays. 
+# Now `x_pos` and `y_pos` will be 10-element arrays.
 #
 # Because operations are member functions and return the result image, you can
 # chain them. For example, you can write:
@@ -310,30 +310,30 @@ require 'vips/gvalue'
 # result_image = image.real.cos
 # ```
 #
-# to calculate the cosine of the real part of a complex image. 
+# to calculate the cosine of the real part of a complex image.
 # There are also a full set
 # of arithmetic operator overloads, see below.
 #
-# libvips types are also automatically wrapped. The override looks at the type 
-# of argument required by the operation and converts the value you supply, 
-# when it can. For example, {Image#linear} takes a `VipsArrayDouble` as 
-# an argument 
-# for the set of constants to use for multiplication. You can supply this 
-# value as an integer, a float, or some kind of compound object and it 
+# libvips types are also automatically wrapped. The override looks at the type
+# of argument required by the operation and converts the value you supply,
+# when it can. For example, {Image#linear} takes a `VipsArrayDouble` as
+# an argument
+# for the set of constants to use for multiplication. You can supply this
+# value as an integer, a float, or some kind of compound object and it
 # will be converted for you. You can write:
 #
 # ```ruby
-# result_image = image.linear 1, 3 
-# result_image = image.linear 12.4, 13.9 
-# result_image = image.linear [1, 2, 3], [4, 5, 6] 
-# result_image = image.linear 1, [4, 5, 6] 
+# result_image = image.linear 1, 3
+# result_image = image.linear 12.4, 13.9
+# result_image = image.linear [1, 2, 3], [4, 5, 6]
+# result_image = image.linear 1, [4, 5, 6]
 # ```
 #
 # And so on. A set of overloads are defined for {Image#linear}, see below.
 #
 # It does a couple of more ambitious conversions. It will automatically convert
 # to and from the various vips types, like `VipsBlob` and `VipsArrayImage`. For
-# example, you can read the ICC profile out of an image like this: 
+# example, you can read the ICC profile out of an image like this:
 #
 # ```ruby
 # profile = im.get_value "icc-profile-data"
@@ -343,7 +343,7 @@ require 'vips/gvalue'
 #
 # If an operation takes several input images, you can use a constant for all but
 # one of them and the wrapper will expand the constant to an image for you. For
-# example, {Image#ifthenelse} uses a condition image to pick pixels 
+# example, {Image#ifthenelse} uses a condition image to pick pixels
 # between a then and an else image:
 #
 # ```ruby
@@ -360,7 +360,7 @@ require 'vips/gvalue'
 #
 # Will make an image where true pixels are green and false pixels are red.
 #
-# This is useful for {Image#bandjoin}, the thing to join two or more 
+# This is useful for {Image#bandjoin}, the thing to join two or more
 # images up bandwise. You can write:
 #
 # ```ruby
@@ -377,39 +377,39 @@ require 'vips/gvalue'
 # result_image = image1.bandjoin [image2, 255]
 # ```
 #
-# and so on. 
+# and so on.
 #
 # # Logging
 #
-# Libvips uses g_log() to log warning, debug, info and (some) error messages. 
+# Libvips uses g_log() to log warning, debug, info and (some) error messages.
 #
 # https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 #
 # You can disable wanrings by defining the `VIPS_WARNING` environment variable.
-# You can enable info output by defining `VIPS_INFO`. 
+# You can enable info output by defining `VIPS_INFO`.
 #
 # # Exceptions
 #
 # The wrapper spots errors from vips operations and raises the {Vips::Error}
-# exception. You can catch it in the usual way. 
+# exception. You can catch it in the usual way.
 #
 # # Automatic YARD documentation
 #
-# The bulk of these API docs are generated automatically by 
+# The bulk of these API docs are generated automatically by
 # {Vips::generate_yard}. It examines
 # libvips and writes a summary of each operation and the arguments and options
-# that that operation expects. 
-# 
-# Use the [C API 
-# docs](https://jcupitt.github.io/libvips/API/current) 
+# that that operation expects.
+#
+# Use the [C API
+# docs](https://jcupitt.github.io/libvips/API/current)
 # for more detail.
 #
 # # Enums
 #
 # The libvips enums, such as `VipsBandFormat` appear in ruby-vips as Symbols
 # like `:uchar`. They are documented as a set of classes for convenience, see
-# the class list. 
-# 
+# the class list.
+#
 # # Draw operations
 #
 # Paint operations like {Image#draw_circle} and {Image#draw_line}
@@ -421,7 +421,7 @@ require 'vips/gvalue'
 # image in memory before calling the operation. This stops crashes, but it does
 # make it inefficient. If you draw 100 lines on an image, for example, you'll
 # copy the image 100 times. The wrapper does make sure that memory is recycled
-# where possible, so you won't have 100 copies in memory. 
+# where possible, so you won't have 100 copies in memory.
 #
 # If you want to avoid the copies, you'll need to call drawing operations
 # yourself.
@@ -438,7 +438,7 @@ require 'vips/gvalue'
 #
 # # Expansions
 #
-# Some vips operators take an enum to select an action, for example 
+# Some vips operators take an enum to select an action, for example
 # {Image#math} can be used to calculate sine of every pixel like this:
 #
 # ```ruby
@@ -454,9 +454,9 @@ require 'vips/gvalue'
 #
 # # Convenience functions
 #
-# The wrapper defines a few extra useful utility functions: 
-# {Image#get_value}, {Image#set_value}, {Image#bandsplit}, 
-# {Image#maxpos}, {Image#minpos}, 
+# The wrapper defines a few extra useful utility functions:
+# {Image#get_value}, {Image#set_value}, {Image#bandsplit},
+# {Image#maxpos}, {Image#minpos},
 # {Image#median}.
 
 module Vips
@@ -478,17 +478,17 @@ module Vips
   attach_function :vips_error_buffer, [], :string
   attach_function :vips_error_clear, [], :void
 
-    # The ruby-vips error class. 
+    # The ruby-vips error class.
   class Error < RuntimeError
       # @param msg [String] The error message. If this is not supplied, grab
-      #   and clear the vips error buffer and use that. 
+      #   and clear the vips error buffer and use that.
     def initialize msg = nil
       if msg
         @details = msg
       elsif Vips::vips_error_buffer != ""
         @details = Vips::vips_error_buffer
           Vips::vips_error_clear
-      else 
+      else
         @details = nil
       end
     end
@@ -519,7 +519,7 @@ module Vips
   attach_function :vips_concurrency_set, [:int], :void
 
     # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
-    # very useful for user code. 
+    # very useful for user code.
   def self.leak_set leak
     vips_leak_set (leak ? 1 : 0)
   end
@@ -529,7 +529,7 @@ module Vips
   attach_function :vips_cache_set_max_files, [:int], :void
 
     # Set the maximum number of operations that libvips should cache. Set 0 to
-    # disable the operation cache. The default is 1000. 
+    # disable the operation cache. The default is 1000.
   def self.cache_set_max size
     vips_cache_set_max size
   end
@@ -540,22 +540,22 @@ module Vips
     vips_cache_set_max_mem size
   end
 
-    # Set the maximum number of files libvips should keep open in the 
-    # operation cache. Set 0 to disable the operation cache. The default is 
+    # Set the maximum number of files libvips should keep open in the
+    # operation cache. Set 0 to disable the operation cache. The default is
     # 100.
   def self.cache_set_max_files size
     vips_cache_set_max_files size
   end
 
     # Set the size of the libvips worker pool. This defaults to the number of
-    # hardware threads on your computer. Set to 1 to disable threading. 
+    # hardware threads on your computer. Set to 1 to disable threading.
   def self.concurrency_set n
     vips_concurrency_set n
   end
 
     # Enable or disable SIMD and the run-time compiler. This can give a nice
     # speed-up, but can also be unstable on some systems or with some versions
-    # of the run-time compiler. 
+    # of the run-time compiler.
   def self.vector_set enabled
     vips_vector_set_enabled(enabled ? 1 : 0)
   end

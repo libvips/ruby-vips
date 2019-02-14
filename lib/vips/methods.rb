@@ -1205,7 +1205,7 @@ module Vips
 #   @option opts [String] :separator Separator characters
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method matrixsave(filename, opts = {})
 #   Save image to matrix file.
@@ -1214,7 +1214,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method matrixprint(opts = {})
 #   Print matrix.
@@ -1222,7 +1222,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method rawsave(filename, opts = {})
 #   Save image to raw file.
@@ -1231,7 +1231,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method rawsave_fd(fd, opts = {})
 #   Write raw image to file descriptor.
@@ -1240,7 +1240,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method vipssave(filename, opts = {})
 #   Save image to vips file.
@@ -1249,7 +1249,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method ppmsave(filename, opts = {})
 #   Save image to ppm file.
@@ -1260,7 +1260,7 @@ module Vips
 #   @option opts [Boolean] :squash save as one bit
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method radsave(filename, opts = {})
 #   Save image to radiance file.
@@ -1269,7 +1269,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method radsave_buffer(opts = {})
 #   Save image to radiance buffer.
@@ -1298,7 +1298,7 @@ module Vips
 #   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method dzsave_buffer(opts = {})
 #   Save image to dz buffer.
@@ -1335,7 +1335,7 @@ module Vips
 #   @option opts [Float] :dither Amount of dithering
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method pngsave_buffer(opts = {})
 #   Save image to png buffer.
@@ -1369,7 +1369,7 @@ module Vips
 #   @option opts [Integer] :quant_table Use predefined quantization table with given index
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method jpegsave_buffer(opts = {})
 #   Save image to jpeg buffer.
@@ -1403,7 +1403,7 @@ module Vips
 #   @option opts [Integer] :quant_table Use predefined quantization table with given index
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method webpsave(filename, opts = {})
 #   Save image to webp file.
@@ -1418,7 +1418,7 @@ module Vips
 #   @option opts [Integer] :alpha_q Change alpha plane fidelity for lossy compression
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method webpsave_buffer(opts = {})
 #   Save image to webp buffer.
@@ -1457,7 +1457,7 @@ module Vips
 #   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method tiffsave_buffer(opts = {})
 #   Save image to tiff buffer.
@@ -1492,7 +1492,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method magicksave_buffer(opts = {})
 #   Save image to magick buffer.
@@ -1511,7 +1511,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method niftisave(filename, opts = {})
 #   Save image to nifti file.
@@ -1520,7 +1520,7 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
-#   @return [nil] 
+#   @return [nil]
 
 # @!method self.thumbnail(filename, width, opts = {})
 #   Generate thumbnail from file.

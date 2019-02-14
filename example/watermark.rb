@@ -1,9 +1,9 @@
 #!/usr/bin/ruby
 
 require 'vips'
- 
+
 im = Vips::Image.new_from_file ARGV[0], :access => :sequential
- 
+
 text = Vips::Image.text ARGV[2], :width => 500, :dpi => 300
 text = (text * 0.3).cast(:uchar)
 text = text.embed 100, 100, text.width + 200, text.width + 200
@@ -40,5 +40,5 @@ marked = text.ifthenelse text_colour, im, :blend => true
 
 # reattach alpha
 marked = marked.bandjoin alpha  if alpha
- 
+
 marked.write_to_file ARGV[1]

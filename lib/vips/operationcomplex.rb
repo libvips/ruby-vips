@@ -1,6 +1,6 @@
 module Vips
 
-    # The type of complex operation to perform on an image. See 
+    # The type of complex operation to perform on an image. See
     # {Image#complex}.
     #
     # * ':polar' to polar coordinates

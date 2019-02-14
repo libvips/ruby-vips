@@ -1,11 +1,11 @@
 module Vips
 
     # When the edges of an image are extended, you can specify
-    # how you want the extension done. 
-    # See {Image#embed}, {Image#conv}, {Image#affine} and 
+    # how you want the extension done.
+    # See {Image#embed}, {Image#conv}, {Image#affine} and
     # so on.
     #
-    # * `:black` new pixels are black, ie. all bits are zero. 
+    # * `:black` new pixels are black, ie. all bits are zero.
     # * `:copy` each new pixel takes the value of the nearest edge pixel
     # * `:repeat` the image is tiled to fill the new area
     # * `:mirror` the image is reflected and tiled to reduce hash edges

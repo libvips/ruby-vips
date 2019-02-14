@@ -9,7 +9,7 @@ require 'ffi'
 module Vips
     private
 
-  attach_function :vips_image_new_matrix_from_array, 
+  attach_function :vips_image_new_matrix_from_array,
       [:int, :int, :pointer, :int], :pointer
 
   attach_function :vips_image_copy_memory, [:pointer], :pointer
@@ -22,11 +22,11 @@ module Vips
   attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
   attach_function :vips_foreign_find_save_buffer, [:string], :string
 
-  attach_function :vips_image_write_to_memory, 
+  attach_function :vips_image_write_to_memory,
       [:pointer, SizeStruct.ptr], :pointer
 
   attach_function :vips_image_get_typeof, [:pointer, :string], :GType
-  attach_function :vips_image_get, 
+  attach_function :vips_image_get,
       [:pointer, :string, GObject::GValue.ptr], :int
 
     # vips_image_get_fields was added in libvips 8.5
@@ -120,7 +120,7 @@ rescue FFI::NotFoundError
           end
 
             unless Image::float? image.format
-              image = image.cast :float 
+              image = image.cast :float
             end
 
             new_format = image.format == :double ? :dpcomplex : :complex
@@ -147,14 +147,14 @@ rescue FFI::NotFoundError
     end
 
       # Write can fail due to no file descriptors and memory can fill if
-      # large objects are not collected fairly soon. We can't try a 
-      # write and GC and retry on fail, since the write may take a 
+      # large objects are not collected fairly soon. We can't try a
+      # write and GC and retry on fail, since the write may take a
       # long time and may not be repeatable.
       #
-      # GCing before every write would have a horrible effect on 
+      # GCing before every write would have a horrible effect on
       # performance, so as a compromise we GC every @@gc_interval writes.
-      #                                 
-      # ruby2.1 introduced a generational GC which is fast enough to be 
+      #
+      # ruby2.1 introduced a generational GC which is fast enough to be
       # able to GC on every write.
 
     @@generational_gc = RUBY_ENGINE == "ruby" && RUBY_VERSION.to_f >= 2.1
@@ -163,13 +163,13 @@ rescue FFI::NotFoundError
     @@gc_countdown = @@gc_interval
 
     def write_gc
-      if @@generational_gc  
+      if @@generational_gc
         GC.start full_mark: false
       else
         @@gc_countdown -= 1
           if @@gc_countdown < 0
             @@gc_countdown = @@gc_interval
-              GC.start  
+              GC.start
           end
       end
     end
@@ -183,7 +183,7 @@ rescue FFI::NotFoundError
 
     def respond_to? name, include_all = false
         # To support keyword args, we need to tell Ruby that final image
-        # arguments cannot be hashes of keywords. 
+        # arguments cannot be hashes of keywords.
         #
         # https://makandracards.com/makandra/36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
       return false if name == :to_hash
@@ -201,8 +201,8 @@ rescue FFI::NotFoundError
         super
     end
 
-      # Invoke a vips operation with {Vips::Operation.call}, using self as 
-      # the first input argument. 
+      # Invoke a vips operation with {Vips::Operation.call}, using self as
+      # the first input argument.
       #
       # @param name [String] vips operation to call
       # @return result of vips operation
@@ -229,7 +229,7 @@ rescue FFI::NotFoundError
       # image = Vips::new_from_file "fred.jpg", shrink: 2
       # ```
       #
-      # The full set of options available depend upon the load operation that 
+      # The full set of options available depend upon the load operation that
       # will be executed. Try something like:
       #
       # ```
@@ -244,7 +244,7 @@ rescue FFI::NotFoundError
       #
       # @!macro [new] vips.loadopts
       #   @param opts [Hash] set of options
-      #   @option opts [Boolean] :disc (true) Open large images via a 
+      #   @option opts [Boolean] :disc (true) Open large images via a
       #     temporary disc file
       #   @option opts [Vips::Access] :access (:random) Access mode for file
       #
@@ -252,7 +252,7 @@ rescue FFI::NotFoundError
       # @macro vips.loadopts
       # @return [Image] the loaded image
     def self.new_from_file name, opts = {}
-        # very common, and Vips::vips_filename_get_filename will segv if we 
+        # very common, and Vips::vips_filename_get_filename will segv if we
         # pass this
       raise Vips::Error, "filename is nil" if name == nil
 
@@ -271,7 +271,7 @@ rescue FFI::NotFoundError
       # ```
       # image = Vips::Image.new_from_buffer memory_buffer, "shrink=2"
       # ```
-      # 
+      #
       # or alternatively:
       #
       # ```
@@ -284,9 +284,9 @@ rescue FFI::NotFoundError
       # $ vips jpegload_buffer
       # ```
       #
-      # at the command-line to see the available options. Not all loaders 
+      # at the command-line to see the available options. Not all loaders
       # support load from buffer, but at least JPEG, PNG and
-      # TIFF images will work. 
+      # TIFF images will work.
       #
       # Loading is fast: only enough of the image is loaded to be able to fill
       # out the header. Pixels will only be decompressed when they are needed.
@@ -305,7 +305,7 @@ rescue FFI::NotFoundError
     def self.matrix_from_array width, height, array
       ptr = FFI::MemoryPointer.new :double, array.length
         ptr.write_array_of_double array
-        image = Vips::vips_image_new_matrix_from_array width, height, 
+        image = Vips::vips_image_new_matrix_from_array width, height,
             ptr, array.length
         Vips::Image.new image
     end
@@ -313,7 +313,7 @@ rescue FFI::NotFoundError
       # Create a new Image from a 1D or 2D array. A 1D array becomes an
       # image with height 1. Use `scale` and `offset` to set the scale and
       # offset fields in the header. These are useful for integer
-      # convolutions. 
+      # convolutions.
       #
       # For example:
       #
@@ -401,14 +401,14 @@ rescue FFI::NotFoundError
       # image.write_to_file "fred.jpg", Q: 90
       # ```
       #
-      # The full set of save options depend on the selected saver. Try 
+      # The full set of save options depend on the selected saver. Try
       # something like:
       #
       # ```
       # $ vips jpegsave
       # ```
       #
-      # to see all the available options for JPEG save. 
+      # to see all the available options for JPEG save.
       #
       # @!macro [new] vips.saveopts
       #   @param opts [Hash] set of options
@@ -426,11 +426,11 @@ rescue FFI::NotFoundError
         end
 
         Vips::Operation.call saver, [self, filename], opts, option_string
- 
+
         write_gc
     end
 
-      # Write this image to a memory buffer. Save options may be encoded in 
+      # Write this image to a memory buffer. Save options may be encoded in
       # the format_string or given as a hash. For example:
       #
       # ```
@@ -443,22 +443,22 @@ rescue FFI::NotFoundError
       # image.write_to_buffer ".jpg", Q: 90
       # ```
       #
-      # The full set of save options depend on the selected saver. Try 
+      # The full set of save options depend on the selected saver. Try
       # something like:
       #
       # ```
       # $ vips jpegsave
       # ```
       #
-      # to see all the available options for JPEG save. 
+      # to see all the available options for JPEG save.
       #
       # @param format_string [String] save format plus options
       # @macro vips.saveopts
       # @return [String] the image saved in the specified format
     def write_to_buffer format_string, opts = {}
-      filename = 
+      filename =
           Vips::p2str(Vips::vips_filename_get_filename format_string)
-        option_string = 
+        option_string =
             Vips::p2str(Vips::vips_filename_get_options format_string)
         saver = Vips::vips_foreign_find_save_buffer filename
         if saver == nil
@@ -503,8 +503,8 @@ rescue FFI::NotFoundError
         Vips::vips_image_get_typeof self, name
     end
 
-      # Get a metadata item from an image. Ruby types are constructed 
-      # automatically from the `GValue`, if possible. 
+      # Get a metadata item from an image. Ruby types are constructed
+      # automatically from the `GValue`, if possible.
       #
       # For example, you can read the ICC profile from an image like this:
       #
@@ -512,7 +512,7 @@ rescue FFI::NotFoundError
       # profile = image.get "icc-profile-data"
       # ```
       #
-      # and profile will be an array containing the profile. 
+      # and profile will be an array containing the profile.
       #
       # @param name [String] Metadata field to get
       # @return [Object] Value of field
@@ -525,15 +525,15 @@ rescue FFI::NotFoundError
 
         gvalue = GObject::GValue.alloc
         result = Vips::vips_image_get self, name, gvalue
-        raise Vips::Error if result != 0 
+        raise Vips::Error if result != 0
 
         return gvalue.get
     end
 
       # Get the names of all fields on an image. Use this to loop over all
-      # image metadata. 
+      # image metadata.
       #
-      # @return [[String]] array of field names 
+      # @return [[String]] array of field names
     def get_fields
         # vips_image_get_fields() was added in libvips 8.5
       return [] unless Vips.respond_to? :vips_image_get_fields
@@ -552,8 +552,8 @@ rescue FFI::NotFoundError
         return names
     end
 
-      # Create a metadata item on an image of the specifed type. Ruby types 
-      # are automatically transformed into the matching `GType`, if possible. 
+      # Create a metadata item on an image of the specifed type. Ruby types
+      # are automatically transformed into the matching `GType`, if possible.
       #
       # For example, you can use this to set an image's ICC profile:
       #
@@ -574,9 +574,9 @@ rescue FFI::NotFoundError
         Vips::vips_image_set self, name, gvalue
     end
 
-      # Set the value of a metadata item on an image. The metadata item must 
-      # already exist. Ruby types are automatically transformed into the 
-      # matching `GValue`, if possible. 
+      # Set the value of a metadata item on an image. The metadata item must
+      # already exist. Ruby types are automatically transformed into the
+      # matching `GValue`, if possible.
       #
       # For example, you can use this to set an image's ICC profile:
       #
@@ -705,7 +705,7 @@ rescue FFI::NotFoundError
         get "offset"
     end
 
-      # Get the image size. 
+      # Get the image size.
       #
       # @return [Integer, Integer] image width and height
     def size
@@ -738,8 +738,8 @@ rescue FFI::NotFoundError
       # Copy an image to a memory area.
       #
       # This can be useful for reusing results, but can obviously use a lot of
-      # memory for large images. See {Image#tilecache} for a way of caching 
-      # parts of an image. 
+      # memory for large images. See {Image#tilecache} for a way of caching
+      # parts of an image.
       #
       # @return [Image] new memory image
     def copy_memory
@@ -756,52 +756,52 @@ rescue FFI::NotFoundError
       draw_rect ink, left, top, 1, 1, opts
     end
 
-      # Add an image, constant or array. 
+      # Add an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] Thing to add to self
       # @return [Image] result of addition
-    def + other 
-      other.is_a?(Vips::Image) ? 
+    def + other
+      other.is_a?(Vips::Image) ?
           add(other) : linear(1, other)
     end
 
-      # Subtract an image, constant or array. 
+      # Subtract an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] Thing to subtract from self
       # @return [Image] result of subtraction
     def - other
-      other.is_a?(Vips::Image) ? 
+      other.is_a?(Vips::Image) ?
           subtract(other) : linear(1, Image::smap(other) {|x| x * -1})
     end
 
-      # Multiply an image, constant or array. 
+      # Multiply an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] Thing to multiply by self
       # @return [Image] result of multiplication
     def * other
-      other.is_a?(Vips::Image) ? 
+      other.is_a?(Vips::Image) ?
           multiply(other) : linear(other, 0)
     end
 
-      # Divide an image, constant or array. 
+      # Divide an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] Thing to divide self by
       # @return [Image] result of division
     def / other
-      other.is_a?(Vips::Image) ? 
+      other.is_a?(Vips::Image) ?
           divide(other) : linear(Image::smap(other) {|x| 1.0 / x}, 0)
     end
 
-      # Remainder after integer division with an image, constant or array. 
+      # Remainder after integer division with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] self modulo this
       # @return [Image] result of modulo
     def % other
-      other.is_a?(Vips::Image) ? 
+      other.is_a?(Vips::Image) ?
           remainder(other) : remainder_const(other)
     end
 
-      # Raise to power of an image, constant or array. 
+      # Raise to power of an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] self to the power of this
       # @return [Image] result of power
@@ -809,7 +809,7 @@ rescue FFI::NotFoundError
       call_enum "math2", other, :pow
     end
 
-      # Integer left shift with an image, constant or array. 
+      # Integer left shift with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] shift left by this much
       # @return [Image] result of left shift
@@ -817,7 +817,7 @@ rescue FFI::NotFoundError
       call_enum "boolean", other, :lshift
     end
 
-      # Integer right shift with an image, constant or array. 
+      # Integer right shift with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] shift right by this much
       # @return [Image] result of right shift
@@ -825,26 +825,26 @@ rescue FFI::NotFoundError
       call_enum "boolean", other, :rshift
     end
 
-      # Integer bitwise OR with an image, constant or array. 
+      # Integer bitwise OR with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] bitwise OR with this
-      # @return [Image] result of bitwise OR 
+      # @return [Image] result of bitwise OR
     def | other
       call_enum "boolean", other, :or
     end
 
-      # Integer bitwise AND with an image, constant or array. 
+      # Integer bitwise AND with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] bitwise AND with this
-      # @return [Image] result of bitwise AND 
+      # @return [Image] result of bitwise AND
     def & other
       call_enum "boolean", other, :and
     end
 
-      # Integer bitwise EOR with an image, constant or array. 
+      # Integer bitwise EOR with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] bitwise EOR with this
-      # @return [Image] result of bitwise EOR 
+      # @return [Image] result of bitwise EOR
     def ^ other
       call_enum "boolean", other, :eor
     end
@@ -863,19 +863,19 @@ rescue FFI::NotFoundError
       self ^ -1
     end
 
-      # @return [Image] image 
+      # @return [Image] image
     def +@
       self
     end
 
       # Equivalent to image * -1
       #
-      # @return [Image] negative of image 
+      # @return [Image] negative of image
     def -@
       self * -1
     end
 
-      # Relational less than with an image, constant or array. 
+      # Relational less than with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] relational less than with this
       # @return [Image] result of less than
@@ -883,7 +883,7 @@ rescue FFI::NotFoundError
       call_enum "relational", other, :less
     end
 
-      # Relational less than or equal to with an image, constant or array. 
+      # Relational less than or equal to with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] relational less than or
       #   equal to with this
@@ -892,7 +892,7 @@ rescue FFI::NotFoundError
       call_enum "relational", other, :lesseq
     end
 
-      # Relational more than with an image, constant or array. 
+      # Relational more than with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] relational more than with this
       # @return [Image] result of more than
@@ -900,7 +900,7 @@ rescue FFI::NotFoundError
       call_enum "relational", other, :more
     end
 
-      # Relational more than or equal to with an image, constant or array. 
+      # Relational more than or equal to with an image, constant or array.
       #
       # @param other [Image, Real, Array<Real>] relational more than or
       #   equal to with this
@@ -944,17 +944,17 @@ rescue FFI::NotFoundError
         n = index.size
           extract_band index.begin, n: n
       elsif index.is_a? Numeric
-        extract_band index 
+        extract_band index
       else
         raise Vips::Error, "[] index is not range or numeric."
       end
     end
 
-      # Convert to an Array. This will be slow for large images. 
+      # Convert to an Array. This will be slow for large images.
       #
       # @return [Array] array of Fixnum
     def to_a
-        # we render the image to a big string, then unpack 
+        # we render the image to a big string, then unpack
         # as a Ruby array of the correct type
       memory = write_to_memory
 
@@ -978,7 +978,7 @@ rescue FFI::NotFoundError
         # gather band elements together
         pixel_array = array.each_slice(bands).to_a
 
-        # build rows 
+        # build rows
         row_array = pixel_array.each_slice(width).to_a
 
         return row_array
@@ -986,21 +986,21 @@ rescue FFI::NotFoundError
 
       # Return the largest integral value not greater than the argument.
       #
-      # @return [Image] floor of image 
+      # @return [Image] floor of image
     def floor
       round :floor
     end
 
       # Return the smallest integral value not less than the argument.
       #
-      # @return [Image] ceil of image 
+      # @return [Image] ceil of image
     def ceil
       round :ceil
     end
 
       # Return the nearest integral value.
       #
-      # @return [Image] rint of image 
+      # @return [Image] rint of image
     def rint
       round :rint
     end
@@ -1119,11 +1119,11 @@ rescue FFI::NotFoundError
       complexget :imag
     end
 
-      # Return an image with rectangular pixels converted to polar. 
+      # Return an image with rectangular pixels converted to polar.
       #
       # The image
       # can be complex, in which case the return image will also be complex,
-      # or must have an even number of bands, in which case pairs of 
+      # or must have an even number of bands, in which case pairs of
       # bands are treated as (x, y) coordinates.
       #
       # @see xyz
@@ -1136,7 +1136,7 @@ rescue FFI::NotFoundError
       #
       # The image
       # can be complex, in which case the return image will also be complex,
-      # or must have an even number of bands, in which case pairs of 
+      # or must have an even number of bands, in which case pairs of
       # bands are treated as (x, y) coordinates.
       #
       # @see xyz
@@ -1149,7 +1149,7 @@ rescue FFI::NotFoundError
       #
       # The image
       # can be complex, in which case the return image will also be complex,
-      # or must have an even number of bands, in which case pairs of 
+      # or must have an even number of bands, in which case pairs of
       # bands are treated as (x, y) coordinates.
       #
       # @return [Image] complex conjugate
@@ -1169,7 +1169,7 @@ rescue FFI::NotFoundError
       #
       # @return [Image] sine of each pixel
     def sin
-      math :sin 
+      math :sin
     end
 
       # Return the cosine of an image in degrees.
@@ -1295,15 +1295,15 @@ rescue FFI::NotFoundError
     end
 
       # Select pixels from `th` if `self` is non-zero and from `el` if
-      # `self` is zero. Use the `:blend` option to fade smoothly 
-      # between `th` and `el`. 
+      # `self` is zero. Use the `:blend` option to fade smoothly
+      # between `th` and `el`.
       #
       # @param th [Image, Real, Array<Real>] true values
       # @param el [Image, Real, Array<Real>] false values
       # @param opts [Hash] set of options
       # @option opts [Boolean] :blend (false) Blend smoothly between th and el
       # @return [Image] merged image
-    def ifthenelse(th, el, opts = {}) 
+    def ifthenelse(th, el, opts = {})
       match_image = [th, el, self].find {|x| x.is_a? Vips::Image}
 
         unless th.is_a? Vips::Image
@@ -1328,9 +1328,9 @@ rescue FFI::NotFoundError
   end
 
     # This method generates yard comments for all the dynamically bound
-    # vips operations. 
+    # vips operations.
     #
-    # Regenerate with something like: 
+    # Regenerate with something like:
     #
     # ```
     # $ ruby > methods.rb
@@ -1364,14 +1364,14 @@ rescue FFI::NotFoundError
           description = Vips::vips_object_get_description op
 
           # find and classify all the arguments the operator can take
-          required_input = [] 
+          required_input = []
           optional_input = []
-          required_output = [] 
+          required_output = []
           optional_output = []
           member_x = nil
           op.argument_map do |pspec, argument_class, argument_instance|
             arg_flags = argument_class[:flags]
-              next if (arg_flags & ARGUMENT_CONSTRUCT) == 0 
+              next if (arg_flags & ARGUMENT_CONSTRUCT) == 0
               next if (arg_flags & ARGUMENT_DEPRECATED) != 0
 
               name = pspec[:name].tr("-", "_")
@@ -1381,22 +1381,22 @@ rescue FFI::NotFoundError
               fundamental = GObject::g_type_fundamental gtype
               type_name = GObject::g_type_name gtype
               if map_go_to_ruby.include? type_name
-                type_name = map_go_to_ruby[type_name] 
+                type_name = map_go_to_ruby[type_name]
               end
               if fundamental == GObject::GFLAGS_TYPE ||
                   fundamental == GObject::GENUM_TYPE
                 type_name = "Vips::" + type_name[/Vips(.*)/, 1]
               end
               blurb = GObject::g_param_spec_get_blurb pspec
-              value = {:name => name, 
-                       :flags => arg_flags, 
-                       :gtype => gtype, 
-                       :type_name => type_name, 
+              value = {:name => name,
+                       :flags => arg_flags,
+                       :gtype => gtype,
+                       :type_name => type_name,
                        :blurb => blurb}
 
-              if (arg_flags & ARGUMENT_INPUT) != 0 
-                if (arg_flags & ARGUMENT_REQUIRED) != 0 
-                    # note the first required input image, if any ... we 
+              if (arg_flags & ARGUMENT_INPUT) != 0
+                if (arg_flags & ARGUMENT_REQUIRED) != 0
+                    # note the first required input image, if any ... we
                     # will be a method of this instance
                   if !member_x && gtype == Vips::IMAGE_TYPE
                     member_x = value
@@ -1422,7 +1422,7 @@ rescue FFI::NotFoundError
           end
 
           print "# @!method "
-          print "self." unless member_x 
+          print "self." unless member_x
           print "#{nickname}("
           print required_input.map{|x| x[:name]}.join(", ")
           print ", " if required_input.length > 0
@@ -1446,14 +1446,14 @@ rescue FFI::NotFoundError
           end
 
           print "#   @return ["
-          if required_output.length == 0 
-            print "nil" 
-          elsif required_output.length == 1 
+          if required_output.length == 0
+            print "nil"
+          elsif required_output.length == 1
             print required_output.first[:type_name]
-          elsif 
-              print "Array<" 
+          elsif
+              print "Array<"
             print required_output.map{|x| x[:type_name]}.join(", ")
-              print ">" 
+              print ">"
           end
           if optional_output.length > 0
             print ", Hash<Symbol => Object>"

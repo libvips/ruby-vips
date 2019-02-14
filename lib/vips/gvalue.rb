@@ -17,10 +17,10 @@ module GObject
     # ```
     #
     # Lifetime is managed automatically. It doesn't know about all GType values,
-    # but it does know the ones that libvips uses. 
+    # but it does know the ones that libvips uses.
 
   class GValue < FFI::ManagedStruct
-    layout :gtype, :GType, 
+    layout :gtype, :GType,
            :data, [:ulong_long, 2]
 
       # convert an enum value (str/symb/int) into an int ready for libvips
@@ -49,7 +49,7 @@ module GObject
 
     def self.release ptr
         # GLib::logger.debug("GObject::GValue::release") {"ptr = #{ptr}"}
-      ::GObject::g_value_unset ptr 
+      ::GObject::g_value_unset ptr
     end
 
       # Allocate memory for a GValue and return a class wrapper. Memory will
@@ -61,8 +61,8 @@ module GObject
         # allocate memory
       memory = FFI::MemoryPointer.new GValue
 
-        # make this alloc autorelease ... we mustn't release in 
-        # GValue::release, since we are used to wrap GValue pointers 
+        # make this alloc autorelease ... we mustn't release in
+        # GValue::release, since we are used to wrap GValue pointers
         # made by other people
         pointer = FFI::Pointer.new GValue, memory
 
@@ -163,7 +163,7 @@ module GObject
     end
 
       # Get the value of a GValue. The value is converted to a Ruby type in
-      # the obvious way. 
+      # the obvious way.
       #
       # @return [Any] the value held by the GValue
     def get
@@ -205,7 +205,7 @@ module GObject
           len = Vips::IntStruct.new
             array = Vips::vips_value_get_array_image self, len
             result = array.get_array_of_pointer 0, len[:value]
-            result.map! do |pointer| 
+            result.map! do |pointer|
               ::GObject::g_object_ref pointer
                 Vips::Image.new pointer
             end
@@ -273,9 +273,9 @@ module GObject
   attach_function :g_value_get_object, [GValue.ptr], :pointer
 
     # use :pointer rather than GObject.ptr to avoid casting later
-  attach_function :g_object_set_property, 
+  attach_function :g_object_set_property,
       [:pointer, :string, GValue.ptr], :void
-  attach_function :g_object_get_property, 
+  attach_function :g_object_get_property,
       [:pointer, :string, GValue.ptr], :void
 
 end

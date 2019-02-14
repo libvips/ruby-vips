@@ -1,6 +1,6 @@
 module Vips
 
-    # The type of relational operation to perform on an image. See 
+    # The type of relational operation to perform on an image. See
     # {Image#relational}.
     #
     # * ':more' more than

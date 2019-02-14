@@ -1,6 +1,6 @@
 module Vips
 
-    # The type of complex projection operation to perform on an image. See 
+    # The type of complex projection operation to perform on an image. See
     # {Image#complexget}.
     #
     # * ':real' get real part

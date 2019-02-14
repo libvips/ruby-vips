@@ -4,7 +4,7 @@ module Vips
     #
     # * `:d0` no rotate
     # * `:d90` 90 degrees clockwise
-    # * `:d180` 180 degrees 
+    # * `:d180` 180 degrees
     # * `:d270` 90 degrees anti-clockwise
 
   class Angle < Symbol
