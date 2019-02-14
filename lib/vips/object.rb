@@ -7,7 +7,7 @@
 require 'ffi'
 
 module Vips
-    private
+  private
 
     # debugging support
     attach_function :vips_object_print_all, [], :void
@@ -18,7 +18,7 @@ module Vips
     attach_function :vips_interpretation_get_type, [], :GType
     attach_function :vips_coding_get_type, [], :GType
 
-    public
+  public
 
     # some handy gtypes
     IMAGE_TYPE = GObject::g_type_from_name "VipsImage"
@@ -39,7 +39,7 @@ module Vips
       BLEND_MODE_TYPE = nil
     end
 
-    private
+  private
 
     attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
     attach_function :vips_enum_nick, [:GType, :int], :string

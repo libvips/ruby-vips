@@ -7,7 +7,7 @@
 require 'ffi'
 
 module Vips
-    private
+  private
 
     attach_function :vips_operation_new, [:string], :pointer
 
@@ -154,7 +154,7 @@ module Vips
         super name, value
       end
 
-        public
+      public
 
       # This is the public entry point for the vips binding. {call} will run
       # any vips operation, for example:

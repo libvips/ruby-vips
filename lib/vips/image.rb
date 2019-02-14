@@ -7,7 +7,7 @@
 require 'ffi'
 
 module Vips
-    private
+  private
 
     attach_function :vips_image_new_matrix_from_array,
         [:int, :int, :pointer, :int], :pointer
@@ -58,7 +58,7 @@ module Vips
       pointer.read_string
     end
 
-    public
+  public
 
     # This class represents a libvips image. See the {Vips} module documentation
     # for an introduction to using this class.
@@ -66,7 +66,7 @@ module Vips
     class Image < Vips::Object
       alias_method :parent_get_typeof, :get_typeof
 
-        private
+      private
 
       # the layout of the VipsImage struct
       module ImageLayout
@@ -174,7 +174,7 @@ module Vips
         end
       end
 
-        public
+      public
 
       def inspect
         "#<Image #{width}x#{height} #{format}, #{bands} bands, " +
