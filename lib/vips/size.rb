@@ -8,6 +8,6 @@ module Vips
     # * `:down` only downsize
     # * `:force` change aspect ratio
 
-    class Size < Symbol
-    end
+  class Size < Symbol
+  end
 end

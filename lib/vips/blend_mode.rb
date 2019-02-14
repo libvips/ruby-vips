@@ -28,7 +28,7 @@ module Vips
     # `:difference` - difference of the two
     # `:exclusion` - somewhat like `:difference`, but lower-contrast
 
-    class BlendMode < Symbol
-    end
+  class BlendMode < Symbol
+  end
 end
 

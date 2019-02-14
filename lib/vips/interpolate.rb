@@ -1,6 +1,6 @@
 module Vips
 
-    attach_function :vips_interpolate_new, [:string], :pointer
+  attach_function :vips_interpolate_new, [:string], :pointer
 
     # An interpolator. One of these can be given to operations like 
     # {Image#affine} or {Image#mapim} to select the type of pixel interpolation
@@ -29,34 +29,34 @@ module Vips
     #      :interpolate => Vips::Interpolate.new(:bicubic)
     #  ```
 
-    class Interpolate < Vips::Object
+  class Interpolate < Vips::Object
 
-        # the layout of the VipsInterpolate struct
-        module InterpolateLayout
-            def self.included base
-                base.class_eval do
-                    layout :parent, Vips::Object::Struct
-                    # rest opaque
-                end
-            end
+      # the layout of the VipsInterpolate struct
+    module InterpolateLayout
+      def self.included base
+        base.class_eval do
+          layout :parent, Vips::Object::Struct
+            # rest opaque
         end
+      end
+    end
 
-        class Struct < Vips::Object::Struct
-            include InterpolateLayout
-
-        end
-
-        class ManagedStruct < Vips::Object::ManagedStruct
-            include InterpolateLayout
-
-        end
-
-        def initialize name
-            ptr = Vips::vips_interpolate_new name
-            raise Vips::Error if ptr == nil
-
-            super ptr
-        end
+    class Struct < Vips::Object::Struct
+      include InterpolateLayout
 
     end
+
+    class ManagedStruct < Vips::Object::ManagedStruct
+      include InterpolateLayout
+
+    end
+
+    def initialize name
+      ptr = Vips::vips_interpolate_new name
+        raise Vips::Error if ptr == nil
+
+        super ptr
+    end
+
+  end
 end

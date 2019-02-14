@@ -7,6 +7,6 @@ module Vips
     # * `:d180` 180 degrees 
     # * `:d270` 90 degrees anti-clockwise
 
-    class Angle < Symbol
-    end
+  class Angle < Symbol
+  end
 end

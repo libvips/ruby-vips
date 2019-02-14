@@ -12,6 +12,6 @@ module Vips
     # * `:"south-west"`
     # * `:"north-west"`
 
-    class CompassDirection < Symbol
-    end
+  class CompassDirection < Symbol
+  end
 end

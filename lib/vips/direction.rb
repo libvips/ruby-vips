@@ -6,6 +6,6 @@ module Vips
     # *   `:horizontal` left-right 
     # *   `:vertical` top-bottom
 
-    class Direction < Symbol
-    end
+  class Direction < Symbol
+  end
 end

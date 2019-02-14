@@ -12,7 +12,7 @@ Vips::leak_set true
 #Vips.set_debug true
 
 ARGV.each do |filename|
-    im = Vips::Image.new_from_file filename
+  im = Vips::Image.new_from_file filename
     profile = im.get_value "icc-profile-data"
     puts "profile has #{profile.length} bytes"
 end

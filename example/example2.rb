@@ -17,11 +17,11 @@ Vips::cache_set_max 0
 n = 10000
 
 n.times do |i|
-    puts ""
+  puts ""
     puts "call #{i} ..."
     out = Vips::Operation.call "black", [200, 300]
     if out.width != 200 or out.height != 300
-        puts "bad image result from black"
+      puts "bad image result from black"
     end
 end
 

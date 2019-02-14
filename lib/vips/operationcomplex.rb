@@ -7,6 +7,6 @@ module Vips
     # * ':rect' to rectangular coordinates
     # * ':conj' complex conjugate
 
-    class OperationComplex < Symbol
-    end
+  class OperationComplex < Symbol
+  end
 end

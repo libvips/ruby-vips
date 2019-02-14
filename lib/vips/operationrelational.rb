@@ -10,6 +10,6 @@ module Vips
     # * ':equal' equal to
     # * ':noteq' not equal to
 
-    class OperationRelational < Symbol
-    end
+  class OperationRelational < Symbol
+  end
 end

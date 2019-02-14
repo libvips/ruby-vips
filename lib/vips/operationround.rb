@@ -6,6 +6,6 @@ module Vips
     # * ':floor' round down
     # * ':rint' round to nearest integer
 
-    class OperationRound < Symbol
-    end
+  class OperationRound < Symbol
+  end
 end

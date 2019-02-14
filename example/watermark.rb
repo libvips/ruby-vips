@@ -16,24 +16,24 @@ text = text.crop 0, 0, im.width, im.height
 # guess how many bands from the start of im contain visible colour information
 if im.bands >= 4 and im.interpretation == :cmyk
     # cmyk image
-    n_visible_bands = 4
+  n_visible_bands = 4
     text_colour = [0, 255, 0, 0]
 elsif im.bands >= 3
     # rgb image
-    n_visible_bands = 3
+  n_visible_bands = 3
     text_colour = [255, 0, 0]
 else
     # mono image
-    n_visible_bands = 1
+  n_visible_bands = 1
     text_colour = 255
 end
 
 # split into image and alpha
 if im.bands - n_visible_bands > 0
-    alpha = im.extract_band n_visible_bands, :n => im.bands - n_visible_bands
+  alpha = im.extract_band n_visible_bands, :n => im.bands - n_visible_bands
     im = im.extract_band 0, :n => n_visible_bands
 else
-    alpha = nil
+  alpha = nil
 end
 
 marked = text.ifthenelse text_colour, im, :blend => true

@@ -1,48 +1,48 @@
 require 'spec_helper.rb'
 
 RSpec.describe Vips do
-    describe 'Vips' do
-        it 'can set concurrency' do
-            Vips::concurrency_set 12
-        end
-
-        it 'can set SIMD' do
-            Vips::vector_set true
-        end
-
-        it 'can enable leak testing' do
-            Vips::leak_set true
-            Vips::leak_set false
-        end
-
-        it 'can set the operation cache size' do
-            Vips::cache_set_max 0
-            Vips::cache_set_max 100
-        end
-
-        it 'can set the operation cache memory limit' do
-            Vips::cache_set_max_mem 0
-            Vips::cache_set_max_mem 10000000
-        end
-
-        it 'can set the operation cache file limit' do
-            Vips::cache_set_max_files 0
-            Vips::cache_set_max_files 100
-        end
-
+  describe 'Vips' do
+    it 'can set concurrency' do
+      Vips::concurrency_set 12
     end
 
-    describe '#call' do
-        it 'can make a black image' do
-            image = Vips::Operation.call "black", [200, 200]
+      it 'can set SIMD' do
+        Vips::vector_set true
+      end
 
-            expect(image.width).to eq(200)
-            expect(image.height).to eq(200)
-            expect(image.bands).to eq(1)
-        end
+      it 'can enable leak testing' do
+        Vips::leak_set true
+          Vips::leak_set false
+      end
+
+      it 'can set the operation cache size' do
+        Vips::cache_set_max 0
+          Vips::cache_set_max 100
+      end
+
+      it 'can set the operation cache memory limit' do
+        Vips::cache_set_max_mem 0
+          Vips::cache_set_max_mem 10000000
+      end
+
+      it 'can set the operation cache file limit' do
+        Vips::cache_set_max_files 0
+          Vips::cache_set_max_files 100
+      end
+
+  end
+
+    describe '#call' do
+      it 'can make a black image' do
+        image = Vips::Operation.call "black", [200, 200]
+
+          expect(image.width).to eq(200)
+          expect(image.height).to eq(200)
+          expect(image.bands).to eq(1)
+      end
 
         it 'can take an optional argument' do
-            image = Vips::Operation.call "black", [200, 200], {:bands => 12}
+          image = Vips::Operation.call "black", [200, 200], {:bands => 12}
 
             expect(image.width).to eq(200)
             expect(image.height).to eq(200)
@@ -50,7 +50,7 @@ RSpec.describe Vips do
         end
 
         it 'ignores optional arguments with nil values' do
-            image = Vips::Operation.call "black", [200, 200], { bands: nil }
+          image = Vips::Operation.call "black", [200, 200], { bands: nil }
 
             expect(image.width).to eq(200)
             expect(image.height).to eq(200)
@@ -58,7 +58,7 @@ RSpec.describe Vips do
         end
 
         it 'can handle enum arguments' do
-            black = Vips::Operation.call "black", [200, 200]
+          black = Vips::Operation.call "black", [200, 200]
             embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500], 
                 {:extend => :mirror}
 
@@ -68,7 +68,7 @@ RSpec.describe Vips do
         end
 
         it 'enum arguments can be strings' do
-            black = Vips::Operation.call "black", [200, 200]
+          black = Vips::Operation.call "black", [200, 200]
             embed = Vips::Operation.call "embed", [black, 10, 10, 500, 500], 
                {:extend => "mirror"}
 
@@ -78,7 +78,7 @@ RSpec.describe Vips do
         end
 
         it 'can return optional output args' do
-            point = Vips::Operation.call "black", [1, 1]
+          point = Vips::Operation.call "black", [1, 1]
             test = Vips::Operation.call "embed", [point, 20, 10, 100, 100],  
                 {:extend => :white}
             value, opts = Vips::Operation.call "min", [test],  
@@ -90,7 +90,7 @@ RSpec.describe Vips do
         end
 
         it 'can call draw operations' do
-            black = Vips::Operation.call "black", [100, 100]
+          black = Vips::Operation.call "black", [100, 100]
             test = Vips::Operation.call "draw_rect", [black, 255, 10, 10, 1, 1]
 
             max_black = Vips::Operation.call "max", [black]
@@ -101,7 +101,7 @@ RSpec.describe Vips do
         end
 
         it 'can throw errors for failed operations' do
-            black = Vips::Operation.call "black", [100, 1]
+          black = Vips::Operation.call "black", [100, 1]
 
             expect{black.resize(0.4)}.to raise_exception(Vips::Error)
         end

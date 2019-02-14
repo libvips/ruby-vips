@@ -6,6 +6,6 @@ module Vips
     # *   `:sequential` means requests will be top-to-bottom, but with some
     #     amount of buffering behind the read point for small non-local
     #     accesses. 
-    class Access < Symbol
-    end
+  class Access < Symbol
+  end
 end

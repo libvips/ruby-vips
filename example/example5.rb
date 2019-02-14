@@ -12,7 +12,7 @@ require 'vips'
 #Vips.set_debug true
 
 if ARGV.length < 2
-    raise "usage: #{$PROGRAM_NAME}: input-file output-file"
+  raise "usage: #{$PROGRAM_NAME}: input-file output-file"
 end
 
 im = Vips::Image.new_from_file ARGV[0], :access => :sequential

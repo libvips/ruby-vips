@@ -31,92 +31,92 @@ module GObject
     # - we separate the struct layout into a separate module to avoid repeating
     #   ourselves
 
-    class GObject
-        extend Forwardable
-        extend SingleForwardable
+  class GObject
+    extend Forwardable
+    extend SingleForwardable
 
-        def_instance_delegators :@struct, :[], :to_ptr
-        def_single_delegators :ffi_struct, :ptr
+    def_instance_delegators :@struct, :[], :to_ptr
+    def_single_delegators :ffi_struct, :ptr
 
-        # the layout of the GObject struct
-        module GObjectLayout
-            def self.included base
-                base.class_eval do
-                    layout :g_type_instance, :pointer,
-                           :ref_count, :uint,
-                           :qdata, :pointer
-                end
-            end
+      # the layout of the GObject struct
+    module GObjectLayout
+      def self.included base
+        base.class_eval do
+          layout :g_type_instance, :pointer,
+                 :ref_count, :uint,
+                 :qdata, :pointer
         end
+      end
+    end
 
-        # the struct with unref ... manage object lifetime with this
-        class ManagedStruct < FFI::ManagedStruct
-            include GObjectLayout
+      # the struct with unref ... manage object lifetime with this
+    class ManagedStruct < FFI::ManagedStruct
+      include GObjectLayout
 
-            def self.release ptr
-                # GLib::logger.debug("GObject::GObject::ManagedStruct.release") {
-                #     "unreffing #{ptr}"
-                # }
-                ::GObject::g_object_unref ptr
-            end
-        end
+      def self.release ptr
+          # GLib::logger.debug("GObject::GObject::ManagedStruct.release") {
+          #     "unreffing #{ptr}"
+          # }
+        ::GObject::g_object_unref ptr
+      end
+    end
 
-        # the plain struct ... cast with this
-        class Struct < FFI::Struct
-            include GObjectLayout
-
-        end
-
-        # don't allow ptr == nil, we never want to allocate a GObject struct
-        # ourselves, we just want to wrap GLib-allocated GObjects
-        #
-        # here we use ManagedStruct, not Struct, since this is the ref that will
-        # need the unref
-        def initialize ptr
-            # GLib::logger.debug("GObject::GObject.initialize") {"ptr = #{ptr}"}
-            @struct = ffi_managed_struct.new ptr
-        end
-
-        # access to the casting struct for this class
-        def ffi_struct
-            self.class.ffi_struct
-        end
-
-        class << self
-            def ffi_struct
-                self.const_get :Struct
-            end
-        end
-
-        # access to the managed struct for this class
-        def ffi_managed_struct
-            self.class.ffi_managed_struct
-        end
-
-        class << self
-            def ffi_managed_struct
-                self.const_get :ManagedStruct
-            end
-        end
+      # the plain struct ... cast with this
+    class Struct < FFI::Struct
+      include GObjectLayout
 
     end
 
-    class GParamSpec < FFI::Struct
-        # the first few public fields
-        layout :g_type_instance, :pointer,
-               :name, :string,
-               :flags, :uint,
-               :value_type, :GType,
-               :owner_type, :GType
+      # don't allow ptr == nil, we never want to allocate a GObject struct
+      # ourselves, we just want to wrap GLib-allocated GObjects
+      #
+      # here we use ManagedStruct, not Struct, since this is the ref that will
+      # need the unref
+    def initialize ptr
+        # GLib::logger.debug("GObject::GObject.initialize") {"ptr = #{ptr}"}
+      @struct = ffi_managed_struct.new ptr
     end
 
-    class GParamSpecPtr < FFI::Struct
-        layout :value, GParamSpec.ptr
+      # access to the casting struct for this class
+    def ffi_struct
+      self.class.ffi_struct
     end
 
-    attach_function :g_param_spec_get_blurb, [GParamSpec.ptr], :string
+    class << self
+      def ffi_struct
+        self.const_get :Struct
+      end
+    end
 
-    attach_function :g_object_ref, [:pointer], :void
-    attach_function :g_object_unref, [:pointer], :void
+      # access to the managed struct for this class
+    def ffi_managed_struct
+      self.class.ffi_managed_struct
+    end
+
+    class << self
+      def ffi_managed_struct
+        self.const_get :ManagedStruct
+      end
+    end
+
+  end
+
+  class GParamSpec < FFI::Struct
+      # the first few public fields
+    layout :g_type_instance, :pointer,
+           :name, :string,
+           :flags, :uint,
+           :value_type, :GType,
+           :owner_type, :GType
+  end
+
+  class GParamSpecPtr < FFI::Struct
+    layout :value, GParamSpec.ptr
+  end
+
+  attach_function :g_param_spec_get_blurb, [GParamSpec.ptr], :string
+
+  attach_function :g_object_ref, [:pointer], :void
+  attach_function :g_object_unref, [:pointer], :void
 
 end

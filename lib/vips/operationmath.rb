@@ -13,6 +13,6 @@ module Vips
     # * ':exp' e to the something
     # * ':exp10' 10 to the something
 
-    class OperationMath < Symbol
-    end
+  class OperationMath < Symbol
+  end
 end

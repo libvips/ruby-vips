@@ -6,6 +6,6 @@ module Vips
     # * ':real' get real part
     # * ':imag' get imaginary part
 
-    class OperationComplexget < Symbol
-    end
+  class OperationComplexget < Symbol
+  end
 end

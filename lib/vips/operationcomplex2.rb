@@ -5,6 +5,6 @@ module Vips
     #
     # * ':cross_phase' cross phase
 
-    class OperationComplex2 < Symbol
-    end
+  class OperationComplex2 < Symbol
+  end
 end

@@ -9,6 +9,6 @@ module Vips
     # * ':lshift' shift left n bits
     # * ':rshift' shift right n bits
 
-    class OperationBoolean < Symbol
-    end
+  class OperationBoolean < Symbol
+  end
 end

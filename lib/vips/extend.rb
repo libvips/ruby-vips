@@ -12,6 +12,6 @@ module Vips
     # * `:white` new pixels are white, ie. all bits are set
     # * `:background` colour set from the @background property
 
-    class Extend < Symbol
-    end
+  class Extend < Symbol
+  end
 end
