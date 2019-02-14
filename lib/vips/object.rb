@@ -78,14 +78,14 @@ module Vips
     attach_function :type_find, :vips_type_find, [:string, :string], :GType
 
     class Object < GObject::GObject
-  
+
       # print all active VipsObjects, with their reference counts. Handy for
       # debugging ruby-vips.
       def self.print_all
         GC.start
         Vips::vips_object_print_all
       end
-  
+
       # the layout of the VipsObject struct
       module ObjectLayout
         def self.included base
@@ -104,39 +104,39 @@ module Vips
           end
         end
       end
-  
+
       class Struct < GObject::GObject::Struct
         include ObjectLayout
-  
+
       end
-  
+
       class ManagedStruct < GObject::GObject::ManagedStruct
         include ObjectLayout
-  
+
       end
-  
+
       # return a pspec, or nil ... nil wil leave a message in the error log
       # which you must clear
       def get_pspec name
         pspec = GObject::GParamSpecPtr.new
         argument_class = Vips::ArgumentClassPtr.new
         argument_instance = Vips::ArgumentInstancePtr.new
-  
+
         result = Vips::vips_object_get_argument self, name,
             pspec, argument_class, argument_instance
         return nil if result != 0
-  
+
         pspec
       end
-  
+
       # return a gtype, raise an error on not found
       def get_typeof_error name
         pspec = get_pspec name
         raise Vips::Error unless pspec
-  
+
         pspec[:value][:value_type]
       end
-  
+
       # return a gtype, 0 on not found
       def get_typeof name
         pspec = get_pspec name
@@ -144,32 +144,32 @@ module Vips
           Vips::vips_error_clear
           return 0
         end
-  
+
         pspec[:value][:value_type]
       end
-  
+
       def get name
         gtype = get_typeof_error name
         gvalue = GObject::GValue.alloc
         gvalue.init gtype
         GObject::g_object_get_property self, name, gvalue
         result = gvalue.get
-  
+
         GLib::logger.debug("Vips::Object.get") {"#{name} == #{result}"}
-  
+
         return result
       end
-  
+
       def set name, value
         GLib::logger.debug("Vips::Object.set") {"#{name} = #{value}"}
-  
+
         gtype = get_typeof_error name
         gvalue = GObject::GValue.alloc
         gvalue.init gtype
         gvalue.set value
         GObject::g_object_set_property self, name, gvalue
       end
-  
+
     end
 
     class ObjectClass < FFI::Struct

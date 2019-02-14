@@ -36,7 +36,7 @@ module Vips
     attach_function :vips_operation_get_flags, [:pointer], :int
 
     class Operation < Object
-  
+
       # the layout of the VipsOperation struct
       module OperationLayout
         def self.included base
@@ -46,17 +46,17 @@ module Vips
           end
         end
       end
-  
+
       class Struct < Object::Struct
         include OperationLayout
-  
+
       end
-  
+
       class ManagedStruct < Object::ManagedStruct
         include OperationLayout
-  
+
       end
-  
+
       def initialize value
         # allow init with a pointer so we can wrap the return values from
         # things like _build
@@ -64,35 +64,35 @@ module Vips
           value = Vips::vips_operation_new value
           raise Vips::Error if value == nil
         end
-  
+
         super value
       end
-  
+
       def build
         op = Vips::vips_cache_operation_build self
         if op == nil
           raise Vips::Error
         end
-  
+
         return Operation.new op
       end
-  
+
       def argument_map &block
         fn = Proc.new do |op, pspec, argument_class, argument_instance, a, b|
           block.call pspec, argument_class, argument_instance
         end
-  
+
         Vips::vips_argument_map self, fn, nil, nil
       end
-  
+
       def get_flags
         Vips::vips_operation_get_flags self
       end
-  
+
       # not quick! try to call this infrequently
       def get_construct_args
         args = []
-  
+
         argument_map do |pspec, argument_class, argument_instance|
           flags = argument_class[:flags]
           if (flags & ARGUMENT_CONSTRUCT) != 0
@@ -103,26 +103,26 @@ module Vips
             args << [name, flags]
           end
         end
-  
+
         return args
       end
-  
+
       # search array for the first element to match a predicate ...
       # search inside subarrays and sub-hashes
       def self.find_inside object, &block
         return object if block.call object
-  
+
         if object.is_a? Enumerable
           object.find {|value| block.call value, block}
         end
-  
+
         return nil
       end
-  
+
       # expand a constant into an image
       def self.imageize match_image, value
         return value if value.is_a? Image
-  
+
         # 2D array values become tiny 2D images
         # if there's nothing to match to, we also make a 2D image
         if (value.is_a?(Array) && value[0].is_a?(Array)) ||
@@ -134,12 +134,12 @@ module Vips
           return match_image.new_from_image value
         end
       end
-  
+
       # set an operation argument, expanding constants and copying images as
       # required
       def set name, value, match_image = nil, flags = 0
         gtype = get_typeof name
-  
+
         if gtype == IMAGE_TYPE
           value = Operation::imageize match_image, value
 
@@ -150,12 +150,12 @@ module Vips
         elsif gtype == ARRAY_IMAGE_TYPE
           value = value.map {|x| Operation::imageize match_image, x}
         end
-  
+
         super name, value
       end
-  
+
         public
-  
+
       # This is the public entry point for the vips binding. {call} will run
       # any vips operation, for example:
       #
@@ -222,15 +222,15 @@ module Vips
       #
       # to add an extra band to the image where each pixel in the new band has
       # the constant value 255.
-  
+
       def self.call name, supplied, optional = {}, option_string = ""
         GLib::logger.debug("Vips::VipsOperation.call") {
           "name = #{name}, supplied = #{supplied}, " +
           "optional = #{optional}, option_string = #{option_string}"
         }
-  
+
         op = Operation.new name
-  
+
         # find and classify all the arguments the operator can take
         args = op.get_construct_args
         required_input = []
@@ -260,7 +260,7 @@ module Vips
           end
 
         end
-  
+
         # so we should have been supplied with n_required_input values, or
         # n_required_input + 1 if there's a hash of options at the end
         unless supplied.is_a? Array
@@ -276,7 +276,7 @@ module Vips
               "you supplied #{supplied.length} arguments, " +
               "but operation needs #{required_input.length}."
         end
-  
+
         # very that all supplied_optional keys are in optional_input or
         # optional_output
         optional.each do |key, value|
@@ -288,7 +288,7 @@ module Vips
                 "unknown option #{arg_name}"
           end
         end
-  
+
         # the first image arg is the thing we expand constants to match ...
         # we need to find it
         #
@@ -297,14 +297,14 @@ module Vips
         match_image = find_inside(supplied) do |value|
           value.is_a? Image
         end
-  
+
         # set any string args first so they can't be overridden
         if option_string != nil
           if Vips::vips_object_set_from_string(op, option_string) != 0
             raise Vips::Error
           end
         end
-  
+
         # set all required inputs
         required_input.each_index do |i|
           arg_name = required_input[i][0]
@@ -313,7 +313,7 @@ module Vips
 
           op.set arg_name, value, match_image, flags
         end
-  
+
         # set all optional inputs
         optional.each do |key, value|
           next if value.nil?
@@ -326,15 +326,15 @@ module Vips
             op.set arg_name, value, match_image, flags
           end
         end
-  
+
         op = op.build
-  
+
         # get all required results
         result = []
         required_output.each do |arg_name, flags|
           result << op.get(arg_name)
         end
-  
+
         # fetch all optional ones
         optional_results = {}
         optional.each do |key, value|
@@ -346,22 +346,22 @@ module Vips
             optional_results[arg_name] = op.get arg_name
           end
         end
-  
+
         result << optional_results if optional_results != {}
-  
+
         if result.length == 1
           result = result.first
         elsif result.length == 0
           result = nil
         end
-  
+
         GLib::logger.debug("Vips::Operation.call") {"result = #{result}"}
-  
+
         Vips::vips_object_unref_outputs op
-  
+
         return result
       end
-  
+
     end
 
 end
