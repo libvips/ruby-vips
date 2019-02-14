@@ -29,13 +29,13 @@ module Vips
   attach_function :vips_image_get,
       [:pointer, :string, GObject::GValue.ptr], :int
 
-    # vips_image_get_fields was added in libvips 8.5
+  # vips_image_get_fields was added in libvips 8.5
   begin
     attach_function :vips_image_get_fields, [:pointer], :pointer
 rescue FFI::NotFoundError
   end
 
-    # vips_addalpha was added in libvips 8.6
+  # vips_addalpha was added in libvips 8.6
   if Vips::at_least_libvips?(8, 6)
     attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
   end
@@ -52,7 +52,7 @@ rescue FFI::NotFoundError
 
   attach_function :nickname_find, :vips_nickname_find, [:GType], :string
 
-    # turn a raw pointer that must be freed into a self-freeing Ruby string
+  # turn a raw pointer that must be freed into a self-freeing Ruby string
   def self.p2str(pointer)
     pointer = FFI::AutoPointer.new(pointer, GLib::G_FREE)
     pointer.read_string
@@ -60,8 +60,8 @@ rescue FFI::NotFoundError
 
   public
 
-    # This class represents a libvips image. See the {Vips} module documentation
-    # for an introduction to using this class.
+  # This class represents a libvips image. See the {Vips} module documentation
+  # for an introduction to using this class.
 
   class Image < Vips::Object
     alias_method :parent_get_typeof, :get_typeof
@@ -1327,16 +1327,16 @@ rescue FFI::NotFoundError
 
   end
 
-    # This method generates yard comments for all the dynamically bound
-    # vips operations.
-    #
-    # Regenerate with something like:
-    #
-    # ```
-    # $ ruby > methods.rb
-    # require 'vips'; Vips::generate_yard
-    # ^D
-    # ```
+  # This method generates yard comments for all the dynamically bound
+  # vips operations.
+  #
+  # Regenerate with something like:
+  #
+  # ```
+  # $ ruby > methods.rb
+  # require 'vips'; Vips::generate_yard
+  # ^D
+  # ```
 
   def self.generate_yard
     # these have hand-written methods, see above

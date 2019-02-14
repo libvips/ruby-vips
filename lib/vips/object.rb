@@ -9,18 +9,18 @@ require 'ffi'
 module Vips
   private
 
-    # debugging support
+  # debugging support
   attach_function :vips_object_print_all, [], :void
 
-    # we must init these by hand, since they are usually made on first image
-    # create
+  # we must init these by hand, since they are usually made on first image
+  # create
   attach_function :vips_band_format_get_type, [], :GType
   attach_function :vips_interpretation_get_type, [], :GType
   attach_function :vips_coding_get_type, [], :GType
 
   public
 
-    # some handy gtypes
+  # some handy gtypes
   IMAGE_TYPE = GObject::g_type_from_name "VipsImage"
   ARRAY_INT_TYPE = GObject::g_type_from_name "VipsArrayInt"
   ARRAY_DOUBLE_TYPE = GObject::g_type_from_name "VipsArrayDouble"
@@ -185,7 +185,7 @@ module Vips
     # rest opaque
   end
 
-    # enum VipsArgumentFlags
+  # enum VipsArgumentFlags
   ARGUMENT_REQUIRED = 1
   ARGUMENT_CONSTRUCT = 2
   ARGUMENT_SET_ONCE = 4
@@ -222,8 +222,8 @@ module Vips
     layout :value, ArgumentInstance.ptr
   end
 
-    # just use :pointer, not VipsObject.ptr, to avoid casting gobject
-    # subclasses
+  # just use :pointer, not VipsObject.ptr, to avoid casting gobject
+  # subclasses
   attach_function :vips_object_get_argument,
       [:pointer, :string,
        GObject::GParamSpecPtr.ptr,
