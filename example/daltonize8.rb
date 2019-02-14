@@ -29,7 +29,7 @@ im = Vips::Image.new_from_file ARGV[0]
 alpha = nil
 if im.bands == 4
   alpha = im[3]
-    im = im.extract_band 0, :n => 3
+  im = im.extract_band 0, :n => 3
 end
 
 begin

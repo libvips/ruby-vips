@@ -83,12 +83,12 @@ module GLib
 
       def initialize(ptr)
         log "GLib::GObject::ManagedStruct.new: #{ptr}"
-          super
+        super
       end
 
       def self.release(ptr)
         log "GLib::GObject::ManagedStruct.release: unreffing #{ptr}"
-          GLib::g_object_unref(ptr) unless ptr.null?
+        GLib::g_object_unref(ptr) unless ptr.null?
       end
 
     end
@@ -99,7 +99,7 @@ module GLib
 
       def initialize(ptr)
         log "GLib::GObject::Struct.new: #{ptr}"
-          super
+        super
       end
 
     end
@@ -111,7 +111,7 @@ module GLib
       # need the unref
     def initialize(ptr)
       log "GLib::GObject.initialize: ptr = #{ptr}"
-        @struct = ffi_managed_struct.new(ptr)
+      @struct = ffi_managed_struct.new(ptr)
     end
 
       # access to the cast struct for this class
@@ -161,13 +161,13 @@ module Vips
 
   def self.get_error
     errstr = Vips::vips_error_buffer
-      Vips::vips_error_clear
-      errstr
+    Vips::vips_error_clear
+    errstr
   end
 
   if Vips::vips_init($0) != 0
     puts Vips::get_error
-      exit 1
+    exit 1
   end
 
   at_exit {
@@ -180,7 +180,7 @@ module Vips
   def self.showall
     if $vips_debug
       GC.start
-        vips_object_print_all
+      vips_object_print_all
     end
   end
 
@@ -214,7 +214,7 @@ module Vips
 
       def initialize(ptr)
         log "Vips::VipsObject::Struct.new: #{ptr}"
-          super
+        super
       end
 
     end
@@ -224,7 +224,7 @@ module Vips
 
       def initialize(ptr)
         log "Vips::VipsObject::ManagedStruct.new: #{ptr}"
-          super
+        super
       end
 
     end
@@ -248,7 +248,7 @@ module Vips
 
       def initialize(ptr)
         log "Vips::VipsImage::Struct.new: #{ptr}"
-          super
+        super
       end
 
     end
@@ -258,7 +258,7 @@ module Vips
 
       def initialize(ptr)
         log "Vips::VipsImage::ManagedStruct.new: #{ptr}"
-          super
+        super
       end
 
     end
@@ -276,11 +276,11 @@ end
 puts "creating image"
 begin
   x = Vips::VipsImage.new_partial
-    puts "x = #{x}"
-    puts ""
-    puts "x[:parent] = #{x[:parent]}"
-    puts ""
-    puts "x[:parent][:description] = #{x[:parent][:description]}"
-    puts ""
+  puts "x = #{x}"
+  puts ""
+  puts "x[:parent] = #{x[:parent]}"
+  puts ""
+  puts "x[:parent][:description] = #{x[:parent][:description]}"
+  puts ""
 end
 

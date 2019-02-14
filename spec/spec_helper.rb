@@ -24,7 +24,7 @@ module Spec
   module Helpers
     def reset_working!
       FileUtils.rm Dir[tmp.join('*.*')], :force => true
-        FileUtils.mkdir_p(tmp)
+      FileUtils.mkdir_p(tmp)
     end
   end
 
@@ -40,10 +40,10 @@ end
 
 RSpec.configure do |config|
   config.include Spec::Path
-    config.include Spec::Helpers
+  config.include Spec::Helpers
 
-    config.before :each do
-      reset_working!
-    end
+  config.before :each do
+    reset_working!
+  end
 
 end

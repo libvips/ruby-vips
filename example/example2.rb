@@ -18,11 +18,11 @@ n = 10000
 
 n.times do |i|
   puts ""
-    puts "call #{i} ..."
-    out = Vips::Operation.call "black", [200, 300]
-    if out.width != 200 or out.height != 300
-      puts "bad image result from black"
-    end
+  puts "call #{i} ..."
+  out = Vips::Operation.call "black", [200, 300]
+  if out.width != 200 or out.height != 300
+    puts "bad image result from black"
+  end
 end
 
 puts ""

@@ -53,9 +53,9 @@ module Vips
 
     def initialize name
       ptr = Vips::vips_interpolate_new name
-        raise Vips::Error if ptr == nil
+      raise Vips::Error if ptr == nil
 
-        super ptr
+      super ptr
     end
 
   end

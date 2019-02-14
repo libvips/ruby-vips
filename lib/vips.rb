@@ -73,26 +73,26 @@ module GLib
   def self.remove_log_handler
     if @glib_log_handler_id != 0 && @glib_log_domain
       g_log_remove_handler @glib_log_domain, @glib_log_handler_id
-        @glib_log_handler_id = nil
+      @glib_log_handler_id = nil
     end
   end
 
   def self.set_log_domain domain
     GLib::remove_log_handler
 
-      @glib_log_domain = domain
+    @glib_log_domain = domain
 
       # forward all glib logging output from this domain to a Ruby logger
-      if @glib_log_domain
-          # disable this feature for now
-          #
-          # libvips background worker threads can issue warnings, and
-          # since the main thread is blocked waiting for libvips to come back
-          # from an ffi call, you get a deadlock on the GIL
-          #
-          # to fix this, we need a way for g_log() calls from libvips workers
-          # to be returned via the main thread
-          #
+    if @glib_log_domain
+        # disable this feature for now
+        #
+        # libvips background worker threads can issue warnings, and
+        # since the main thread is blocked waiting for libvips to come back
+        # from an ffi call, you get a deadlock on the GIL
+        #
+        # to fix this, we need a way for g_log() calls from libvips workers
+        # to be returned via the main thread
+        #
 
 #             @glib_log_handler_id = g_log_set_handler @glib_log_domain,
 #                 LOG_LEVEL_DEBUG |
@@ -104,13 +104,13 @@ module GLib
 #                 LOG_FLAG_FATAL | LOG_FLAG_RECURSION,
 #                 LOG_HANDLER, nil
 
-          # we must remove any handlers on exit, since libvips may log stuff
-          # on shutdown and we don't want LOG_HANDLER to be invoked
-          # after Ruby has gone
-        at_exit {
-          GLib::remove_log_handler
-        }
-      end
+        # we must remove any handlers on exit, since libvips may log stuff
+        # on shutdown and we don't want LOG_HANDLER to be invoked
+        # after Ruby has gone
+      at_exit {
+        GLib::remove_log_handler
+      }
+    end
 
   end
 
@@ -487,7 +487,7 @@ module Vips
         @details = msg
       elsif Vips::vips_error_buffer != ""
         @details = Vips::vips_error_buffer
-          Vips::vips_error_clear
+        Vips::vips_error_clear
       else
         @details = nil
       end
@@ -575,9 +575,9 @@ module Vips
     # True if this is at least libvips x.y
   def self.at_least_libvips?(x, y)
     major = version(0)
-      minor = version(1)
+    minor = version(1)
 
-      major > x || (major == x && minor >= y)
+    major > x || (major == x && minor >= y)
   end
 
   LIBRARY_VERSION = Vips::version_string
