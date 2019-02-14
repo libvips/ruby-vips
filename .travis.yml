@@ -1,5 +1,4 @@
-dist: trusty
-sudo: false
+dist: xenial
 
 env:
   global:
@@ -33,6 +32,7 @@ addons:
       - libwebp-dev
 
 cache:
+  bundler: true
   directories:
     - $HOME/vips
 
@@ -44,6 +44,7 @@ rvm:
   - 2.3
   - 2.4
   - 2.5
+  - 2.6
 
 script: bundle exec rake spec
 
@@ -57,5 +58,5 @@ before_install:
 jobs:
   include:
     - stage: Lint
-      rvm: 2.5
+      rvm: 2.6
       script: bundle exec rake rubocop
