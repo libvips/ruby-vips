@@ -2,7 +2,7 @@
 
 require 'vips'
 
-# this makes vips keep a list of all active objects 
+# this makes vips keep a list of all active objects
 Vips::leak_set true
 
 # disable the operation cache
@@ -12,7 +12,7 @@ Vips::leak_set true
 #Vips.set_debug true
 
 ARGV.each do |filename|
-    im = Vips::Image.new_from_file filename
-    profile = im.get_value "icc-profile-data"
-    puts "profile has #{profile.length} bytes"
+  im = Vips::Image.new_from_file filename
+  profile = im.get_value "icc-profile-data"
+  puts "profile has #{profile.length} bytes"
 end
