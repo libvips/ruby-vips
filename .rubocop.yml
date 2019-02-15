@@ -5,3 +5,6 @@ AllCops:
 
 Gemspec/OrderedDependencies:
   Enabled: false
+
+Layout/AlignHash:
+  EnforcedLastArgumentHashStyle: ignore_implicit
