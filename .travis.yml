@@ -1,12 +1,11 @@
-dist: trusty
-sudo: false
+dist: xenial
 
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - VIPS_VERSION_MAJOR=8
     - VIPS_VERSION_MINOR=7
-    - VIPS_VERSION_MICRO=0
+    - VIPS_VERSION_MICRO=2
     - PATH=$HOME/vips/bin:$PATH
     - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
     - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -33,6 +32,7 @@ addons:
       - libwebp-dev
 
 cache:
+  bundler: true
   directories:
     - $HOME/vips
 
@@ -44,6 +44,7 @@ rvm:
   - 2.3
   - 2.4
   - 2.5
+  - 2.6
 
 script: bundle exec rake spec
 
@@ -57,5 +58,5 @@ before_install:
 jobs:
   include:
     - stage: Lint
-      rvm: 2.5
+      rvm: 2.6
       script: bundle exec rake rubocop

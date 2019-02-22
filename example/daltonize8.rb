@@ -28,20 +28,20 @@ im = Vips::Image.new_from_file ARGV[0]
 # remove any alpha channel before processing
 alpha = nil
 if im.bands == 4
-    alpha = im[3]
-    im = im.extract_band 0, :n => 3 
+  alpha = im[3]
+  im = im.extract_band 0, :n => 3
 end
 
 begin
-    # import to XYZ with lcms
-    # if there's no profile there, we'll fall back to the thing below
-    xyz = im.icc_import :embedded => true, :pcs => :xyz 
+  # import to XYZ with lcms
+  # if there's no profile there, we'll fall back to the thing below
+  xyz = im.icc_import :embedded => true, :pcs => :xyz
 rescue Vips::Error
-    # nope .. use the built-in converter instead
-    xyz = im.colourspace :xyz
+  # nope .. use the built-in converter instead
+  xyz = im.colourspace :xyz
 end
 
-brad = xyz.recomb xyz_to_brad 
+brad = xyz.recomb xyz_to_brad
 
 # through the Deuteranope matrix
 # we need rows to sum to 1 in Bradford space --- the matrix in the original
@@ -52,24 +52,24 @@ deut = brad.recomb [
     [0, 0, 1]
 ]
 
-xyz = deut.recomb brad_to_xyz 
+xyz = deut.recomb brad_to_xyz
 
-# .. and back to sRGB 
+# .. and back to sRGB
 rgb = xyz.colourspace :srgb
 
-# so this is the colour error 
+# so this is the colour error
 err = im - rgb
 
 # add the error back to other channels to make a compensated image
 im = im + err.recomb([
-    [0, 0, 0], 
+    [0, 0, 0],
     [0.7, 1, 0],
     [0.7, 0, 1]
 ])
 
 # reattach any alpha we saved above
 if alpha
-    im = im.bandjoin(alpha)
+  im = im.bandjoin(alpha)
 end
 
-im.write_to_file ARGV[1] 
+im.write_to_file ARGV[1]

@@ -2,3 +2,9 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   TargetRubyVersion: 2.2
+
+Gemspec/OrderedDependencies:
+  Enabled: false
+
+Layout/AlignHash:
+  EnforcedLastArgumentHashStyle: ignore_implicit

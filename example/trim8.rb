@@ -11,11 +11,11 @@ require 'vips'
 
 im = Vips::Image.new_from_file ARGV[0]
 
-# find the value of the pixel at (0, 0) ... we will search for all pixels 
+# find the value of the pixel at (0, 0) ... we will search for all pixels
 # significantly different from this
 background = im.getpoint(0, 0)
 
-# we need to smooth the image, subtract the background from every pixel, take 
+# we need to smooth the image, subtract the background from every pixel, take
 # the absolute value of the difference, then threshold
 mask = (im.median - background).abs > 10
 

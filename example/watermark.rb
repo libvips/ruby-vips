@@ -19,10 +19,10 @@ im = im.colourspace :srgb
 # we want to split the image into alpha and non-alpha so we can blend the 
 # text into the main part of the image and leave any alpha untouched
 if im.has_alpha?
-    alpha = im[im.bands - 1] 
-    im = im[0 ... im.bands - 1]
+  alpha = im[im.bands - 1] 
+  im = im[0 ... im.bands - 1]
 else
-    alpha = nil
+  alpha = nil
 end
 
 im = text.ifthenelse [255, 128, 128], im, blend: true
