@@ -2,43 +2,32 @@
 
 require 'vips'
  
-im = Vips::Image.new_from_file ARGV[0], :access => :sequential
- 
-text = Vips::Image.text ARGV[2], :width => 500, :dpi => 300
-text = (text * 0.3).cast(:uchar)
-text = text.embed 100, 100, text.width + 200, text.width + 200
+im = Vips::Image.new_from_file ARGV[0], access: :sequential
+
+# make the text overlay mask
+text = Vips::Image.text ARGV[2], width: 500, dpi: 300, font: "sans bold"
+text = text.rotate -45
+# make the text transparent
+text = (text * 0.3).cast("uchar")
+text = text.gravity :centre, 200, 200
 text = text.replicate 1 + im.width / text.width, 1 + im.height / text.height
 text = text.crop 0, 0, im.width, im.height
 
-# we want to blend into the visible part of the image and leave any alpha
-# channels untouched ... we need to split im into two parts
+# we blend in RGB colourspace, so no CMYK etc.
+im = im.colourspace :srgb
 
-# guess how many bands from the start of im contain visible colour information
-if im.bands >= 4 and im.interpretation == :cmyk
-    # cmyk image
-    n_visible_bands = 4
-    text_colour = [0, 255, 0, 0]
-elsif im.bands >= 3
-    # rgb image
-    n_visible_bands = 3
-    text_colour = [255, 0, 0]
-else
-    # mono image
-    n_visible_bands = 1
-    text_colour = 255
-end
-
-# split into image and alpha
-if im.bands - n_visible_bands > 0
-    alpha = im.extract_band n_visible_bands, :n => im.bands - n_visible_bands
-    im = im.extract_band 0, :n => n_visible_bands
+# we want to split the image into alpha and non-alpha so we can blend the 
+# text into the main part of the image and leave any alpha untouched
+if im.has_alpha?
+    alpha = im[im.bands - 1] 
+    im = im[0 ... im.bands - 1]
 else
     alpha = nil
 end
 
-marked = text.ifthenelse text_colour, im, :blend => true
+im = text.ifthenelse [255, 128, 128], im, blend: true
 
 # reattach alpha
-marked = marked.bandjoin alpha  if alpha
+im = im.bandjoin alpha if alpha
  
-marked.write_to_file ARGV[1]
+im.write_to_file ARGV[1]
