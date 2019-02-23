@@ -518,6 +518,13 @@ module Vips
   attach_function :vips_vector_set_enabled, [:int], :void
   attach_function :vips_concurrency_set, [:int], :void
 
+  # vips_foreign_get_suffixes was added in libvips 8.8
+  begin
+    attach_function :vips_foreign_get_suffixes, [], :pointer
+  rescue FFI::NotFoundError
+    nil
+  end
+
   # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
   # very useful for user code.
   def self.leak_set leak
@@ -578,6 +585,28 @@ module Vips
     minor = version(1)
 
     major > x || (major == x && minor >= y)
+  end
+
+  # Get a list of all supported file suffixes.
+  #
+  # @return [[String]] array of supported suffixes
+  def self.get_suffixes
+    # vips_foreign_get_suffixes() was added in libvips 8.8
+    return [] unless Vips.respond_to? :vips_foreign_get_suffixes
+
+    array = Vips::vips_foreign_get_suffixes
+
+    names = []
+    p = array
+    until (q = p.read_pointer).null?
+      suff = q.read_string
+      GLib::g_free q
+      names << suff if !names.include? suff
+      p += FFI::Type::POINTER.size
+    end
+    GLib::g_free array
+
+    names
   end
 
   LIBRARY_VERSION = Vips::version_string

@@ -32,7 +32,8 @@ module Vips
   # vips_image_get_fields was added in libvips 8.5
   begin
     attach_function :vips_image_get_fields, [:pointer], :pointer
-rescue FFI::NotFoundError
+  rescue FFI::NotFoundError
+    nil
   end
 
   # vips_addalpha was added in libvips 8.6
@@ -527,7 +528,7 @@ rescue FFI::NotFoundError
       result = Vips::vips_image_get self, name, gvalue
       raise Vips::Error if result != 0
 
-      return gvalue.get
+      gvalue.get
     end
 
     # Get the names of all fields on an image. Use this to loop over all
@@ -542,14 +543,14 @@ rescue FFI::NotFoundError
 
       names = []
       p = array
-      until ((q = p.read_pointer).null?)
+      until (q = p.read_pointer).null?
         names << q.read_string
         GLib::g_free q
         p += FFI::Type::POINTER.size
       end
       GLib::g_free array
 
-      return names
+      names
     end
 
     # Create a metadata item on an image of the specifed type. Ruby types
@@ -1326,6 +1327,9 @@ rescue FFI::NotFoundError
     end
 
   end
+end
+
+module Vips
 
   # This method generates yard comments for all the dynamically bound
   # vips operations.
