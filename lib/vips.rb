@@ -601,7 +601,7 @@ module Vips
     until (q = p.read_pointer).null?
       suff = q.read_string
       GLib::g_free q
-      names << suff if !names.include? suff
+      names << suff unless names.include? suff
       p += FFI::Type::POINTER.size
     end
     GLib::g_free array

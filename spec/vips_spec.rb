@@ -30,6 +30,11 @@ RSpec.describe Vips do
       Vips::cache_set_max_files 100
     end
 
+    it 'can get a set of filename suffixes' do
+      suffs = Vips::get_suffixes
+      expect(suffs.length > 10).to be true unless suffs.empty?
+    end
+
   end
 
   describe '#call' do
