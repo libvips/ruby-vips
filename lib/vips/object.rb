@@ -230,15 +230,10 @@ module Vips
        ArgumentClassPtr.ptr, ArgumentInstancePtr.ptr],
       :int
 
-  attach_function :vips_object_print_all, [], :void
-
   attach_function :vips_object_set_from_string, [:pointer, :string], :int
 
   callback :type_map_fn, [:GType, :pointer], :pointer
   attach_function :vips_type_map, [:GType, :type_map_fn, :pointer], :pointer
 
   attach_function :vips_object_get_description, [:pointer], :string
-
 end
-
-
