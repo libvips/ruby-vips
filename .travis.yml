@@ -1,6 +1,6 @@
-os:
-  - linux
-#  - osx
+language: ruby
+dist: xenial
+cache: bundler
 
 addons:
   apt:
@@ -22,25 +22,32 @@ addons:
       - libpoppler-glib-dev
       - librsvg2-dev
       - libwebp-dev
+  brew:
+    packages:
+      # A simple way to install all dependencies.
+      - vips
 
 cache:
   bundler: true
   directories: $HOME/vips/ext
 
-language: ruby
-rvm:
-  - 2.3
-  - 2.4
-  - 2.5
-  - 2.6
+matrix:
+  include:
+    - rvm: 2.4
+    - rvm: 2.5
+    - rvm: 2.6
+    - rvm: 2.6
+      os: osx
+    - rvm: truffleruby
+    - rvm: jruby-head
+    - rvm: ruby-head
+  allow_failures:
+    - rvm: truffleruby
+    - rvm: ruby-head
+    - rvm: jruby-head
 
 before_script:
-  - gem update --system
-  - gem install bundler
   - bundle exec rake ext
 
 script: 
   - bundle exec rake
-
-gemfile:
-  - Gemfile
