@@ -2,31 +2,26 @@ os:
   - linux
 #  - osx
 
-sudo: false
-
 addons:
   apt:
     packages:
       - libexpat1-dev
       - gettext
+      - libglib2.0-dev
+      - liborc-0.4-dev
+      - libfftw3-dev
       - liblcms2-dev
       - libmagickwand-dev
       - libopenexr-dev
       - libcfitsio3-dev
       - libgif-dev
-      - libgs-dev
       - libgsf-1-dev
       - libmatio-dev
       - libopenslide-dev
-      - liborc-0.4-dev
       - libpango1.0-dev
       - libpoppler-glib-dev
       - librsvg2-dev
       - libwebp-dev
-        # missing on trusty, unfortunately
-        # - libwebpmux2
-      - libfftw3-dev
-      - libglib2.0-dev
 
 cache:
   bundler: true

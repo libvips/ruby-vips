@@ -2,7 +2,7 @@
 
 require 'vips'
 
-# this makes vips keep a list of all active objects 
+# this makes vips keep a list of all active objects
 # Vips::leak_set true
 
 # disable the operation cache
@@ -12,7 +12,7 @@ require 'vips'
 #Vips.set_debug true
 
 if ARGV.length < 2
-    raise "usage: #{$PROGRAM_NAME}: input-file output-file"
+  raise "usage: #{$PROGRAM_NAME}: input-file output-file"
 end
 
 im = Vips::Image.new_from_file ARGV[0], :access => :sequential
