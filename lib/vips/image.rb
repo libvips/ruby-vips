@@ -1480,7 +1480,7 @@ module Vips
         begin
           # can fail for abstract types
           op = Vips::Operation.new nickname
-      rescue
+        rescue
         end
 
         generate_operation.(gtype, nickname, op) if op
