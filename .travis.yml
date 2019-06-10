@@ -22,10 +22,11 @@ addons:
       - libpoppler-glib-dev
       - librsvg2-dev
       - libwebp-dev
-  brew:
+  homebrew:
     packages:
       # A simple way to install all dependencies.
       - vips
+      - glib
 
 cache:
   bundler: true
