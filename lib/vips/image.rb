@@ -252,7 +252,7 @@ module Vips
     # @param name [String] the filename to load from
     # @macro vips.loadopts
     # @return [Image] the loaded image
-    def self.new_from_file name, opts = {}
+    def self.new_from_file name, **opts
       # very common, and Vips::vips_filename_get_filename will segv if we
       # pass this
       raise Vips::Error, "filename is nil" if name == nil
@@ -296,7 +296,7 @@ module Vips
     # @param option_string [String] load options as a string
     # @macro vips.loadopts
     # @return [Image] the loaded image
-    def self.new_from_buffer data, option_string, opts = {}
+    def self.new_from_buffer data, option_string, **opts
       loader = Vips::vips_foreign_find_load_buffer data, data.bytesize
       raise Vips::Error if loader == nil
 
@@ -418,7 +418,7 @@ module Vips
     #     flatten alpha against, if necessary
     #
     # @param name [String] filename to write to
-    def write_to_file name, opts = {}
+    def write_to_file name, **opts
       filename = Vips::p2str(Vips::vips_filename_get_filename name)
       option_string = Vips::p2str(Vips::vips_filename_get_options name)
       saver = Vips::vips_foreign_find_save filename
@@ -456,7 +456,7 @@ module Vips
     # @param format_string [String] save format plus options
     # @macro vips.saveopts
     # @return [String] the image saved in the specified format
-    def write_to_buffer format_string, opts = {}
+    def write_to_buffer format_string, **opts
       filename =
           Vips::p2str(Vips::vips_filename_get_filename format_string)
       option_string =
@@ -753,7 +753,7 @@ module Vips
     # See {Image#draw_rect}.
     #
     # @return [Image] modified image
-    def draw_point ink, left, top, opts = {}
+    def draw_point ink, left, top, **opts
       draw_rect ink, left, top, 1, 1, opts
     end
 
@@ -1061,7 +1061,7 @@ module Vips
     # @option opts [Vips::Interpretation] :compositing_space Composite images in this colour space
     # @option opts [Boolean] :premultiplied Images have premultiplied alpha
     # @return [Image] blended image
-    def composite overlay, mode, opts = {}
+    def composite overlay, mode, **opts
       unless overlay.is_a? Array
         overlay = [overlay]
       end
@@ -1304,7 +1304,7 @@ module Vips
     # @param opts [Hash] set of options
     # @option opts [Boolean] :blend (false) Blend smoothly between th and el
     # @return [Image] merged image
-    def ifthenelse(th, el, opts = {})
+    def ifthenelse(th, el, **opts)
       match_image = [th, el, self].find {|x| x.is_a? Vips::Image}
 
       unless th.is_a? Vips::Image
@@ -1322,7 +1322,7 @@ module Vips
     #
     # @param opts [Hash] Set of options
     # @return [Vips::Image] Output image
-    def scaleimage opts = {}
+    def scaleimage **opts
       Vips::Image.scale self, opts
     end
 
@@ -1430,7 +1430,7 @@ module Vips
       print "#{nickname}("
       print required_input.map{|x| x[:name]}.join(", ")
       print ", " if required_input.length > 0
-      puts "opts = {})"
+      puts "**opts)"
 
       puts "#   #{description.capitalize}."
 
