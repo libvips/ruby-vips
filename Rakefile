@@ -26,9 +26,3 @@ YARD::Rake::YardocTask.new do |yard|
 	require "github/markup"
 	require "redcarpet"
 end
-
-# RuboCop requires Ruby >= 2.2
-if Gem.ruby_version >= Gem::Version.new("2.2.0")
-  require 'rubocop/rake_task'
-  RuboCop::RakeTask.new
-end
