@@ -6,8 +6,9 @@
 
 * update links for new home [jcupitt]
 * various doc fixes [janko-m]
-* update docs for 8.7 [jcupitt]
 * add `Vips::get_suffixes` [jcupitt]
+* prefer options splat [ioquatix]
+* update docs for 8.8 [jcupitt]
 
 ## Version 2.0.13 (2018-8-6)
 
