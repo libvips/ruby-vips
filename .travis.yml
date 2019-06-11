@@ -54,9 +54,3 @@ gemfile:
 before_install:
   - uname -a
   - bash install-vips.sh
-
-jobs:
-  include:
-    - stage: Lint
-      rvm: 2.6
-      script: bundle exec rake rubocop

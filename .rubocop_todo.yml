@@ -84,7 +84,7 @@ Layout/ExtraSpacing:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_brackets
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   Exclude:
     - 'example/daltonize8.rb'
     - 'example/example5.rb'
@@ -101,7 +101,7 @@ Layout/IndentAssignment:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   Exclude:
     - 'lib/vips.rb'
     - 'lib/vips/image.rb'
@@ -307,12 +307,6 @@ Naming/UncommunicativeMethodParamName:
   Exclude:
     - 'lib/vips.rb'
     - 'lib/vips/image.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Performance/RedundantBlockCall:
-  Exclude:
-    - 'lib/vips/operation.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

@@ -5,7 +5,19 @@
 	Complex(1, 2)
 	=> (1+2i)
 
+- reinstate linting by appending this to .travis.yml
+
+	jobs:
+	  include:
+	    - stage: Lint
+	      rvm: 2.6
+	      script: bundle exec rake rubocop
+
 # Common operations
+
+- lint 
+
+	bundle exec rake rubocop
 
 - version bump
 
