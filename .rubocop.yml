@@ -6,5 +6,6 @@ AllCops:
 Gemspec/OrderedDependencies:
   Enabled: false
 
+# we have some long kw arg calls
 Layout/AlignHash:
   EnforcedLastArgumentHashStyle: ignore_implicit
