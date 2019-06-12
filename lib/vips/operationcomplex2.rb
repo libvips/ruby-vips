@@ -1,5 +1,4 @@
 module Vips
-
   # The type of binary complex operation to perform on an image. See
   # {Image#complex2}.
   #

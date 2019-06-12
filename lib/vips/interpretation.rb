@@ -1,5 +1,4 @@
 module Vips
-
   # How the values in an image should be interpreted. For example, a
   # three-band float image of type :lab should have its
   # pixels interpreted as coordinates in CIE Lab space.

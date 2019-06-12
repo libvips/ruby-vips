@@ -1,5 +1,4 @@
 module Vips
-
   # Pick the algorithm vips uses to decide image "interestingness". This is
   # used by {Image#smartcrop}, for example, to decide what parts of the image
   # to keep.

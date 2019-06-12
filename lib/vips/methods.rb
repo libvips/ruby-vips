@@ -230,12 +230,12 @@ module Vips
 # @!method project(**opts)
 #   Find image projections.
 #   @param opts [Hash] Set of options
-#   @return [Array<] Sums of columns, Sums of rows
+#   @return [Array<Vips::Image, Vips::Image>] Sums of columns, Sums of rows
 
 # @!method profile(**opts)
 #   Find image profiles.
 #   @param opts [Hash] Set of options
-#   @return [Array<] First non-zero pixel in column, First non-zero pixel in row
+#   @return [Array<Vips::Image, Vips::Image>] First non-zero pixel in column, First non-zero pixel in row
 
 # @!method measure(h, v, **opts)
 #   Measure a set of patches on a color chart.
@@ -260,7 +260,7 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :threshold Object threshold
 #   @option opts [Array<Double>] :background Color for background pixels
-#   @return [Array<] Left edge of image, Top edge of extract area, Width of extract area, Height of extract area
+#   @return [Array<Integer, Integer, Integer, Integer>] Left edge of image, Top edge of extract area, Width of extract area, Height of extract area
 
 # @!method copy(**opts)
 #   Copy an image.

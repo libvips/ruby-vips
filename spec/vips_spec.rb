@@ -34,7 +34,6 @@ RSpec.describe Vips do
       suffs = Vips::get_suffixes
       expect(suffs.length > 10).to be true unless suffs.empty?
     end
-
   end
 
   describe '#call' do
@@ -110,8 +109,6 @@ RSpec.describe Vips do
 
       expect{black.resize(0.4)}.to raise_exception(Vips::Error)
     end
-
   end
-
 end
 

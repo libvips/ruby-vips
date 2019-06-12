@@ -3,7 +3,6 @@ require 'vips'
 require 'tempfile'
 
 module Spec
-
   module Path
     def root
       @root ||= Pathname.new(File.expand_path('..', __FILE__))
@@ -18,7 +17,6 @@ module Spec
     end
 
     extend self
-
   end
 
   module Helpers
@@ -27,7 +25,6 @@ module Spec
       FileUtils.mkdir_p(tmp)
     end
   end
-
 end
 
 def simg(name)
@@ -45,5 +42,4 @@ RSpec.configure do |config|
   config.before :each do
     reset_working!
   end
-
 end

@@ -11,11 +11,6 @@
 
 	bundle exec rake rubocop
 
-- version bump
-
-	edit lib/vips/version.rb 
-	edit VERSION
-
 - reinstall local copy of gem after a change
 
 	bundle exec rake install
@@ -23,6 +18,11 @@
 - run test suite
 
 	bundle exec rake 
+
+- version bump
+
+	edit lib/vips/version.rb 
+	edit VERSION
 
 - regenerate autodocs
 

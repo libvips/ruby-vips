@@ -43,7 +43,7 @@ module GLib
   LOG_FLAG_FATAL              = 1 << 1
 
   # GLib log levels
-  LOG_LEVEL_ERROR             = 1 << 2       # always fatal
+  LOG_LEVEL_ERROR             = 1 << 2 # always fatal
   LOG_LEVEL_CRITICAL          = 1 << 3
   LOG_LEVEL_WARNING           = 1 << 4
   LOG_LEVEL_MESSAGE           = 1 << 5
@@ -52,12 +52,12 @@ module GLib
 
   # map glib levels to Logger::Severity
   GLIB_TO_SEVERITY = {
-      LOG_LEVEL_ERROR => Logger::ERROR,
-      LOG_LEVEL_CRITICAL => Logger::FATAL,
-      LOG_LEVEL_WARNING => Logger::WARN,
-      LOG_LEVEL_MESSAGE => Logger::UNKNOWN,
-      LOG_LEVEL_INFO => Logger::INFO,
-      LOG_LEVEL_DEBUG => Logger::DEBUG
+    LOG_LEVEL_ERROR => Logger::ERROR,
+    LOG_LEVEL_CRITICAL => Logger::FATAL,
+    LOG_LEVEL_WARNING => Logger::WARN,
+    LOG_LEVEL_MESSAGE => Logger::UNKNOWN,
+    LOG_LEVEL_INFO => Logger::INFO,
+    LOG_LEVEL_DEBUG => Logger::DEBUG
   }
   GLIB_TO_SEVERITY.default = Logger::UNKNOWN
 
@@ -111,9 +111,7 @@ module GLib
         GLib::remove_log_handler
       }
     end
-
   end
-
 end
 
 module GObject
@@ -151,7 +149,6 @@ module GObject
   GFLAGS_TYPE = g_type_from_name "GFlags"
   GSTR_TYPE = g_type_from_name "gchararray"
   GOBJECT_TYPE = g_type_from_name "GObject"
-
 end
 
 require 'vips/gobject'
@@ -614,7 +611,6 @@ module Vips
   # libvips has this arbitrary number as a sanity-check upper bound on image
   # size. It's sometimes useful for know whan calculating image ratios.
   MAX_COORD = 10000000
-
 end
 
 require 'vips/object'

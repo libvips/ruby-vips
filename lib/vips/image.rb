@@ -81,12 +81,10 @@ module Vips
 
     class Struct < Vips::Object::Struct
       include ImageLayout
-
     end
 
     class ManagedStruct < Vips::Object::ManagedStruct
       include ImageLayout
-
     end
 
     class GenericPtr < FFI::Struct
@@ -353,6 +351,7 @@ module Vips
         unless array.all? {|x| x.length == width}
           raise Vips::Error, "Array not rectangular."
         end
+
         array = array.flatten
       else
         height = 1
@@ -457,10 +456,8 @@ module Vips
     # @macro vips.saveopts
     # @return [String] the image saved in the specified format
     def write_to_buffer format_string, **opts
-      filename =
-          Vips::p2str(Vips::vips_filename_get_filename format_string)
-      option_string =
-          Vips::p2str(Vips::vips_filename_get_options format_string)
+      filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
+      option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
       saver = Vips::vips_foreign_find_save_buffer filename
       if saver == nil
         raise Vips::Error, "No known saver for '#{filename}'."
@@ -962,16 +959,16 @@ module Vips
 
       # make the template for unpack
       template = {
-          :char => 'c',
-          :uchar => 'C',
-          :short => 's_',
-          :ushort => 'S_',
-          :int => 'i_',
-          :uint => 'I_',
-          :float => 'f',
-          :double => 'd',
-          :complex => 'f',
-          :dpcomplex => 'd'
+        char: 'c',
+        uchar: 'C',
+        short: 's_',
+        ushort: 'S_',
+        int: 'i_',
+        uint: 'I_',
+        float: 'f',
+        double: 'd',
+        complex: 'f',
+        dpcomplex: 'd'
       }[format] + '*'
 
       # and unpack into something like [1, 2, 3, 4 ..]
@@ -1326,12 +1323,10 @@ module Vips
     def scaleimage **opts
       Vips::Image.scale self, opts
     end
-
   end
 end
 
 module Vips
-
   # This method generates yard comments for all the dynamically bound
   # vips operations.
   #
@@ -1349,23 +1344,24 @@ module Vips
 
     # map gobject's type names to Ruby
     map_go_to_ruby = {
-        "gboolean" => "Boolean",
-        "gint" => "Integer",
-        "gdouble" => "Float",
-        "gfloat" => "Float",
-        "gchararray" => "String",
-        "VipsImage" => "Vips::Image",
-        "VipsInterpolate" => "Vips::Interpolate",
-        "VipsArrayDouble" => "Array<Double>",
-        "VipsArrayInt" => "Array<Integer>",
-        "VipsArrayImage" => "Array<Image>",
-        "VipsArrayString" => "Array<String>",
+      "gboolean": "Boolean",
+      "gint": "Integer",
+      "gdouble": "Float",
+      "gfloat": "Float",
+      "gchararray": "String",
+      "VipsImage": "Vips::Image",
+      "VipsInterpolate": "Vips::Interpolate",
+      "VipsArrayDouble": "Array<Double>",
+      "VipsArrayInt": "Array<Integer>",
+      "VipsArrayImage": "Array<Image>",
+      "VipsArrayString": "Array<String>",
     }
 
     generate_operation = lambda do |gtype, nickname, op|
       op_flags = op.get_flags
       return if (op_flags & OPERATION_DEPRECATED) != 0
       return if no_generate.include? nickname
+
       description = Vips::vips_object_get_description op
 
       # find and classify all the arguments the operator can take
@@ -1423,7 +1419,6 @@ module Vips
             optional_output << value
           end
         end
-
       end
 
       print "# @!method "
@@ -1455,8 +1450,8 @@ module Vips
         print "nil"
       elsif required_output.length == 1
         print required_output.first[:type_name]
-      elsif
-          print "Array<"
+      else
+        print "Array<"
         print required_output.map{|x| x[:type_name]}.join(", ")
         print ">"
       end
@@ -1499,5 +1494,4 @@ module Vips
     puts "  end"
     puts "end"
   end
-
 end

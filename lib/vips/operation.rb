@@ -28,15 +28,14 @@ module Vips
   OPERATION_DEPRECATED = 8
 
   OPERATION_FLAGS = {
-      :sequential => OPERATION_SEQUENTIAL,
-      :nocache => OPERATION_NOCACHE,
-      :deprecated => OPERATION_DEPRECATED
+    sequential: OPERATION_SEQUENTIAL,
+    nocache: OPERATION_NOCACHE,
+    deprecated: OPERATION_DEPRECATED
   }
 
   attach_function :vips_operation_get_flags, [:pointer], :int
 
   class Operation < Object
-
     # the layout of the VipsOperation struct
     module OperationLayout
       def self.included base
@@ -49,12 +48,10 @@ module Vips
 
     class Struct < Object::Struct
       include OperationLayout
-
     end
 
     class ManagedStruct < Object::ManagedStruct
       include OperationLayout
-
     end
 
     def initialize value
@@ -258,7 +255,6 @@ module Vips
             optional_output[name] = flags
           end
         end
-
       end
 
       # so we should have been supplied with n_required_input values, or
@@ -361,7 +357,5 @@ module Vips
 
       return result
     end
-
   end
-
 end

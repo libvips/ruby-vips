@@ -1,5 +1,4 @@
 module Vips
-
   attach_function :vips_interpolate_new, [:string], :pointer
 
   # An interpolator. One of these can be given to operations like
@@ -30,7 +29,6 @@ module Vips
   #  ```
 
   class Interpolate < Vips::Object
-
     # the layout of the VipsInterpolate struct
     module InterpolateLayout
       def self.included base
@@ -43,12 +41,10 @@ module Vips
 
     class Struct < Vips::Object::Struct
       include InterpolateLayout
-
     end
 
     class ManagedStruct < Vips::Object::ManagedStruct
       include InterpolateLayout
-
     end
 
     def initialize name
@@ -57,6 +53,5 @@ module Vips
 
       super ptr
     end
-
   end
 end

@@ -23,9 +23,9 @@ im *= [1, 2, 1]
 # make it ourselves
 # if you are OK with scale=1, you can just pass the array directly to .conv()
 mask = Vips::Image.new_from_array [
-    [-1, -1, -1],
-    [-1, 16, -1],
-    [-1, -1, -1]], 8
+  [-1, -1, -1],
+  [-1, 16, -1],
+  [-1, -1, -1]], 8
 im = im.conv mask
 
 im.write_to_file ARGV[1]

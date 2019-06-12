@@ -5,6 +5,7 @@
 ## Version 2.0.15 (2019-6-12)
 
 * better error messages from `write_to_memory` [linkyndy]
+* fix doc generation typo for array return [jcupitt]
 
 ## Version 2.0.14 (2018-10-3)
 

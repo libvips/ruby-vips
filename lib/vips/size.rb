@@ -1,5 +1,4 @@
 module Vips
-
   # Controls whether an operation should upsize, downsize, or both up and
   # downsize.
   #

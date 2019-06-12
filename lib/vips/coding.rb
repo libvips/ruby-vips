@@ -1,5 +1,4 @@
 module Vips
-
   # How pixels are coded.
   #
   # Normally, pixels are uncoded and can be manipulated as you would expect.
