@@ -9,7 +9,7 @@
 
 require 'vips'
 
-#Vips.set_debug true
+# Vips.set_debug true
 
 # matrices to convert D65 XYZ to and from bradford cone space
 xyz_to_brad = [

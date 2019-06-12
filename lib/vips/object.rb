@@ -152,13 +152,13 @@ module Vips
       GObject::g_object_get_property self, name, gvalue
       result = gvalue.get
 
-      GLib::logger.debug("Vips::Object.get") {"#{name} == #{result}"}
+      GLib::logger.debug("Vips::Object.get") { "#{name} == #{result}" }
 
       return result
     end
 
     def set name, value
-      GLib::logger.debug("Vips::Object.set") {"#{name} = #{value}"}
+      GLib::logger.debug("Vips::Object.set") { "#{name} = #{value}" }
 
       gtype = get_typeof_error name
       gvalue = GObject::GValue.alloc

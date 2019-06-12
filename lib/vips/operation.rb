@@ -110,7 +110,7 @@ module Vips
       return object if block.call object
 
       if object.is_a? Enumerable
-        object.find {|value| block.call value, block}
+        object.find { |value| block.call value, block }
       end
 
       return nil
@@ -123,7 +123,7 @@ module Vips
       # 2D array values become tiny 2D images
       # if there's nothing to match to, we also make a 2D image
       if (value.is_a?(Array) && value[0].is_a?(Array)) ||
-          match_image == nil
+         match_image == nil
         return Image.new_from_array value
       else
         # we have a 1D array ... use that as a pixel constant and
@@ -145,7 +145,7 @@ module Vips
           value = value.copy.copy_memory
         end
       elsif gtype == ARRAY_IMAGE_TYPE
-        value = value.map {|x| Operation::imageize match_image, x}
+        value = value.map { |x| Operation::imageize match_image, x }
       end
 
       super name, value
@@ -223,7 +223,7 @@ module Vips
     def self.call name, supplied, optional = {}, option_string = ""
       GLib::logger.debug("Vips::VipsOperation.call") {
         "name = #{name}, supplied = #{supplied}, " +
-        "optional = #{optional}, option_string = #{option_string}"
+          "optional = #{optional}, option_string = #{option_string}"
       }
 
       op = Operation.new name
@@ -247,8 +247,8 @@ module Vips
 
         # MODIFY INPUT args count as OUTPUT as well
         if (flags & ARGUMENT_OUTPUT) != 0 ||
-            ((flags & ARGUMENT_INPUT) != 0 &&
-             (flags & ARGUMENT_MODIFY) != 0)
+           ((flags & ARGUMENT_INPUT) != 0 &&
+            (flags & ARGUMENT_MODIFY) != 0)
           if (flags & ARGUMENT_REQUIRED) != 0
             required_output << [name, flags]
           else
@@ -261,16 +261,16 @@ module Vips
       # n_required_input + 1 if there's a hash of options at the end
       unless supplied.is_a? Array
         raise Vips::Error, "unable to call #{name}: " +
-            "argument array is not an array"
+                           "argument array is not an array"
       end
       unless optional.is_a? Hash
         raise Vips::Error, "unable to call #{name}: " +
-            "optional arguments are not a hash"
+                           "optional arguments are not a hash"
       end
       if supplied.length != required_input.length
         raise Vips::Error, "unable to call #{name}: " +
-            "you supplied #{supplied.length} arguments, " +
-            "but operation needs #{required_input.length}."
+                           "you supplied #{supplied.length} arguments, " +
+                           "but operation needs #{required_input.length}."
       end
 
       # very that all supplied_optional keys are in optional_input or
@@ -279,9 +279,9 @@ module Vips
         arg_name = key.to_s
 
         unless optional_input.has_key?(arg_name) ||
-            optional_output.has_key?(arg_name)
+               optional_output.has_key?(arg_name)
           raise Vips::Error, "unable to call #{name}: " +
-              "unknown option #{arg_name}"
+                             "unknown option #{arg_name}"
         end
       end
 
@@ -351,7 +351,7 @@ module Vips
         result = nil
       end
 
-      GLib::logger.debug("Vips::Operation.call") {"result = #{result}"}
+      GLib::logger.debug("Vips::Operation.call") { "result = #{result}" }
 
       Vips::vips_object_unref_outputs op
 

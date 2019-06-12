@@ -19,71 +19,6 @@ Layout/AlignArguments:
     - 'lib/vips/object.rb'
     - 'spec/vips_spec.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Layout/LeadingCommentSpace:
-  Exclude:
-    - 'example/daltonize8.rb'
-    - 'example/example4.rb'
-    - 'example/example5.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: symmetrical, new_line, same_line
-Layout/MultilineArrayBraceLayout:
-  Exclude:
-    - 'example/example5.rb'
-
-# Offense count: 16
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: aligned, indented
-Layout/MultilineOperationIndentation:
-  Exclude:
-    - 'lib/vips/gvalue.rb'
-    - 'lib/vips/image.rb'
-    - 'lib/vips/operation.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Layout/RescueEnsureAlignment:
-  Exclude:
-    - 'lib/vips/image.rb'
-
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces.
-# SupportedStyles: space, no_space
-# SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceBeforeBlockBraces:
-  Exclude:
-    - 'lib/vips/image.rb'
-    - 'spec/vips_spec.rb'
-
-# Offense count: 44
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-# SupportedStyles: space, no_space
-# SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceInsideBlockBraces:
-  Exclude:
-    - 'lib/vips/gvalue.rb'
-    - 'lib/vips/image.rb'
-    - 'lib/vips/object.rb'
-    - 'lib/vips/operation.rb'
-    - 'spec/vips_spec.rb'
-
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces.
-# SupportedStyles: space, no_space, compact
-# SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceInsideHashLiteralBraces:
-  Exclude:
-    - 'lib/vips/image.rb'
-    - 'spec/vips_spec.rb'
-
 # Offense count: 9
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
@@ -182,12 +117,12 @@ Metrics/CyclomaticComplexity:
 # Offense count: 12
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:
-  Max: 126
+  Max: 150
 
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
-  Max: 129
+  Max: 150
 
 # Offense count: 4
 Metrics/PerceivedComplexity:
