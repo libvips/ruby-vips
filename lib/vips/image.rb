@@ -480,6 +480,7 @@ module Vips
     def write_to_memory
       len = Vips::SizeStruct.new
       ptr = Vips::vips_image_write_to_memory self, len
+      raise Vips::Error if ptr == nil
 
       # wrap up as an autopointer
       ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)

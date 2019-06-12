@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.15 (2019-6-12)
+
+* better error messages from `write_to_memory` [linkyndy]
+
 ## Version 2.0.14 (2018-10-3)
 
 * update links for new home [jcupitt]
