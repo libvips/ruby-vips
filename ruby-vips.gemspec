@@ -40,4 +40,3 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency "rubocop", ["~> 0.64"]
   end
 end
-

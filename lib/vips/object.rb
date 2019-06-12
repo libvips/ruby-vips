@@ -235,5 +235,3 @@ module Vips
 
   attach_function :vips_object_get_description, [:pointer], :string
 end
-
-

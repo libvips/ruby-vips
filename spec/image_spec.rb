@@ -636,4 +636,3 @@ RSpec.describe Vips::Image do
     end
   end
 end
-

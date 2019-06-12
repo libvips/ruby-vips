@@ -27,5 +27,3 @@ ARGV.each do |filename|
   thumb = via_memory(filename, 500)
   # thumb = via_files(filename, 500)
 end
-
-

@@ -17,3 +17,6 @@ Layout/CommentIndentation:
 Layout/EmptyLinesAroundClassBody:
   Exclude:
     - 'lib/vips/methods.rb'
+Layout/TrailingWhitespace:
+  Exclude:
+    - 'lib/vips/methods.rb'

@@ -30,4 +30,3 @@ module Vips
   class BlendMode < Symbol
   end
 end
-

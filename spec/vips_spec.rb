@@ -110,4 +110,3 @@ RSpec.describe Vips do
     end
   end
 end
-

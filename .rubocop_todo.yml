@@ -19,35 +19,6 @@ Layout/AlignArguments:
     - 'lib/vips/object.rb'
     - 'spec/vips_spec.rb'
 
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: final_newline, final_blank_line
-Layout/TrailingBlankLines:
-  Exclude:
-    - 'example/inheritance_with_refcount.rb'
-    - 'example/thumb.rb'
-    - 'lib/vips.rb'
-    - 'lib/vips/blend_mode.rb'
-    - 'lib/vips/object.rb'
-    - 'lib/vips/version.rb'
-    - 'ruby-vips.gemspec'
-    - 'spec/image_spec.rb'
-    - 'spec/vips_spec.rb'
-
-# Offense count: 19
-# Cop supports --auto-correct.
-# Configuration parameters: AllowInHeredoc.
-Layout/TrailingWhitespace:
-  Exclude:
-    - 'lib/vips/methods.rb'
-
-# Offense count: 1
-# Configuration parameters: AllowComments.
-Lint/HandleExceptions:
-  Exclude:
-    - 'lib/vips/image.rb'
-
 # Offense count: 5
 Lint/IneffectiveAccessModifier:
   Exclude:

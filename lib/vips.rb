@@ -618,5 +618,3 @@ require 'vips/operation'
 require 'vips/image'
 require 'vips/interpolate'
 require 'vips/version'
-
-
