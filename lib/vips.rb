@@ -385,7 +385,7 @@ require 'vips/gvalue'
 #
 # https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 #
-# You can disable wanrings by defining the `VIPS_WARNING` environment variable.
+# You can disable warnings by defining the `VIPS_WARNING` environment variable.
 # You can enable info output by defining `VIPS_INFO`.
 #
 # # Exceptions
