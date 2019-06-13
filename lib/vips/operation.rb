@@ -75,7 +75,7 @@ module Vips
     end
 
     def argument_map &block
-      fn = Proc.new do |op, pspec, argument_class, argument_instance, a, b|
+      fn = Proc.new do |_op, pspec, argument_class, argument_instance, _a, _b|
         block.call pspec, argument_class, argument_instance
       end
 
@@ -90,7 +90,7 @@ module Vips
     def get_construct_args
       args = []
 
-      argument_map do |pspec, argument_class, argument_instance|
+      argument_map do |pspec, argument_class, _argument_instance|
         flags = argument_class[:flags]
         if (flags & ARGUMENT_CONSTRUCT) != 0
           # names can include - as punctuation, but we always use _ in
@@ -234,14 +234,14 @@ module Vips
       optional_input = {}
       required_output = []
       optional_output = {}
-      args.each do |name, flags|
+      args.each do |arg_name, flags|
         next if (flags & ARGUMENT_DEPRECATED) != 0
 
         if (flags & ARGUMENT_INPUT) != 0
           if (flags & ARGUMENT_REQUIRED) != 0
-            required_input << [name, flags]
+            required_input << [arg_name, flags]
           else
-            optional_input[name] = flags
+            optional_input[arg_name] = flags
           end
         end
 
@@ -250,9 +250,9 @@ module Vips
            ((flags & ARGUMENT_INPUT) != 0 &&
             (flags & ARGUMENT_MODIFY) != 0)
           if (flags & ARGUMENT_REQUIRED) != 0
-            required_output << [name, flags]
+            required_output << [arg_name, flags]
           else
-            optional_output[name] = flags
+            optional_output[arg_name] = flags
           end
         end
       end
@@ -275,7 +275,7 @@ module Vips
 
       # very that all supplied_optional keys are in optional_input or
       # optional_output
-      optional.each do |key, value|
+      optional.each do |key, _value|
         arg_name = key.to_s
 
         unless optional_input.has_key?(arg_name) ||
@@ -327,18 +327,16 @@ module Vips
 
       # get all required results
       result = []
-      required_output.each do |arg_name, flags|
+      required_output.each do |arg_name, _flags|
         result << op.get(arg_name)
       end
 
       # fetch all optional ones
       optional_results = {}
-      optional.each do |key, value|
+      optional.each do |key, _value|
         arg_name = key.to_s
 
         if optional_output.has_key? arg_name
-          flags = optional_output[arg_name]
-
           optional_results[arg_name] = op.get arg_name
         end
       end

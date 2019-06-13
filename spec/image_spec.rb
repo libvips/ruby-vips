@@ -233,7 +233,7 @@ RSpec.describe Vips::Image do
     x &= image
     x ^= image
 
-    expect(image.avg).to eq(128)
+    expect(x.avg).to eq(0)
   end
 
   it 'has relational operator overloads with constants' do

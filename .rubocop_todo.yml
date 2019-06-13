@@ -24,25 +24,6 @@ Lint/IneffectiveAccessModifier:
   Exclude:
     - 'lib/vips/image.rb'
 
-# Offense count: 1
-Lint/ParenthesesAsGroupedExpression:
-  Exclude:
-    - 'lib/vips.rb'
-
-# Offense count: 1
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'lib/vips/operation.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'lib/vips.rb'
-    - 'lib/vips/image.rb'
-    - 'lib/vips/operation.rb'
-
 # Offense count: 7
 # Configuration parameters: ContextCreatingMethods, MethodCreatingMethods.
 Lint/UselessAccessModifier:
@@ -50,16 +31,6 @@ Lint/UselessAccessModifier:
     - 'lib/vips/image.rb'
     - 'lib/vips/object.rb'
     - 'lib/vips/operation.rb'
-
-# Offense count: 11
-Lint/UselessAssignment:
-  Exclude:
-    - 'example/example1.rb'
-    - 'example/inheritance_with_refcount.rb'
-    - 'example/thumb.rb'
-    - 'example/trim8.rb'
-    - 'lib/vips/operation.rb'
-    - 'spec/image_spec.rb'
 
 # Offense count: 6
 Lint/UselessComparison:

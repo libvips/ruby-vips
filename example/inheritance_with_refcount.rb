@@ -31,11 +31,8 @@ module GLib
   extend FFI::Library
   ffi_lib 'gobject-2.0'
 
-  # nil being the default
-  glib_log_domain = nil
-
-  def self.set_log_domain(domain)
-    glib_log_domain = domain
+  def self.set_log_domain(_domain)
+    # FIXME: this needs hooking up
   end
 
   # we have a set of things we need to inherit in different ways:

@@ -1370,7 +1370,7 @@ module Vips
       required_output = []
       optional_output = []
       member_x = nil
-      op.argument_map do |pspec, argument_class, argument_instance|
+      op.argument_map do |pspec, argument_class, _argument_instance|
         arg_flags = argument_class[:flags]
         next if (arg_flags & ARGUMENT_CONSTRUCT) == 0
         next if (arg_flags & ARGUMENT_DEPRECATED) != 0
@@ -1470,7 +1470,7 @@ module Vips
       puts ""
     end
 
-    generate_class = lambda do |gtype, a|
+    generate_class = lambda do |gtype, _|
       nickname = Vips::nickname_find gtype
 
       if nickname

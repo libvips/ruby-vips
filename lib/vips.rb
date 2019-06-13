@@ -66,7 +66,7 @@ module GLib
   @glib_log_handler_id = 0
 
   # module-level, so it's not GCd away
-  LOG_HANDLER = Proc.new do |domain, level, message, user_data|
+  LOG_HANDLER = Proc.new do |domain, level, message, _user_data|
     @logger.log(GLIB_TO_SEVERITY[level], message, domain)
   end
 
@@ -525,7 +525,7 @@ module Vips
   # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
   # very useful for user code.
   def self.leak_set leak
-    vips_leak_set (leak ? 1 : 0)
+    vips_leak_set((leak ? 1 : 0))
   end
 
   attach_function :vips_cache_set_max, [:int], :void

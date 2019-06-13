@@ -5,8 +5,7 @@ require 'vips'
 
 GLib::logger.level = Logger::DEBUG
 
-op = Vips::Operation.new "black"
+Vips::Operation.new "black"
 
-op = nil
 GC.start
 Vips::Operation.print_all
