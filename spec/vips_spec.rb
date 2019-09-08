@@ -106,7 +106,7 @@ RSpec.describe Vips do
     it 'can throw errors for failed operations' do
       black = Vips::Operation.call "black", [100, 1]
 
-      expect { black.resize(0.4) }.to raise_exception(Vips::Error)
+      expect { black.crop(10, 10, 1, 1) }.to raise_exception(Vips::Error)
     end
   end
 end

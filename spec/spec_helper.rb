@@ -1,6 +1,7 @@
 require 'vips'
 
 require 'tempfile'
+require 'pathname'
 
 module Spec
   module Path

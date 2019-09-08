@@ -6,6 +6,7 @@
 
 * better error messages from `write_to_memory` [linkyndy]
 * fix doc generation typo for array return [jcupitt]
+* update tests for libvips 8.8 [jcupitt]
 
 ## Version 2.0.14 (2018-10-3)
 
