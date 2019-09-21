@@ -15,21 +15,21 @@ require 'logger'
 # Platform notes:
 # linux:
 #   Some distros allow "libvips.so", but only if the -dev headers have been
-#   installed. To work everywhere, you must include the ABI number. 
-#   Confusingly, the file extension is not at the end. ffi adds the "lib" 
+#   installed. To work everywhere, you must include the ABI number.
+#   Confusingly, the file extension is not at the end. ffi adds the "lib"
 #   prefix.
 # mac:
 #   As linux, but the extension is at the end and is added by ffi.
 # windows:
-#   The ABI number must be included, but with a hyphen. ffi does not add a 
+#   The ABI number must be included, but with a hyphen. ffi does not add a
 #   "lib" prefix or a ".dll" suffix.
 def library_name(name, abi_number)
   if FFI::Platform.windows?
-    return "lib#{name}-#{abi_number}.dll"
+    "lib#{name}-#{abi_number}.dll"
   elsif FFI::Platform.mac?
-    return "#{name}.#{abi_number}"
+    "#{name}.#{abi_number}"
   else
-    return "#{name}.so.#{abi_number}"
+    "#{name}.so.#{abi_number}"
   end
 end
 
@@ -42,7 +42,7 @@ module GLib
 
   extend FFI::Library
 
-  ffi_lib library_name('glib-2.0', 0) 
+  ffi_lib library_name('glib-2.0', 0)
 
   attach_function :g_malloc, [:size_t], :pointer
 
@@ -134,7 +134,7 @@ end
 module GObject
   extend FFI::Library
 
-  ffi_lib library_name('gobject-2.0', 0) 
+  ffi_lib library_name('gobject-2.0', 0)
 
   # we can't just use ulong, windows has different int sizing rules
   if FFI::Platform::ADDRESS_SIZE == 64
@@ -470,7 +470,7 @@ require 'vips/gvalue'
 module Vips
   extend FFI::Library
 
-  ffi_lib library_name('vips', 42) 
+  ffi_lib library_name('vips', 42)
 
   LOG_DOMAIN = "VIPS"
   GLib::set_log_domain LOG_DOMAIN
