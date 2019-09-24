@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.16 (2019-9-21)
+
+* better library name generation [renchap]
+
 ## Version 2.0.15 (2019-6-12)
 
 * better error messages from `write_to_memory` [linkyndy]
