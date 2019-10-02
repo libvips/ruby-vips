@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.16 (2019-10-1)
+
+* add `Vips::Region` and `Region#fetch` [jcupitt]
+
 ## Version 2.0.14 (2018-10-3)
 
 * update links for new home [jcupitt]
