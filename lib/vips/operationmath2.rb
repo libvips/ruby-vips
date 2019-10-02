@@ -1,5 +1,4 @@
 module Vips
-
   # The binary math operation to perform on an image. See {Image#math2}.
   #
   # * ':pow' pow()

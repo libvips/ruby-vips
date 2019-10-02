@@ -1,5 +1,4 @@
 module Vips
-
   # When the edges of an image are extended, you can specify
   # how you want the extension done.
   # See {Image#embed}, {Image#conv}, {Image#affine} and

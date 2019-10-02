@@ -9,18 +9,18 @@
 
 require 'vips'
 
-#Vips.set_debug true
+# Vips.set_debug true
 
 # matrices to convert D65 XYZ to and from bradford cone space
 xyz_to_brad = [
-    [0.8951,  0.2664, -0.1614],
-    [-0.7502,  1.7135,  0.0367],
-    [0.0389, -0.0685,  1.0296]
+  [0.8951, 0.2664, -0.1614],
+  [-0.7502, 1.7135, 0.0367],
+  [0.0389, -0.0685, 1.0296]
 ]
 brad_to_xyz = [
-    [0.987, -0.147, 0.16],
-    [0.432, 0.5184, 0.0493],
-    [-0.0085, 0.04, 0.968]
+  [0.987, -0.147, 0.16],
+  [0.432, 0.5184, 0.0493],
+  [-0.0085, 0.04, 0.968]
 ]
 
 im = Vips::Image.new_from_file ARGV[0]
@@ -47,9 +47,9 @@ brad = xyz.recomb xyz_to_brad
 # we need rows to sum to 1 in Bradford space --- the matrix in the original
 # Python code sums to 1.742
 deut = brad.recomb [
-    [1, 0, 0],
-    [0.7, 0, 0.3],
-    [0, 0, 1]
+  [1, 0, 0],
+  [0.7, 0, 0.3],
+  [0, 0, 1]
 ]
 
 xyz = deut.recomb brad_to_xyz
@@ -61,11 +61,9 @@ rgb = xyz.colourspace :srgb
 err = im - rgb
 
 # add the error back to other channels to make a compensated image
-im = im + err.recomb([
-    [0, 0, 0],
-    [0.7, 1, 0],
-    [0.7, 0, 1]
-])
+im = im + err.recomb([[0, 0, 0],
+                      [0.7, 1, 0],
+                      [0.7, 0, 1]])
 
 # reattach any alpha we saved above
 if alpha

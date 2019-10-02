@@ -6,7 +6,6 @@
 require 'ffi'
 
 module GObject
-
   # Represent a GValue. Example use:
   #
   # ```ruby
@@ -134,7 +133,7 @@ module GObject
         ptr.write_array_of_pointer value
 
         # the gvalue needs a ref on each of the images
-        value.each {|image| ::GObject::g_object_ref image}
+        value.each { |image| ::GObject::g_object_ref image }
 
       when Vips::BLOB_TYPE
         len = value.bytesize
@@ -156,8 +155,7 @@ module GObject
 
         else
           raise Vips::Error, "unimplemented gtype for set: " +
-              "#{::GObject::g_type_name gtype} (#{gtype})"
-
+                             "#{::GObject::g_type_name gtype} (#{gtype})"
         end
       end
     end
@@ -233,8 +231,7 @@ module GObject
 
         else
           raise Vips::Error, "unimplemented gtype for get: " +
-              "#{::GObject::g_type_name gtype} (#{gtype})"
-
+                             "#{::GObject::g_type_name gtype} (#{gtype})"
         end
       end
 
@@ -243,9 +240,7 @@ module GObject
       # }
 
       return result
-
     end
-
   end
 
   attach_function :g_value_init, [GValue.ptr, :GType], :void
@@ -277,5 +272,4 @@ module GObject
       [:pointer, :string, GValue.ptr], :void
   attach_function :g_object_get_property,
       [:pointer, :string, GValue.ptr], :void
-
 end

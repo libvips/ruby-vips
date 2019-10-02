@@ -23,16 +23,16 @@ mask = (im.median - background).abs > 10
 # direction
 columns, rows = mask.project
 
-first_column, first_row = columns.profile
+_first_column, first_row = columns.profile
 left = first_row.min
 
-first_column, first_row = columns.fliphor.profile
+_first_column, first_row = columns.fliphor.profile
 right = columns.width - first_row.min
 
-first_column, first_row = rows.profile
+first_column, _first_row = rows.profile
 top = first_column.min
 
-first_column, first_row = rows.flipver.profile
+first_column, _first_row = rows.flipver.profile
 bottom = rows.height - first_column.min
 
 # and now crop the original image

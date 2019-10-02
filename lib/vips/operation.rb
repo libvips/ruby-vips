@@ -28,15 +28,14 @@ module Vips
   OPERATION_DEPRECATED = 8
 
   OPERATION_FLAGS = {
-      :sequential => OPERATION_SEQUENTIAL,
-      :nocache => OPERATION_NOCACHE,
-      :deprecated => OPERATION_DEPRECATED
+    sequential: OPERATION_SEQUENTIAL,
+    nocache: OPERATION_NOCACHE,
+    deprecated: OPERATION_DEPRECATED
   }
 
   attach_function :vips_operation_get_flags, [:pointer], :int
 
   class Operation < Object
-
     # the layout of the VipsOperation struct
     module OperationLayout
       def self.included base
@@ -49,12 +48,10 @@ module Vips
 
     class Struct < Object::Struct
       include OperationLayout
-
     end
 
     class ManagedStruct < Object::ManagedStruct
       include OperationLayout
-
     end
 
     def initialize value
@@ -78,7 +75,7 @@ module Vips
     end
 
     def argument_map &block
-      fn = Proc.new do |op, pspec, argument_class, argument_instance, a, b|
+      fn = Proc.new do |_op, pspec, argument_class, argument_instance, _a, _b|
         block.call pspec, argument_class, argument_instance
       end
 
@@ -93,7 +90,7 @@ module Vips
     def get_construct_args
       args = []
 
-      argument_map do |pspec, argument_class, argument_instance|
+      argument_map do |pspec, argument_class, _argument_instance|
         flags = argument_class[:flags]
         if (flags & ARGUMENT_CONSTRUCT) != 0
           # names can include - as punctuation, but we always use _ in
@@ -113,7 +110,7 @@ module Vips
       return object if block.call object
 
       if object.is_a? Enumerable
-        object.find {|value| block.call value, block}
+        object.find { |value| block.call value, block }
       end
 
       return nil
@@ -126,7 +123,7 @@ module Vips
       # 2D array values become tiny 2D images
       # if there's nothing to match to, we also make a 2D image
       if (value.is_a?(Array) && value[0].is_a?(Array)) ||
-          match_image == nil
+         match_image == nil
         return Image.new_from_array value
       else
         # we have a 1D array ... use that as a pixel constant and
@@ -148,7 +145,7 @@ module Vips
           value = value.copy.copy_memory
         end
       elsif gtype == ARRAY_IMAGE_TYPE
-        value = value.map {|x| Operation::imageize match_image, x}
+        value = value.map { |x| Operation::imageize match_image, x }
       end
 
       super name, value
@@ -226,7 +223,7 @@ module Vips
     def self.call name, supplied, optional = {}, option_string = ""
       GLib::logger.debug("Vips::VipsOperation.call") {
         "name = #{name}, supplied = #{supplied}, " +
-        "optional = #{optional}, option_string = #{option_string}"
+          "optional = #{optional}, option_string = #{option_string}"
       }
 
       op = Operation.new name
@@ -237,55 +234,54 @@ module Vips
       optional_input = {}
       required_output = []
       optional_output = {}
-      args.each do |name, flags|
+      args.each do |arg_name, flags|
         next if (flags & ARGUMENT_DEPRECATED) != 0
 
         if (flags & ARGUMENT_INPUT) != 0
           if (flags & ARGUMENT_REQUIRED) != 0
-            required_input << [name, flags]
+            required_input << [arg_name, flags]
           else
-            optional_input[name] = flags
+            optional_input[arg_name] = flags
           end
         end
 
         # MODIFY INPUT args count as OUTPUT as well
         if (flags & ARGUMENT_OUTPUT) != 0 ||
-            ((flags & ARGUMENT_INPUT) != 0 &&
-             (flags & ARGUMENT_MODIFY) != 0)
+           ((flags & ARGUMENT_INPUT) != 0 &&
+            (flags & ARGUMENT_MODIFY) != 0)
           if (flags & ARGUMENT_REQUIRED) != 0
-            required_output << [name, flags]
+            required_output << [arg_name, flags]
           else
-            optional_output[name] = flags
+            optional_output[arg_name] = flags
           end
         end
-
       end
 
       # so we should have been supplied with n_required_input values, or
       # n_required_input + 1 if there's a hash of options at the end
       unless supplied.is_a? Array
         raise Vips::Error, "unable to call #{name}: " +
-            "argument array is not an array"
+                           "argument array is not an array"
       end
       unless optional.is_a? Hash
         raise Vips::Error, "unable to call #{name}: " +
-            "optional arguments are not a hash"
+                           "optional arguments are not a hash"
       end
       if supplied.length != required_input.length
         raise Vips::Error, "unable to call #{name}: " +
-            "you supplied #{supplied.length} arguments, " +
-            "but operation needs #{required_input.length}."
+                           "you supplied #{supplied.length} arguments, " +
+                           "but operation needs #{required_input.length}."
       end
 
       # very that all supplied_optional keys are in optional_input or
       # optional_output
-      optional.each do |key, value|
+      optional.each do |key, _value|
         arg_name = key.to_s
 
         unless optional_input.has_key?(arg_name) ||
-            optional_output.has_key?(arg_name)
+               optional_output.has_key?(arg_name)
           raise Vips::Error, "unable to call #{name}: " +
-              "unknown option #{arg_name}"
+                             "unknown option #{arg_name}"
         end
       end
 
@@ -331,18 +327,16 @@ module Vips
 
       # get all required results
       result = []
-      required_output.each do |arg_name, flags|
+      required_output.each do |arg_name, _flags|
         result << op.get(arg_name)
       end
 
       # fetch all optional ones
       optional_results = {}
-      optional.each do |key, value|
+      optional.each do |key, _value|
         arg_name = key.to_s
 
         if optional_output.has_key? arg_name
-          flags = optional_output[arg_name]
-
           optional_results[arg_name] = op.get arg_name
         end
       end
@@ -355,13 +349,11 @@ module Vips
         result = nil
       end
 
-      GLib::logger.debug("Vips::Operation.call") {"result = #{result}"}
+      GLib::logger.debug("Vips::Operation.call") { "result = #{result}" }
 
       Vips::vips_object_unref_outputs op
 
       return result
     end
-
   end
-
 end

@@ -10,6 +10,29 @@ require 'logger'
 # This module uses FFI to make a simple layer over the glib and gobject
 # libraries.
 
+# Generate a library name for ffi.
+#
+# Platform notes:
+# linux:
+#   Some distros allow "libvips.so", but only if the -dev headers have been
+#   installed. To work everywhere, you must include the ABI number.
+#   Confusingly, the file extension is not at the end. ffi adds the "lib"
+#   prefix.
+# mac:
+#   As linux, but the extension is at the end and is added by ffi.
+# windows:
+#   The ABI number must be included, but with a hyphen. ffi does not add a
+#   "lib" prefix or a ".dll" suffix.
+def library_name(name, abi_number)
+  if FFI::Platform.windows?
+    "lib#{name}-#{abi_number}.dll"
+  elsif FFI::Platform.mac?
+    "#{name}.#{abi_number}"
+  else
+    "#{name}.so.#{abi_number}"
+  end
+end
+
 module GLib
   class << self
     attr_accessor :logger
@@ -19,13 +42,7 @@ module GLib
 
   extend FFI::Library
 
-  if FFI::Platform.windows?
-    glib_libname = 'libglib-2.0-0.dll'
-  else
-    glib_libname = 'glib-2.0'
-  end
-
-  ffi_lib glib_libname
+  ffi_lib library_name('glib-2.0', 0)
 
   attach_function :g_malloc, [:size_t], :pointer
 
@@ -43,7 +60,7 @@ module GLib
   LOG_FLAG_FATAL              = 1 << 1
 
   # GLib log levels
-  LOG_LEVEL_ERROR             = 1 << 2       # always fatal
+  LOG_LEVEL_ERROR             = 1 << 2 # always fatal
   LOG_LEVEL_CRITICAL          = 1 << 3
   LOG_LEVEL_WARNING           = 1 << 4
   LOG_LEVEL_MESSAGE           = 1 << 5
@@ -52,12 +69,12 @@ module GLib
 
   # map glib levels to Logger::Severity
   GLIB_TO_SEVERITY = {
-      LOG_LEVEL_ERROR => Logger::ERROR,
-      LOG_LEVEL_CRITICAL => Logger::FATAL,
-      LOG_LEVEL_WARNING => Logger::WARN,
-      LOG_LEVEL_MESSAGE => Logger::UNKNOWN,
-      LOG_LEVEL_INFO => Logger::INFO,
-      LOG_LEVEL_DEBUG => Logger::DEBUG
+    LOG_LEVEL_ERROR => Logger::ERROR,
+    LOG_LEVEL_CRITICAL => Logger::FATAL,
+    LOG_LEVEL_WARNING => Logger::WARN,
+    LOG_LEVEL_MESSAGE => Logger::UNKNOWN,
+    LOG_LEVEL_INFO => Logger::INFO,
+    LOG_LEVEL_DEBUG => Logger::DEBUG
   }
   GLIB_TO_SEVERITY.default = Logger::UNKNOWN
 
@@ -66,7 +83,7 @@ module GLib
   @glib_log_handler_id = 0
 
   # module-level, so it's not GCd away
-  LOG_HANDLER = Proc.new do |domain, level, message, user_data|
+  LOG_HANDLER = Proc.new do |domain, level, message, _user_data|
     @logger.log(GLIB_TO_SEVERITY[level], message, domain)
   end
 
@@ -111,21 +128,13 @@ module GLib
         GLib::remove_log_handler
       }
     end
-
   end
-
 end
 
 module GObject
   extend FFI::Library
 
-  if FFI::Platform.windows?
-    gobject_libname = 'libgobject-2.0-0.dll'
-  else
-    gobject_libname = 'gobject-2.0'
-  end
-
-  ffi_lib gobject_libname
+  ffi_lib library_name('gobject-2.0', 0)
 
   # we can't just use ulong, windows has different int sizing rules
   if FFI::Platform::ADDRESS_SIZE == 64
@@ -151,7 +160,6 @@ module GObject
   GFLAGS_TYPE = g_type_from_name "GFlags"
   GSTR_TYPE = g_type_from_name "gchararray"
   GOBJECT_TYPE = g_type_from_name "GObject"
-
 end
 
 require 'vips/gobject'
@@ -385,7 +393,7 @@ require 'vips/gvalue'
 #
 # https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 #
-# You can disable wanrings by defining the `VIPS_WARNING` environment variable.
+# You can disable warnings by defining the `VIPS_WARNING` environment variable.
 # You can enable info output by defining `VIPS_INFO`.
 #
 # # Exceptions
@@ -462,13 +470,7 @@ require 'vips/gvalue'
 module Vips
   extend FFI::Library
 
-  if FFI::Platform.windows?
-    vips_libname = 'libvips-42.dll'
-  else
-    vips_libname = 'vips'
-  end
-
-  ffi_lib vips_libname
+  ffi_lib library_name('vips', 42)
 
   LOG_DOMAIN = "VIPS"
   GLib::set_log_domain LOG_DOMAIN
@@ -528,7 +530,7 @@ module Vips
   # Turn libvips leak testing on and off. Handy for debugging ruby-vips, not
   # very useful for user code.
   def self.leak_set leak
-    vips_leak_set (leak ? 1 : 0)
+    vips_leak_set((leak ? 1 : 0))
   end
 
   attach_function :vips_cache_set_max, [:int], :void
@@ -614,7 +616,6 @@ module Vips
   # libvips has this arbitrary number as a sanity-check upper bound on image
   # size. It's sometimes useful for know whan calculating image ratios.
   MAX_COORD = 10000000
-
 end
 
 require 'vips/object'
@@ -622,5 +623,3 @@ require 'vips/operation'
 require 'vips/image'
 require 'vips/interpolate'
 require 'vips/version'
-
-

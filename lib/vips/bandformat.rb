@@ -1,5 +1,4 @@
 module Vips
-
   # The format used for each band element. Each corresponds to a native C type
   # for the current machine.
   #
@@ -16,5 +15,4 @@ module Vips
   # * `:dpcomplex` double complex (two double) format
   class BandFormat < Symbol
   end
-
 end

@@ -1,5 +1,4 @@
 module Vips
-
   # Various fixed 90 degree rotation angles. See {Image#rot}.
   #
   # * `:d0` no rotate

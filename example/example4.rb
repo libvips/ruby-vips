@@ -6,10 +6,10 @@ require 'vips'
 Vips::leak_set true
 
 # disable the operation cache
-#Vips::cache_set_max 0
+# Vips::cache_set_max 0
 
 # turn on debug logging
-#Vips.set_debug true
+# Vips.set_debug true
 
 ARGV.each do |filename|
   im = Vips::Image.new_from_file filename

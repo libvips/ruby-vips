@@ -24,8 +24,6 @@ end
 
 ARGV.each do |filename|
   puts "processing #{filename} ..."
-  thumb = via_memory(filename, 500)
-  # thumb = via_files(filename, 500)
+  _thumb = via_memory(filename, 500)
+  # _thumb = via_files(filename, 500)
 end
-
-

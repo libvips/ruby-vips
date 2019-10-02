@@ -78,7 +78,6 @@ module Vips
   attach_function :type_find, :vips_type_find, [:string, :string], :GType
 
   class Object < GObject::GObject
-
     # print all active VipsObjects, with their reference counts. Handy for
     # debugging ruby-vips.
     def self.print_all
@@ -107,12 +106,10 @@ module Vips
 
     class Struct < GObject::GObject::Struct
       include ObjectLayout
-
     end
 
     class ManagedStruct < GObject::GObject::ManagedStruct
       include ObjectLayout
-
     end
 
     # return a pspec, or nil ... nil wil leave a message in the error log
@@ -155,13 +152,13 @@ module Vips
       GObject::g_object_get_property self, name, gvalue
       result = gvalue.get
 
-      GLib::logger.debug("Vips::Object.get") {"#{name} == #{result}"}
+      GLib::logger.debug("Vips::Object.get") { "#{name} == #{result}" }
 
       return result
     end
 
     def set name, value
-      GLib::logger.debug("Vips::Object.set") {"#{name} = #{value}"}
+      GLib::logger.debug("Vips::Object.set") { "#{name} = #{value}" }
 
       gtype = get_typeof_error name
       gvalue = GObject::GValue.alloc
@@ -169,7 +166,6 @@ module Vips
       gvalue.set value
       GObject::g_object_set_property self, name, gvalue
     end
-
   end
 
   class ObjectClass < FFI::Struct
@@ -196,14 +192,14 @@ module Vips
   ARGUMENT_MODIFY = 128
 
   ARGUMENT_FLAGS = {
-      :required => ARGUMENT_REQUIRED,
-      :construct => ARGUMENT_CONSTRUCT,
-      :set_once => ARGUMENT_SET_ONCE,
-      :set_always => ARGUMENT_SET_ALWAYS,
-      :input => ARGUMENT_INPUT,
-      :output => ARGUMENT_OUTPUT,
-      :deprecated => ARGUMENT_DEPRECATED,
-      :modify => ARGUMENT_MODIFY
+    required: ARGUMENT_REQUIRED,
+    construct: ARGUMENT_CONSTRUCT,
+    set_once: ARGUMENT_SET_ONCE,
+    set_always: ARGUMENT_SET_ALWAYS,
+    input: ARGUMENT_INPUT,
+    output: ARGUMENT_OUTPUT,
+    deprecated: ARGUMENT_DEPRECATED,
+    modify: ARGUMENT_MODIFY
   }
 
   class ArgumentClass < Argument
@@ -238,7 +234,4 @@ module Vips
   attach_function :vips_type_map, [:GType, :type_map_fn, :pointer], :pointer
 
   attach_function :vips_object_get_description, [:pointer], :string
-
 end
-
-

@@ -31,11 +31,8 @@ module GLib
   extend FFI::Library
   ffi_lib 'gobject-2.0'
 
-  # nil being the default
-  glib_log_domain = nil
-
-  def self.set_log_domain(domain)
-    glib_log_domain = domain
+  def self.set_log_domain(_domain)
+    # FIXME: this needs hooking up
   end
 
   # we have a set of things we need to inherit in different ways:
@@ -90,7 +87,6 @@ module GLib
         log "GLib::GObject::ManagedStruct.release: unreffing #{ptr}"
         GLib::g_object_unref(ptr) unless ptr.null?
       end
-
     end
 
     # the plain struct ... cast with this
@@ -101,7 +97,6 @@ module GLib
         log "GLib::GObject::Struct.new: #{ptr}"
         super
       end
-
     end
 
     # don't allow ptr == nil, we never want to allocate a GObject struct
@@ -135,12 +130,10 @@ module GLib
         self.const_get(:ManagedStruct)
       end
     end
-
   end
 
   # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
   typedef :ulong, :GType
-
 end
 
 module Vips
@@ -189,7 +182,6 @@ module Vips
   end
 
   class VipsObject < GLib::GObject
-
     # the layout of the VipsObject struct
     module VipsObjectLayout
       def self.included(base)
@@ -216,7 +208,6 @@ module Vips
         log "Vips::VipsObject::Struct.new: #{ptr}"
         super
       end
-
     end
 
     class ManagedStruct < GLib::GObject::ManagedStruct
@@ -226,13 +217,10 @@ module Vips
         log "Vips::VipsObject::ManagedStruct.new: #{ptr}"
         super
       end
-
     end
-
   end
 
   class VipsImage < VipsObject
-
     # the layout of the VipsImage struct
     module VipsImageLayout
       def self.included(base)
@@ -250,7 +238,6 @@ module Vips
         log "Vips::VipsImage::Struct.new: #{ptr}"
         super
       end
-
     end
 
     class ManagedStruct < VipsObject::ManagedStruct
@@ -260,17 +247,14 @@ module Vips
         log "Vips::VipsImage::ManagedStruct.new: #{ptr}"
         super
       end
-
     end
 
     def self.new_partial
       VipsImage.new(Vips::vips_image_new)
     end
-
   end
 
   attach_function :vips_image_new, [], :pointer
-
 end
 
 puts "creating image"
@@ -283,4 +267,3 @@ begin
   puts "x[:parent][:description] = #{x[:parent][:description]}"
   puts ""
 end
-

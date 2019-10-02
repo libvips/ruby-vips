@@ -1,5 +1,4 @@
 module Vips
-
   # Blend mode to use when compositing images. See {Image#composite}.
   #
   # `:clear` - where the second object is drawn, the first is removed
@@ -31,4 +30,3 @@ module Vips
   class BlendMode < Symbol
   end
 end
-

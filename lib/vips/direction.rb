@@ -1,5 +1,4 @@
 module Vips
-
   # Operations like {Image#flip} need to be told whether to flip
   # left-right or top-bottom.
   #

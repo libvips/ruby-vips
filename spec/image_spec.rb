@@ -5,7 +5,6 @@ def has_jpeg?
 end
 
 RSpec.describe Vips::Image do
-
   it 'can save an image to a file' do
     filename = timg 'x.v'
 
@@ -76,9 +75,9 @@ RSpec.describe Vips::Image do
     expect(im.bands).to eq(3)
 
     im = im.conv [
-        [0.11, 0.11, 0.11],
-        [0.11, 0.11, 0.11],
-        [0.11, 0.11, 0.11]
+      [0.11, 0.11, 0.11],
+      [0.11, 0.11, 0.11],
+      [0.11, 0.11, 0.11]
     ], :precision => :float
 
     expect(im.width).to eq(16)
@@ -234,7 +233,7 @@ RSpec.describe Vips::Image do
     x &= image
     x ^= image
 
-    expect(image.avg).to eq(128)
+    expect(x.avg).to eq(0)
   end
 
   it 'has relational operator overloads with constants' do
@@ -329,7 +328,6 @@ RSpec.describe Vips::Image do
     expect(x[3].avg).to eq(1)
     expect(x[4].avg).to eq(2)
     expect(x.bands).to eq(5)
-
   end
 
   if Vips::at_least_libvips?(8, 6)
@@ -345,7 +343,6 @@ RSpec.describe Vips::Image do
       expect(pixel[1]).to be_within(0.1).of(133)
       expect(pixel[2]).to be_within(0.1).of(135)
       expect(pixel[3]).to eq(255)
-
     end
   end
 
@@ -365,7 +362,6 @@ RSpec.describe Vips::Image do
     expect(v).to eq(12)
     expect(x).to eq(10)
     expect(y).to eq(12)
-
   end
 
   it 'can form complex images' do
@@ -457,9 +453,9 @@ RSpec.describe Vips::Image do
     a = Vips::Image.black(16, 16)
     a = a.draw_rect 255, 10, 12, 1, 1
     mask = Vips::Image.new_from_array [
-        [128, 255, 128],
-        [255, 255, 255],
-        [128, 255, 128]
+      [128, 255, 128],
+      [255, 255, 255],
+      [128, 255, 128]
     ]
     im = a.erode mask
 
@@ -470,9 +466,9 @@ RSpec.describe Vips::Image do
     a = Vips::Image.black(16, 16)
     a = a.draw_rect 255, 10, 12, 1, 1
     mask = Vips::Image.new_from_array [
-        [128, 255, 128],
-        [255, 255, 255],
-        [128, 255, 128]
+      [128, 255, 128],
+      [255, 255, 255],
+      [128, 255, 128]
     ]
     im = a.dilate mask
 
@@ -640,4 +636,3 @@ RSpec.describe Vips::Image do
     end
   end
 end
-

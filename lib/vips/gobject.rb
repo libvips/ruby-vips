@@ -8,7 +8,6 @@ require 'ffi'
 require 'forwardable'
 
 module GObject
-
   # we have a number of things we need to inherit in different ways:
   #
   # - we want to be able to subclass GObject in Ruby in a simple way
@@ -64,7 +63,6 @@ module GObject
     # the plain struct ... cast with this
     class Struct < FFI::Struct
       include GObjectLayout
-
     end
 
     # don't allow ptr == nil, we never want to allocate a GObject struct
@@ -98,7 +96,6 @@ module GObject
         self.const_get :ManagedStruct
       end
     end
-
   end
 
   class GParamSpec < FFI::Struct
@@ -118,5 +115,4 @@ module GObject
 
   attach_function :g_object_ref, [:pointer], :void
   attach_function :g_object_unref, [:pointer], :void
-
 end

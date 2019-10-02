@@ -1,5 +1,4 @@
 module Vips
-
   # The math operation to perform on an image. See {Image#math}.
   #
   # * ':sin' sin(), angles in degrees
