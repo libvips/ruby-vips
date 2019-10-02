@@ -1,5 +1,12 @@
-module Vips
+# This module provides an interface to the top level bits of libvips
+# via ruby-ffi.
+#
+# Author::    John Cupitt  (mailto:jcupitt@gmail.com)
+# License::   MIT
 
+require 'ffi'
+
+module Vips
   attach_function :vips_region_new, [:pointer], :pointer
 
   if Vips::at_least_libvips?(8, 8)
@@ -14,15 +21,13 @@ module Vips
   # For example:
   #
   #  ```ruby
-  #  region = Vips::Region.new(image) 
-  #  pixels = region.fetch(10, 10, 100, 100) 
+  #  region = Vips::Region.new(image)
+  #  pixels = region.fetch(10, 10, 100, 100)
   #  ```
-
   class Region < Vips::Object
-
-    # the layout of the VipsRegion struct
+    # The layout of the VipsRegion struct.
     module RegionLayout
-      def self.included base
+      def self.included(base)
         base.class_eval do
           layout :parent, Vips::Object::Struct
           # rest opaque
@@ -32,17 +37,15 @@ module Vips
 
     class Struct < Vips::Object::Struct
       include RegionLayout
-
     end
 
     class ManagedStruct < Vips::Object::ManagedStruct
       include RegionLayout
-
     end
 
-    def initialize name
+    def initialize(name)
       ptr = Vips::vips_region_new name
-      raise Vips::Error if ptr == nil
+      raise Vips::Error if ptr.nil?
 
       super ptr
     end
@@ -55,17 +58,16 @@ module Vips
       Vips::vips_region_height self
     end
 
-    # Fetch a region filled with pixel data. 
+    # Fetch a region filled with pixel data.
     def fetch(left, top, width, height)
       len = Vips::SizeStruct.new
       ptr = Vips::vips_region_fetch self, left, top, width, height, len
-      raise Vips::Error if ptr == nil
+      raise Vips::Error if ptr.nil?
 
       # wrap up as an autopointer
       ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)
 
       ptr.get_bytes 0, len[:value]
     end
-
   end
 end

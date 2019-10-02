@@ -2,21 +2,16 @@
 
 ## master
 
-<<<<<<< HEAD
-## Version 2.0.16 (2019-10-1)
-
-* add `Vips::Region` and `Region#fetch` [jcupitt]
-=======
 ## Version 2.0.16 (2019-9-21)
 
 * better library name generation [renchap]
+* add `Vips::Region` and `Region#fetch` [jcupitt]
 
 ## Version 2.0.15 (2019-6-12)
 
 * better error messages from `write_to_memory` [linkyndy]
 * fix doc generation typo for array return [jcupitt]
 * update tests for libvips 8.8 [jcupitt]
->>>>>>> master
 
 ## Version 2.0.14 (2018-10-3)
 
