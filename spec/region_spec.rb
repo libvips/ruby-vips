@@ -25,6 +25,7 @@ RSpec.describe Vips::Region do
       region = Vips::Region.new image
       pixel_data = region.fetch 10, 20, 30, 40
 
+      expect(pixel_data)
       expect(region.width == 30)
       expect(region.height == 40)
     end
