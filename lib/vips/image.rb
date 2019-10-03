@@ -219,13 +219,13 @@ module Vips
     # load options, for example:
     #
     # ```
-    # image = Vips::new_from_file "fred.jpg[shrink=2]"
+    # image = Vips::Image.new_from_file "fred.jpg[shrink=2]"
     # ```
     #
     # You can also supply options as a hash, for example:
     #
     # ```
-    # image = Vips::new_from_file "fred.jpg", shrink: 2
+    # image = Vips::Image.new_from_file "fred.jpg", shrink: 2
     # ```
     #
     # The full set of options available depend upon the load operation that
