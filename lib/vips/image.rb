@@ -317,13 +317,13 @@ module Vips
     # For example:
     #
     # ```
-    # image = Vips::new_from_array [1, 2, 3]
+    # image = Vips::Image.new_from_array [1, 2, 3]
     # ```
     #
     # or
     #
     # ```
-    # image = Vips::new_from_array [
+    # image = Vips::Image.new_from_array [
     #     [-1, -1, -1],
     #     [-1, 16, -1],
     #     [-1, -1, -1]], 8
