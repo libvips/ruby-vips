@@ -6,6 +6,7 @@
 
 * better library name generation [renchap]
 * allow `_` as a separator in enum names [D-W-L]
+* add `Vips::Region` and `Region#fetch` [jcupitt]
 
 ## Version 2.0.15 (2019-6-12)
 

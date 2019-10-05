@@ -29,19 +29,13 @@ module Vips
   attach_function :vips_image_get,
       [:pointer, :string, GObject::GValue.ptr], :int
 
-  # vips_image_get_fields was added in libvips 8.5
-  begin
+  if Vips::at_least_libvips?(8, 5)
     attach_function :vips_image_get_fields, [:pointer], :pointer
-  rescue FFI::NotFoundError
-    nil
+    attach_function :vips_image_hasalpha, [:pointer], :int
   end
 
-  # vips_addalpha was added in libvips 8.6
   if Vips::at_least_libvips?(8, 6)
     attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
-  end
-  if Vips::at_least_libvips?(8, 5)
-    attach_function :vips_image_hasalpha, [:pointer], :int
   end
 
   attach_function :vips_image_set,
