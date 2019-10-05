@@ -5,6 +5,7 @@
 ## Version 2.0.16 (2019-9-21)
 
 * better library name generation [renchap]
+* allow `_` as a separator in enum names [D-W-L]
 
 ## Version 2.0.15 (2019-6-12)
 
