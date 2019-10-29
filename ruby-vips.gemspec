@@ -39,4 +39,6 @@ Gem::Specification.new do |spec|
   if Gem.ruby_version >= Gem::Version.new("2.2")
     spec.add_development_dependency "rubocop", ["~> 0.64"]
   end
+
+  spec.metadata["msys2_mingw_dependencies"] = "libvips"
 end
