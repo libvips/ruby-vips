@@ -447,7 +447,7 @@ Style/TrailingCommaInHashLiteral:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/UnneededInterpolation:
+Style/RedundantInterpolation:
   Exclude:
     - 'lib/vips/image.rb'
 
