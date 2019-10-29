@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.17 (2019-10-29)
+
+* install msys2 libvips on Windows [larskanis]
+
 ## Version 2.0.16 (2019-9-21)
 
 * better library name generation [renchap]
