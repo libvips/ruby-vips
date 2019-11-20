@@ -90,6 +90,16 @@ RSpec.describe Vips do
       expect(embed.bands).to eq(1)
     end
 
+    it 'enum arguments can be ints' do
+      black = Vips::Image.black 200, 100
+      # not angle 0, enum 0 (VIPS_ANGLE_D0)
+      rot = black.rot 0
+
+      expect(rot.width).to eq(200)
+      expect(rot.height).to eq(100)
+      expect(rot.bands).to eq(1)
+    end
+
     it 'can return optional output args' do
       point = Vips::Operation.call "black", [1, 1]
       test = Vips::Operation.call "embed", [point, 20, 10, 100, 100],
