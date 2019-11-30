@@ -25,12 +25,11 @@ module GObject
     # convert an enum value (str/symb/int) into an int ready for libvips
     def self.from_nick(gtype, value)
       value = value.to_s if value.is_a? Symbol
-      # libvips expects "-" as a separator in enum names, but "_" is more
-      # convenient for ruby, eg. :b_w
-      value = value.tr("_", "-")
 
       if value.is_a? String
-        value = Vips::vips_enum_from_nick "ruby-vips", gtype, value
+        # libvips expects "-" as a separator in enum names, but "_" is more
+        # convenient for ruby, eg. :b_w
+        value = Vips::vips_enum_from_nick "ruby-vips", gtype, value.tr("_", "-")
         if value == -1
           raise Vips::Error
         end
