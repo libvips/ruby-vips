@@ -151,6 +151,7 @@ module Vips
       gvalue.init gtype
       GObject::g_object_get_property self, name, gvalue
       result = gvalue.get
+      gvalue.unset
 
       GLib::logger.debug("Vips::Object.get") { "#{name} == #{result}" }
 
@@ -165,6 +166,7 @@ module Vips
       gvalue.init gtype
       gvalue.set value
       GObject::g_object_set_property self, name, gvalue
+      gvalue.unset
     end
   end
 

@@ -154,6 +154,7 @@ RSpec.describe Vips::Image do
     it 'can set an ICC profile on a jpg image' do
       x = Vips::Image.new_from_file simg('icc.jpg')
       profile = File.open(simg('lcd.icc'), 'rb').read
+      x = x.copy
       x.set_value 'icc-profile-data', profile
       x.write_to_file(timg('x.jpg'))
 

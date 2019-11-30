@@ -517,10 +517,11 @@ module Vips
       end
 
       gvalue = GObject::GValue.alloc
-      result = Vips::vips_image_get self, name, gvalue
-      raise Vips::Error if result != 0
+      raise Vips::Error if Vips::vips_image_get(self, name, gvalue) != 0
+      result = gvalue.get
+      gvalue.unset
 
-      gvalue.get
+      result
     end
 
     # Get the names of all fields on an image. Use this to loop over all
@@ -565,6 +566,7 @@ module Vips
       gvalue.init gtype
       gvalue.set value
       Vips::vips_image_set self, name, gvalue
+      gvalue.unset
     end
 
     # Set the value of a metadata item on an image. The metadata item must
