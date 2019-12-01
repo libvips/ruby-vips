@@ -24,6 +24,7 @@ module Vips
 
   if Vips::at_least_libvips?(8, 9)
     attach_function :vips_foreign_find_load_stream, [:pointer], :string
+    attach_function :vips_foreign_find_save_stream, [:string], :string
   end
 
   attach_function :vips_image_write_to_memory,
@@ -497,7 +498,7 @@ module Vips
       option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
       saver = Vips::vips_foreign_find_save_buffer filename
       if saver == nil
-        raise Vips::Error, "No known saver for '#{filename}'."
+        raise Vips::Error, "No known buffer saver for '#{filename}'."
       end
 
       buffer = Vips::Operation.call saver, [self], opts, option_string
@@ -506,6 +507,44 @@ module Vips
       write_gc
 
       return buffer
+    end
+
+    # Write this image to a stream. Save options may be encoded in
+    # the format_string or given as a hash. For example:
+    #
+    # ```ruby
+    # stream = Vips::Streamo.new_to_file "k2.jpg"
+    # image.write_to_stream stream, ".jpg[Q=90]"
+    # ```
+    #
+    # or equivalently:
+    #
+    # ```ruby
+    # image.write_to_stream stream, ".jpg", Q: 90
+    # ```
+    #
+    # The full set of save options depend on the selected saver. Try
+    # something like:
+    #
+    # ```
+    # $ vips jpegsave_stream
+    # ```
+    #
+    # to see all the available options for JPEG save.
+    #
+    # @param stream [Vips::Streamo] the stream to write to
+    # @param format_string [String] save format plus string options
+    # @macro vips.saveopts
+    def write_to_stream stream, format_string, **opts
+      filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
+      option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
+      saver = Vips::vips_foreign_find_save_stream filename
+      if saver == nil
+        raise Vips::Error, "No known stream saver for '#{filename}'."
+      end
+
+      Vips::Operation.call saver, [self, stream], opts, option_string
+      write_gc
     end
 
     # Write this image to a large memory buffer.

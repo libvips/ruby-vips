@@ -43,26 +43,65 @@ RSpec.describe Vips::Streami do
       expect(image.height).to eq(478)
       expect(image.bands).to eq(3)
       expect(image.avg).to be_within(0.001).of(109.789)
-    end
 
+    end
+  end
+end
+
+RSpec.describe Vips::Streamo do
+  if Vips::at_least_libvips?(8, 9)
     it 'can create a stream to a filename' do
       stream = Vips::Streamo.new_to_file timg('x.jpg')
 
       expect(stream)
     end
 
+    it 'can create a stream to a descriptor' do
+      stream = Vips::Streamo.new_to_descriptor 1
+
+      expect(stream)
+    end
+
+    it 'can create a stream to a memory area' do
+      stream = Vips::Streamo.new_to_memory
+
+      expect(stream)
+    end
+
     it 'can\'t create a stream to a bad filename' do
-      # we'll need to touch the file, set it read-only, then try writing
-      #expect { 
-      #  Vips::Streamo.new_to_file '/banana'
-      #}.to raise_exception(Vips::Error)
+      expect { 
+        Vips::Streamo.new_to_file '/banana/monkey'
+      }.to raise_exception(Vips::Error)
     end
 
     it 'can save an image to a filename stream' do
       streami = Vips::Streami.new_from_file simg('wagon.jpg')
       image = Vips::Image.new_from_stream streami, ''
-      streamo = Vips::Streamo.new_to_file timg('x.jpg')
-      image.write_to_stream streamo, '.jpg'
+      filename = timg('x4.png')
+      streamo = Vips::Streamo.new_to_file filename
+      image.write_to_stream streamo, '.png'
+
+      image = Vips::Image.new_from_file filename
+      expect(image)
+      expect(image.width).to eq(685)
+      expect(image.height).to eq(478)
+      expect(image.bands).to eq(3)
+      expect(image.avg).to be_within(0.001).of(109.789)
+    end
+
+    it 'can save an image to a memory stream' do
+      streami = Vips::Streami.new_from_file simg('wagon.jpg')
+      image = Vips::Image.new_from_stream streami, ''
+      streamo = Vips::Streamo.new_to_memory
+      image.write_to_stream streamo, '.png'
+      memory = streamo.get('blob')
+
+      image = Vips::Image.new_from_buffer memory, ''
+      expect(image)
+      expect(image.width).to eq(685)
+      expect(image.height).to eq(478)
+      expect(image.bands).to eq(3)
+      expect(image.avg).to be_within(0.001).of(109.789)
     end
 
   end

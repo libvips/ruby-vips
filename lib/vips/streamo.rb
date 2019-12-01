@@ -61,7 +61,7 @@ module Vips
     # @param filename [String] the name of the file
     # @return [Streamo] the new Vips::Streamo
     def self.new_to_file(filename)
-      raise Vips::Error, "filename is nil" if filename.nil?
+      raise Vips::Error, 'filename is nil' if filename.nil?
       ptr = Vips::vips_streamo_new_to_file filename
       raise Vips::Error if ptr.null?
 
@@ -72,9 +72,12 @@ module Vips
     #
     # Pass output streams to Vips::Image.write_to_stream to write images to
     # them.
+    #
+    # Once the image has been written, use `streamo.get("blob")` to read out the
+    # data.
     # 
     # @return [Streamo] the new Vips::Streamo
-    def self.new_to_memory(data)
+    def self.new_to_memory
       ptr = Vips::vips_streamo_new_to_memory 
 
       Vips::Streamo.new ptr
