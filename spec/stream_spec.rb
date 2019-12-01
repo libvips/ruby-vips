@@ -1,8 +1,6 @@
 require 'spec_helper.rb'
 
 RSpec.describe Vips::Streami do
-  #Vips.set_debug true
-
   if Vips::at_least_libvips?(8, 9)
     it 'can create a stream from a descriptor' do
       stream = Vips::Streami.new_from_descriptor(0)
@@ -14,6 +12,12 @@ RSpec.describe Vips::Streami do
       stream = Vips::Streami.new_from_file simg('wagon.jpg')
 
       expect(stream)
+    end
+
+    it 'can\'t create a stream from a bad filename' do
+      expect { 
+        Vips::Streami.new_from_file simg('banana.jpg') 
+      }.to raise_exception(Vips::Error)
     end
 
     it 'can create a stream from an area of memory' do
@@ -38,7 +42,7 @@ RSpec.describe Vips::Streami do
       expect(image.width).to eq(685)
       expect(image.height).to eq(478)
       expect(image.bands).to eq(3)
-      #expect(image.avg).to be_within(0.001).of(109.789)
+      expect(image.avg).to be_within(0.001).of(109.789)
     end
 
   end

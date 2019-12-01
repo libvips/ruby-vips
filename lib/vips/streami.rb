@@ -48,7 +48,7 @@ module Vips
     # @return [Streami] the new Vips::Streami
     def self.new_from_descriptor(descriptor)
       ptr = Vips::vips_streami_new_from_descriptor descriptor
-      raise Vips::Error if ptr.nil?
+      raise Vips::Error if ptr.null?
 
       Vips::Streami.new ptr
     end
@@ -63,7 +63,7 @@ module Vips
     def self.new_from_file(filename)
       raise Vips::Error, "filename is nil" if filename.nil?
       ptr = Vips::vips_streami_new_from_file filename
-      raise Vips::Error if ptr.nil?
+      raise Vips::Error if ptr.null?
 
       Vips::Streami.new ptr
     end
@@ -78,7 +78,7 @@ module Vips
     # @return [Streami] the new Vips::Streami
     def self.new_from_memory(data)
       ptr = Vips::vips_streami_new_from_memory data, data.bytesize
-      raise Vips::Error if ptr.nil?
+      raise Vips::Error if ptr.null?
 
       # FIXME do we need to keep a ref to the underlying memory area? what abut
       # Image.new_from_buffer? Does that need a secret ref too?

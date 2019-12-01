@@ -45,7 +45,7 @@ module Vips
 
     def initialize(name)
       ptr = Vips::vips_region_new name
-      raise Vips::Error if ptr.nil?
+      raise Vips::Error if ptr.null?
 
       super ptr
     end
@@ -62,7 +62,7 @@ module Vips
     def fetch(left, top, width, height)
       len = Vips::SizeStruct.new
       ptr = Vips::vips_region_fetch self, left, top, width, height, len
-      raise Vips::Error if ptr.nil?
+      raise Vips::Error if ptr.null?
 
       # wrap up as an autopointer
       ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)
