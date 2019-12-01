@@ -67,7 +67,8 @@ module Vips
 
     def build
       op = Vips::vips_cache_operation_build self
-      if op == nil
+      if op.null?
+        Vips::vips_object_unref_outputs self
         raise Vips::Error
       end
 
