@@ -22,6 +22,10 @@ module Vips
   attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
   attach_function :vips_foreign_find_save_buffer, [:string], :string
 
+  if Vips::at_least_libvips?(8, 9)
+    attach_function :vips_foreign_find_load_stream, [:pointer], :string
+  end
+
   attach_function :vips_image_write_to_memory,
       [:pointer, SizeStruct.ptr], :pointer
 
@@ -290,9 +294,48 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_buffer data, option_string, **opts
       loader = Vips::vips_foreign_find_load_buffer data, data.bytesize
-      raise Vips::Error if loader == nil
+      raise Vips::Error if loader.nil?
 
       Vips::Operation.call loader, [data], opts, option_string
+    end
+
+    # Create a new {Image} from an input stream. Load options may be passed as
+    # strings or appended as a hash. For example:
+    #
+    # ```
+    # stream = Vips::Streami.new_from_file("k2.jpg")
+    # image = Vips::Image.new_from_stream stream, "shrink=2"
+    # ```
+    #
+    # or alternatively:
+    #
+    # ```
+    # image = Vips::Image.new_from_stream stream, "", shrink: 2
+    # ```
+    #
+    # The options available depend on the file format. Try something like:
+    #
+    # ```
+    # $ vips jpegload_stream
+    # ```
+    #
+    # at the command-line to see the available options. Not all loaders
+    # support load from stream, but at least JPEG, PNG and
+    # TIFF images will work.
+    #
+    # Loading is fast: only enough data is read to be able to fill
+    # out the header. Pixels will only be read and decompressed when they are 
+    # needed.
+    #
+    # @param stream [Vips::Streami] the stream to load from
+    # @param option_string [String] load options as a string
+    # @macro vips.loadopts
+    # @return [Image] the loaded image
+    def self.new_from_stream stream, option_string, **opts
+      loader = Vips::vips_foreign_find_load_stream stream
+      raise Vips::Error if loader.nil?
+
+      Vips::Operation.call loader, [stream], opts, option_string
     end
 
     def self.matrix_from_array width, height, array
@@ -1347,6 +1390,11 @@ module Vips
       "gchararray" => "String",
       "VipsImage" => "Vips::Image",
       "VipsInterpolate" => "Vips::Interpolate",
+      "VipsStream" => "Vips::Stream",
+      "VipsStreami" => "Vips::Streami",
+      "VipsStreamo" => "Vips::Streamo",
+      "VipsStreamiu" => "Vips::Streamiu",
+      "VipsStreamou" => "Vips::Streamou",
       "VipsArrayDouble" => "Array<Double>",
       "VipsArrayInt" => "Array<Integer>",
       "VipsArrayImage" => "Array<Image>",

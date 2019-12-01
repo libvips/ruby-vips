@@ -121,7 +121,7 @@ module Vips
 
       result = Vips::vips_object_get_argument self, name,
           pspec, argument_class, argument_instance
-      return nil if result != 0
+      return nil if result.nil?
 
       pspec
     end

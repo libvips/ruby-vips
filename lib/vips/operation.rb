@@ -59,7 +59,7 @@ module Vips
       # things like _build
       if value.is_a? String
         value = Vips::vips_operation_new value
-        raise Vips::Error if value == nil
+        raise Vips::Error if value.nil?
       end
 
       super value
@@ -67,9 +67,7 @@ module Vips
 
     def build
       op = Vips::vips_cache_operation_build self
-      if op == nil
-        raise Vips::Error
-      end
+      raise Vips::Error if op.nil?
 
       return Operation.new op
     end
