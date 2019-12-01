@@ -16,8 +16,8 @@ module Vips
   # An input stream. For example:
   #
   # ```ruby
-  # streami = Vips::Streami.new_from_file("k2.jpg")
-  # image = Vips::Image.new_from_stream(streami)
+  # stream = Vips::Streami.new_from_file("k2.jpg")
+  # image = Vips::Image.new_from_stream(stream)
   # ```
   class Streami < Vips::Stream
     # The layout of the VipsRegion struct.
@@ -74,7 +74,7 @@ module Vips
     # Pass input streams to Vips::Image.new_from_stream to load images from
     # them.
     # 
-    # @param descriptor [String] memory area 
+    # @param data [String] memory area 
     # @return [Streami] the new Vips::Streami
     def self.new_from_memory(data)
       ptr = Vips::vips_streami_new_from_memory data, data.bytesize
