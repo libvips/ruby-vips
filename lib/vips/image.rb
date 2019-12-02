@@ -1445,7 +1445,7 @@ module Vips
         if nickname
           begin
             # can fail for abstract types
-            introspect = Vips::Introspect.get nickname
+            introspect = Vips::Introspect.get_yard nickname
           rescue Vips::Error
             nil
           end

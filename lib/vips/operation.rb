@@ -46,21 +46,15 @@ module Vips
     @@introspect_cache = {}
 
     def initialize name
-      op = Operation.new name
-
-      @name = name
-      @description = Vips::vips_object_get_description op
-      @flags = Vips::vips_operation_get_flags op
+      @op = Operation.new name
       @args = []
       @required_input = []
       @optional_input = {}
       @required_output = []
       @optional_output = {}
-      @member_x = nil
-      @method_args = []
 
       # find all the arguments the operator can take
-      op.argument_map do |pspec, argument_class, _argument_instance|
+      @op.argument_map do |pspec, argument_class, _argument_instance|
         flags = argument_class[:flags]
         if (flags & ARGUMENT_CONSTRUCT) != 0
           # names can include - as punctuation, but we always use _ in
@@ -68,11 +62,8 @@ module Vips
           arg_name = pspec[:name].tr("-", "_")
           args << {
             :arg_name => arg_name,
-            # yard hates "in" as an arg name
-            :yard_name => arg_name == "in" ? "im" : arg_name,
             :flags => flags,
-            :gtype => op.get_typeof(arg_name),
-            :blurb => GObject::g_param_spec_get_blurb(pspec)
+            :gtype => pspec[:value_type]
           }
         end
       end
@@ -83,17 +74,9 @@ module Vips
         gtype = details[:gtype]
 
         if (flags & ARGUMENT_INPUT) != 0
-          if ((flags & ARGUMENT_REQUIRED) != 0) && 
-             ((flags & ARGUMENT_DEPRECATED) == 0)
+          if (flags & ARGUMENT_REQUIRED) != 0 && 
+             (flags & ARGUMENT_DEPRECATED) == 0
             @required_input << details
-
-            # the first required input image is the thing we will be a method 
-            # of
-            if @member_x == nil && gtype == IMAGE_TYPE
-              @member_x = details 
-            else
-              @method_args << details
-            end
           elsif 
             # we allow deprecated optional args
             @optional_input[arg_name] = details
@@ -101,16 +84,16 @@ module Vips
 
           # MODIFY INPUT args count as OUTPUT as well
           if (flags & ARGUMENT_MODIFY) != 0
-            if ((flags & ARGUMENT_REQUIRED) != 0) && 
-               ((flags & ARGUMENT_DEPRECATED) == 0)
+            if (flags & ARGUMENT_REQUIRED) != 0 && 
+               (flags & ARGUMENT_DEPRECATED) == 0
               @required_output << details
             else
               @optional_output[arg_name] = details
             end
           end
         elsif (flags & ARGUMENT_OUTPUT) != 0
-          if ((flags & ARGUMENT_REQUIRED) != 0 && 
-             (flags & ARGUMENT_DEPRECATED) == 0)
+          if (flags & ARGUMENT_REQUIRED) != 0 && 
+             (flags & ARGUMENT_DEPRECATED) == 0
             @required_output << details
           else
             # again, allow deprecated optional args
@@ -120,9 +103,48 @@ module Vips
       end
     end
 
+    # Yard comment generation needs a little more introspection. We add this
+    # extra metadata in a separate method to keep the main path as fast as
+    # we can.
+    def add_yard_introspection 
+      @description = Vips::vips_object_get_description @op
+      @flags = Vips::vips_operation_get_flags @op
+      @member_x = nil
+      @method_args = []
+
+      @args.each do |details|
+        arg_name = details[:arg_name]
+        flags = details[:flags]
+        gtype = details[:gtype]
+
+        details[:yard_name] = arg_name == "in" ? "im" : arg_name
+        pspec = @op.get_pspec arg_name
+        details[:blurb] = GObject::g_param_spec_get_blurb pspec
+
+        if (flags & ARGUMENT_INPUT) != 0 && 
+           (flags & ARGUMENT_REQUIRED) != 0 && 
+           (flags & ARGUMENT_DEPRECATED) == 0
+          # the first required input image is the thing we will be a method 
+          # of
+          if @member_x == nil && gtype == IMAGE_TYPE
+            @member_x = details 
+          else
+            @method_args << details
+          end
+        end
+      end
+    end
+
     def self.get name
       @@introspect_cache[name] ||= Introspect.new name
     end
+
+    def self.get_yard name
+      introspect = Introspect.get name
+      introspect.add_yard_introspection
+      introspect
+    end
+
   end
 
   class Operation < Object
@@ -294,8 +316,10 @@ module Vips
       }
 
       introspect = Introspect.get name
-
-      op = Operation.new name
+      required_input = introspect.required_input
+      required_output = introspect.required_output
+      optional_input = introspect.optional_input
+      optional_output = introspect.optional_output
 
       unless supplied.is_a? Array
         raise Vips::Error, "unable to call #{name}: " +
@@ -306,11 +330,10 @@ module Vips
                            "optional arguments are not a hash"
       end
 
-      if supplied.length != introspect.required_input.length
+      if supplied.length != required_input.length
         raise Vips::Error, "unable to call #{name}: " +
                            "you supplied #{supplied.length} arguments, " +
-                           "but operation needs " +
-                           "#{introspect.required_input.length}."
+                           "but operation needs " + "#{required_input.length}."
       end
 
       # all supplied_optional keys should be in optional_input or
@@ -318,8 +341,8 @@ module Vips
       optional.each do |key, _value|
         arg_name = key.to_s
 
-        unless introspect.optional_input.has_key?(arg_name) ||
-            introspect.optional_output.has_key?(arg_name)
+        unless optional_input.has_key?(arg_name) ||
+            optional_output.has_key?(arg_name)
           raise Vips::Error, "unable to call #{name}: " +
                              "unknown option #{arg_name}"
         end
@@ -332,6 +355,8 @@ module Vips
       # array of images
       match_image = find_inside(supplied) { |value| value.is_a? Image }
 
+      op = Operation.new name
+
       # set any string args first so they can't be overridden
       if option_string != nil
         if Vips::vips_object_set_from_string(op, option_string) != 0
@@ -340,8 +365,8 @@ module Vips
       end
 
       # set all required inputs
-      introspect.required_input.each_index do |i|
-        details = introspect.required_input[i]
+      required_input.each_index do |i|
+        details = required_input[i]
         arg_name = details[:arg_name]
         flags = details[:flags]
         gtype = details[:gtype]
@@ -356,8 +381,8 @@ module Vips
 
         arg_name = key.to_s
 
-        if introspect.optional_input.has_key? arg_name
-          details = introspect.optional_input[arg_name]
+        if optional_input.has_key? arg_name
+          details = optional_input[arg_name]
           flags = details[:flags]
           gtype = details[:gtype]
 
@@ -369,7 +394,7 @@ module Vips
 
       # get all required results
       result = []
-      introspect.required_output.each do |details|
+      required_output.each do |details|
         result << op.get(details[:arg_name])
       end
 
@@ -378,7 +403,7 @@ module Vips
       optional.each do |key, _value|
         arg_name = key.to_s
 
-        if introspect.optional_output.has_key? arg_name
+        if optional_output.has_key? arg_name
           optional_results[arg_name] = op.get arg_name
         end
       end
