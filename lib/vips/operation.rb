@@ -40,7 +40,8 @@ module Vips
   # call.
   class Introspect
     attr_reader :name, :description, :flags, :args, :required_input, 
-      :optional_input, :required_output, :optional_output
+      :optional_input, :required_output, :optional_output, :member_x, 
+      :method_args
 
     @@introspect_cache = {}
 
@@ -49,12 +50,14 @@ module Vips
 
       @name = name
       @description = Vips::vips_object_get_description op
-      @flags = op.get_flags
+      @flags = Vips::vips_operation_get_flags op
       @args = []
       @required_input = []
       @optional_input = {}
       @required_output = []
       @optional_output = {}
+      @member_x = nil
+      @method_args = []
 
       # find all the arguments the operator can take
       op.argument_map do |pspec, argument_class, _argument_instance|
@@ -63,48 +66,63 @@ module Vips
           # names can include - as punctuation, but we always use _ in
           # Ruby
           arg_name = pspec[:name].tr("-", "_")
-          gtype = op.get_typeof arg_name
-          blurb = GObject::g_param_spec_get_blurb pspec
-
-          @args << [arg_name, flags, gtype, blurb]
+          args << {
+            :arg_name => arg_name,
+            # yard hates "in" as an arg name
+            :yard_name => arg_name == "in" ? "im" : arg_name,
+            :flags => flags,
+            :gtype => op.get_typeof(arg_name),
+            :blurb => GObject::g_param_spec_get_blurb(pspec)
+          }
         end
       end
 
       @args.each do |details|
-        arg_name, flags, gtype, blurb = details
-
-        next if (flags & ARGUMENT_DEPRECATED) != 0
+        arg_name = details[:arg_name]
+        flags = details[:flags]
+        gtype = details[:gtype]
 
         if (flags & ARGUMENT_INPUT) != 0
-          if (flags & ARGUMENT_REQUIRED) != 0
+          if ((flags & ARGUMENT_REQUIRED) != 0) && 
+             ((flags & ARGUMENT_DEPRECATED) == 0)
             @required_input << details
-          else
+
+            # the first required input image is the thing we will be a method 
+            # of
+            if @member_x == nil && gtype == IMAGE_TYPE
+              @member_x = details 
+            else
+              @method_args << details
+            end
+          elsif 
+            # we allow deprecated optional args
             @optional_input[arg_name] = details
           end
-        end
 
-        # MODIFY INPUT args count as OUTPUT as well
-        if (flags & ARGUMENT_OUTPUT) != 0 ||
-           ((flags & ARGUMENT_INPUT) != 0 &&
-            (flags & ARGUMENT_MODIFY) != 0)
-          if (flags & ARGUMENT_REQUIRED) != 0
+          # MODIFY INPUT args count as OUTPUT as well
+          if (flags & ARGUMENT_MODIFY) != 0
+            if ((flags & ARGUMENT_REQUIRED) != 0) && 
+               ((flags & ARGUMENT_DEPRECATED) == 0)
+              @required_output << details
+            else
+              @optional_output[arg_name] = details
+            end
+          end
+        elsif (flags & ARGUMENT_OUTPUT) != 0
+          if ((flags & ARGUMENT_REQUIRED) != 0 && 
+             (flags & ARGUMENT_DEPRECATED) == 0)
             @required_output << details
           else
+            # again, allow deprecated optional args
             @optional_output[arg_name] = details
           end
         end
       end
-
     end
 
     def self.get name
-      if ! @@introspect_cache.include? name
-        @@introspect_cache[name] = Introspect.new name
-      end
-
-      @@introspect_cache[name]
+      @@introspect_cache[name] ||= Introspect.new name
     end
-
   end
 
   class Operation < Object
@@ -155,10 +173,6 @@ module Vips
       Vips::vips_argument_map self, fn, nil, nil
     end
 
-    def get_flags
-      Vips::vips_operation_get_flags self
-    end
-
     # search array for the first element to match a predicate ...
     # search inside subarrays and sub-hashes
     def self.find_inside object, &block
@@ -177,7 +191,7 @@ module Vips
 
       # 2D array values become tiny 2D images
       # if there's nothing to match to, we also make a 2D image
-      if (value.is_a?(Array) && value[0].is_a?(Array)) ||
+      if (value.is_a?(Array) && value[0].is_a?(Array)) || 
          match_image == nil
         return Image.new_from_array value
       else
@@ -316,9 +330,7 @@ module Vips
       #
       # look inside array and hash arguments, since we may be passing an
       # array of images
-      match_image = find_inside(supplied) do |value|
-        value.is_a? Image
-      end
+      match_image = find_inside(supplied) { |value| value.is_a? Image }
 
       # set any string args first so they can't be overridden
       if option_string != nil
@@ -329,7 +341,10 @@ module Vips
 
       # set all required inputs
       introspect.required_input.each_index do |i|
-        arg_name, flags, gtype, blurb = introspect.required_input[i]
+        details = introspect.required_input[i]
+        arg_name = details[:arg_name]
+        flags = details[:flags]
+        gtype = details[:gtype]
         value = supplied[i]
 
         op.set arg_name, value, match_image, flags, gtype
@@ -342,7 +357,9 @@ module Vips
         arg_name = key.to_s
 
         if introspect.optional_input.has_key? arg_name
-          _, flags, gtype, blurb = introspect.optional_input[arg_name]
+          details = introspect.optional_input[arg_name]
+          flags = details[:flags]
+          gtype = details[:gtype]
 
           op.set arg_name, value, match_image, flags, gtype
         end
@@ -353,8 +370,7 @@ module Vips
       # get all required results
       result = []
       introspect.required_output.each do |details|
-        arg_name, flags, gtype, blurb = details
-        result << op.get(arg_name)
+        result << op.get(details[:arg_name])
       end
 
       # fetch all optional ones

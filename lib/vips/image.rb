@@ -1323,23 +1323,20 @@ module Vips
 end
 
 module Vips
-  # This method generates yard comments for all the dynamically bound
+  # This module generates yard comments for all the dynamically bound
   # vips operations.
   #
   # Regenerate with something like:
   #
   # ```
   # $ ruby > methods.rb
-  # require 'vips'; Vips::generate_yard
+  # require 'vips'; Vips::Yard.generate
   # ^D
   # ```
 
-  def self.generate_yard
-    # these have hand-written methods, see above
-    no_generate = ["scale", "bandjoin", "composite", "ifthenelse"]
-
+  module Yard
     # map gobject's type names to Ruby
-    map_go_to_ruby = {
+    MAP_GO_TO_RUBY = {
       "gboolean" => "Boolean",
       "gint" => "Integer",
       "gdouble" => "Float",
@@ -1353,110 +1350,85 @@ module Vips
       "VipsArrayString" => "Array<String>",
     }
 
-    generate_operation = lambda do |gtype, nickname, op|
-      op_flags = op.get_flags
-      return if (op_flags & OPERATION_DEPRECATED) != 0
-      return if no_generate.include? nickname
+    # these have hand-written methods, see above
+    NO_GENERATE = ["scale", "bandjoin", "composite", "ifthenelse"]
 
-      description = Vips::vips_object_get_description op
+    # turn a gtype into a ruby type name
+    def self.gtype_to_ruby gtype
+      fundamental = GObject::g_type_fundamental gtype
+      type_name = GObject::g_type_name gtype
 
-      # find and classify all the arguments the operator can take
-      required_input = []
-      optional_input = []
-      required_output = []
-      optional_output = []
-      member_x = nil
-      op.argument_map do |pspec, argument_class, _argument_instance|
-        arg_flags = argument_class[:flags]
-        next if (arg_flags & ARGUMENT_CONSTRUCT) == 0
-        next if (arg_flags & ARGUMENT_DEPRECATED) != 0
-
-        name = pspec[:name].tr("-", "_")
-        # 'in' as a param name confuses yard
-        name = "im" if name == "in"
-        gtype = pspec[:value_type]
-        fundamental = GObject::g_type_fundamental gtype
-        type_name = GObject::g_type_name gtype
-        if map_go_to_ruby.include? type_name
-          type_name = map_go_to_ruby[type_name]
-        end
-        if fundamental == GObject::GFLAGS_TYPE ||
-           fundamental == GObject::GENUM_TYPE
-          type_name = "Vips::" + type_name[/Vips(.*)/, 1]
-        end
-        blurb = GObject::g_param_spec_get_blurb pspec
-        value = {
-          name: name,
-          flags: arg_flags,
-          gtype: gtype,
-          type_name: type_name,
-          blurb: blurb
-        }
-
-        if (arg_flags & ARGUMENT_INPUT) != 0
-          if (arg_flags & ARGUMENT_REQUIRED) != 0
-            # note the first required input image, if any ... we
-            # will be a method of this instance
-            if !member_x && gtype == Vips::IMAGE_TYPE
-              member_x = value
-            else
-              required_input << value
-            end
-          else
-            optional_input << value
-          end
-        end
-
-        # MODIFY INPUT args count as OUTPUT as well
-        if (arg_flags & ARGUMENT_OUTPUT) != 0 ||
-           ((arg_flags & ARGUMENT_INPUT) != 0 &&
-            (arg_flags & ARGUMENT_MODIFY) != 0)
-          if (arg_flags & ARGUMENT_REQUIRED) != 0
-            required_output << value
-          else
-            optional_output << value
-          end
-        end
+      if MAP_GO_TO_RUBY.include? type_name
+        type_name = MAP_GO_TO_RUBY[type_name]
       end
 
+      if fundamental == GObject::GFLAGS_TYPE ||
+         fundamental == GObject::GENUM_TYPE
+        type_name = "Vips::" + type_name[/Vips(.*)/, 1]
+      end
+
+      type_name
+    end
+
+    def self.generate_operation introspect
+      return if (introspect.flags & OPERATION_DEPRECATED) != 0
+      return if NO_GENERATE.include? introspect.name
+
+      method_args = introspect.method_args
+      required_output = introspect.required_output
+      optional_input = introspect.optional_input
+      optional_output = introspect.optional_output
+
       print "# @!method "
-      print "self." unless member_x
-      print "#{nickname}("
-      print required_input.map { |x| x[:name] }.join(", ")
-      print ", " if required_input.length > 0
+      print "self." unless introspect.member_x
+      print "#{introspect.name}("
+      print method_args.map{ |x| x[:yard_name] }.join(", ")
+      print ", " if method_args.length > 0
       puts "**opts)"
 
-      puts "#   #{description.capitalize}."
+      puts "#   #{introspect.description.capitalize}."
 
-      required_input.each do |arg|
-        puts "#   @param #{arg[:name]} [#{arg[:type_name]}] #{arg[:blurb]}"
+      method_args.each do |details|
+        yard_name = details[:yard_name]
+        gtype = details[:gtype]
+        blurb = details[:blurb]
+
+        puts "#   @param #{yard_name} [#{gtype_to_ruby(gtype)}] #{blurb}"
       end
 
       puts "#   @param opts [Hash] Set of options"
-      optional_input.each do |arg|
-        puts "#   @option opts [#{arg[:type_name]}] :#{arg[:name]} " +
-             "#{arg[:blurb]}"
+      optional_input.each do |arg_name, details|
+        yard_name = details[:yard_name]
+        gtype = details[:gtype]
+        blurb = details[:blurb]
+
+        puts "#   @option opts [#{gtype_to_ruby(gtype)}] :#{yard_name} " +
+             "#{blurb}"
       end
-      optional_output.each do |arg|
-        print "#   @option opts [#{arg[:type_name]}] :#{arg[:name]}"
-        puts " Output #{arg[:blurb]}"
+      optional_output.each do |arg_name, details|
+        yard_name = details[:yard_name]
+        gtype = details[:gtype]
+        blurb = details[:blurb]
+
+        print "#   @option opts [#{gtype_to_ruby(gtype)}] :#{yard_name}"
+        puts " Output #{blurb}"
       end
 
       print "#   @return ["
       if required_output.length == 0
         print "nil"
       elsif required_output.length == 1
-        print required_output.first[:type_name]
+        print gtype_to_ruby(required_output.first[:gtype])
       else
         print "Array<"
-        print required_output.map { |x| x[:type_name] }.join(", ")
+        print required_output.map{ |x| gtype_to_ruby(x[:gtype]) }.join(", ")
         print ">"
       end
       if optional_output.length > 0
         print ", Hash<Symbol => Object>"
       end
       print "] "
-      print required_output.map { |x| x[:blurb] }.join(", ")
+      print required_output.map{ |x| x[:blurb] }.join(", ")
       if optional_output.length > 0
         print ", " if required_output.length > 0
         print "Hash of optional output items"
@@ -1466,30 +1438,32 @@ module Vips
       puts ""
     end
 
-    generate_class = lambda do |gtype, _|
-      nickname = Vips::nickname_find gtype
+    def self.generate
+      generate_class = lambda do |gtype, _|
+        nickname = Vips::nickname_find gtype
 
-      if nickname
-        begin
-          # can fail for abstract types
-          op = Vips::Operation.new nickname
-        rescue Vips::Error
-          nil
+        if nickname
+          begin
+            # can fail for abstract types
+            introspect = Vips::Introspect.get nickname
+          rescue Vips::Error
+            nil
+          end
+
+          generate_operation(introspect) if introspect
         end
 
-        generate_operation.(gtype, nickname, op) if op
+        Vips::vips_type_map gtype, generate_class, nil
       end
 
-      Vips::vips_type_map gtype, generate_class, nil
+      puts "module Vips"
+      puts "  class Image"
+      puts ""
+
+      generate_class.(GObject::g_type_from_name("VipsOperation"), nil)
+
+      puts "  end"
+      puts "end"
     end
-
-    puts "module Vips"
-    puts "  class Image"
-    puts ""
-
-    generate_class.(GObject::g_type_from_name("VipsOperation"), nil)
-
-    puts "  end"
-    puts "end"
   end
 end
