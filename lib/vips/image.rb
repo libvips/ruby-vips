@@ -22,6 +22,11 @@ module Vips
   attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
   attach_function :vips_foreign_find_save_buffer, [:string], :string
 
+  if Vips::at_least_libvips?(8, 9)
+    attach_function :vips_foreign_find_load_stream, [:pointer], :string
+    attach_function :vips_foreign_find_save_stream, [:string], :string
+  end
+
   attach_function :vips_image_write_to_memory,
       [:pointer, SizeStruct.ptr], :pointer
 
@@ -290,9 +295,48 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_buffer data, option_string, **opts
       loader = Vips::vips_foreign_find_load_buffer data, data.bytesize
-      raise Vips::Error if loader == nil
+      raise Vips::Error if loader.nil?
 
       Vips::Operation.call loader, [data], opts, option_string
+    end
+
+    # Create a new {Image} from an input stream. Load options may be passed as
+    # strings or appended as a hash. For example:
+    #
+    # ```
+    # stream = Vips::Streami.new_from_file("k2.jpg")
+    # image = Vips::Image.new_from_stream stream, "shrink=2"
+    # ```
+    #
+    # or alternatively:
+    #
+    # ```
+    # image = Vips::Image.new_from_stream stream, "", shrink: 2
+    # ```
+    #
+    # The options available depend on the file format. Try something like:
+    #
+    # ```
+    # $ vips jpegload_stream
+    # ```
+    #
+    # at the command-line to see the available options. Not all loaders
+    # support load from stream, but at least JPEG, PNG and
+    # TIFF images will work.
+    #
+    # Loading is fast: only enough data is read to be able to fill
+    # out the header. Pixels will only be read and decompressed when they are 
+    # needed.
+    #
+    # @param stream [Vips::Streami] the stream to load from
+    # @param option_string [String] load options as a string
+    # @macro vips.loadopts
+    # @return [Image] the loaded image
+    def self.new_from_stream stream, option_string, **opts
+      loader = Vips::vips_foreign_find_load_stream stream
+      raise Vips::Error if loader.nil?
+
+      Vips::Operation.call loader, [stream], opts, option_string
     end
 
     def self.matrix_from_array width, height, array
@@ -454,7 +498,7 @@ module Vips
       option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
       saver = Vips::vips_foreign_find_save_buffer filename
       if saver == nil
-        raise Vips::Error, "No known saver for '#{filename}'."
+        raise Vips::Error, "No known buffer saver for '#{filename}'."
       end
 
       buffer = Vips::Operation.call saver, [self], opts, option_string
@@ -463,6 +507,44 @@ module Vips
       write_gc
 
       return buffer
+    end
+
+    # Write this image to a stream. Save options may be encoded in
+    # the format_string or given as a hash. For example:
+    #
+    # ```ruby
+    # stream = Vips::Streamo.new_to_file "k2.jpg"
+    # image.write_to_stream stream, ".jpg[Q=90]"
+    # ```
+    #
+    # or equivalently:
+    #
+    # ```ruby
+    # image.write_to_stream stream, ".jpg", Q: 90
+    # ```
+    #
+    # The full set of save options depend on the selected saver. Try
+    # something like:
+    #
+    # ```
+    # $ vips jpegsave_stream
+    # ```
+    #
+    # to see all the available options for JPEG save.
+    #
+    # @param stream [Vips::Streamo] the stream to write to
+    # @param format_string [String] save format plus string options
+    # @macro vips.saveopts
+    def write_to_stream stream, format_string, **opts
+      filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
+      option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
+      saver = Vips::vips_foreign_find_save_stream filename
+      if saver == nil
+        raise Vips::Error, "No known stream saver for '#{filename}'."
+      end
+
+      Vips::Operation.call saver, [self, stream], opts, option_string
+      write_gc
     end
 
     # Write this image to a large memory buffer.
@@ -1344,6 +1426,11 @@ module Vips
       "gchararray" => "String",
       "VipsImage" => "Vips::Image",
       "VipsInterpolate" => "Vips::Interpolate",
+      "VipsStream" => "Vips::Stream",
+      "VipsStreami" => "Vips::Streami",
+      "VipsStreamo" => "Vips::Streamo",
+      "VipsStreamiu" => "Vips::Streamiu",
+      "VipsStreamou" => "Vips::Streamou",
       "VipsArrayDouble" => "Array<Double>",
       "VipsArrayInt" => "Array<Integer>",
       "VipsArrayImage" => "Array<Image>",

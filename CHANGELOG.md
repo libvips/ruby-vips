@@ -9,6 +9,7 @@
 * fix `GValue#set` for stricter metadata rules in 8.9 [jcupitt]
 * fix a ref leak on operation build error [jcupitt]
 * faster operation call -- test suite is ~20% quicker [jcupitt]
+* add support for VipsStream [jcupitt]
 
 ## Version 2.0.16 (2019-9-21)
 

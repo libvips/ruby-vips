@@ -171,7 +171,7 @@ module Vips
       # things like _build
       if value.is_a? String
         value = Vips::vips_operation_new value
-        raise Vips::Error if value == nil
+        raise Vips::Error if value.null?
       end
 
       super value

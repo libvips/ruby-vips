@@ -127,5 +127,6 @@ RSpec.describe Vips do
 
       expect { black.crop(10, 10, 1, 1) }.to raise_exception(Vips::Error)
     end
+
   end
 end
