@@ -41,6 +41,38 @@ module Vips
 
   private
 
+  class Progress < FFI::Struct
+    layout :im, :pointer,
+      :run, :int,
+      :eta, :int,
+      :tpels, :int64_t, 
+      :npels, :int64_t, 
+      :percent, :int, 
+      :start, :pointer 
+  end
+
+  # Our signal marshalers. 
+  #
+  # These are functions which take the handler as a param and return a 
+  # closure with the right FFI signature for g_signal_connect for this
+  # specific signal. 
+  #
+  # ruby-ffi makes it hard to use the g_signal_connect user data param 
+  # to pass the function pointer through, unfortunately.
+
+  MARSHAL_PROGRESS = lambda do |handler|
+    FFI::Function.new(:void, [:pointer, :pointer, :pointer]) do |vi, prog, cb|
+      handler.(Progress.new(prog))
+    end
+  end
+
+  # map signal name to marshal proc
+  MARSHAL_ALL = {
+    :preeval => MARSHAL_PROGRESS,
+    :eval => MARSHAL_PROGRESS,
+    :posteval => MARSHAL_PROGRESS,
+  }
+
   attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
   attach_function :vips_enum_nick, [:GType, :int], :string
 
@@ -167,6 +199,20 @@ module Vips
       gvalue.set value
       GObject::g_object_set_property self, name, gvalue
       gvalue.unset
+    end
+
+    def signal_connect name
+      marshal = MARSHAL_ALL[name.to_sym]
+      raise Vips::Error, "unsupported signal #{name}" if marshal == nil
+
+      # grab the block given to signal_connect, make it into a proc, and pass
+      # that into marshal to make our callback
+      callback = marshal.(Proc.new)
+
+      # we need to make sure this is not GCd while self is alive
+      @references << callback
+
+      GObject::g_signal_connect_data(self, name.to_s, callback, nil, nil, 0)
     end
   end
 

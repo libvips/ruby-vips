@@ -14,6 +14,8 @@ module Vips
 
   attach_function :vips_image_copy_memory, [:pointer], :pointer
 
+  attach_function :vips_image_set_progress, [:pointer, :bool], :void
+
   attach_function :vips_filename_get_filename, [:string], :pointer
   attach_function :vips_filename_get_options, [:string], :pointer
 
@@ -114,7 +116,7 @@ module Vips
 
       unless Image::complex? image.format
         if image.bands % 2 != 0
-          raise Error, "not an even number of bands"
+          raise Vips::Error, "not an even number of bands"
         end
 
         unless Image::float? image.format
@@ -559,6 +561,17 @@ module Vips
       ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)
 
       ptr.get_bytes 0, len[:value]
+    end
+
+    # Turn progress signalling on and off. 
+    #
+    # If this is on, the most-downstream image from this image will issue
+    # progress signals. 
+    #
+    # @see Object#signal_connect
+    # @param state [Boolean] progress signalling state
+    def set_progress state
+      Vips::vips_image_set_progress self, state
     end
 
     # Get the `GType` of a metadata field. The result is 0 if no such field
