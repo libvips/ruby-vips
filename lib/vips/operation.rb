@@ -196,11 +196,11 @@ module Vips
     end
 
     # Search an object for the first element to match a predicate. Search 
-    # inside subarrays and sub-hashes. Return nil for no object matches.
-    def self.find_inside object, &block
-      if object.is_a? Enumerable
+    # inside subarrays and sub-hashes. Equlvalent to x.flatten.find{}.
+    def self.flat_find object, &block
+      if object.respond_to? :each
         object.each do |x| 
-          result = find_inside x, &block 
+          result = flat_find x, &block 
           return result if result != nil
         end
       else
@@ -356,7 +356,7 @@ module Vips
       #
       # look inside array and hash arguments, since we may be passing an
       # array of images
-      match_image = find_inside(supplied) { |value| value.is_a? Image }
+      match_image = flat_find(supplied) { |value| value.is_a? Image }
 
       op = Operation.new name
 
