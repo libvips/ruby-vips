@@ -195,13 +195,16 @@ module Vips
       Vips::vips_argument_map self, fn, nil, nil
     end
 
-    # search array for the first element to match a predicate ...
-    # search inside subarrays and sub-hashes
+    # Search an object for the first element to match a predicate. Search 
+    # inside subarrays and sub-hashes. Return nil for no object matches.
     def self.find_inside object, &block
-      return object if block.call object
-
       if object.is_a? Enumerable
-        object.find { |value| block.call value, block }
+        object.each do |x| 
+          result = find_inside x, &block 
+          return result if result != nil
+        end
+      else
+        return object if yield object
       end
 
       return nil
