@@ -20,7 +20,6 @@ module Vips
   # image = Vips::Image.new_from_stream(stream)
   # ```
   class Streami < Vips::Stream
-    # The layout of the VipsRegion struct.
     module StreamiLayout
       def self.included(base)
         base.class_eval do

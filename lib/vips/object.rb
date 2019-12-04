@@ -66,11 +66,39 @@ module Vips
     end
   end
 
+  MARSHAL_READ = lambda do |handler|
+    FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
+      handler.(p, len)
+    end
+  end
+
+  MARSHAL_SEEK = lambda do |handler|
+    FFI::Function.new(:int64_t, [:pointer, :int64_t, :int]) do |i, off, whence|
+      handler.(off, whence)
+    end
+  end
+
+  MARSHAL_WRITE = lambda do |handler|
+    FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
+      handler.(p, len)
+    end
+  end
+
+  MARSHAL_FINISH = lambda do |handler|
+    FFI::Function.new(:void, [:pointer, :pointer]) do |i, cb|
+      handler.()
+    end
+  end
+
   # map signal name to marshal proc
   MARSHAL_ALL = {
     :preeval => MARSHAL_PROGRESS,
     :eval => MARSHAL_PROGRESS,
     :posteval => MARSHAL_PROGRESS,
+    :read => MARSHAL_READ,
+    :seek => MARSHAL_SEEK,
+    :write => MARSHAL_WRITE,
+    :finish => MARSHAL_FINISH,
   }
 
   attach_function :vips_enum_from_nick, [:string, :GType, :string], :int
@@ -201,19 +229,30 @@ module Vips
       gvalue.unset
     end
 
-    def signal_connect name
+    def signal_connect name, handler=nil
       marshal = MARSHAL_ALL[name.to_sym]
       raise Vips::Error, "unsupported signal #{name}" if marshal == nil
 
-      # grab the block given to signal_connect, make it into a proc, and pass
-      # that into marshal to make our callback
-      callback = marshal.(Proc.new)
+      if has_block? 
+        # This will grab the block given to signal_connect and make it 
+        # into a proc
+        prc = Proc.new
+      elsif handler
+        prc = handler
+      else
+        raise Vips::Error, "must supply either block or handler"
+      end
+
+      # The marshal will make a closure with the right type signature for the
+      # named signal
+      callback = marshal.(prc)
 
       # we need to make sure this is not GCd while self is alive
       @references << callback
 
       GObject::g_signal_connect_data(self, name.to_s, callback, nil, nil, 0)
     end
+
   end
 
   class ObjectClass < FFI::Struct
