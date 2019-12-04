@@ -68,13 +68,21 @@ module Vips
 
   MARSHAL_READ = lambda do |handler|
     FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
-      handler.(p, len)
+      puts "MARSHAL_READ handler: #{len} bytes to read"
+      bytes_read = handler.(p, len)
+      puts "  bytes_read = #{bytes_read}"
+
+      bytes_read
     end
   end
 
   MARSHAL_SEEK = lambda do |handler|
     FFI::Function.new(:int64_t, [:pointer, :int64_t, :int]) do |i, off, whence|
-      handler.(off, whence)
+      puts "MARSHAL_READ handler: off #{off}, whence #{whence}"
+      new_position = handler.(off, whence)
+      puts "  new_position = #{new_position}"
+
+      new_position
     end
   end
 
@@ -233,9 +241,8 @@ module Vips
       marshal = MARSHAL_ALL[name.to_sym]
       raise Vips::Error, "unsupported signal #{name}" if marshal == nil
 
-      if has_block? 
-        # This will grab the block given to signal_connect and make it 
-        # into a proc
+      if block_given? 
+        # This will grab any block given to us and make it into a proc
         prc = Proc.new
       elsif handler
         prc = handler
@@ -243,8 +250,8 @@ module Vips
         raise Vips::Error, "must supply either block or handler"
       end
 
-      # The marshal will make a closure with the right type signature for the
-      # named signal
+      # The marshal function will make a closure with the right type signature 
+      # for the selected signal
       callback = marshal.(prc)
 
       # we need to make sure this is not GCd while self is alive

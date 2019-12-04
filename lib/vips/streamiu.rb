@@ -8,7 +8,7 @@ require 'ffi'
 
 module Vips
   if Vips::at_least_libvips?(8, 9)
-    attach_function :vips_streamiu_new, [:void], :pointer
+    attach_function :vips_streamiu_new, [], :pointer
   end
 
   # A user input stream you can attach action signal handlers to to implememt 
@@ -40,6 +40,7 @@ module Vips
     end
 
     def initialize
+      puts "Streamiu: initialize"
       super Vips::vips_streamiu_new
     end
 
