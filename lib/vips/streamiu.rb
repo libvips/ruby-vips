@@ -40,8 +40,10 @@ module Vips
     end
 
     def initialize
-      puts "Streamiu: initialize"
-      super Vips::vips_streamiu_new
+      pointer = Vips::vips_streamiu_new
+      raise Vips::Error if pointer.null?
+
+      super pointer
     end
 
   end
