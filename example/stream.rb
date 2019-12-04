@@ -18,6 +18,8 @@ class Mystreami < Vips::Streamiu
 
       bytes_available = @length - @read_point
       bytes_to_copy = [bytes_available, len].min
+      puts "Mystreami read: #{bytes_available} bytes_available"
+      puts "Mystreami read: #{bytes_to_copy} bytes_to_copy"
       buf.put_bytes(0, @contents, @read_point, bytes_to_copy)
       @read_point += bytes_to_copy
 
@@ -32,6 +34,33 @@ class Mystreami < Vips::Streamiu
   end
 end
 
+class Mystreamo < Vips::Streamou
+  def initialize(filename)
+    puts "Mystreamo: initialize"
+
+    @filename = filename
+    @f = File.open(@filename, "wb")
+
+    super()
+
+    signal_connect "write" do |buf, len|
+      puts "Mystreami write: #{len} bytes"
+      @f.write(buf)
+      len
+    end
+
+    signal_connect "finish" do 
+      @f.close
+      @f = nil
+    end
+
+  end
+end
+
 streamiu = Mystreami.new(ARGV[0])
 image = Vips::Image.new_from_stream(streamiu, "", access: "sequential")
+image.avg
+
+#streamio = Mystreamo.new(ARGV[1])
+#image.write_to_stream(streamio, ".png")
 

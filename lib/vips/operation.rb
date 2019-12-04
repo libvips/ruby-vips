@@ -11,7 +11,13 @@ module Vips
 
   attach_function :vips_operation_new, [:string], :pointer
 
-  attach_function :vips_cache_operation_build, [:pointer], :pointer
+  # We may well block during this (eg. if it's avg, or perhaps jpegsave), and
+  # libvips might trigger some signals which ruby has handles for. 
+  #
+  # We need FFI to drop the GIL lock during this call and reacquire it when 
+  # the call ends, or we'll deadlock.
+  attach_function :vips_cache_operation_build, [:pointer], :pointer, 
+    blocking: true
   attach_function :vips_object_unref_outputs, [:pointer], :void
 
   callback :argument_map_fn, [:pointer,
