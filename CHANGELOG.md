@@ -11,6 +11,7 @@
 * faster operation call -- test suite is ~20% quicker [jcupitt]
 * add support for VipsStream [jcupitt]
 * add `signal_connect` [jcupitt]
+* add `Image#set_kill` for progress termination [jcupitt]
 
 ## Version 2.0.16 (2019-9-21)
 
