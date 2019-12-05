@@ -166,7 +166,7 @@ require 'vips/gobject'
 require 'vips/gvalue'
 
 # This module provides a binding for the [libvips image processing
-# library](https://jcupitt.github.io/libvips/).
+# library](https://libvips.github.io/libvips/).
 #
 # # Example
 #
@@ -404,12 +404,12 @@ require 'vips/gvalue'
 # # Automatic YARD documentation
 #
 # The bulk of these API docs are generated automatically by
-# {Vips::generate_yard}. It examines
+# {Vips::Yard::generate}. It examines
 # libvips and writes a summary of each operation and the arguments and options
 # that that operation expects.
 #
 # Use the [C API
-# docs](https://jcupitt.github.io/libvips/API/current)
+# docs](https://libvips.github.io/libvips/API/current)
 # for more detail.
 #
 # # Enums
@@ -433,6 +433,43 @@ require 'vips/gvalue'
 #
 # If you want to avoid the copies, you'll need to call drawing operations
 # yourself.
+#
+# # Progress
+#
+# You can attach signal handlers to images to watch computation progress. For
+# example:
+#
+# ```ruby
+# image = Vips::Image.black 1, 100000
+# image.set_progress true
+# 
+# def progress_to_s(name, progress)
+#   puts "#{name}:"
+#   puts "    run = #{progress[:run]}"
+#   puts "    eta = #{progress[:eta]}"
+#   puts "    tpels = #{progress[:tpels]}"
+#   puts "    npels = #{progress[:npels]}"
+#   puts "    percent = #{progress[:percent]}"
+# end
+# 
+# image.signal_connect :preeval do |progress|
+#   progress_to_s("preeval", progress)
+# end
+# 
+# image.signal_connect :eval do |progress|
+#   progress_to_s("eval", progress)
+#   image.set_kill(true) if progress[:percent] > 50
+# end
+# 
+# image.signal_connect :posteval do |progress|
+#   progress_to_s("posteval", progress)
+# end
+# 
+# image.avg
+# ```
+# 
+# The `:eval` signal will fire for every tile that is processed. You can stop
+# progress with Image#set_kill and processing will end with an exception.
 #
 # # Overloads
 #
