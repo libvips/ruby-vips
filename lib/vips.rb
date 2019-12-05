@@ -212,6 +212,9 @@ require 'vips/gvalue'
 # memory buffers, create images that wrap C-style memory arrays, or make images
 # from constants.
 #
+# Use {Streami} and {Image.new_from_stream} to load images from any data
+# source, for example URIs.
+#
 # The next line:
 #
 # ```ruby
@@ -252,6 +255,9 @@ require 'vips/gvalue'
 # write any format supported by vips: the file type is set from the filename
 # suffix. You can also write formatted images to memory buffers, or dump
 # image data to a raw memory array.
+#
+# Use {Streamo} and {Image#write_to_stream} to write formatted images to 
+# any data sink, for example URIs.
 #
 # # How it works
 #
@@ -469,7 +475,7 @@ require 'vips/gvalue'
 # ```
 # 
 # The `:eval` signal will fire for every tile that is processed. You can stop
-# progress with Image#set_kill and processing will end with an exception.
+# progress with {Image#set_kill} and processing will end with an exception.
 #
 # # Overloads
 #
