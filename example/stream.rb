@@ -31,28 +31,28 @@ class Mystreami < Vips::Streamiu
       puts "seek: offset #{offset}, whence #{whence}"
       if @pipe_mode
         puts "    new_position == -1 (pipe mode)"
-        -1 
-      else
-        case whence 
-        when 0
-          # SEEK_SET
-          new_read_point = offset
-        when 1
-          # SEEK_CUR
-          new_read_point = self.read_point + offset
-        when 2
-          # SEEK_END
-          new_read_point = self.length + offset
-        else
-          raise "bad whence #{whence}"
-        end
-
-        @read_point = [0, [@length, new_read_point].min].max
-
-        puts "    new_position = #{@read_point}"
-
-        @read_point
+        return -1 
       end
+
+      case whence 
+      when 0
+        # SEEK_SET
+        new_read_point = offset
+      when 1
+        # SEEK_CUR
+        new_read_point = self.read_point + offset
+      when 2
+        # SEEK_END
+        new_read_point = self.length + offset
+      else
+        raise "bad whence #{whence}"
+      end
+
+      @read_point = [0, [@length, new_read_point].min].max
+
+      puts "    new_position = #{@read_point}"
+
+      @read_point
     end
   end
 end

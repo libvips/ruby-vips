@@ -60,31 +60,31 @@ module Vips
   # ruby-ffi makes it hard to use the g_signal_connect user data param 
   # to pass the function pointer through, unfortunately.
 
-  MARSHAL_PROGRESS = lambda do |handler|
+  MARSHAL_PROGRESS = Proc.new do |handler|
     FFI::Function.new(:void, [:pointer, :pointer, :pointer]) do |vi, prog, cb|
       handler.(Progress.new(prog))
     end
   end
 
-  MARSHAL_READ = lambda do |handler|
+  MARSHAL_READ = Proc.new do |handler|
     FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
       handler.(p, len)
     end
   end
 
-  MARSHAL_SEEK = lambda do |handler|
+  MARSHAL_SEEK = Proc.new do |handler|
     FFI::Function.new(:int64_t, [:pointer, :int64_t, :int]) do |i, off, whence|
       handler.(off, whence)
     end
   end
 
-  MARSHAL_WRITE = lambda do |handler|
+  MARSHAL_WRITE = Proc.new do |handler|
     FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
       handler.(p, len)
     end
   end
 
-  MARSHAL_FINISH = lambda do |handler|
+  MARSHAL_FINISH = Proc.new do |handler|
     FFI::Function.new(:void, [:pointer, :pointer]) do |i, cb|
       handler.()
     end
@@ -237,6 +237,7 @@ module Vips
         # This will grab any block given to us and make it into a proc
         prc = Proc.new
       elsif handler
+        # We assume the hander is a proc (perhas we should test)
         prc = handler
       else
         raise Vips::Error, "must supply either block or handler"
