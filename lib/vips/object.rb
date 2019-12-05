@@ -68,34 +68,24 @@ module Vips
 
   MARSHAL_READ = lambda do |handler|
     FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
-      puts "MARSHAL_READ handler: #{len} bytes to read"
-      bytes_read = handler.(p, len)
-      puts "  bytes_read = #{bytes_read}"
-
-      bytes_read
+      handler.(p, len)
     end
   end
 
   MARSHAL_SEEK = lambda do |handler|
     FFI::Function.new(:int64_t, [:pointer, :int64_t, :int]) do |i, off, whence|
-      puts "MARSHAL_SEEK handler: off #{off}, whence #{whence}"
-      new_position = handler.(off, whence)
-      puts "  new_position = #{new_position}"
-
-      new_position
+      handler.(off, whence)
     end
   end
 
   MARSHAL_WRITE = lambda do |handler|
     FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
-      puts "MARSHAL_WRITE handler: #{len} bytes to write"
       handler.(p, len)
     end
   end
 
   MARSHAL_FINISH = lambda do |handler|
     FFI::Function.new(:void, [:pointer, :pointer]) do |i, cb|
-      puts "MARSHAL_FINISH handler:"
       handler.()
     end
   end
