@@ -59,34 +59,65 @@ module Vips
   #
   # ruby-ffi makes it hard to use the g_signal_connect user data param 
   # to pass the function pointer through, unfortunately.
+  #
+  # We can't throw exceptions across C, so we must catch everything.
 
   MARSHAL_PROGRESS = Proc.new do |handler|
     FFI::Function.new(:void, [:pointer, :pointer, :pointer]) do |vi, prog, cb|
-      handler.(Progress.new(prog))
+      begin
+        handler.(Progress.new(prog))
+      rescue Exception => e
+        puts "progress: #{e}"
+      end
     end
   end
 
   MARSHAL_READ = Proc.new do |handler|
     FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
-      handler.(p, len)
+      begin
+        result = handler.(p, len)
+      rescue Exception => e
+        puts "read: #{e}"
+        result = 0
+      end
+
+      result
     end
   end
 
   MARSHAL_SEEK = Proc.new do |handler|
     FFI::Function.new(:int64_t, [:pointer, :int64_t, :int]) do |i, off, whence|
-      handler.(off, whence)
+      begin
+        result = handler.(off, whence)
+      rescue Exception => e
+        puts "seek: #{e}"
+        result = -1
+      end
+
+      result
     end
   end
 
   MARSHAL_WRITE = Proc.new do |handler|
     FFI::Function.new(:int64_t, [:pointer, :pointer, :int64_t]) do |i, p, len|
-      handler.(p, len)
+      begin
+        result = handler.(p, len)
+      rescue Exception => e
+        puts "write: #{e}"
+        result = 0
+      end
+
+      result
     end
   end
 
   MARSHAL_FINISH = Proc.new do |handler|
     FFI::Function.new(:void, [:pointer, :pointer]) do |i, cb|
-      handler.()
+      begin
+        handler.()
+      rescue Exception => e
+        puts "finish: #{e}"
+      end
     end
   end
 

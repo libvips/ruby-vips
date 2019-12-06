@@ -51,7 +51,13 @@ module Vips
     # number of bytes written.
     def on_write &block
       signal_connect "write" do |p, len|
-        block.call(p.get_bytes(0, len))
+        chunk = p.get_bytes(0, len)
+        bytes_written = block.call chunk
+
+        # early release of memory allocated by get_bytes
+        chunk.clear
+
+        bytes_written
       end
     end
 

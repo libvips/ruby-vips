@@ -54,7 +54,6 @@ module Vips
       signal_connect "read" do |buf, len|
         chunk = block.call len
         return 0 if chunk == nil
-
         buf.put_bytes(0, chunk, 0, chunk.bytesize)
         chunk.bytesize
       end
@@ -65,7 +64,7 @@ module Vips
     # position.
     def on_seek &block
       signal_connect "seek" do |offset, whence|
-        block.call offset, whence
+       block.call offset, whence
       end
     end
 
