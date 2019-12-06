@@ -46,5 +46,22 @@ module Vips
       super pointer
     end
 
+    # The block is executed to write data to the source. The interface is
+    # exactly as IO::write, ie. it should write the string and return the 
+    # number of bytes written.
+    def on_write &block
+      signal_connect "write" do |p, len|
+        block.call(p.get_bytes(0, len))
+      end
+    end
+
+    # The block is executed at the end of write. It should do any necessary
+    # finishing action.
+    def on_finish &block
+      signal_connect "finish" do 
+        block.call()
+      end
+    end
+
   end
 end

@@ -108,81 +108,19 @@ if Vips::at_least_libvips?(8, 9)
 end
 
 if Vips::at_least_libvips?(8, 9)
-  class Mystreami < Vips::Streamiu
-    def initialize(filename, pipe_mode=false)
-      @filename = filename
-      @contents = File.open(@filename, "rb").read
-      @length = @contents.length
-      @pipe_mode = pipe_mode
-      @read_point = 0
-
-      super()
-
-      signal_connect "read" do |buf, len|
-        bytes_available = @length - @read_point
-        bytes_to_copy = [bytes_available, len].min
-        buf.put_bytes(0, @contents, @read_point, bytes_to_copy)
-        @read_point += bytes_to_copy
-
-        bytes_to_copy
-      end
-
-      signal_connect "seek" do |offset, whence|
-        if @pipe_mode
-          -1
-        else
-          case whence 
-          when 0
-            # SEEK_SET
-            new_read_point = offset
-          when 1
-            # SEEK_CUR
-            new_read_point = self.read_point + offset
-          when 2
-            # SEEK_END
-            new_read_point = self.length + offset
-          else
-            raise "bad whence #{whence}"
-          end
-
-          @read_point = [0, [@length, new_read_point].min].max
-        end
-      end
-    end
-  end
-
-  class Mystreamo < Vips::Streamou
-    def initialize(filename)
-      @filename = filename
-      @f = File.open(@filename, "wb")
-
-      super()
-
-      signal_connect "write" do |buf, len|
-        @f.write(buf.get_bytes(0, len))
-        len
-      end
-
-      signal_connect "finish" do 
-        @f.close
-        @f = nil
-      end
-
-    end
-  end
-end
-
-if Vips::at_least_libvips?(8, 9)
   RSpec.describe Vips::Streamiu do
     it 'can create a user input stream' do
-      streamiu = Mystreami.new simg('wagon.jpg')
+      input_stream = Vips::Streamiu.new
 
-      expect(streamiu)
+      expect(input_stream)
     end
 
     it 'can load a user stream' do
-      streamiu = Mystreami.new simg('wagon.jpg')
-      image = Vips::Image.new_from_stream streamiu, ''
+      source = File.open simg('wagon.jpg'), "rb"
+      input_stream = Vips::Streamiu.new
+      input_stream.on_read { |length| source.read length }
+      input_stream.on_seek { |offset, whence| source.seek(offset, whence) }
+      image = Vips::Image.new_from_stream input_stream, ""
 
       expect(image)
       expect(image.width).to eq(685)
@@ -191,9 +129,12 @@ if Vips::at_least_libvips?(8, 9)
       expect(image.avg).to be_within(0.001).of(109.789)
     end
 
-    it 'can load a user stream in pipe mode' do
-      streamiu = Mystreami.new simg('wagon.jpg'), true
-      image = Vips::Image.new_from_stream streamiu, ''
+    it 'on_seek is optional' do
+      source = File.open simg('wagon.jpg'), "rb"
+      input_stream = Vips::Streamiu.new
+      input_stream.on_read { |length| source.read length }
+      input_stream.on_seek { |offset, whence| -1 }
+      image = Vips::Image.new_from_stream input_stream, ""
 
       expect(image)
       expect(image.width).to eq(685)
@@ -203,16 +144,19 @@ if Vips::at_least_libvips?(8, 9)
     end
 
     it 'can create a user output stream' do
-      streamou = Mystreamo.new timg('x.jpg')
+      output_stream = Vips::Streamou.new
 
-      expect(streamou)
+      expect(output_stream)
     end
 
     it 'can write an image to a user output stream' do
-      image = Vips::Image.new_from_file simg('wagon.jpg')
       filename = timg('x5.png')
-      streamou = Mystreamo.new filename
-      image.write_to_stream streamou, '.png'
+      dest = File.open filename, "wb"
+      output_stream = Vips::Streamou.new
+      output_stream.on_write { |chunk| dest.write(chunk) }
+      output_stream.on_finish { dest.close }
+      image = Vips::Image.new_from_file simg('wagon.jpg')
+      image.write_to_stream output_stream, ".png"
 
       image = Vips::Image.new_from_file filename
       expect(image)
