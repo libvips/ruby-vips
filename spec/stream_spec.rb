@@ -133,7 +133,6 @@ if Vips::at_least_libvips?(8, 9)
       source = File.open simg('wagon.jpg'), "rb"
       input_stream = Vips::Streamiu.new
       input_stream.on_read { |length| source.read length }
-      input_stream.on_seek { |offset, whence| -1 }
       image = Vips::Image.new_from_stream input_stream, ""
 
       expect(image)
