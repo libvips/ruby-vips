@@ -53,8 +53,6 @@ module Vips
       signal_connect "write" do |p, len|
         chunk = p.get_bytes(0, len)
         bytes_written = block.call chunk
-
-        # early release of memory allocated by get_bytes
         chunk.clear
 
         bytes_written
