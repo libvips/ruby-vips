@@ -268,7 +268,7 @@ module Vips
         # This will grab any block given to us and make it into a proc
         prc = Proc.new
       elsif handler
-        # We assume the hander is a proc (perhas we should test)
+        # We assume the hander is a proc (perhaps we should test)
         prc = handler
       else
         raise Vips::Error, "must supply either block or handler"
