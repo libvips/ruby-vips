@@ -1174,7 +1174,7 @@ module Vips
         GObject::GValue.from_nick Vips::BLEND_MODE_TYPE, x
       end
 
-      Vips::Image.composite([self] + overlay, mode, opts)
+      Vips::Image.composite([self] + overlay, mode, **opts)
     end
 
     # Return the coordinates of the image maximum.
@@ -1424,7 +1424,7 @@ module Vips
     # @param opts [Hash] Set of options
     # @return [Vips::Image] Output image
     def scaleimage **opts
-      Vips::Image.scale self, opts
+      Vips::Image.scale self, **opts
     end
   end
 end
