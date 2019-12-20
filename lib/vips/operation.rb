@@ -77,13 +77,12 @@ module Vips
       @args.each do |details|
         arg_name = details[:arg_name]
         flags = details[:flags]
-        gtype = details[:gtype]
 
         if (flags & ARGUMENT_INPUT) != 0
           if (flags & ARGUMENT_REQUIRED) != 0 && 
              (flags & ARGUMENT_DEPRECATED) == 0
             @required_input << details
-          elsif 
+          else
             # we allow deprecated optional args
             @optional_input[arg_name] = details
           end
