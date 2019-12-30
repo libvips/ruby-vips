@@ -212,7 +212,7 @@ require 'vips/gvalue'
 # memory buffers, create images that wrap C-style memory arrays, or make images
 # from constants.
 #
-# Use {Streamiu} and {Image.new_from_stream} to load images from any data
+# Use {Source} and {Image.new_from_source} to load images from any data
 # source, for example URIs.
 #
 # The next line:
@@ -256,7 +256,7 @@ require 'vips/gvalue'
 # suffix. You can also write formatted images to memory buffers, or dump
 # image data to a raw memory array.
 #
-# Use {Streamou} and {Image#write_to_stream} to write formatted images to 
+# Use {Target} and {Image#write_to_target} to write formatted images to 
 # any data sink, for example URIs.
 #
 # # How it works
@@ -479,14 +479,14 @@ require 'vips/gvalue'
 #
 # User streams
 #
-# You can make your own input and output stream objects with {Streamiu} and
-# {Streamou}. For example:
+# You can make your own input and output stream objects with {SourceCustom} and
+# {TargetCustom}. For example:
 #
 # ```ruby
-# source = File.open "some/file", "rb"
-# input_stream = Vips::Streamiu.new
-# input_stream.on_read { |length| source.read length }
-# image = Vips::Image.new_from_stream input_stream, "", access: "sequential"
+# file = File.open "some/file", "rb"
+# source = Vips::SourceCustom.new
+# source.on_read { |length| file.read length }
+# image = Vips::Image.new_from_source source, "", access: "sequential"
 # ```
 #
 # # Overloads
@@ -679,8 +679,8 @@ require 'vips/image'
 require 'vips/interpolate'
 require 'vips/region'
 require 'vips/version'
-require 'vips/stream'
-require 'vips/streami'
-require 'vips/streamiu'
-require 'vips/streamo'
-require 'vips/streamou'
+require 'vips/connection'
+require 'vips/source'
+require 'vips/sourcecustom'
+require 'vips/target'
+require 'vips/targetcustom'

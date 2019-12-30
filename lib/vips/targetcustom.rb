@@ -8,39 +8,38 @@ require 'ffi'
 
 module Vips
   if Vips::at_least_libvips?(8, 9)
-    attach_function :vips_streamou_new, [], :pointer
+    attach_function :vips_target_custom_new, [], :pointer
   end
 
-  # A user output stream you can attach action signal handlers to to implememt 
+  # A target you can attach action signal handlers to to implememt 
   # custom output types.
   #
   # ```ruby
-  # stream = Vips::Streamou.new
-  # stream.signal_connect "write" do |buf, len|
-  #   # write up to len bytes from buf, return the nuber of bytes 
-  #   # actually written
+  # target = Vips::TargetCustom.new
+  # target.on_write do |buf|
+  #   # write buf to the output
   # end
   # ```
-  class Streamou < Vips::Streamo
-    module StreamouLayout
+  class TargetCustom < Vips::Target
+    module TargetCustomLayout
       def self.included(base)
         base.class_eval do
-          layout :parent, Vips::Streamo::Struct
+          layout :parent, Vips::Target::Struct
           # rest opaque
         end
       end
     end
 
-    class Struct < Vips::Streamo::Struct
-      include StreamouLayout
+    class Struct < Vips::Target::Struct
+      include TargetCustomLayout
     end
 
-    class ManagedStruct < Vips::Streamo::ManagedStruct
-      include StreamouLayout
+    class ManagedStruct < Vips::Target::ManagedStruct
+      include TargetCustomLayout
     end
 
     def initialize
-      pointer = Vips::vips_streamou_new
+      pointer = Vips::vips_target_custom_new
       raise Vips::Error if pointer.null?
 
       super pointer

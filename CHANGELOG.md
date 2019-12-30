@@ -9,7 +9,7 @@
 * fix `GValue#set` for stricter metadata rules in 8.9 [jcupitt]
 * fix a ref leak on operation build error [jcupitt]
 * faster operation call [jcupitt]
-* add support for VipsStream [jcupitt]
+* add support for VipsConnection [jcupitt]
 * add `signal_connect` [jcupitt]
 * add `Image#set_kill` for progress termination [jcupitt]
 

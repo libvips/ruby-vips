@@ -8,14 +8,14 @@ require 'ffi'
 
 module Vips
   if Vips::at_least_libvips?(8, 9)
-    attach_function :vips_stream_filename, [:pointer], :string
-    attach_function :vips_stream_nick, [:pointer], :string
+    attach_function :vips_connection_filename, [:pointer], :string
+    attach_function :vips_connection_nick, [:pointer], :string
   end
 
-  # Abstract base class for streams.
-  class Stream < Vips::Object
+  # Abstract base class for connections.
+  class Connection < Vips::Object
     # The layout of the VipsRegion struct.
-    module StreamLayout
+    module ConnectionLayout
       def self.included(base)
         base.class_eval do
           layout :parent, Vips::Object::Struct
@@ -25,19 +25,19 @@ module Vips
     end
 
     class Struct < Vips::Object::Struct
-      include StreamLayout
+      include ConnectionLayout
     end
 
     class ManagedStruct < Vips::Object::ManagedStruct
-      include StreamLayout
+      include ConnectionLayout
     end
 
     def filename
-      Vips::vips_stream_filename self
+      Vips::vips_connection_filename self
     end
 
     def nick
-      Vips::vips_stream_nick self
+      Vips::vips_connection_nick self
     end
   end
 end

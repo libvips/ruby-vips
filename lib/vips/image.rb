@@ -26,8 +26,8 @@ module Vips
   attach_function :vips_foreign_find_save_buffer, [:string], :string
 
   if Vips::at_least_libvips?(8, 9)
-    attach_function :vips_foreign_find_load_stream, [:pointer], :string
-    attach_function :vips_foreign_find_save_stream, [:string], :string
+    attach_function :vips_foreign_find_load_source, [:pointer], :string
+    attach_function :vips_foreign_find_save_target, [:string], :string
   end
 
   attach_function :vips_image_write_to_memory,
@@ -303,43 +303,43 @@ module Vips
       Vips::Operation.call loader, [data], opts, option_string
     end
 
-    # Create a new {Image} from an input stream. Load options may be passed as
+    # Create a new {Image} from a source. Load options may be passed as
     # strings or appended as a hash. For example:
     #
     # ```
-    # stream = Vips::Streami.new_from_file("k2.jpg")
-    # image = Vips::Image.new_from_stream stream, "shrink=2"
+    # source = Vips::Source.new_from_file("k2.jpg")
+    # image = Vips::Image.new_from_source source, "shrink=2"
     # ```
     #
     # or alternatively:
     #
     # ```
-    # image = Vips::Image.new_from_stream stream, "", shrink: 2
+    # image = Vips::Image.new_from_source source, "", shrink: 2
     # ```
     #
     # The options available depend on the file format. Try something like:
     #
     # ```
-    # $ vips jpegload_stream
+    # $ vips jpegload_source
     # ```
     #
     # at the command-line to see the available options. Not all loaders
-    # support load from stream, but at least JPEG, PNG and
+    # support load from source, but at least JPEG, PNG and
     # TIFF images will work.
     #
     # Loading is fast: only enough data is read to be able to fill
     # out the header. Pixels will only be read and decompressed when they are 
     # needed.
     #
-    # @param stream [Vips::Streami] the stream to load from
+    # @param source [Vips::Source] the source to load from
     # @param option_string [String] load options as a string
     # @macro vips.loadopts
     # @return [Image] the loaded image
-    def self.new_from_stream stream, option_string, **opts
-      loader = Vips::vips_foreign_find_load_stream stream
+    def self.new_from_source source, option_string, **opts
+      loader = Vips::vips_foreign_find_load_source source
       raise Vips::Error if loader.nil?
 
-      Vips::Operation.call loader, [stream], opts, option_string
+      Vips::Operation.call loader, [source], opts, option_string
     end
 
     def self.matrix_from_array width, height, array
@@ -512,41 +512,41 @@ module Vips
       return buffer
     end
 
-    # Write this image to a stream. Save options may be encoded in
+    # Write this image to a target. Save options may be encoded in
     # the format_string or given as a hash. For example:
     #
     # ```ruby
-    # stream = Vips::Streamo.new_to_file "k2.jpg"
-    # image.write_to_stream stream, ".jpg[Q=90]"
+    # target = Vips::Target.new_to_file "k2.jpg"
+    # image.write_to_target target, ".jpg[Q=90]"
     # ```
     #
     # or equivalently:
     #
     # ```ruby
-    # image.write_to_stream stream, ".jpg", Q: 90
+    # image.write_to_target target, ".jpg", Q: 90
     # ```
     #
     # The full set of save options depend on the selected saver. Try
     # something like:
     #
     # ```
-    # $ vips jpegsave_stream
+    # $ vips jpegsave_target
     # ```
     #
     # to see all the available options for JPEG save.
     #
-    # @param stream [Vips::Streamo] the stream to write to
+    # @param target [Vips::Target] the target to write to
     # @param format_string [String] save format plus string options
     # @macro vips.saveopts
-    def write_to_stream stream, format_string, **opts
+    def write_to_target target, format_string, **opts
       filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
       option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
-      saver = Vips::vips_foreign_find_save_stream filename
+      saver = Vips::vips_foreign_find_save_target filename
       if saver == nil
-        raise Vips::Error, "No known stream saver for '#{filename}'."
+        raise Vips::Error, "No known target saver for '#{filename}'."
       end
 
-      Vips::Operation.call saver, [self, stream], opts, option_string
+      Vips::Operation.call saver, [self, target], opts, option_string
       write_gc
     end
 
