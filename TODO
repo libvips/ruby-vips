@@ -28,7 +28,7 @@
 
 	cd lib/vips
 	ruby > methods.rb
-	require 'vips'; Vips::generate_yard
+	require 'vips'; Vips::Yard.generate
 	^D
 
 - Regenerate `.rubocop_todo.yml`.

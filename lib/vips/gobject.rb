@@ -114,7 +114,7 @@ module GObject
     layout :value, GParamSpec.ptr
   end
 
-  attach_function :g_param_spec_get_blurb, [GParamSpec.ptr], :string
+  attach_function :g_param_spec_get_blurb, [:pointer], :string
 
   attach_function :g_object_ref, [:pointer], :void
   attach_function :g_object_unref, [:pointer], :void

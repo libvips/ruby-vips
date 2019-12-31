@@ -53,6 +53,7 @@ module Vips
 
     def initialize name
       @op = Operation.new name
+      @name = name
       @args = []
       @required_input = []
       @optional_input = {}

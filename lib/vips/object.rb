@@ -206,15 +206,15 @@ module Vips
     # return a pspec, or nil ... nil wil leave a message in the error log
     # which you must clear
     def get_pspec name
-      pspec = GObject::GParamSpecPtr.new
+      ppspec = GObject::GParamSpecPtr.new
       argument_class = Vips::ArgumentClassPtr.new
       argument_instance = Vips::ArgumentInstancePtr.new
 
       result = Vips::vips_object_get_argument self, name,
-          pspec, argument_class, argument_instance
+          ppspec, argument_class, argument_instance
       return nil if result != 0
 
-      pspec
+      ppspec[:value]
     end
 
     # return a gtype, raise an error on not found
@@ -222,7 +222,7 @@ module Vips
       pspec = get_pspec name
       raise Vips::Error unless pspec
 
-      pspec[:value][:value_type]
+      pspec[:value_type]
     end
 
     # return a gtype, 0 on not found
@@ -233,7 +233,7 @@ module Vips
         return 0
       end
 
-      pspec[:value][:value_type]
+      pspec[:value_type]
     end
 
     def get name
