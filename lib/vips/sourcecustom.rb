@@ -11,15 +11,20 @@ module Vips
     attach_function :vips_source_custom_new, [], :pointer
   end
 
-  # A source you can attach action signal handlers to to implememt 
+  # A source you can attach action signal handlers to to implement 
   # custom input types.
   #
+  # For example:
+  #
   # ```ruby
+  # file = File.open "some/file/name", "rb"
   # source = Vips::SourceCustom.new
-  # source.on_read do |len|
-  #   # return up to len bytes 
-  # end
+  # source.on_read { |length| file.read length }
+  # image = Vips::Image.new_from_source source
   # ```
+  #
+  # (just an example -- of course in practice you'd use {Source#new_from_file} 
+  # to read from a named file)
   class SourceCustom < Vips::Source
     module SourceCustomLayout
       def self.included(base)
@@ -49,6 +54,9 @@ module Vips
     # exactly as IO::read, ie. it takes a maximum number of bytes to read and
     # returns a string of bytes from the source, or nil if the source is already
     # at end of file.
+    #
+    # @yieldparam length [Integer] Read and return up to this many bytes
+    # @yieldreturn [String] Up to length bytes of data, or nil for EOF
     def on_read &block
       signal_connect "read" do |buf, len|
         chunk = block.call len
@@ -62,12 +70,16 @@ module Vips
     end
 
     # The block is executed to seek the source. The interface is exactly as
-    # IO::seek, ie. it should take an offset and whence, and return the new read
-    # position.
+    # IO::seek, ie. it should take an offset and whence, and return the 
+    # new read position.
     #
     # This handler is optional -- if you do not attach a seek handler,
-    # ruby-vips will treat your source as an unseekable pipe-like object, and
+    # {Source} will treat your source like an unseekable pipe object and
     # do extra caching.
+    #
+    # @yieldparam offset [Integer] Seek offset
+    # @yieldparam whence [Integer] Seek whence
+    # @yieldreturn [Integer] the new read position, or -1 on error
     def on_seek &block
       signal_connect "seek" do |offset, whence|
         block.call offset, whence

@@ -14,12 +14,17 @@ module Vips
   # A target you can attach action signal handlers to to implememt 
   # custom output types.
   #
+  # For example:
+  #
   # ```ruby
+  # file = File.open "some/file/name", "wb"
   # target = Vips::TargetCustom.new
-  # target.on_write do |buf|
-  #   # write buf to the output
-  # end
+  # target.on_write { |bytes| file.write bytes }
+  # image.write_to_target target, ".png"
   # ```
+  #
+  # (just an example -- of course in practice you'd use {Target#new_to_file} 
+  # to write to a named file)
   class TargetCustom < Vips::Target
     module TargetCustomLayout
       def self.included(base)
@@ -48,6 +53,9 @@ module Vips
     # The block is executed to write data to the source. The interface is
     # exactly as IO::write, ie. it should write the string and return the 
     # number of bytes written.
+    #
+    # @yieldparam bytes [String] Write these bytes to the file 
+    # @yieldreturn [Integer] The number of bytes written, or -1 on error
     def on_write &block
       signal_connect "write" do |p, len|
         chunk = p.get_bytes(0, len)
@@ -59,7 +67,7 @@ module Vips
     end
 
     # The block is executed at the end of write. It should do any necessary
-    # finishing action.
+    # finishing action, such as closing a file.
     def on_finish &block
       signal_connect "finish" do 
         block.call()

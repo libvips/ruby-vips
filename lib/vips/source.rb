@@ -40,7 +40,7 @@ module Vips
     # Create a new source from a file descriptor. File descriptors are
     # small integers, for example 0 is stdin.
     #
-    # Pass sources to Vips::Image.new_from_source to load images from
+    # Pass sources to {Image.new_from_source} to load images from
     # them.
     # 
     # @param descriptor [Integer] the file descriptor
@@ -54,7 +54,7 @@ module Vips
 
     # Create a new source from a file name. 
     #
-    # Pass sourca to Vips::Image.new_from_source to load images from
+    # Pass sources to {Image.new_from_source} to load images from
     # them.
     # 
     # @param filename [String] the name of the file
@@ -70,7 +70,7 @@ module Vips
     # Create a new source from an area of memory. Memory areas can be
     # strings, arrays and so forth -- anything that supports bytesize.
     #
-    # Pass sources to Vips::Image.new_from_source to load images from
+    # Pass sources to {Image.new_from_source} to load images from
     # them.
     # 
     # @param data [String] memory area 

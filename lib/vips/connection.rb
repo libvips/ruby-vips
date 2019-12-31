@@ -32,10 +32,13 @@ module Vips
       include ConnectionLayout
     end
 
+    # Get any filename associated with a connection, or nil.
     def filename
       Vips::vips_connection_filename self
     end
 
+    # Get a nickname (short description) of a connection that could be shown to
+    # the user.
     def nick
       Vips::vips_connection_nick self
     end

@@ -41,7 +41,7 @@ module Vips
     # Create a new target to a file descriptor. File descriptors are
     # small integers, for example 1 is stdout.
     #
-    # Pass targets to Vips::Image.write_to_target to write images to
+    # Pass targets to {Image#write_to_target} to write images to
     # them.
     # 
     # @param descriptor [Integer] the file descriptor
@@ -55,7 +55,7 @@ module Vips
 
     # Create a new target to a file name. 
     #
-    # Pass targets to Vips::Image.write_to_target to write images to
+    # Pass targets to {Image#write_to_target} to write images to
     # them.
     # 
     # @param filename [String] the name of the file
@@ -70,11 +70,11 @@ module Vips
 
     # Create a new target to an area of memory. 
     #
-    # Pass output targets to Vips::Image.write_to_target to write images to
+    # Pass targets to {Image#write_to_target} to write images to
     # them.
     #
-    # Once the image has been written, use `target.get("blob")` to read out the
-    # data.
+    # Once the image has been written, use {Object#get}`("blob")` to read out 
+    # the data.
     # 
     # @return [Target] the new Vips::Target
     def self.new_to_memory
