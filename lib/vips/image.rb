@@ -1465,6 +1465,9 @@ module Vips
     # these have hand-written methods, see above
     NO_GENERATE = ["scale", "bandjoin", "composite", "ifthenelse"]
 
+    # these are aliased (appear under several names)
+    ALIAS = ["crop"]
+
     # turn a gtype into a ruby type name
     def self.gtype_to_ruby gtype
       fundamental = GObject::g_type_fundamental gtype
@@ -1551,13 +1554,23 @@ module Vips
     end
 
     def self.generate
-      generate_class = lambda do |gtype, _|
-        nickname = Vips::nickname_find gtype
+      alias_gtypes = {}
+      ALIAS.each do |name| 
+        gtype = Vips::type_find "VipsOperation", name
+        alias_gtypes[gtype] = name 
+      end
 
-        if nickname
+      generate_class = lambda do |gtype, _|
+        if alias_gtypes.key? gtype
+          name = alias_gtypes[gtype]
+        else
+          name = Vips::nickname_find gtype
+        end
+
+        if name
           begin
             # can fail for abstract types
-            introspect = Vips::Introspect.get_yard nickname
+            introspect = Vips::Introspect.get_yard name
           rescue Vips::Error
             nil
           end

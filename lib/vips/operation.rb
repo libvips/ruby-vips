@@ -53,7 +53,6 @@ module Vips
 
     def initialize name
       @op = Operation.new name
-      @name = name
       @args = []
       @required_input = []
       @optional_input = {}
@@ -112,7 +111,8 @@ module Vips
     # Yard comment generation needs a little more introspection. We add this
     # extra metadata in a separate method to keep the main path as fast as
     # we can.
-    def add_yard_introspection 
+    def add_yard_introspection name
+      @name = name
       @description = Vips::vips_object_get_description @op
       @flags = Vips::vips_operation_get_flags @op
       @member_x = nil
@@ -147,7 +147,7 @@ module Vips
 
     def self.get_yard name
       introspect = Introspect.get name
-      introspect.add_yard_introspection
+      introspect.add_yard_introspection name
       introspect
     end
 

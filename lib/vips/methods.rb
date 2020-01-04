@@ -384,7 +384,7 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
-# @!method extract_area(left, top, width, height, **opts)
+# @!method crop(left, top, width, height, **opts)
 #   Extract an area from an image.
 #   @param left [Integer] Left edge of extract area
 #   @param top [Integer] Top edge of extract area
@@ -1103,17 +1103,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page Load this page from the file
 #   @option opts [Integer] :n Load this many pages
-#   @option opts [Boolean] :memory Force open via memory
-#   @option opts [Vips::Access] :access Required access pattern for this file
-#   @option opts [Boolean] :sequential Sequential read only
-#   @option opts [Boolean] :fail Fail on first error
-#   @option opts [Boolean] :disc Open to disc
-#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
-#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
-
-# @!method self.pngload_base(**opts)
-#   Load png base class.
-#   @param opts [Hash] Set of options
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Boolean] :sequential Sequential read only
