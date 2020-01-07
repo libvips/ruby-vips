@@ -41,6 +41,7 @@
 
 - Push new gem to rubygems, tag repository with version.
 
+	gem2.5 signin --otp 111111 / enter username and passwd
 	bundle exec rake release
 
   There's an invisible prompt for the authenticator code. Enter eg. 123456, 
