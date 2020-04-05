@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "ffi", ["~> 1.9"]
 
-  spec.add_development_dependency "rake", ["~> 11.0"]
+  spec.add_development_dependency "rake", ["~> 12.0"]
   spec.add_development_dependency "rspec", ["~> 3.3"]
   spec.add_development_dependency "yard", ["~> 0.9.11"]
   spec.add_development_dependency "redcarpet", ["~> 3.3"]
