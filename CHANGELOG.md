@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.0.18 (2020-04-05)
+
+* better behaviour with some nil parameters [jcupitt]
+
 ## Version 2.0.17 (2019-10-29)
 
 * install msys2 libvips on Windows [larskanis]

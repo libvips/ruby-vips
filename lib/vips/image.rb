@@ -459,6 +459,8 @@ module Vips
     #
     # @param name [String] filename to write to
     def write_to_file name, **opts
+      raise Vips::Error, "filename is nil" if name == nil
+
       filename = Vips::p2str(Vips::vips_filename_get_filename name)
       option_string = Vips::p2str(Vips::vips_filename_get_options name)
       saver = Vips::vips_foreign_find_save filename
@@ -497,6 +499,7 @@ module Vips
     # @macro vips.saveopts
     # @return [String] the image saved in the specified format
     def write_to_buffer format_string, **opts
+      raise Vips::Error, "filename is nil" if format_string == nil
       filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
       option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
       saver = Vips::vips_foreign_find_save_buffer filename
@@ -539,6 +542,7 @@ module Vips
     # @param format_string [String] save format plus string options
     # @macro vips.saveopts
     def write_to_target target, format_string, **opts
+      raise Vips::Error, "filename is nil" if format_string == nil
       filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
       option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
       saver = Vips::vips_foreign_find_save_target filename
