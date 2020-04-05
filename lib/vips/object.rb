@@ -262,7 +262,7 @@ module Vips
 
     def signal_connect name, handler=nil
       marshal = MARSHAL_ALL[name.to_sym]
-      raise Vips::Error, "unsupported signal #{name}" if marshal == nil
+      raise Vips::Error, "unsupported signal #{name}" if marshal.nil?
 
       if block_given? 
         # This will grab any block given to us and make it into a proc

@@ -43,7 +43,7 @@ module GObject
     # convert an int enum back into a symbol
     def self.to_nick(gtype, enum_value)
       enum_name = Vips::vips_enum_nick gtype, enum_value
-      if enum_name == nil
+      if enum_name.nil?
         raise Vips::Error
       end
 

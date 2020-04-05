@@ -255,12 +255,12 @@ module Vips
     def self.new_from_file name, **opts
       # very common, and Vips::vips_filename_get_filename will segv if we
       # pass this
-      raise Vips::Error, "filename is nil" if name == nil
+      raise Vips::Error, "filename is nil" if name.nil?
 
       filename = Vips::p2str(Vips::vips_filename_get_filename name)
       option_string = Vips::p2str(Vips::vips_filename_get_options name)
       loader = Vips::vips_foreign_find_load filename
-      raise Vips::Error if loader == nil
+      raise Vips::Error if loader.nil?
 
       Operation.call loader, [filename], opts, option_string
     end
@@ -404,7 +404,7 @@ module Vips
       end
 
       image = Vips::Image.matrix_from_array width, height, array
-      raise Vips::Error if image == nil
+      raise Vips::Error if image.nil?
 
       # be careful to set them as double
       image.set_type GObject::GDOUBLE_TYPE, 'scale', scale.to_f
@@ -459,14 +459,12 @@ module Vips
     #
     # @param name [String] filename to write to
     def write_to_file name, **opts
-      raise Vips::Error, "filename is nil" if name == nil
+      raise Vips::Error, "filename is nil" if name.nil?
 
       filename = Vips::p2str(Vips::vips_filename_get_filename name)
       option_string = Vips::p2str(Vips::vips_filename_get_options name)
       saver = Vips::vips_foreign_find_save filename
-      if saver == nil
-        raise Vips::Error, "No known saver for '#{filename}'."
-      end
+      raise Vips::Error if saver.nil?
 
       Vips::Operation.call saver, [self, filename], opts, option_string
 
@@ -499,16 +497,14 @@ module Vips
     # @macro vips.saveopts
     # @return [String] the image saved in the specified format
     def write_to_buffer format_string, **opts
-      raise Vips::Error, "filename is nil" if format_string == nil
+      raise Vips::Error, "filename is nil" if format_string.nil?
       filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
       option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
       saver = Vips::vips_foreign_find_save_buffer filename
-      if saver == nil
-        raise Vips::Error, "No known buffer saver for '#{filename}'."
-      end
+      raise Vips::Error if saver.nil?
 
       buffer = Vips::Operation.call saver, [self], opts, option_string
-      raise Vips::Error if buffer == nil
+      raise Vips::Error if buffer.nil?
 
       write_gc
 
@@ -542,13 +538,11 @@ module Vips
     # @param format_string [String] save format plus string options
     # @macro vips.saveopts
     def write_to_target target, format_string, **opts
-      raise Vips::Error, "filename is nil" if format_string == nil
+      raise Vips::Error, "filename is nil" if format_string.nil?
       filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
       option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
       saver = Vips::vips_foreign_find_save_target filename
-      if saver == nil
-        raise Vips::Error, "No known target saver for '#{filename}'."
-      end
+      raise Vips::Error if saver.nil?
 
       Vips::Operation.call saver, [self, target], opts, option_string
       write_gc
@@ -560,7 +554,7 @@ module Vips
     def write_to_memory
       len = Vips::SizeStruct.new
       ptr = Vips::vips_image_write_to_memory self, len
-      raise Vips::Error if ptr == nil
+      raise Vips::Error if ptr.nil?
 
       # wrap up as an autopointer
       ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)
@@ -1021,7 +1015,7 @@ module Vips
     # @return [Image] result of equality
     def == other
       # for equality, we must allow tests against nil
-      if other == nil
+      if other.nil?
         false
       else
         call_enum "relational", other, :equal
@@ -1034,7 +1028,7 @@ module Vips
     # @return [Image] result of inequality
     def != other
       # for equality, we must allow tests against nil
-      if other == nil
+      if other.nil?
         true
       else
         call_enum "relational", other, :noteq

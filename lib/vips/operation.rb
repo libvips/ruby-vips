@@ -132,7 +132,7 @@ module Vips
            (flags & ARGUMENT_DEPRECATED) == 0
           # the first required input image is the thing we will be a method 
           # of
-          if @member_x == nil && gtype == IMAGE_TYPE
+          if @member_x.nil? && gtype == IMAGE_TYPE
             @member_x = details 
           else
             @method_args << details
@@ -222,8 +222,7 @@ module Vips
 
       # 2D array values become tiny 2D images
       # if there's nothing to match to, we also make a 2D image
-      if (value.is_a?(Array) && value[0].is_a?(Array)) || 
-         match_image == nil
+      if (value.is_a?(Array) && value[0].is_a?(Array)) || match_image.nil?
         return Image.new_from_array value
       else
         # we have a 1D array ... use that as a pixel constant and
