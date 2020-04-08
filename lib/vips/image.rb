@@ -853,7 +853,7 @@ module Vips
     #
     # @return [Image] modified image
     def draw_point ink, left, top, **opts
-      draw_rect ink, left, top, 1, 1, opts
+      draw_rect ink, left, top, 1, 1, **opts
     end
 
     # Add an image, constant or array.
