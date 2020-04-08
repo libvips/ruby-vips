@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
 
-  spec.add_runtime_dependency "ffi", ["~> 1.9"]
+  spec.add_runtime_dependency "ffi", ["~> 1.12"]
 
   spec.add_development_dependency "rake", ["~> 12.0"]
   spec.add_development_dependency "rspec", ["~> 3.3"]
