@@ -14,18 +14,18 @@ module Vips
   #
   # But at least these should be available:
   #
-  # *   `:nearest` Nearest-neighbour interpolation.
-  # *   `:bilinear` Bilinear interpolation.
-  # *   `:bicubic` Bicubic interpolation.
-  # *   `:lbb` Reduced halo bicubic interpolation.
-  # *   `:nohalo` Edge sharpening resampler with halo reduction.
-  # *   `:vsqbs` B-Splines with antialiasing smoothing.
+  # *   `nearest` Nearest-neighbour interpolation.
+  # *   `bilinear` Bilinear interpolation.
+  # *   `bicubic` Bicubic interpolation.
+  # *   `lbb` Reduced halo bicubic interpolation.
+  # *   `nohalo` Edge sharpening resampler with halo reduction.
+  # *   `vsqbs` B-Splines with antialiasing smoothing.
   #
   #  For example:
   #
   #  ```ruby
   #  im = im.affine [2, 0, 0, 2],
-  #      :interpolate => Vips::Interpolate.new(:bicubic)
+  #      :interpolate => Vips::Interpolate.new('bicubic')
   #  ```
 
   class Interpolate < Vips::Object
