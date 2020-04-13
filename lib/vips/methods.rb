@@ -2024,7 +2024,7 @@ module Vips
 #   @param scale [Float] Scale image by this factor
 #   @param opts [Hash] Set of options
 #   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
-#   @option opts [Vips::Kernel] :kernel Resampling kernel
+#   @option opts [Symbol] :kernel Resampling kernel {Vips::Kernel}
 #   @option opts [Boolean] :centre Use centre sampling convention
 #   @option opts [Float] :vscale Vertical scale image by this factor
 #   @option opts [Float] :idx Horizontal input displacement
