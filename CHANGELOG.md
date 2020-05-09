@@ -5,6 +5,7 @@
 ## Version 2.0.18 (2020-04-05)
 
 * better behaviour with some nil parameters [jcupitt]
+* revise gemspec [jcupitt]
 
 ## Version 2.0.17 (2019-10-29)
 

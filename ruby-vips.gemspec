@@ -1,19 +1,31 @@
+# frozen_string_literal: true
 # coding: utf-8
 
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'vips/version'
+require_relative 'lib/vips/version'
 
 Gem::Specification.new do |spec|
   spec.name = "ruby-vips"
   spec.version = Vips::VERSION
-  spec.authors = ["John Cupitt"]
-  spec.email = "jcupitt@gmail.com"
-
-  spec.summary = "Ruby extension for the vips image processing library."
-  spec.description = "ruby-vips is a binding for the vips image processing library. It is fast and it can process large images without loading the whole image in memory."
+  spec.summary = "A fast image processing library with low memory needs"
+  spec.description = <<-DESC
+ruby-vips is a binding for the libvips image processing library. It is fast 
+and it can process large images without loading the whole image in memory.
+  DESC
   spec.homepage = "http://github.com/libvips/ruby-vips"
   spec.licenses = ["MIT"]
+  spec.authors = ["John Cupitt"]
+  spec.email = ["jcupitt@gmail.com"]
+
+  spec.metadata = {
+    "bug_tracker_uri" => "https://github.com/libvips/ruby-vips/issues",
+    "changelog_uri" => 
+      "https://github.com/libvips/ruby-vips/blob/master/CHANGELOG.md",
+    "documentation_uri" => "https://www.rubydoc.info/gems/ruby-vips",
+    "homepage_uri" => spec.homepage,
+    "source_code_uri" => "https://github.com/libvips/ruby-vips",
+
+    "msys2_mingw_dependencies" => "libvips",
+  }
 
   spec.require_paths = ["lib"]
   spec.extra_rdoc_files = [
@@ -40,5 +52,4 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency "rubocop", ["~> 0.64"]
   end
 
-  spec.metadata["msys2_mingw_dependencies"] = "libvips"
 end
