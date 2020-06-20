@@ -1157,7 +1157,10 @@ module Vips
     # @param overlay [Image, Array<Image>] images to composite
     # @param mode [BlendMode, Array<BlendMode>] blend modes to use
     # @param opts [Hash] Set of options
-    # @option opts [Vips::Interpretation] :compositing_space Composite images in this colour space
+    # @option opts [Array<Integer>] :x x positions of overlay
+    # @option opts [Array<Integer>] :y y positions of overlay
+    # @option opts [Vips::Interpretation] :compositing_space Composite images 
+    #     in this colour space
     # @option opts [Boolean] :premultiplied Images have premultiplied alpha
     # @return [Image] blended image
     def composite overlay, mode, **opts
