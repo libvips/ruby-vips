@@ -7,6 +7,7 @@
 * better behaviour with some nil parameters [jcupitt]
 * revise gemspec [jcupitt]
 * allow symbols for Interpolate.new [noraj]
+* update docs for 8.10, fix minor doc formatting issues [jcupitt]
 
 ## Version 2.0.17 (2019-10-29)
 
