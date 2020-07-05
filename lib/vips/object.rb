@@ -260,15 +260,15 @@ module Vips
       gvalue.unset
     end
 
-    def signal_connect name, handler=nil
+    def signal_connect name, handler=nil, &block
       marshal = MARSHAL_ALL[name.to_sym]
       raise Vips::Error, "unsupported signal #{name}" if marshal.nil?
 
       if block_given? 
-        # This will grab any block given to us and make it into a proc
-        prc = Proc.new
+        # our block as a Proc
+        prc = block
       elsif handler
-        # We assume the hander is a proc (perhaps we should test)
+        # We assume the hander is a Proc (perhaps we should test)
         prc = handler
       else
         raise Vips::Error, "must supply either block or handler"

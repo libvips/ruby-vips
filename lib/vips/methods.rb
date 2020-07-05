@@ -872,21 +872,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
-# @!method self.csvload_base(**opts)
-#   Load csv.
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :skip Skip this many lines at the start of the file
-#   @option opts [Integer] :lines Read this many lines from the file
-#   @option opts [String] :whitespace Set of whitespace characters
-#   @option opts [String] :separator Set of separator characters
-#   @option opts [Boolean] :memory Force open via memory
-#   @option opts [Vips::Access] :access Required access pattern for this file
-#   @option opts [Boolean] :sequential Sequential read only
-#   @option opts [Boolean] :fail Fail on first error
-#   @option opts [Boolean] :disc Open to disc
-#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
-#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
-
 # @!method self.csvload(filename, **opts)
 #   Load csv.
 #   @param filename [String] Filename to load from
@@ -911,17 +896,6 @@ module Vips
 #   @option opts [Integer] :lines Read this many lines from the file
 #   @option opts [String] :whitespace Set of whitespace characters
 #   @option opts [String] :separator Set of separator characters
-#   @option opts [Boolean] :memory Force open via memory
-#   @option opts [Vips::Access] :access Required access pattern for this file
-#   @option opts [Boolean] :sequential Sequential read only
-#   @option opts [Boolean] :fail Fail on first error
-#   @option opts [Boolean] :disc Open to disc
-#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
-#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
-
-# @!method self.matrixload_base(**opts)
-#   Load matrix.
-#   @param opts [Hash] Set of options
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Boolean] :sequential Sequential read only
@@ -999,6 +973,18 @@ module Vips
 # @!method self.ppmload(filename, **opts)
 #   Load ppm from file.
 #   @param filename [String] Filename to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Boolean] :sequential Sequential read only
+#   @option opts [Boolean] :fail Fail on first error
+#   @option opts [Boolean] :disc Open to disc
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
+# @!method self.ppmload_source(source, **opts)
+#   Load ppm base class.
+#   @param source [Vips::Source] Source to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
@@ -1600,6 +1586,18 @@ module Vips
 #   @option opts [Integer] :page_height Set page height for multipage save
 #   @return [nil] 
 
+# @!method ppmsave_target(target, **opts)
+#   Save to ppm.
+#   @param target [Vips::Target] Target to save to
+#   @param opts [Hash] Set of options
+#   @option opts [Boolean] :ascii save as ascii
+#   @option opts [Boolean] :squash save as one bit
+#   @option opts [Integer] :bitdepth Write as a 1 bit image
+#   @option opts [Boolean] :strip Strip all metadata from image
+#   @option opts [Array<Double>] :background Background value
+#   @option opts [Integer] :page_height Set page height for multipage save
+#   @return [nil] 
+
 # @!method radsave(filename, **opts)
 #   Save image to radiance file.
 #   @param filename [String] Filename to save to
@@ -1691,6 +1689,7 @@ module Vips
 #   @option opts [Integer] :colours Max number of palette colours
 #   @option opts [Integer] :Q Quantisation quality
 #   @option opts [Float] :dither Amount of dithering
+#   @option opts [Integer] :bitdepth Write as a 1, 2, 4 or 8 bit image
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1707,6 +1706,7 @@ module Vips
 #   @option opts [Integer] :colours Max number of palette colours
 #   @option opts [Integer] :Q Quantisation quality
 #   @option opts [Float] :dither Amount of dithering
+#   @option opts [Integer] :bitdepth Write as a 1, 2, 4 or 8 bit image
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1724,6 +1724,7 @@ module Vips
 #   @option opts [Integer] :colours Max number of palette colours
 #   @option opts [Integer] :Q Quantisation quality
 #   @option opts [Float] :dither Amount of dithering
+#   @option opts [Integer] :bitdepth Write as a 1, 2, 4 or 8 bit image
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -2735,6 +2736,11 @@ module Vips
 #   @option opts [Integer] :mblend Maximum blend size
 #   @option opts [Integer] :bandno Band to search for features on
 #   @return [Vips::Image] Output image
+
+# @!method matrixinvert(**opts)
+#   Invert an matrix.
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output matrix
 
 # @!method match(sec, xr1, yr1, xs1, ys1, xr2, yr2, xs2, ys2, **opts)
 #   First-order match of two images.
