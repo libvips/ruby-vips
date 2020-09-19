@@ -37,6 +37,10 @@ module Vips
   attach_function :vips_image_get,
       [:pointer, :string, GObject::GValue.ptr], :int
 
+  attach_function :vips_image_get_width, [:pointer], :int
+  attach_function :vips_image_get_height, [:pointer], :int
+  attach_function :vips_image_get_bands, [:pointer], :int
+
   if Vips::at_least_libvips?(8, 5)
     attach_function :vips_image_get_fields, [:pointer], :pointer
     attach_function :vips_image_hasalpha, [:pointer], :int
@@ -189,13 +193,17 @@ module Vips
       #   36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
       return false if name == :to_hash
 
+      super
+    end
+
+    def respond_to_missing? name, include_all = false
       # respond to all vips operations by nickname
       return true if Vips::type_find("VipsOperation", name.to_s) != 0
 
       super
     end
 
-    def self.respond_to? name, include_all = false
+    def self.respond_to_missing? name, include_all = false
       # respond to all vips operations by nickname
       return true if Vips::type_find("VipsOperation", name.to_s) != 0
 
@@ -714,21 +722,21 @@ module Vips
     #
     # @return [Integer] image width, in pixels
     def width
-      get "width"
+      Vips::vips_image_get_width self
     end
 
     # Get image height, in pixels.
     #
     # @return [Integer] image height, in pixels
     def height
-      get "height"
+      Vips::vips_image_get_height self
     end
 
     # Get number of image bands.
     #
     # @return [Integer] number of image bands
     def bands
-      get "bands"
+      Vips::vips_image_get_bands self
     end
 
     # Get image format.
