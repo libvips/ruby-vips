@@ -31,6 +31,8 @@ addons:
       - libpoppler-glib-dev
       - librsvg2-dev
       - libwebp-dev
+      - libtiff5-dev
+      - libjpeg-turbo8-dev
 
 cache:
   bundler: true
