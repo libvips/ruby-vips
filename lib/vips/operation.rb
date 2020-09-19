@@ -24,7 +24,7 @@ module Vips
                               GObject::GParamSpec.ptr,
                               ArgumentClass.ptr,
                               ArgumentInstance.ptr,
-                              :pointer, :pointer], :pointer
+                              :pointer, :pointer], :void
   attach_function :vips_argument_map, [:pointer,
                                        :argument_map_fn,
                                        :pointer, :pointer], :pointer
@@ -66,7 +66,7 @@ module Vips
           # names can include - as punctuation, but we always use _ in
           # Ruby
           arg_name = pspec[:name].tr("-", "_")
-          args << {
+          @args << {
             :arg_name => arg_name,
             :flags => flags,
             :gtype => pspec[:value_type]
@@ -194,10 +194,9 @@ module Vips
     end
 
     def argument_map &block
-      fn = Proc.new do |_op, pspec, argument_class, argument_instance, _a, _b|
+      fn = proc do |_op, pspec, argument_class, argument_instance, _a, _b|
         block.call pspec, argument_class, argument_instance
       end
-
       Vips::vips_argument_map self, fn, nil, nil
     end
 
