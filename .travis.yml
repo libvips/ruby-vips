@@ -14,25 +14,25 @@ env:
 addons:
   apt:
     packages:
-      - libexpat1-dev
       - gettext
-      - libglib2.0-dev
-      - liborc-0.4-dev
+      - libcfitsio3-dev
+      - libexpat1-dev
       - libfftw3-dev
+      - libgif-dev
+      - libglib2.0-dev
+      - libgsf-1-dev
+      - libjpeg-turbo8-dev
       - liblcms2-dev
       - libmagickwand-dev
-      - libopenexr-dev
-      - libcfitsio3-dev
-      - libgif-dev
-      - libgsf-1-dev
       - libmatio-dev
+      - libopenexr-dev
       - libopenslide-dev
+      - liborc-0.4-dev
       - libpango1.0-dev
       - libpoppler-glib-dev
       - librsvg2-dev
-      - libwebp-dev
       - libtiff5-dev
-      - libjpeg-turbo8-dev
+      - libwebp-dev
 
 cache:
   bundler: true
