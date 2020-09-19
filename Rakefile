@@ -20,8 +20,8 @@ end
 
 task :default => :spec
 
-require "github/markup"
-require "redcarpet"
+# require "github/markup"
+# require "redcarpet"
 require "yard"
 require "yard/rake/yardoc_task"
 
