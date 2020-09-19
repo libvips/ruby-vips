@@ -14,7 +14,7 @@ RSpec.describe Vips::Image do
     expect(File.exist?(filename)).to be true
   end
 
-  it 'can load an image from a file' do
+  xit 'can load an image from a file' do
     filename = timg 'x.v'
 
     image = Vips::Image.black(16, 16) + 128
