@@ -24,6 +24,7 @@ addons:
       - libjpeg-turbo8-dev
       - liblcms2-dev
       - libmagickwand-dev
+      - libmagick++-dev
       - libmatio-dev
       - libopenexr-dev
       - libopenslide-dev
