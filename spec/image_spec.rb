@@ -53,7 +53,7 @@ RSpec.describe Vips::Image do
     expect(image.avg).to eq(2.5)
   end
 
-  it 'can make an image from a 1d array' do
+  xit 'can make an image from a 1d array' do
     image = Vips::Image.new_from_array [1, 2]
     expect(image.width).to eq(2)
     expect(image.height).to eq(1)
