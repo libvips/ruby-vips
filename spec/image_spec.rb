@@ -14,7 +14,7 @@ RSpec.describe Vips::Image do
     expect(File.exist?(filename)).to be true
   end
 
-  xit 'can load an image from a file' do
+  it 'can load an image from a file' do
     filename = timg 'x.v'
 
     image = Vips::Image.black(16, 16) + 128
@@ -53,7 +53,7 @@ RSpec.describe Vips::Image do
     expect(image.avg).to eq(2.5)
   end
 
-  xit 'can make an image from a 1d array' do
+  it 'can make an image from a 1d array' do
     image = Vips::Image.new_from_array [1, 2]
     expect(image.width).to eq(2)
     expect(image.height).to eq(1)
