@@ -677,7 +677,7 @@ module Vips
     #
     # See #MutableImage.
     def mutate
-      mutable = Vips::MutableImage.new_from_image self
+      mutable = Vips::MutableImage.new self
       yield mutable
       mutable.image
     end

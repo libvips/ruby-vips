@@ -17,10 +17,9 @@ module Vips
       :filename, :xoffset, :yoffset, :xres, :yres, :size, :get, :get_typeof,
       :get_fields
 
-    private
-
-    # the layout of the VipsImage struct
-    module ImageLayout
+    # layout is exactly as Image (since we are also wrapping a VipsImage
+    # object)
+    module MutableImageLayout
       def self.included base
         base.class_eval do
           layout :parent, Vips::Object::Struct
@@ -30,22 +29,12 @@ module Vips
     end
 
     class Struct < Vips::Object::Struct
-      include ImageLayout
+      include MutableImageLayout
     end
 
     class ManagedStruct < Vips::Object::ManagedStruct
-      include ImageLayout
+      include MutableImageLayout
     end
-
-    class GenericPtr < FFI::Struct
-      layout :value, :pointer
-    end
-
-    def image= image
-      @image = image
-    end
-
-    public
 
     # get the #Image this #MutableImage is modifying. Only use this once you
     # have finished all modifications.
@@ -53,17 +42,25 @@ module Vips
       @image
     end
 
-    # make a mutable image from an image ... copy the VipsImage so that we
-    # have a unique image to modify
-    def self.new_from_image image
-      new_image = image.copy
-      mutable = Vips::MutableImage.new new_image.pointer
-      mutable.image = image 
-      mutable
+    # Make a MutableImage from a regular Image. 
+    def initialize(image)
+      # We take a copy of the regular Image to ensure we have an unshared 
+      # (unique) object. We forward things like #width and #height to this, and 
+      # it's the thing we return at the end of the mutate block.
+      copy_image = image.copy
+
+      # use ptr since we need the raw unwrapped pointer inside the image ...
+      # and make the ref that gobject will unref when it finishes
+      pointer = copy_image.ptr
+      ::GObject::g_object_ref pointer
+      super pointer
+
+      # and save the copy ready for when we finish mutating
+      @image = copy_image
     end
 
     def inspect
-      "#<Image #{width}x#{height} #{format}, #{bands} bands, #{interpretation}>"
+      "#<MutableImage #{width}x#{height} #{format}, #{bands} bands, #{interpretation}>"
     end
 
     def respond_to? name, include_all = false
@@ -78,13 +75,6 @@ module Vips
     end
 
     def respond_to_missing? name, include_all = false
-      # respond to all vips operations by nickname
-      return true if Vips::type_find("VipsOperation", name.to_s) != 0
-
-      super
-    end
-
-    def self.respond_to_missing? name, include_all = false
       # respond to all vips operations by nickname
       return true if Vips::type_find("VipsOperation", name.to_s) != 0
 
@@ -139,7 +129,7 @@ module Vips
     # @param name [String] Metadata field to set
     # @param value [Object] Value to set
     def set! name, value
-      set_type get_typeof(name), name, value
+      set_type! get_typeof(name), name, value
     end
 
     # Remove a metadata item from an image.
