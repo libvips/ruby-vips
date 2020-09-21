@@ -50,6 +50,8 @@ module Vips
     attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
   end
 
+  # move these three lines to mutableimage when we finally remove set and
+  # remove in this class
   attach_function :vips_image_set,
       [:pointer, :string, GObject::GValue.ptr], :void
   attach_function :vips_image_remove, [:pointer, :string], :void
@@ -657,6 +659,27 @@ module Vips
       GLib::g_free array
 
       names
+    end
+
+    # Mutate an image with a block. Inside the block, you can call methods 
+    # which modify the image, such as setting or removing metadata, or 
+    # modifying pixels.
+    #
+    # For example:
+    #
+    #     def draw_lines image, points
+    #       image.mutate do |mutable|
+    #         points.each do |x, y|
+    #           mutable.draw_line! 255, 0, 0, x, y
+    #         end
+    #       end
+    #     end
+    #
+    # See #MutableImage.
+    def mutate
+      mutable = Vips::MutableImage.new_from_image self
+      yield mutable
+      mutable.image
     end
 
     # Create a metadata item on an image of the specifed type. Ruby types

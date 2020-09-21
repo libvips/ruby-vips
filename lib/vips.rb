@@ -676,6 +676,7 @@ end
 require 'vips/object'
 require 'vips/operation'
 require 'vips/image'
+require 'vips/mutableimage'
 require 'vips/interpolate'
 require 'vips/region'
 require 'vips/version'
