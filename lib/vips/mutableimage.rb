@@ -13,9 +13,9 @@ module Vips
   class MutableImage < Vips::Object
     extend Forwardable
     alias_method :parent_get_typeof, :get_typeof
-    def_delegators :@image, :width, :height, :bands, :format, :interpretation, 
-      :filename, :xoffset, :yoffset, :xres, :yres, :size, :get, :get_typeof,
-      :get_fields
+    def_instance_delegators :@image, :width, :height, :bands, :format, 
+      :interpretation, :filename, :xoffset, :yoffset, :xres, :yres, :size, 
+      :get, :get_typeof, :get_fields
 
     # layout is exactly as Image (since we are also wrapping a VipsImage
     # object)
