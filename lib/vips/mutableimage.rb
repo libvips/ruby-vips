@@ -8,8 +8,8 @@ require 'ffi'
 require 'forwardable'
 
 module Vips
-  # This class represents a libvips image. See the {Vips} module documentation
-  # for an introduction to using this class.
+  # This class represents a libvips image which can be modified. See
+  # {Vips::Image.mutate}.
   class MutableImage < Vips::Object
     extend Forwardable
     alias_method :parent_get_typeof, :get_typeof
@@ -17,7 +17,7 @@ module Vips
       :interpretation, :filename, :xoffset, :yoffset, :xres, :yres, :size, 
       :get, :get_typeof, :get_fields
 
-    # layout is exactly as Image (since we are also wrapping a VipsImage
+    # layout is exactly as {Image} (since we are also wrapping a VipsImage
     # object)
     module MutableImageLayout
       def self.included base
@@ -36,13 +36,19 @@ module Vips
       include MutableImageLayout
     end
 
-    # get the #Image this #MutableImage is modifying. Only use this once you
+    # Get the {Image} this {MutableImage} is modifying. Only use this once you
     # have finished all modifications.
+    #
+    # This is for internal use only. See {Vips::Image.mutate} for the
+    # user-facing interface.
     def image 
       @image
     end
 
-    # Make a MutableImage from a regular Image. 
+    # Make a {MutableImage} from a regular {Image}. 
+    #
+    # This is for internal use only. See {Vips::Image.mutate} for the
+    # user-facing interface.
     def initialize(image)
       # We take a copy of the regular Image to ensure we have an unshared 
       # (unique) object. We forward things like #width and #height to this, and 
@@ -82,7 +88,8 @@ module Vips
     end
 
     # Invoke a vips operation with {Vips::Operation.call}, using self as
-    # the first input argument.
+    # the first input argument. {Vips::Operation.call} will only allow
+    # operations that modify self when passed a {MutableImage}.
     #
     # @param name [String] vips operation to call
     # @return result of vips operation
@@ -96,12 +103,12 @@ module Vips
     # For example, you can use this to set an image's ICC profile:
     #
     # ```
-    # x = y.set_type Vips::BLOB_TYPE, "icc-profile-data", profile
+    # x.set_type! Vips::BLOB_TYPE, "icc-profile-data", profile
     # ```
     #
     # where `profile` is an ICC profile held as a binary string object.
     #
-    # @see set
+    # @see set!
     # @param gtype [Integer] GType of item
     # @param name [String] Metadata field to set
     # @param value [Object] Value to set
@@ -120,12 +127,12 @@ module Vips
     # For example, you can use this to set an image's ICC profile:
     #
     # ```
-    # x = y.set "icc-profile-data", profile
+    # x.set! "icc-profile-data", profile
     # ```
     #
     # where `profile` is an ICC profile held as a binary string object.
     #
-    # @see set_type
+    # @see set_type!
     # @param name [String] Metadata field to set
     # @param value [Object] Value to set
     def set! name, value
@@ -133,6 +140,12 @@ module Vips
     end
 
     # Remove a metadata item from an image.
+    #
+    # For example:
+    #
+    # ```
+    # x.remove! "icc-profile-data"
+    # ```
     #
     # @param name [String] Metadata field to remove
     def remove! name
