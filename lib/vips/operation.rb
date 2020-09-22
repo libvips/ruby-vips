@@ -385,8 +385,39 @@ module Vips
       #
       # look inside array and hash arguments, since we may be passing an
       # array of images
-      match_image = flat_find(supplied) do |value| 
-        value.is_a?(Image) || value.is_a?(MutableImage)
+      #
+      # also enforce the rules around mutable and non-mutable images
+      match_image = nil
+      flat_find(supplied) do |value| 
+        if match_image 
+          # no non-first image arg can ever be mutable
+          if value.is_a?(MutableImage)
+            raise Vips::Error, "unable to call #{name}: " +
+                               "only the first image argument can be mutable"
+          end
+        else
+          if destructive
+            if value.is_a?(Image)
+              raise Vips::Error, "unable to call #{name}: " +
+                                 "first image argument to a destructive " +
+                                 "operation must be mutable"
+            elsif value.is_a?(MutableImage)
+              match_image = value
+            end
+          else
+            # non destructive operation, so no mutable images
+            if value.is_a?(MutableImage)
+              raise Vips::Error, "unable to call #{name}: " +
+                                 "must not pass mutable images to " +
+                                 "non-destructive operations"
+            elsif value.is_a?(Image)
+              match_image = value
+            end
+          end
+        end
+
+        # keep looping
+        false
       end
 
       op = Operation.new introspect.vips_name
