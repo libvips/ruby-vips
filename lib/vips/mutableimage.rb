@@ -9,7 +9,7 @@ require 'forwardable'
 
 module Vips
   # This class represents a libvips image which can be modified. See
-  # {Vips::Image.mutate}.
+  # {Vips::Image#mutate}.
   class MutableImage < Vips::Object
     extend Forwardable
     alias_method :parent_get_typeof, :get_typeof
@@ -39,7 +39,7 @@ module Vips
     # Get the {Image} this {MutableImage} is modifying. Only use this once you
     # have finished all modifications.
     #
-    # This is for internal use only. See {Vips::Image.mutate} for the
+    # This is for internal use only. See {Vips::Image#mutate} for the
     # user-facing interface.
     def image 
       @image
@@ -47,7 +47,7 @@ module Vips
 
     # Make a {MutableImage} from a regular {Image}. 
     #
-    # This is for internal use only. See {Vips::Image.mutate} for the
+    # This is for internal use only. See {Vips::Image#mutate} for the
     # user-facing interface.
     def initialize(image)
       # We take a copy of the regular Image to ensure we have an unshared 
@@ -87,8 +87,8 @@ module Vips
       super
     end
 
-    # Invoke a vips operation with {Vips::Operation.call}, using self as
-    # the first input argument. {Vips::Operation.call} will only allow
+    # Invoke a vips operation with {Vips::Operation#call}, using self as
+    # the first input argument. {Vips::Operation#call} will only allow
     # operations that modify self when passed a {MutableImage}.
     #
     # @param name [String] vips operation to call
@@ -98,11 +98,12 @@ module Vips
     end
 
     # Create a metadata item on an image of the specifed type. Ruby types
-    # are automatically transformed into the matching `GType`, if possible.
+    # are automatically transformed into the matching glib type (eg.
+    # {GObject::GINT_TYPE}), if possible. 
     #
     # For example, you can use this to set an image's ICC profile:
     #
-    # ```
+    # ```ruby
     # x.set_type! Vips::BLOB_TYPE, "icc-profile-data", profile
     # ```
     #
@@ -122,7 +123,7 @@ module Vips
 
     # Set the value of a metadata item on an image. The metadata item must
     # already exist. Ruby types are automatically transformed into the
-    # matching `GValue`, if possible.
+    # matching {GObject::GValue}, if possible.
     #
     # For example, you can use this to set an image's ICC profile:
     #
