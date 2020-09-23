@@ -20,12 +20,13 @@ end
 
 task :default => :spec
 
-require "github/markup"
-require "redcarpet"
-require "yard"
-require "yard/rake/yardoc_task"
+#
+unless RUBY_PLATFORM.include?('java')
+  require "github/markup"
+  require "yard"
+  require "yard/rake/yardoc_task"
 
-YARD::Rake::YardocTask.new do |yard|
+  YARD::Rake::YardocTask.new
 end
 
 # RuboCop requires Ruby >= 2.2

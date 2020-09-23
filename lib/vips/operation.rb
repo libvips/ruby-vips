@@ -66,12 +66,14 @@ module Vips
           # names can include - as punctuation, but we always use _ in
           # Ruby
           arg_name = pspec[:name].tr("-", "_")
-          args << {
+          @args << {
             :arg_name => arg_name,
             :flags => flags,
             :gtype => pspec[:value_type]
           }
         end
+
+        nil
       end
 
       @args.each do |details|
@@ -197,7 +199,6 @@ module Vips
       fn = Proc.new do |_op, pspec, argument_class, argument_instance, _a, _b|
         block.call pspec, argument_class, argument_instance
       end
-
       Vips::vips_argument_map self, fn, nil, nil
     end
 

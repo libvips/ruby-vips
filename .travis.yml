@@ -2,13 +2,14 @@ dist: xenial
 
 env:
   global:
+    - JRUBY_OPTS="--dev --debug"
+    - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - PATH=$HOME/vips/bin:$PATH
+    - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
     - VIPS_VERSION_MAJOR=8
     - VIPS_VERSION_MINOR=7
     - VIPS_VERSION_MICRO=2
-    - PATH=$HOME/vips/bin:$PATH
-    - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
-    - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
 
 addons:
   apt:
@@ -46,6 +47,9 @@ rvm:
   - 2.5
   - 2.6
   - 2.7
+  - jruby
+
+jdk: openjdk14
 
 script: bundle exec rake spec
 
@@ -55,3 +59,6 @@ gemfile:
 before_install:
   - uname -a
   - bash install-vips.sh
+
+jobs:
+  fast_finish: true
