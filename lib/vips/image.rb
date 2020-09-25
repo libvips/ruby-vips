@@ -324,19 +324,15 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_memory data, width, height, bands, format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-
-      pointer = create_data_pointer data
-
-      vi = Vips::vips_image_new_from_memory pointer, pointer.size, width, height, bands, format_number
-
+      size = data.respond_to?(:bytesize) ? data.bytesize : data.size
+      vi = Vips::vips_image_new_from_memory data, size, width, height, bands, format_number
       raise Vips::Error, "unable to make image from memory" if vi.null?
-
       image = new(vi)
 
       # keep a secret ref to the underlying object .. this reference will be
       # inherited by things that in turn depend on us, so the memory we are
       # using will not be freed
-      image.references << pointer
+      image.references << data
 
       image
     end
@@ -351,13 +347,9 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_memory_copy data, width, height, bands, format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-
-      pointer = create_data_pointer data
-
-      vi = Vips::vips_image_new_from_memory_copy pointer, pointer.size, width, height, bands, format_number
-
+      size = data.respond_to?(:bytesize) ? data.bytesize : data.size
+      vi = Vips::vips_image_new_from_memory_copy data, size, width, height, bands, format_number
       raise Vips::Error, "unable to make image from memory" if vi.null?
-
       new(vi)
     end
 
