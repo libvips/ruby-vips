@@ -1477,17 +1477,6 @@ module Vips
     def scaleimage **opts
       Vips::Image.scale self, **opts
     end
-
-    def self.create_data_pointer data
-      if data.is_a? FFI::Pointer
-        data
-      else
-        pointer = FFI::MemoryPointer.new :char, data.bytesize
-        pointer.write_bytes data
-        pointer
-      end
-    end
-    private_class_method :create_data_pointer
   end
 end
 
