@@ -5,6 +5,7 @@
 # License::   MIT
 
 require 'ffi'
+require 'set'
 
 module Vips
   private
@@ -373,6 +374,18 @@ module Vips
         end
       end
 
+      # collect a list of all input references here
+      references = Set.new
+
+      add_reference = lambda do |x|
+        if x.is_a?(Vips::Image)
+          x.references.each do |i|
+            references << i
+          end
+        end
+        false
+      end
+
       # set all required inputs
       required_input.each_index do |i|
         details = required_input[i]
@@ -381,6 +394,7 @@ module Vips
         gtype = details[:gtype]
         value = supplied[i]
 
+        flat_find value, &add_reference
         op.set arg_name, value, match_image, flags, gtype
       end
 
@@ -395,16 +409,27 @@ module Vips
           flags = details[:flags]
           gtype = details[:gtype]
 
+          flat_find value, &add_reference
           op.set arg_name, value, match_image, flags, gtype
         end
       end
 
       op = op.build
 
+      # attach all input refs to output x
+      set_reference = lambda do |x|
+        if x.is_a? Vips::Image
+          x.references += references
+        end
+        false
+      end
+
       # get all required results
       result = []
       required_output.each do |details|
-        result << op.get(details[:arg_name])
+        value = details[:arg_name]
+        flat_find value, &set_reference
+        result << op.get(value)
       end
 
       # fetch all optional ones
@@ -413,7 +438,9 @@ module Vips
         arg_name = key.to_s
 
         if optional_output.has_key? arg_name
-          optional_results[arg_name] = op.get arg_name
+          value = op.get arg_name
+          flat_find value, &set_reference
+          optional_results[arg_name] = value
         end
       end
 

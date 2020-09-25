@@ -27,6 +27,20 @@ RSpec.describe Vips::Image do
     expect(x.avg).to eq(128)
   end
 
+  it 'can load an image from memory' do
+    image = Vips::Image.black(16, 16) + 128
+    data = image.write_to_memory
+
+    x = Vips::Image.new_from_memory data, image.width, image.height, image.bands, image.format
+
+    GC.start # make sure the memory isn't freed
+
+    expect(x.width).to eq(16)
+    expect(x.height).to eq(16)
+    expect(x.bands).to eq(1)
+    expect(x.avg).to eq(128)
+  end
+
   if has_jpeg?
     it 'can save an image to a buffer' do
       image = Vips::Image.black(16, 16) + 128

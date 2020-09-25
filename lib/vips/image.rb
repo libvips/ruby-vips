@@ -59,6 +59,8 @@ module Vips
 
   attach_function :nickname_find, :vips_nickname_find, [:GType], :string
 
+  attach_function :vips_image_new_from_memory, [:pointer, :size_t, :int, :int, :int, :int], :pointer
+
   # turn a raw pointer that must be freed into a self-freeing Ruby string
   def self.p2str(pointer)
     pointer = FFI::AutoPointer.new(pointer, GLib::G_FREE)
@@ -309,6 +311,34 @@ module Vips
       raise Vips::Error if loader.nil?
 
       Vips::Operation.call loader, [data], opts, option_string
+    end
+
+    # Create a new {Image} from memory
+    #
+    # @param data [String] the data to load from
+    # @param width [Integer] width in pixels
+    # @param height [Integer] height in pixels
+    # @param bands [Integer] number of bands
+    # @param format [Symbol] band format
+    # @return [Image] the loaded image
+    def self.new_from_memory data, width, height, bands, format
+      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+
+      pointer = FFI::MemoryPointer.new :char, data.bytesize
+      pointer.write_bytes data
+
+      vi = Vips::vips_image_new_from_memory pointer, pointer.size, width, height, bands, format_number
+
+      raise Vips::Error, "unable to make image from memory" if vi.null?
+
+      image = new(vi)
+
+      # keep a secret ref to the underlying object .. this reference will be
+      # inherited by things that in turn depend on us, so the memory we are
+      # using will not be freed
+      image.references << pointer
+
+      image
     end
 
     # Create a new {Image} from a source. Load options may be passed as
