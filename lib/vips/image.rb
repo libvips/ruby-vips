@@ -60,6 +60,7 @@ module Vips
   attach_function :nickname_find, :vips_nickname_find, [:GType], :string
 
   attach_function :vips_image_new_from_memory, [:pointer, :size_t, :int, :int, :int, :int], :pointer
+  attach_function :vips_image_new_from_memory_copy, [:pointer, :size_t, :int, :int, :int, :int], :pointer
 
   # turn a raw pointer that must be freed into a self-freeing Ruby string
   def self.p2str(pointer)
@@ -315,7 +316,7 @@ module Vips
 
     # Create a new {Image} from memory
     #
-    # @param data [String] the data to load from
+    # @param data [String, FFI::Pointer] the data to load from
     # @param width [Integer] width in pixels
     # @param height [Integer] height in pixels
     # @param bands [Integer] number of bands
@@ -324,8 +325,7 @@ module Vips
     def self.new_from_memory data, width, height, bands, format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
 
-      pointer = FFI::MemoryPointer.new :char, data.bytesize
-      pointer.write_bytes data
+      pointer = create_data_pointer data
 
       vi = Vips::vips_image_new_from_memory pointer, pointer.size, width, height, bands, format_number
 
@@ -339,6 +339,26 @@ module Vips
       image.references << pointer
 
       image
+    end
+
+    # Create a new {Image} from memory and copies the memory area
+    #
+    # @param data [String, FFI::Pointer] the data to load from
+    # @param width [Integer] width in pixels
+    # @param height [Integer] height in pixels
+    # @param bands [Integer] number of bands
+    # @param format [Symbol] band format
+    # @return [Image] the loaded image
+    def self.new_from_memory_copy data, width, height, bands, format
+      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+
+      pointer = create_data_pointer data
+
+      vi = Vips::vips_image_new_from_memory_copy pointer, pointer.size, width, height, bands, format_number
+
+      raise Vips::Error, "unable to make image from memory" if vi.null?
+
+      new(vi)
     end
 
     # Create a new {Image} from a source. Load options may be passed as
@@ -1465,6 +1485,17 @@ module Vips
     def scaleimage **opts
       Vips::Image.scale self, **opts
     end
+
+    def self.create_data_pointer data
+      if data.is_a? FFI::Pointer
+        data
+      else
+        pointer = FFI::MemoryPointer.new :char, data.bytesize
+        pointer.write_bytes data
+        pointer
+      end
+    end
+    private_class_method :create_data_pointer
   end
 end
 
