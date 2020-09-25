@@ -324,9 +324,15 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_memory data, width, height, bands, format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+
+      # prevent data from being freed with JRuby FFI
+      if defined?(JRUBY_VERSION) && !data.is_a?(FFI::Pointer)
+        data = ::FFI::MemoryPointer.new(:char, data.bytesize).write_bytes data
+      end
+
       size = data.respond_to?(:bytesize) ? data.bytesize : data.size
       vi = Vips::vips_image_new_from_memory data, size, width, height, bands, format_number
-      raise Vips::Error, "unable to make image from memory" if vi.null?
+      raise Vips::Error if vi.null?
       image = new(vi)
 
       # keep a secret ref to the underlying object .. this reference will be
@@ -349,7 +355,7 @@ module Vips
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
       size = data.respond_to?(:bytesize) ? data.bytesize : data.size
       vi = Vips::vips_image_new_from_memory_copy data, size, width, height, bands, format_number
-      raise Vips::Error, "unable to make image from memory" if vi.null?
+      raise Vips::Error if vi.null?
       new(vi)
     end
 
