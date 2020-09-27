@@ -409,6 +409,10 @@ module Vips
         width = array.length
       end
 
+      unless array.length == width * height
+        raise Vips::Error, "Bad array dimensions."
+      end
+
       unless array.all? { |x| x.is_a? Numeric }
         raise Vips::Error, "Not all array elements are Numeric."
       end
