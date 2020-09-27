@@ -41,43 +41,11 @@ RSpec.describe Vips::Image do
     expect(x.avg).to eq(128)
   end
 
-  it 'can load an image from memory with pointer' do
-    image = Vips::Image.black(16, 16) + 128
-    data = image.write_to_memory
-
-    pointer = FFI::MemoryPointer.new(:char, data.bytesize)
-    pointer.write_bytes(data)
-
-    x = Vips::Image.new_from_memory pointer, image.width, image.height, image.bands, image.format
-
-    GC.start # make sure the memory isn't freed
-
-    expect(x.width).to eq(16)
-    expect(x.height).to eq(16)
-    expect(x.bands).to eq(1)
-    expect(x.avg).to eq(128)
-  end
-
   it 'can load an image from memory and copy' do
     image = Vips::Image.black(16, 16) + 128
     data = image.write_to_memory
 
     x = Vips::Image.new_from_memory_copy data, image.width, image.height, image.bands, image.format
-
-    expect(x.width).to eq(16)
-    expect(x.height).to eq(16)
-    expect(x.bands).to eq(1)
-    expect(x.avg).to eq(128)
-  end
-
-  it 'can load an image from memory and copy with pointer' do
-    image = Vips::Image.black(16, 16) + 128
-    data = image.write_to_memory
-
-    pointer = FFI::MemoryPointer.new(:char, data.bytesize)
-    pointer.write_bytes(data)
-
-    x = Vips::Image.new_from_memory_copy pointer, image.width, image.height, image.bands, image.format
 
     expect(x.width).to eq(16)
     expect(x.height).to eq(16)
