@@ -278,8 +278,8 @@ module Vips
       Operation.call loader, [filename], opts, option_string
     end
 
-    # Create a new {Image} for an image encoded, in a format such as
-    # JPEG, in a binary string. Load options may be passed as
+    # Create a new {Image} for an image encoded in a format such as
+    # JPEG in a binary string. Load options may be passed as
     # strings or appended as a hash. For example:
     #
     # ```
@@ -316,7 +316,22 @@ module Vips
       Vips::Operation.call loader, [data], opts, option_string
     end
 
-    # Create a new {Image} from memory
+    # Create a new {Image} from a C-style array held in memory. For example:
+    #
+    # ```
+    # image = Vips::Image.black(16, 16) + 128
+    # data = image.write_to_memory
+    # 
+    # x = Vips::Image.new_from_memory data, 
+    #   image.width, image.height, image.bands, image.format
+    # ```
+    #
+    # {new_from_memory} keeps a reference to the array of pixels you pass in
+    # to try to prevent that memory from being freed by the Ruby GC while it
+    # is being used.
+    #
+    # See {new_from_memory_copy} for a version of this method which does not
+    # keep a reference.
     #
     # @param data [String, FFI::Pointer] the data to load from
     # @param width [Integer] width in pixels
@@ -333,7 +348,8 @@ module Vips
       end
 
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      vi = Vips::vips_image_new_from_memory data, size, width, height, bands, format_number
+      vi = Vips::vips_image_new_from_memory data, size, 
+        width, height, bands, format_number
       raise Vips::Error if vi.null?
       image = new(vi)
 
@@ -345,7 +361,9 @@ module Vips
       image
     end
 
-    # Create a new {Image} from memory and copies the memory area
+    # Create a new {Image} from memory and copies the memory area. See
+    # {new_from_memory} for a version of this method which does not copy the
+    # memory area.
     #
     # @param data [String, FFI::Pointer] the data to load from
     # @param width [Integer] width in pixels
@@ -355,7 +373,8 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_memory_copy data, width, height, bands, format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      vi = Vips::vips_image_new_from_memory_copy data, data.bytesize, width, height, bands, format_number
+      vi = Vips::vips_image_new_from_memory_copy data, data.bytesize, 
+        width, height, bands, format_number
       raise Vips::Error if vi.null?
       new(vi)
     end

@@ -31,9 +31,13 @@ RSpec.describe Vips::Image do
     image = Vips::Image.black(16, 16) + 128
     data = image.write_to_memory
 
-    x = Vips::Image.new_from_memory data, image.width, image.height, image.bands, image.format
+    x = Vips::Image.new_from_memory data, 
+      image.width, image.height, image.bands, image.format
 
-    GC.start # make sure the memory isn't freed
+    # GC to try to trigger a segv if data hasn't been reffed by 
+    # new_from_memory
+    data = nil
+    GC.start
 
     expect(x.width).to eq(16)
     expect(x.height).to eq(16)
@@ -45,7 +49,8 @@ RSpec.describe Vips::Image do
     image = Vips::Image.black(16, 16) + 128
     data = image.write_to_memory
 
-    x = Vips::Image.new_from_memory_copy data, image.width, image.height, image.bands, image.format
+    x = Vips::Image.new_from_memory_copy data, 
+      image.width, image.height, image.bands, image.format
 
     expect(x.width).to eq(16)
     expect(x.height).to eq(16)
