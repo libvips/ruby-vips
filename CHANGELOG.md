@@ -11,6 +11,7 @@
 * add "mutate" method [jcupitt]
 * `new_from_array` checks array argument more carefully [dkam]
 * add `new_from_memory` and `new_from_memory_copy` [ankane]
+* jruby added to CI testing [pftg]
 
 ## Version 2.0.17 (2019-10-29)
 
