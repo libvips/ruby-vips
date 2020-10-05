@@ -1,7 +1,7 @@
 require 'spec_helper.rb'
 
 RSpec.describe Vips::MutableImage do
-  it 'can set! metadata' do
+  it 'can set! metadata in mutate' do
     image = Vips::Image.black(16, 16)
     image = image.mutate do |x|
       x.set_type! GObject::GINT_TYPE, "banana", 12
@@ -10,7 +10,7 @@ RSpec.describe Vips::MutableImage do
     expect(image.get "banana").to eq(12)
   end
 
-  it 'can remove! metadata' do
+  it 'can remove! metadata in mutate' do
     image = Vips::Image.black(16, 16)
     image = image.mutate do |x|
       x.set_type! GObject::GINT_TYPE, "banana", 12
@@ -23,7 +23,7 @@ RSpec.describe Vips::MutableImage do
     expect(image.get_typeof "banana").to eq(0)
   end
 
-  it 'can call destructive operations' do
+  it 'can call destructive operations in mutate' do
     image = Vips::Image.black(16, 16)
     image = image.mutate do |x|
       x.draw_line! 255, 0, 0, x.width, x.height
@@ -32,7 +32,7 @@ RSpec.describe Vips::MutableImage do
     expect(image.avg).to be > 0
   end
 
-  it 'can cannot call non-destructive operations' do
+  it 'cannot call non-destructive operations in mutate' do
     image = Vips::Image.black(16, 16)
 
     expect {
@@ -42,7 +42,7 @@ RSpec.describe Vips::MutableImage do
     }.to raise_exception(Vips::Error)
   end
 
-  it 'can cannot use mutable images as arguments' do
+  it 'cannot use mutable images as arguments in mutate' do
     image = Vips::Image.black(16, 16)
 
     expect {
@@ -52,7 +52,7 @@ RSpec.describe Vips::MutableImage do
     }.to raise_exception(Vips::Error)
   end
 
-  it 'cannot call destructive operations outside mutate blocks' do
+  it 'cannot call destructive operations outside mutate' do
     image = Vips::Image.black(16, 16)
 
     expect {
