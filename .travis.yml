@@ -63,4 +63,4 @@ before_install:
 jobs:
   fast_finish: true
   allow_failures:
-    - jruby
+    - rvm: jruby
