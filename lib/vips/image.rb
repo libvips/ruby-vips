@@ -325,13 +325,15 @@ module Vips
     # @param format [Symbol] band format
     # @return [Image] the loaded image
     def self.new_from_memory data, width, height, bands, format
+      size = data.bytesize
+
       # prevent data from being freed with JRuby FFI
       if defined?(JRUBY_VERSION) && !data.is_a?(FFI::Pointer)
         data = ::FFI::MemoryPointer.new(:char, data.bytesize).write_bytes data
       end
 
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      vi = Vips::vips_image_new_from_memory data, data.bytesize, width, height, bands, format_number
+      vi = Vips::vips_image_new_from_memory data, size, width, height, bands, format_number
       raise Vips::Error if vi.null?
       image = new(vi)
 
