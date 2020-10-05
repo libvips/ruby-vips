@@ -10,6 +10,7 @@
 * update docs for 8.10, fix minor doc formatting issues [jcupitt]
 * add "mutate" method [jcupitt]
 * `new_from_array` checks array argument more carefully [dkam]
+* add `new_from_memory` and `new_from_memory_copy` [ankane]
 
 ## Version 2.0.17 (2019-10-29)
 
