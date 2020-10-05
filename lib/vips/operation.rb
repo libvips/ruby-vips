@@ -48,12 +48,23 @@ module Vips
   class Introspect
     attr_reader :name, :description, :flags, :args, :required_input, 
       :optional_input, :required_output, :optional_output, :member_x, 
-      :method_args
+      :method_args, :vips_name, :destructive
 
     @@introspect_cache = {}
 
     def initialize name
-      @op = Operation.new name
+      # if there's a trailing "!", this is a destructive version of an
+      # operation
+      if name[-1] == "!"
+        @destructive = true
+        # strip the trailing "!"
+        @vips_name = name[0 ... -1]
+      else
+        @destructive = false
+        @vips_name = name
+      end
+
+      @op = Operation.new @vips_name
       @args = []
       @required_input = []
       @optional_input = {}
@@ -90,8 +101,9 @@ module Vips
             @optional_input[arg_name] = details
           end
 
-          # MODIFY INPUT args count as OUTPUT as well
-          if (flags & ARGUMENT_MODIFY) != 0
+          # MODIFY INPUT args count as OUTPUT as well in non-destructive mode
+          if (flags & ARGUMENT_MODIFY) != 0 &&
+             !@destructive
             if (flags & ARGUMENT_REQUIRED) != 0 && 
                (flags & ARGUMENT_DEPRECATED) == 0
               @required_output << details
@@ -107,6 +119,16 @@ module Vips
             # again, allow deprecated optional args
             @optional_output[arg_name] = details
           end
+        end
+      end
+
+      # in destructive mode, the first required input arg must be MODIFY and
+      # must be an image
+      if @destructive
+        if @required_input.length < 1 ||
+            @required_input[0][:flags] & ARGUMENT_MODIFY == 0 ||
+            @required_input[0][:gtype] != IMAGE_TYPE
+          raise Vips::Error, "operation #{@vips_name} is not destructive"
         end
       end
     end
@@ -220,7 +242,7 @@ module Vips
 
     # expand a constant into an image
     def self.imageize match_image, value
-      return value if value.is_a? Image
+      return value if value.is_a?(Image) || value.is_a?(MutableImage)
 
       # 2D array values become tiny 2D images
       # if there's nothing to match to, we also make a 2D image
@@ -235,12 +257,13 @@ module Vips
 
     # set an operation argument, expanding constants and copying images as
     # required
-    def set name, value, match_image, flags, gtype
+    def set name, value, match_image, flags, gtype, destructive
       if gtype == IMAGE_TYPE
         value = Operation::imageize match_image, value
 
-        if (flags & ARGUMENT_MODIFY) != 0
-          # make sure we have a unique copy
+        # in non-destructive mode, make sure we have a unique copy
+        if (flags & ARGUMENT_MODIFY) != 0 &&
+            !destructive
           value = value.copy.copy_memory
         end
       elsif gtype == ARRAY_IMAGE_TYPE
@@ -330,6 +353,7 @@ module Vips
       required_output = introspect.required_output
       optional_input = introspect.optional_input
       optional_output = introspect.optional_output
+      destructive = introspect.destructive
 
       unless supplied.is_a? Array
         raise Vips::Error, "unable to call #{name}: " +
@@ -363,9 +387,42 @@ module Vips
       #
       # look inside array and hash arguments, since we may be passing an
       # array of images
-      match_image = flat_find(supplied) { |value| value.is_a? Image }
+      #
+      # also enforce the rules around mutable and non-mutable images
+      match_image = nil
+      flat_find(supplied) do |value| 
+        if match_image 
+          # no non-first image arg can ever be mutable
+          if value.is_a?(MutableImage)
+            raise Vips::Error, "unable to call #{name}: " +
+                               "only the first image argument can be mutable"
+          end
+        else
+          if destructive
+            if value.is_a?(Image)
+              raise Vips::Error, "unable to call #{name}: " +
+                                 "first image argument to a destructive " +
+                                 "operation must be mutable"
+            elsif value.is_a?(MutableImage)
+              match_image = value
+            end
+          else
+            # non destructive operation, so no mutable images
+            if value.is_a?(MutableImage)
+              raise Vips::Error, "unable to call #{name}: " +
+                                 "must not pass mutable images to " +
+                                 "non-destructive operations"
+            elsif value.is_a?(Image)
+              match_image = value
+            end
+          end
+        end
 
-      op = Operation.new name
+        # keep looping
+        false
+      end
+
+      op = Operation.new introspect.vips_name
 
       # set any string args first so they can't be overridden
       if option_string != nil
@@ -395,7 +452,7 @@ module Vips
         value = supplied[i]
 
         flat_find value, &add_reference
-        op.set arg_name, value, match_image, flags, gtype
+        op.set arg_name, value, match_image, flags, gtype, destructive
       end
 
       # set all optional inputs
@@ -410,7 +467,7 @@ module Vips
           gtype = details[:gtype]
 
           flat_find value, &add_reference
-          op.set arg_name, value, match_image, flags, gtype
+          op.set arg_name, value, match_image, flags, gtype, destructive
         end
       end
 

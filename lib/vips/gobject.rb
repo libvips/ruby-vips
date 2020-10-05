@@ -74,6 +74,7 @@ module GObject
     # need the unref
     def initialize ptr
       # GLib::logger.debug("GObject::GObject.initialize") {"ptr = #{ptr}"}
+      @ptr = ptr
       @struct = ffi_managed_struct.new ptr
 
       # sometimes we need to keep refs across C calls ... hide them here
@@ -83,6 +84,12 @@ module GObject
     # access to the casting struct for this class
     def ffi_struct
       self.class.ffi_struct
+    end
+
+    # get the pointer we were built from ... #to_ptr gets the pointer after we
+    # have wrapped it up with an auto unref
+    def ptr
+      @ptr
     end
 
     class << self

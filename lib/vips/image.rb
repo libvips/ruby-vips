@@ -50,6 +50,8 @@ module Vips
     attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
   end
 
+  # move these three lines to mutableimage when we finally remove set and
+  # remove in this class
   attach_function :vips_image_set,
       [:pointer, :string, GObject::GValue.ptr], :void
   attach_function :vips_image_remove, [:pointer, :string], :void
@@ -452,6 +454,10 @@ module Vips
         width = array.length
       end
 
+      unless array.length == width * height
+        raise Vips::Error, "Bad array dimensions."
+      end
+
       unless array.all? { |x| x.is_a? Numeric }
         raise Vips::Error, "Not all array elements are Numeric."
       end
@@ -459,9 +465,11 @@ module Vips
       image = Vips::Image.matrix_from_array width, height, array
       raise Vips::Error if image.nil?
 
-      # be careful to set them as double
-      image.set_type GObject::GDOUBLE_TYPE, 'scale', scale.to_f
-      image.set_type GObject::GDOUBLE_TYPE, 'offset', offset.to_f
+      image = image.mutate do |mutable|
+        # be careful to set them as double
+        mutable.set_type! GObject::GDOUBLE_TYPE, 'scale', scale.to_f
+        mutable.set_type! GObject::GDOUBLE_TYPE, 'offset', offset.to_f
+      end
 
       return image
     end
@@ -704,21 +712,30 @@ module Vips
       names
     end
 
-    # Create a metadata item on an image of the specifed type. Ruby types
-    # are automatically transformed into the matching `GType`, if possible.
+    # Mutate an image with a block. Inside the block, you can call methods 
+    # which modify the image, such as setting or removing metadata, or 
+    # modifying pixels.
     #
-    # For example, you can use this to set an image's ICC profile:
+    # For example:
     #
+    # ```ruby
+    # image = image.mutate do |x|
+    #   (0 ... 1).step(0.01) do |i|
+    #     x.draw_line! 255, x.width * i, 0, 0, x.height * (1 - i)
+    #   end
+    # end
     # ```
-    # x = y.set_type Vips::BLOB_TYPE, "icc-profile-data", profile
-    # ```
     #
-    # where `profile` is an ICC profile held as a binary string object.
+    # See {MutableImage}.
+    def mutate
+      mutable = Vips::MutableImage.new self
+      yield mutable
+      mutable.image
+    end
+
+    # This method is deprecated. 
     #
-    # @see set
-    # @param gtype [Integer] GType of item
-    # @param name [String] Metadata field to set
-    # @param value [Object] Value to set
+    # Please use {MutableImage#set_type!} instead. 
     def set_type gtype, name, value
       gvalue = GObject::GValue.alloc
       gvalue.init gtype
@@ -727,28 +744,16 @@ module Vips
       gvalue.unset
     end
 
-    # Set the value of a metadata item on an image. The metadata item must
-    # already exist. Ruby types are automatically transformed into the
-    # matching `GValue`, if possible.
+    # This method is deprecated. 
     #
-    # For example, you can use this to set an image's ICC profile:
-    #
-    # ```
-    # x = y.set "icc-profile-data", profile
-    # ```
-    #
-    # where `profile` is an ICC profile held as a binary string object.
-    #
-    # @see set_type
-    # @param name [String] Metadata field to set
-    # @param value [Object] Value to set
+    # Please use {MutableImage#set!} instead. 
     def set name, value
       set_type get_typeof(name), name, value
     end
 
-    # Remove a metadata item from an image.
+    # This method is deprecated. 
     #
-    # @param name [String] Metadata field to remove
+    # Please use {MutableImage#remove!} instead. 
     def remove name
       Vips::vips_image_remove self, name
     end
@@ -758,7 +763,9 @@ module Vips
       get name
     end
 
-    # compatibility: old name for set
+    # This method is deprecated. 
+    #
+    # Please use {MutableImage#set!} instead. 
     def set_value name, value
       set name, value
     end

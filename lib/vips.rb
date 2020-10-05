@@ -409,36 +409,83 @@ require 'vips/gvalue'
 #
 # # Automatic YARD documentation
 #
-# The bulk of these API docs are generated automatically by
-# {Vips::Yard::generate}. It examines
-# libvips and writes a summary of each operation and the arguments and options
-# that that operation expects.
+# The bulk of these API docs are generated automatically by {Yard#generate}. 
+# It examines libvips and writes a summary of each operation and the arguments 
+# and options that that operation expects.
 #
-# Use the [C API
-# docs](https://libvips.github.io/libvips/API/current)
+# Use the [C API # docs](https://libvips.github.io/libvips/API/current)
 # for more detail.
 #
 # # Enums
 #
 # The libvips enums, such as `VipsBandFormat` appear in ruby-vips as Symbols
 # like `:uchar`. They are documented as a set of classes for convenience, see
-# the class list.
+# {Vips::BandFormat}, for example.
 #
 # # Draw operations
 #
-# Paint operations like {Image#draw_circle} and {Image#draw_line}
-# modify their input image. This
-# makes them hard to use with the rest of libvips: you need to be very careful
-# about the order in which operations execute or you can get nasty crashes.
+# There are two ways of calling the libvips draw operations, like
+# {Image#draw_circle} and {Image#draw_line}. 
 #
-# The wrapper spots operations of this type and makes a private copy of the
-# image in memory before calling the operation. This stops crashes, but it does
-# make it inefficient. If you draw 100 lines on an image, for example, you'll
-# copy the image 100 times. The wrapper does make sure that memory is recycled
-# where possible, so you won't have 100 copies in memory.
+# First, you can use them like functions. For example:
 #
-# If you want to avoid the copies, you'll need to call drawing operations
-# yourself.
+# ```ruby
+# y = x.draw_line 255, 0, 0, x.width, x.height
+# ```
+#
+# This will make a new image, `y`, which is a copy of `x` but with a line
+# drawn across it. `x` is unchanged.
+#
+# This is simple, but will be slow if you want to draw many lines, since
+# ruby-vips will make a copy of the whole image each time.
+#
+# You can use {Image#mutate} to make a {MutableImage}. This is an image which
+# is unshared and is only available inside the {Image#mutate} block. Within
+# this block, you can use `!` versions of the draw operations to modify images
+# and avoid the copy. For example:
+#
+# ```ruby
+# image = image.mutate do |mutable|
+#   (0 ... 1).step(0.01) do |i|
+#     mutable.draw_line! 255, mutable.width * i, 0, 0, mutable.height * (1 - i)
+#   end
+# end
+# ```
+#
+# Now each {Image#draw_line} will directly modify the mutable image, saving 
+# the copy. This is much faster and needs much less memory. 
+#
+# # Metadata read
+#
+# Use {Image#get_fields} to get a list of the metadata fields that an image
+# supports. ICC profiles, for example, are in a field called
+# `icc-profile-data`. Use `vipsheader -a something.jpg` at the command-line
+# to see all the fields on an image.
+#
+# Use {Image#get_typeof} to get the type of a field. Types are integers, with
+# 0 meaning "no such field". Constants like {GObject::GINT_TYPE} are useful for
+# testing field types.
+#
+# You can read image metadata using {Image#get}. The field value is converted
+# to a Ruby value in the obvious way.
+#
+# # Metadata write
+#
+# You can also set and remove image metadata fields. Images are immutable, so
+# you must make any changes inside a {Image#mutate} block. For example:
+#
+# ```ruby
+# image = image.mutate do |mutable|
+#   image.get_fields.each do |field|
+#     mutable.remove! field unless field == "icc-profile-data"
+#   end
+# end
+# ```
+#
+# To remove all metadata except the icc profile.
+#
+# You can use {MutableImage#set!} to change the value of an existing field,
+# and {MutableImage#set_type!} to create a new field with a specified type.
 #
 # # Progress
 #
@@ -676,6 +723,7 @@ end
 require 'vips/object'
 require 'vips/operation'
 require 'vips/image'
+require 'vips/mutableimage'
 require 'vips/interpolate'
 require 'vips/region'
 require 'vips/version'
