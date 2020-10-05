@@ -37,6 +37,8 @@ module GObject
     def_instance_delegators :@struct, :[], :to_ptr
     def_single_delegators :ffi_struct, :ptr
 
+    attr_reader :references
+
     # the layout of the GObject struct
     module GObjectLayout
       def self.included base

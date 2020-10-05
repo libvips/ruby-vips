@@ -61,6 +61,9 @@ module Vips
 
   attach_function :nickname_find, :vips_nickname_find, [:GType], :string
 
+  attach_function :vips_image_new_from_memory, [:pointer, :size_t, :int, :int, :int, :int], :pointer
+  attach_function :vips_image_new_from_memory_copy, [:pointer, :size_t, :int, :int, :int, :int], :pointer
+
   # turn a raw pointer that must be freed into a self-freeing Ruby string
   def self.p2str(pointer)
     pointer = FFI::AutoPointer.new(pointer, GLib::G_FREE)
@@ -311,6 +314,48 @@ module Vips
       raise Vips::Error if loader.nil?
 
       Vips::Operation.call loader, [data], opts, option_string
+    end
+
+    # Create a new {Image} from memory
+    #
+    # @param data [String, FFI::Pointer] the data to load from
+    # @param width [Integer] width in pixels
+    # @param height [Integer] height in pixels
+    # @param bands [Integer] number of bands
+    # @param format [Symbol] band format
+    # @return [Image] the loaded image
+    def self.new_from_memory data, width, height, bands, format
+      # prevent data from being freed with JRuby FFI
+      if defined?(JRUBY_VERSION) && !data.is_a?(FFI::Pointer)
+        data = ::FFI::MemoryPointer.new(:char, data.bytesize).write_bytes data
+      end
+
+      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+      vi = Vips::vips_image_new_from_memory data, data.bytesize, width, height, bands, format_number
+      raise Vips::Error if vi.null?
+      image = new(vi)
+
+      # keep a secret ref to the underlying object .. this reference will be
+      # inherited by things that in turn depend on us, so the memory we are
+      # using will not be freed
+      image.references << data
+
+      image
+    end
+
+    # Create a new {Image} from memory and copies the memory area
+    #
+    # @param data [String, FFI::Pointer] the data to load from
+    # @param width [Integer] width in pixels
+    # @param height [Integer] height in pixels
+    # @param bands [Integer] number of bands
+    # @param format [Symbol] band format
+    # @return [Image] the loaded image
+    def self.new_from_memory_copy data, width, height, bands, format
+      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+      vi = Vips::vips_image_new_from_memory_copy data, data.bytesize, width, height, bands, format_number
+      raise Vips::Error if vi.null?
+      new(vi)
     end
 
     # Create a new {Image} from a source. Load options may be passed as
