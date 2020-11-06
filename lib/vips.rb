@@ -5,10 +5,22 @@
 # License::   MIT
 
 require 'ffi'
+require 'open3'
 require 'logger'
 
 # This module uses FFI to make a simple layer over the glib and gobject
 # libraries.
+
+def mac_library_paths(library)
+  stdout, stderr, status = Open3.capture3('brew', '--prefix')
+  if status.success?
+    [library, "#{stdout.chomp}/lib/lib#{library}.dylib"]
+  else
+    library
+  end
+rescue Errno::ENOENT
+  library
+end
 
 # Generate a library name for ffi.
 #
@@ -27,7 +39,7 @@ def library_name(name, abi_number)
   if FFI::Platform.windows?
     "lib#{name}-#{abi_number}.dll"
   elsif FFI::Platform.mac?
-    "#{name}.#{abi_number}"
+    mac_library_paths("#{name}.#{abi_number}")
   else
     "#{name}.so.#{abi_number}"
   end
