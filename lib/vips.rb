@@ -208,12 +208,10 @@ require 'vips/gvalue'
 # for full details
 # on the various modes available.
 #
-# You can also load formatted images from
-# memory buffers, create images that wrap C-style memory arrays, or make images
-# from constants.
-#
-# Use {Source} and {Image.new_from_source} to load images from any data
-# source, for example URIs.
+# You can also load formatted images from memory buffers, create images that 
+# wrap C-style memory arrays, or make images from constants. Use {Source} 
+# and {Image.new_from_source} to load images from any data source, for 
+# example URIs.
 #
 # The next line:
 #
