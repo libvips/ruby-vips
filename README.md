@@ -1,7 +1,7 @@
 # ruby-vips
 
 [![Gem Version](https://badge.fury.io/rb/ruby-vips.svg)](https://badge.fury.io/rb/ruby-vips)
-[![Build Status](https://travis-ci.org/libvips/ruby-vips.svg?branch=master)](https://travis-ci.org/libvips/ruby-vips)
+![Test](https://github.com/libvips/ruby-vips/workflows/Test/badge.svg)
 
 This gem is a Ruby binding for the [libvips image processing
 library](https://libvips.github.io/libvips).
