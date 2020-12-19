@@ -10,6 +10,23 @@ env:
   SPEC_OPTS: '--backtrace'
 
 jobs:
+  name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+
+      - name: Run Standard Ruby linter
+        run: bin/standardrb --no-fix --fail-fast
+        continue-on-error: true
+
   test:
     name: Functional Testing
     runs-on: ubuntu-20.04 # In order to install libvips 8.9+ version

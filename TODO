@@ -9,7 +9,7 @@
 
 - Lint.
 
-	bundle exec rake rubocop
+	bundle exec standardrb
 
 - Reinstall local copy of gem after a change.
 
@@ -30,10 +30,6 @@
 	ruby > methods.rb
 	require 'vips'; Vips::Yard.generate
 	^D
-
-- Regenerate `.rubocop_todo.yml`.
-
-	bundle exec rubocop --auto-gen-config
 
 - Regenerate docs.
 
