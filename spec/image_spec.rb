@@ -116,7 +116,7 @@ RSpec.describe Vips::Image do
     expect(im.bands).to eq(3)
   end
 
-  it 'can set scale and offset on a convolution mask' do
+  it 'can set scale and offset on a convolution mask', version: [8, 10] do
     image = Vips::Image.new_from_array [1, 2], 8, 2
     expect(image.width).to eq(2)
     expect(image.height).to eq(1)
@@ -362,20 +362,18 @@ RSpec.describe Vips::Image do
     expect(x.bands).to eq(5)
   end
 
-  if Vips::at_least_libvips?(8, 6)
-    it 'can composite' do
-      image = Vips::Image.black(16, 16, :bands => 3) + [100, 128, 130]
-      image = image.copy interpretation: :srgb
-      base = image + 10
-      overlay = image.bandjoin 128
-      comb = base.composite overlay, :over
-      pixel = comb.getpoint(0, 0)
+  it 'can composite', version: [8, 6] do
+    image = Vips::Image.black(16, 16, :bands => 3) + [100, 128, 130]
+    image = image.copy interpretation: :srgb
+    base = image + 10
+    overlay = image.bandjoin 128
+    comb = base.composite overlay, :over
+    pixel = comb.getpoint(0, 0)
 
-      expect(pixel[0]).to be_within(0.1).of(105)
-      expect(pixel[1]).to be_within(0.1).of(133)
-      expect(pixel[2]).to be_within(0.1).of(135)
-      expect(pixel[3]).to eq(255)
-    end
+    expect(pixel[0]).to be_within(0.1).of(105)
+    expect(pixel[1]).to be_within(0.1).of(133)
+    expect(pixel[2]).to be_within(0.1).of(135)
+    expect(pixel[3]).to eq(255)
   end
 
   it 'has minpos/maxpos' do
@@ -659,12 +657,10 @@ RSpec.describe Vips::Image do
     expect(x.has_alpha?).to be true
   end
 
-  if Vips::at_least_libvips?(8, 6)
-    it 'can add_alpha' do
-      x = Vips::Image.new_from_file './spec/samples/no_alpha.png'
-      expect(x.has_alpha?).to be false
-      y = x.add_alpha
-      expect(y.has_alpha?).to be true
-    end
+  it 'can add_alpha', version: [8, 6] do
+    x = Vips::Image.new_from_file './spec/samples/no_alpha.png'
+    expect(x.has_alpha?).to be false
+    y = x.add_alpha
+    expect(y.has_alpha?).to be true
   end
 end

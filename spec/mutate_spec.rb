@@ -1,7 +1,7 @@
 require 'spec_helper.rb'
 
 RSpec.describe Vips::MutableImage do
-  it 'can set! metadata in mutate' do
+  it 'can set! metadata in mutate', version: [8, 10] do
     image = Vips::Image.black(16, 16)
     image = image.mutate do |x|
       x.set_type! GObject::GINT_TYPE, "banana", 12
