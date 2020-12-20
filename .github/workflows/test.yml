@@ -10,7 +10,8 @@ env:
   SPEC_OPTS: '--backtrace'
 
 jobs:
-  name: Lint
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -24,15 +25,15 @@ jobs:
           bundler-cache: true
 
       - name: Run Standard Ruby linter
-        run: bin/standardrb --no-fix --fail-fast
+        run: bundle exec standardrb --no-fix --fail-fast
         continue-on-error: true
 
   test:
     name: Functional Testing
-    runs-on: ubuntu-20.04 # In order to install libvips 8.9+ version
 
     strategy:
       matrix:
+        os-version: [ 'ubuntu-20.04' ]
         ruby-version:
           - 2.1
           - 2.2
@@ -42,6 +43,9 @@ jobs:
           - 2.6
           - 2.7
           - jruby
+      fail-fast: true
+
+    runs-on: ${{ matrix.os-version }}
 
     steps:
       - name: Checkout code
@@ -62,28 +66,8 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run:
-          sudo apt install --fix-missing -qq --no-install-recommends -o Acquire::Retries=3
+          sudo apt install --fix-missing -qq -o Acquire::Retries=3
             libvips libvips-dev libvips-tools
-            gettext
-            libcfitsio-dev
-            libexpat1-dev
-            libfftw3-dev
-            libgif-dev
-            libglib2.0-dev
-            libgsf-1-dev
-            libjpeg-turbo8-dev
-            liblcms2-dev
-            libmagickwand-dev
-            libmatio-dev
-            libopenexr-dev
-            libopenslide-dev
-            liborc-0.4-dev
-            libpango1.0-dev
-            libpoppler-glib-dev
-            libtiff5-dev
-            libwebp-dev
-            librsvg2-dev
-            libmagick++-dev
 
       - name: Run Tests
         run: bundle exec rake spec

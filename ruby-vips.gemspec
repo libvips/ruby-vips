@@ -47,7 +47,7 @@ and it can process large images without loading the whole image in memory.
 
   # RuboCop requires Ruby >= 2.2
   if Gem.ruby_version >= Gem::Version.new("2.2")
-    spec.add_development_dependency "rubocop", ["~> 0.64"]
+    spec.add_development_dependency "standard"
   end
 
 end

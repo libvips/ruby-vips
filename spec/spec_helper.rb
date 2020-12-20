@@ -3,10 +3,13 @@ require 'vips'
 require 'tempfile'
 require 'pathname'
 
+Vips.set_debug ENV['DEBUG']
+# Vips.leak_set true
+
 module Spec
   module Path
-    def root
-      @root ||= Pathname.new(File.expand_path('..', __FILE__))
+    def set_root(path)
+      @root = Pathname.new(path).expand_path
     end
 
     def sample(*path)
@@ -18,12 +21,11 @@ module Spec
     end
 
     extend self
-  end
 
-  module Helpers
-    def reset_working!
-      FileUtils.rm Dir[tmp.join('*.*')], :force => true
-      FileUtils.mkdir_p(tmp)
+    private
+
+    def root
+      @root ||= set_root(File.expand_path('..', __FILE__))
     end
   end
 end
@@ -38,9 +40,24 @@ end
 
 RSpec.configure do |config|
   config.include Spec::Path
-  config.include Spec::Helpers
 
-  config.before :each do
-    reset_working!
+  config.around do |example|
+    Dir.mktmpdir do |dir|
+      set_root(dir)
+      FileUtils.mkdir_p(Spec::Path.sample)
+      FileUtils.mkdir_p(Spec::Path.tmp)
+      example.run
+    end
+  end
+
+  config.before(:example, jpeg: true) do
+    skip 'required jpegload for this spec' unless has_jpeg?
+  end
+
+  config.before(:example,:version) do |example|
+    required_version = example.metadata[:version]
+    unless Vips::at_least_libvips?(*required_version)
+      skip "required at least #{required_version.join('.')} version of the libvips"
+    end
   end
 end
