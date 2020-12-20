@@ -4,14 +4,14 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
+require "ffi"
 
 module Vips
-  if Vips::at_least_libvips?(8, 9)
+  if Vips.at_least_libvips?(8, 9)
     attach_function :vips_source_custom_new, [], :pointer
   end
 
-  # A source you can attach action signal handlers to to implement 
+  # A source you can attach action signal handlers to to implement
   # custom input types.
   #
   # For example:
@@ -23,7 +23,7 @@ module Vips
   # image = Vips::Image.new_from_source source
   # ```
   #
-  # (just an example -- of course in practice you'd use {Source#new_from_file} 
+  # (just an example -- of course in practice you'd use {Source#new_from_file}
   # to read from a named file)
   class SourceCustom < Vips::Source
     module SourceCustomLayout
@@ -44,7 +44,7 @@ module Vips
     end
 
     def initialize
-      pointer = Vips::vips_source_custom_new
+      pointer = Vips.vips_source_custom_new
       raise Vips::Error if pointer.null?
 
       super pointer
@@ -70,7 +70,7 @@ module Vips
     end
 
     # The block is executed to seek the source. The interface is exactly as
-    # IO::seek, ie. it should take an offset and whence, and return the 
+    # IO::seek, ie. it should take an offset and whence, and return the
     # new read position.
     #
     # This handler is optional -- if you do not attach a seek handler,
@@ -85,6 +85,5 @@ module Vips
         block.call offset, whence
       end
     end
-
   end
 end

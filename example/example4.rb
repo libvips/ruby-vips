@@ -1,9 +1,9 @@
 #!/usr/bin/ruby
 
-require 'vips'
+require "vips"
 
 # this makes vips keep a list of all active objects
-Vips::leak_set true
+Vips.leak_set true
 
 # disable the operation cache
 # Vips::cache_set_max 0

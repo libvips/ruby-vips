@@ -1,9 +1,9 @@
 #!/usr/bin/ruby
 
-require 'logger'
-require 'vips'
+require "logger"
+require "vips"
 
-GLib::logger.level = Logger::DEBUG
+GLib.logger.level = Logger::DEBUG
 
 Vips::Operation.new "black"
 

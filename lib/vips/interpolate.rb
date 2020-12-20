@@ -49,7 +49,7 @@ module Vips
 
     def initialize name
       name = name.to_s if name.is_a? Symbol
-      ptr = Vips::vips_interpolate_new name
+      ptr = Vips.vips_interpolate_new name
       raise Vips::Error if ptr.nil?
 
       super ptr

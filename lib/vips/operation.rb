@@ -4,8 +4,8 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
-require 'set'
+require "ffi"
+require "set"
 
 module Vips
   private
@@ -13,22 +13,22 @@ module Vips
   attach_function :vips_operation_new, [:string], :pointer
 
   # We may well block during this (eg. if it's avg, or perhaps jpegsave), and
-  # libvips might trigger some signals which ruby has handles for. 
+  # libvips might trigger some signals which ruby has handles for.
   #
-  # We need FFI to drop the GIL lock during this call and reacquire it when 
+  # We need FFI to drop the GIL lock during this call and reacquire it when
   # the call ends, or we'll deadlock.
-  attach_function :vips_cache_operation_build, [:pointer], :pointer, 
+  attach_function :vips_cache_operation_build, [:pointer], :pointer,
     blocking: true
   attach_function :vips_object_unref_outputs, [:pointer], :void
 
   callback :argument_map_fn, [:pointer,
-                              GObject::GParamSpec.ptr,
-                              ArgumentClass.ptr,
-                              ArgumentInstance.ptr,
-                              :pointer, :pointer], :pointer
+    GObject::GParamSpec.ptr,
+    ArgumentClass.ptr,
+    ArgumentInstance.ptr,
+    :pointer, :pointer], :pointer
   attach_function :vips_argument_map, [:pointer,
-                                       :argument_map_fn,
-                                       :pointer, :pointer], :pointer
+    :argument_map_fn,
+    :pointer, :pointer], :pointer
 
   OPERATION_SEQUENTIAL = 1
   OPERATION_NOCACHE = 4
@@ -46,8 +46,8 @@ module Vips
   # everything we know about it. This is used for doc generation as well as
   # call.
   class Introspect
-    attr_reader :name, :description, :flags, :args, :required_input, 
-      :optional_input, :required_output, :optional_output, :member_x, 
+    attr_reader :name, :description, :flags, :args, :required_input,
+      :optional_input, :required_output, :optional_output, :member_x,
       :method_args, :vips_name, :destructive
 
     @@introspect_cache = {}
@@ -58,7 +58,7 @@ module Vips
       if name[-1] == "!"
         @destructive = true
         # strip the trailing "!"
-        @vips_name = name[0 ... -1]
+        @vips_name = name[0...-1]
       else
         @destructive = false
         @vips_name = name
@@ -79,9 +79,9 @@ module Vips
           # Ruby
           arg_name = pspec[:name].tr("-", "_")
           @args << {
-            :arg_name => arg_name,
-            :flags => flags,
-            :gtype => pspec[:value_type]
+            arg_name: arg_name,
+            flags: flags,
+            gtype: pspec[:value_type]
           }
         end
 
@@ -93,8 +93,8 @@ module Vips
         flags = details[:flags]
 
         if (flags & ARGUMENT_INPUT) != 0
-          if (flags & ARGUMENT_REQUIRED) != 0 && 
-             (flags & ARGUMENT_DEPRECATED) == 0
+          if (flags & ARGUMENT_REQUIRED) != 0 &&
+              (flags & ARGUMENT_DEPRECATED) == 0
             @required_input << details
           else
             # we allow deprecated optional args
@@ -103,17 +103,17 @@ module Vips
 
           # MODIFY INPUT args count as OUTPUT as well in non-destructive mode
           if (flags & ARGUMENT_MODIFY) != 0 &&
-             !@destructive
-            if (flags & ARGUMENT_REQUIRED) != 0 && 
-               (flags & ARGUMENT_DEPRECATED) == 0
+              !@destructive
+            if (flags & ARGUMENT_REQUIRED) != 0 &&
+                (flags & ARGUMENT_DEPRECATED) == 0
               @required_output << details
             else
               @optional_output[arg_name] = details
             end
           end
         elsif (flags & ARGUMENT_OUTPUT) != 0
-          if (flags & ARGUMENT_REQUIRED) != 0 && 
-             (flags & ARGUMENT_DEPRECATED) == 0
+          if (flags & ARGUMENT_REQUIRED) != 0 &&
+              (flags & ARGUMENT_DEPRECATED) == 0
             @required_output << details
           else
             # again, allow deprecated optional args
@@ -138,8 +138,8 @@ module Vips
     # we can.
     def add_yard_introspection name
       @name = name
-      @description = Vips::vips_object_get_description @op
-      @flags = Vips::vips_operation_get_flags @op
+      @description = Vips.vips_object_get_description @op
+      @flags = Vips.vips_operation_get_flags @op
       @member_x = nil
       @method_args = []
 
@@ -150,15 +150,15 @@ module Vips
 
         details[:yard_name] = arg_name == "in" ? "im" : arg_name
         pspec = @op.get_pspec arg_name
-        details[:blurb] = GObject::g_param_spec_get_blurb pspec
+        details[:blurb] = GObject.g_param_spec_get_blurb pspec
 
-        if (flags & ARGUMENT_INPUT) != 0 && 
-           (flags & ARGUMENT_REQUIRED) != 0 && 
-           (flags & ARGUMENT_DEPRECATED) == 0
-          # the first required input image is the thing we will be a method 
+        if (flags & ARGUMENT_INPUT) != 0 &&
+            (flags & ARGUMENT_REQUIRED) != 0 &&
+            (flags & ARGUMENT_DEPRECATED) == 0
+          # the first required input image is the thing we will be a method
           # of
           if @member_x.nil? && gtype == IMAGE_TYPE
-            @member_x = details 
+            @member_x = details
           else
             @method_args << details
           end
@@ -175,7 +175,6 @@ module Vips
       introspect.add_yard_introspection name
       introspect
     end
-
   end
 
   class Operation < Object
@@ -201,7 +200,7 @@ module Vips
       # allow init with a pointer so we can wrap the return values from
       # things like _build
       if value.is_a? String
-        value = Vips::vips_operation_new value
+        value = Vips.vips_operation_new value
         raise Vips::Error if value.null?
       end
 
@@ -209,35 +208,35 @@ module Vips
     end
 
     def build
-      op = Vips::vips_cache_operation_build self
+      op = Vips.vips_cache_operation_build self
       if op.null?
-        Vips::vips_object_unref_outputs self
+        Vips.vips_object_unref_outputs self
         raise Vips::Error
       end
 
-      return Operation.new op
+      Operation.new op
     end
 
     def argument_map &block
-      fn = Proc.new do |_op, pspec, argument_class, argument_instance, _a, _b|
+      fn = proc do |_op, pspec, argument_class, argument_instance, _a, _b|
         block.call pspec, argument_class, argument_instance
       end
-      Vips::vips_argument_map self, fn, nil, nil
+      Vips.vips_argument_map self, fn, nil, nil
     end
 
-    # Search an object for the first element to match a predicate. Search 
+    # Search an object for the first element to match a predicate. Search
     # inside subarrays and sub-hashes. Equlvalent to x.flatten.find{}.
     def self.flat_find object, &block
       if object.respond_to? :each
-        object.each do |x| 
-          result = flat_find x, &block 
-          return result if result != nil
+        object.each do |x|
+          result = flat_find x, &block
+          return result unless result.nil?
         end
-      else
-        return object if yield object
+      elsif yield object
+        return object
       end
 
-      return nil
+      nil
     end
 
     # expand a constant into an image
@@ -247,11 +246,11 @@ module Vips
       # 2D array values become tiny 2D images
       # if there's nothing to match to, we also make a 2D image
       if (value.is_a?(Array) && value[0].is_a?(Array)) || match_image.nil?
-        return Image.new_from_array value
+        Image.new_from_array value
       else
         # we have a 1D array ... use that as a pixel constant and
         # expand to match match_image
-        return match_image.new_from_image value
+        match_image.new_from_image value
       end
     end
 
@@ -259,7 +258,7 @@ module Vips
     # required
     def set name, value, match_image, flags, gtype, destructive
       if gtype == IMAGE_TYPE
-        value = Operation::imageize match_image, value
+        value = Operation.imageize match_image, value
 
         # in non-destructive mode, make sure we have a unique copy
         if (flags & ARGUMENT_MODIFY) != 0 &&
@@ -267,7 +266,7 @@ module Vips
           value = value.copy.copy_memory
         end
       elsif gtype == ARRAY_IMAGE_TYPE
-        value = value.map { |x| Operation::imageize match_image, x }
+        value = value.map { |x| Operation.imageize match_image, x }
       end
 
       super name, value
@@ -343,8 +342,8 @@ module Vips
     # the constant value 255.
 
     def self.call name, supplied, optional = {}, option_string = ""
-      GLib::logger.debug("Vips::VipsOperation.call") {
-        "name = #{name}, supplied = #{supplied}, " +
+      GLib.logger.debug("Vips::VipsOperation.call") {
+        "name = #{name}, supplied = #{supplied}, " \
           "optional = #{optional}, option_string = #{option_string}"
       }
 
@@ -356,18 +355,18 @@ module Vips
       destructive = introspect.destructive
 
       unless supplied.is_a? Array
-        raise Vips::Error, "unable to call #{name}: " +
-                           "argument array is not an array"
+        raise Vips::Error, "unable to call #{name}: " \
+          "argument array is not an array"
       end
       unless optional.is_a? Hash
-        raise Vips::Error, "unable to call #{name}: " +
-                           "optional arguments are not a hash"
+        raise Vips::Error, "unable to call #{name}: " \
+          "optional arguments are not a hash"
       end
 
       if supplied.length != required_input.length
-        raise Vips::Error, "unable to call #{name}: " +
-                           "you supplied #{supplied.length} arguments, " +
-                           "but operation needs " + "#{required_input.length}."
+        raise Vips::Error, "unable to call #{name}: " \
+          "you supplied #{supplied.length} arguments, " \
+          "but operation needs #{required_input.length}."
       end
 
       # all supplied_optional keys should be in optional_input or
@@ -377,8 +376,8 @@ module Vips
 
         unless optional_input.has_key?(arg_name) ||
             optional_output.has_key?(arg_name)
-          raise Vips::Error, "unable to call #{name}: " +
-                             "unknown option #{arg_name}"
+          raise Vips::Error, "unable to call #{name}: " \
+            "unknown option #{arg_name}"
         end
       end
 
@@ -390,32 +389,28 @@ module Vips
       #
       # also enforce the rules around mutable and non-mutable images
       match_image = nil
-      flat_find(supplied) do |value| 
-        if match_image 
+      flat_find(supplied) do |value|
+        if match_image
           # no non-first image arg can ever be mutable
           if value.is_a?(MutableImage)
-            raise Vips::Error, "unable to call #{name}: " +
-                               "only the first image argument can be mutable"
+            raise Vips::Error, "unable to call #{name}: " \
+              "only the first image argument can be mutable"
           end
-        else
-          if destructive
-            if value.is_a?(Image)
-              raise Vips::Error, "unable to call #{name}: " +
-                                 "first image argument to a destructive " +
-                                 "operation must be mutable"
-            elsif value.is_a?(MutableImage)
-              match_image = value
-            end
-          else
-            # non destructive operation, so no mutable images
-            if value.is_a?(MutableImage)
-              raise Vips::Error, "unable to call #{name}: " +
-                                 "must not pass mutable images to " +
-                                 "non-destructive operations"
-            elsif value.is_a?(Image)
-              match_image = value
-            end
+        elsif destructive
+          if value.is_a?(Image)
+            raise Vips::Error, "unable to call #{name}: " \
+              "first image argument to a destructive " \
+              "operation must be mutable"
+          elsif value.is_a?(MutableImage)
+            match_image = value
           end
+        elsif value.is_a?(MutableImage)
+          # non destructive operation, so no mutable images
+          raise Vips::Error, "unable to call #{name}: " \
+            "must not pass mutable images to " \
+            "non-destructive operations"
+        elsif value.is_a?(Image)
+          match_image = value
         end
 
         # keep looping
@@ -425,8 +420,8 @@ module Vips
       op = Operation.new introspect.vips_name
 
       # set any string args first so they can't be overridden
-      if option_string != nil
-        if Vips::vips_object_set_from_string(op, option_string) != 0
+      unless option_string.nil?
+        if Vips.vips_object_set_from_string(op, option_string) != 0
           raise Vips::Error
         end
       end
@@ -509,11 +504,11 @@ module Vips
         result = nil
       end
 
-      GLib::logger.debug("Vips::Operation.call") { "result = #{result}" }
+      GLib.logger.debug("Vips::Operation.call") { "result = #{result}" }
 
-      Vips::vips_object_unref_outputs op
+      Vips.vips_object_unref_outputs op
 
-      return result
+      result
     end
   end
 end

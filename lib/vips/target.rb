@@ -4,10 +4,10 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
+require "ffi"
 
 module Vips
-  if Vips::at_least_libvips?(8, 9)
+  if Vips.at_least_libvips?(8, 9)
     attach_function :vips_target_new_to_descriptor, [:int], :pointer
     attach_function :vips_target_new_to_file, [:string], :pointer
     attach_function :vips_target_new_to_memory, [], :pointer
@@ -43,45 +43,44 @@ module Vips
     #
     # Pass targets to {Image#write_to_target} to write images to
     # them.
-    # 
+    #
     # @param descriptor [Integer] the file descriptor
     # @return [Target] the new Vips::Target
     def self.new_to_descriptor(descriptor)
-      ptr = Vips::vips_target_new_to_descriptor descriptor
+      ptr = Vips.vips_target_new_to_descriptor descriptor
       raise Vips::Error if ptr.null?
 
       Vips::Target.new ptr
     end
 
-    # Create a new target to a file name. 
+    # Create a new target to a file name.
     #
     # Pass targets to {Image#write_to_target} to write images to
     # them.
-    # 
+    #
     # @param filename [String] the name of the file
     # @return [Target] the new Vips::Target
     def self.new_to_file(filename)
-      raise Vips::Error, 'filename is nil' if filename.nil?
-      ptr = Vips::vips_target_new_to_file filename
+      raise Vips::Error, "filename is nil" if filename.nil?
+      ptr = Vips.vips_target_new_to_file filename
       raise Vips::Error if ptr.null?
 
       Vips::Target.new ptr
     end
 
-    # Create a new target to an area of memory. 
+    # Create a new target to an area of memory.
     #
     # Pass targets to {Image#write_to_target} to write images to
     # them.
     #
-    # Once the image has been written, use {Object#get}`("blob")` to read out 
+    # Once the image has been written, use {Object#get}`("blob")` to read out
     # the data.
-    # 
+    #
     # @return [Target] the new Vips::Target
     def self.new_to_memory
-      ptr = Vips::vips_target_new_to_memory 
+      ptr = Vips.vips_target_new_to_memory
 
       Vips::Target.new ptr
     end
-
   end
 end

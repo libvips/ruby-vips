@@ -4,8 +4,8 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
-require 'logger'
+require "ffi"
+require "logger"
 
 # This module uses FFI to make a simple layer over the glib and gobject
 # libraries.
@@ -37,12 +37,12 @@ module GLib
   class << self
     attr_accessor :logger
   end
-  @logger = Logger.new(STDOUT)
+  @logger = Logger.new($stdout)
   @logger.level = Logger::WARN
 
   extend FFI::Library
 
-  ffi_lib library_name('glib-2.0', 0)
+  ffi_lib library_name("glib-2.0", 0)
 
   attach_function :g_malloc, [:size_t], :pointer
 
@@ -52,20 +52,20 @@ module GLib
 
   callback :g_log_func, [:string, :int, :string, :pointer], :void
   attach_function :g_log_set_handler,
-      [:string, :int, :g_log_func, :pointer], :int
+    [:string, :int, :g_log_func, :pointer], :int
   attach_function :g_log_remove_handler, [:string, :int], :void
 
   # log flags
-  LOG_FLAG_RECURSION          = 1 << 0
-  LOG_FLAG_FATAL              = 1 << 1
+  LOG_FLAG_RECURSION = 1 << 0
+  LOG_FLAG_FATAL = 1 << 1
 
   # GLib log levels
-  LOG_LEVEL_ERROR             = 1 << 2 # always fatal
-  LOG_LEVEL_CRITICAL          = 1 << 3
-  LOG_LEVEL_WARNING           = 1 << 4
-  LOG_LEVEL_MESSAGE           = 1 << 5
-  LOG_LEVEL_INFO              = 1 << 6
-  LOG_LEVEL_DEBUG             = 1 << 7
+  LOG_LEVEL_ERROR = 1 << 2 # always fatal
+  LOG_LEVEL_CRITICAL = 1 << 3
+  LOG_LEVEL_WARNING = 1 << 4
+  LOG_LEVEL_MESSAGE = 1 << 5
+  LOG_LEVEL_INFO = 1 << 6
+  LOG_LEVEL_DEBUG = 1 << 7
 
   # map glib levels to Logger::Severity
   GLIB_TO_SEVERITY = {
@@ -83,9 +83,9 @@ module GLib
   @glib_log_handler_id = 0
 
   # module-level, so it's not GCd away
-  LOG_HANDLER = Proc.new do |domain, level, message, _user_data|
+  LOG_HANDLER = proc { |domain, level, message, _user_data|
     @logger.log(GLIB_TO_SEVERITY[level], message, domain)
-  end
+  }
 
   def self.remove_log_handler
     if @glib_log_handler_id != 0 && @glib_log_domain
@@ -95,7 +95,7 @@ module GLib
   end
 
   def self.set_log_domain domain
-    GLib::remove_log_handler
+    GLib.remove_log_handler
 
     @glib_log_domain = domain
 
@@ -125,7 +125,7 @@ module GLib
       # on shutdown and we don't want LOG_HANDLER to be invoked
       # after Ruby has gone
       at_exit {
-        GLib::remove_log_handler
+        GLib.remove_log_handler
       }
     end
   end
@@ -134,7 +134,7 @@ end
 module GObject
   extend FFI::Library
 
-  ffi_lib library_name('gobject-2.0', 0)
+  ffi_lib library_name("gobject-2.0", 0)
 
   # we can't just use ulong, windows has different int sizing rules
   if FFI::Platform::ADDRESS_SIZE == 64
@@ -162,8 +162,8 @@ module GObject
   GOBJECT_TYPE = g_type_from_name "GObject"
 end
 
-require 'vips/gobject'
-require 'vips/gvalue'
+require "vips/gobject"
+require "vips/gvalue"
 
 # This module provides a binding for the [libvips image processing
 # library](https://libvips.github.io/libvips/).
@@ -208,9 +208,9 @@ require 'vips/gvalue'
 # for full details
 # on the various modes available.
 #
-# You can also load formatted images from memory buffers, create images that 
-# wrap C-style memory arrays, or make images from constants. Use {Source} 
-# and {Image.new_from_source} to load images from any data source, for 
+# You can also load formatted images from memory buffers, create images that
+# wrap C-style memory arrays, or make images from constants. Use {Source}
+# and {Image.new_from_source} to load images from any data source, for
 # example URIs.
 #
 # The next line:
@@ -254,7 +254,7 @@ require 'vips/gvalue'
 # suffix. You can also write formatted images to memory buffers, or dump
 # image data to a raw memory array.
 #
-# Use {Target} and {Image#write_to_target} to write formatted images to 
+# Use {Target} and {Image#write_to_target} to write formatted images to
 # any data sink, for example URIs.
 #
 # # How it works
@@ -407,8 +407,8 @@ require 'vips/gvalue'
 #
 # # Automatic YARD documentation
 #
-# The bulk of these API docs are generated automatically by {Yard#generate}. 
-# It examines libvips and writes a summary of each operation and the arguments 
+# The bulk of these API docs are generated automatically by {Yard#generate}.
+# It examines libvips and writes a summary of each operation and the arguments
 # and options that that operation expects.
 #
 # Use the [C API # docs](https://libvips.github.io/libvips/API/current)
@@ -423,7 +423,7 @@ require 'vips/gvalue'
 # # Draw operations
 #
 # There are two ways of calling the libvips draw operations, like
-# {Image#draw_circle} and {Image#draw_line}. 
+# {Image#draw_circle} and {Image#draw_line}.
 #
 # First, you can use them like functions. For example:
 #
@@ -450,8 +450,8 @@ require 'vips/gvalue'
 # end
 # ```
 #
-# Now each {Image#draw_line} will directly modify the mutable image, saving 
-# the copy. This is much faster and needs much less memory. 
+# Now each {Image#draw_line} will directly modify the mutable image, saving
+# the copy. This is much faster and needs much less memory.
 #
 # # Metadata read
 #
@@ -493,7 +493,7 @@ require 'vips/gvalue'
 # ```ruby
 # image = Vips::Image.black 1, 100000
 # image.set_progress true
-# 
+#
 # def progress_to_s(name, progress)
 #   puts "#{name}:"
 #   puts "    run = #{progress[:run]}"
@@ -502,23 +502,23 @@ require 'vips/gvalue'
 #   puts "    npels = #{progress[:npels]}"
 #   puts "    percent = #{progress[:percent]}"
 # end
-# 
+#
 # image.signal_connect :preeval do |progress|
 #   progress_to_s("preeval", progress)
 # end
-# 
+#
 # image.signal_connect :eval do |progress|
 #   progress_to_s("eval", progress)
 #   image.set_kill(true) if progress[:percent] > 50
 # end
-# 
+#
 # image.signal_connect :posteval do |progress|
 #   progress_to_s("posteval", progress)
 # end
-# 
+#
 # image.avg
 # ```
-# 
+#
 # The `:eval` signal will fire for every tile that is processed. You can stop
 # progress with {Image#set_kill} and processing will end with an exception.
 #
@@ -570,10 +570,10 @@ require 'vips/gvalue'
 module Vips
   extend FFI::Library
 
-  ffi_lib library_name('vips', 42)
+  ffi_lib library_name("vips", 42)
 
   LOG_DOMAIN = "VIPS"
-  GLib::set_log_domain LOG_DOMAIN
+  GLib.set_log_domain LOG_DOMAIN
 
   typedef :ulong, :GType
 
@@ -587,9 +587,9 @@ module Vips
     def initialize msg = nil
       if msg
         @details = msg
-      elsif Vips::vips_error_buffer != ""
-        @details = Vips::vips_error_buffer
-        Vips::vips_error_clear
+      elsif Vips.vips_error_buffer != ""
+        @details = Vips.vips_error_buffer
+        Vips.vips_error_clear
       else
         @details = nil
       end
@@ -599,7 +599,7 @@ module Vips
     #
     # @return [String] The error message
     def to_s
-      if @details != nil
+      if !@details.nil?
         @details
       else
         super.to_s
@@ -609,8 +609,8 @@ module Vips
 
   attach_function :vips_init, [:string], :int
 
-  if Vips::vips_init($0) != 0
-    throw Vips::get_error
+  if Vips.vips_init($0) != 0
+    throw Vips.get_error
   end
 
   # don't use at_exit to call vips_shutdown, it causes problems with fork, and
@@ -674,7 +674,7 @@ module Vips
   # Don't use this, instead change GLib::logger.level.
   def self.set_debug debug
     if debug
-      GLib::logger.level = Logger::DEBUG
+      GLib.logger.level = Logger::DEBUG
     end
   end
 
@@ -696,37 +696,37 @@ module Vips
     # vips_foreign_get_suffixes() was added in libvips 8.8
     return [] unless Vips.respond_to? :vips_foreign_get_suffixes
 
-    array = Vips::vips_foreign_get_suffixes
+    array = Vips.vips_foreign_get_suffixes
 
     names = []
     p = array
     until (q = p.read_pointer).null?
       suff = q.read_string
-      GLib::g_free q
+      GLib.g_free q
       names << suff unless names.include? suff
       p += FFI::Type::POINTER.size
     end
-    GLib::g_free array
+    GLib.g_free array
 
     names
   end
 
-  LIBRARY_VERSION = Vips::version_string
+  LIBRARY_VERSION = Vips.version_string
 
   # libvips has this arbitrary number as a sanity-check upper bound on image
   # size. It's sometimes useful to know when calculating scale factors.
   MAX_COORD = 10000000
 end
 
-require 'vips/object'
-require 'vips/operation'
-require 'vips/image'
-require 'vips/mutableimage'
-require 'vips/interpolate'
-require 'vips/region'
-require 'vips/version'
-require 'vips/connection'
-require 'vips/source'
-require 'vips/sourcecustom'
-require 'vips/target'
-require 'vips/targetcustom'
+require "vips/object"
+require "vips/operation"
+require "vips/image"
+require "vips/mutableimage"
+require "vips/interpolate"
+require "vips/region"
+require "vips/version"
+require "vips/connection"
+require "vips/source"
+require "vips/sourcecustom"
+require "vips/target"
+require "vips/targetcustom"

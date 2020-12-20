@@ -1,9 +1,9 @@
-require 'vips'
+require "vips"
 
-require 'tempfile'
-require 'pathname'
+require "tempfile"
+require "pathname"
 
-Vips.set_debug ENV['DEBUG']
+Vips.set_debug ENV["DEBUG"]
 # Vips.leak_set true
 
 module Spec
@@ -13,11 +13,11 @@ module Spec
     end
 
     def sample(*path)
-      root.join 'samples', *path
+      root.join "samples", *path
     end
 
     def tmp(*path)
-      root.join 'tmp', 'working', *path
+      root.join "tmp", "working", *path
     end
 
     extend self
@@ -25,17 +25,17 @@ module Spec
     private
 
     def root
-      @root ||= set_root(File.expand_path('..', __FILE__))
+      @root ||= set_root(File.expand_path("..", __FILE__))
     end
   end
 end
 
 def simg(name)
-  Spec::Path::sample(name).to_s
+  Spec::Path.sample(name).to_s
 end
 
 def timg(name)
-  Spec::Path::tmp(name).to_s
+  Spec::Path.tmp(name).to_s
 end
 
 RSpec.configure do |config|
@@ -51,13 +51,13 @@ RSpec.configure do |config|
   end
 
   config.before(:example, jpeg: true) do
-    skip 'required jpegload for this spec' unless has_jpeg?
+    skip "required jpegload for this spec" unless has_jpeg?
   end
 
-  config.before(:example,:version) do |example|
+  config.before(:example, :version) do |example|
     required_version = example.metadata[:version]
-    unless Vips::at_least_libvips?(*required_version)
-      skip "required at least #{required_version.join('.')} version of the libvips"
+    unless Vips.at_least_libvips?(*required_version)
+      skip "required at least #{required_version.join(".")} version of the libvips"
     end
   end
 end

@@ -4,10 +4,10 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
+require "ffi"
 
 module Vips
-  if Vips::at_least_libvips?(8, 9)
+  if Vips.at_least_libvips?(8, 9)
     attach_function :vips_connection_filename, [:pointer], :string
     attach_function :vips_connection_nick, [:pointer], :string
   end
@@ -34,13 +34,13 @@ module Vips
 
     # Get any filename associated with a connection, or nil.
     def filename
-      Vips::vips_connection_filename self
+      Vips.vips_connection_filename self
     end
 
     # Get a nickname (short description) of a connection that could be shown to
     # the user.
     def nick
-      Vips::vips_connection_nick self
+      Vips.vips_connection_nick self
     end
   end
 end

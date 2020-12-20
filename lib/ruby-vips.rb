@@ -1,1 +1,1 @@
-require 'vips'
+require "vips"

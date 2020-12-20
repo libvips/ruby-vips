@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
-require 'ffi'
-require 'forwardable'
+require "ffi"
+require "forwardable"
 
 # this is really very crude logging
 
@@ -29,7 +29,7 @@ end
 
 module GLib
   extend FFI::Library
-  ffi_lib 'gobject-2.0'
+  ffi_lib "gobject-2.0"
 
   def self.set_log_domain(_domain)
     # FIXME: this needs hooking up
@@ -68,8 +68,8 @@ module GLib
       def self.included(base)
         base.class_eval do
           layout :g_type_instance, :pointer,
-                 :ref_count, :uint,
-                 :qdata, :pointer
+            :ref_count, :uint,
+            :qdata, :pointer
         end
       end
     end
@@ -85,7 +85,7 @@ module GLib
 
       def self.release(ptr)
         log "GLib::GObject::ManagedStruct.release: unreffing #{ptr}"
-        GLib::g_object_unref(ptr) unless ptr.null?
+        GLib.g_object_unref(ptr) unless ptr.null?
       end
     end
 
@@ -116,7 +116,7 @@ module GLib
 
     class << self
       def ffi_struct
-        self.const_get(:Struct)
+        const_get(:Struct)
       end
     end
 
@@ -127,7 +127,7 @@ module GLib
 
     class << self
       def ffi_managed_struct
-        self.const_get(:ManagedStruct)
+        const_get(:ManagedStruct)
       end
     end
   end
@@ -138,10 +138,10 @@ end
 
 module Vips
   extend FFI::Library
-  ffi_lib 'vips'
+  ffi_lib "vips"
 
   LOG_DOMAIN = "VIPS"
-  GLib::set_log_domain(LOG_DOMAIN)
+  GLib.set_log_domain(LOG_DOMAIN)
 
   # need to repeat this
   typedef :ulong, :GType
@@ -153,19 +153,19 @@ module Vips
   attach_function :vips_error_clear, [], :void
 
   def self.get_error
-    errstr = Vips::vips_error_buffer
-    Vips::vips_error_clear
+    errstr = Vips.vips_error_buffer
+    Vips.vips_error_clear
     errstr
   end
 
-  if Vips::vips_init($0) != 0
-    puts Vips::get_error
+  if Vips.vips_init($0) != 0
+    puts Vips.get_error
     exit 1
   end
 
-  at_exit {
-    Vips::vips_shutdown
-  }
+  at_exit do
+    Vips.vips_shutdown
+  end
 
   attach_function :vips_object_print_all, [], :void
   attach_function :vips_leak_set, [:int], :void
@@ -188,15 +188,15 @@ module Vips
         base.class_eval do
           # don't actually need most of these, remove them later
           layout :parent, GLib::GObject::Struct,
-             :constructed, :int,
-             :static_object, :int,
-             :argument_table, :pointer,
-             :nickname, :string,
-             :description, :string,
-             :preclose, :int,
-             :close, :int,
-             :postclose, :int,
-             :local_memory, :size_t
+            :constructed, :int,
+            :static_object, :int,
+            :argument_table, :pointer,
+            :nickname, :string,
+            :description, :string,
+            :preclose, :int,
+            :close, :int,
+            :postclose, :int,
+            :local_memory, :size_t
         end
       end
     end
@@ -250,7 +250,7 @@ module Vips
     end
 
     def self.new_partial
-      VipsImage.new(Vips::vips_image_new)
+      VipsImage.new(Vips.vips_image_new)
     end
   end
 
@@ -258,12 +258,11 @@ module Vips
 end
 
 puts "creating image"
-begin
-  x = Vips::VipsImage.new_partial
-  puts "x = #{x}"
-  puts ""
-  puts "x[:parent] = #{x[:parent]}"
-  puts ""
-  puts "x[:parent][:description] = #{x[:parent][:description]}"
-  puts ""
-end
+
+x = Vips::VipsImage.new_partial
+puts "x = #{x}"
+puts ""
+puts "x[:parent] = #{x[:parent]}"
+puts ""
+puts "x[:parent][:description] = #{x[:parent][:description]}"
+puts ""

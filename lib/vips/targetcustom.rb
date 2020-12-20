@@ -4,14 +4,14 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
+require "ffi"
 
 module Vips
-  if Vips::at_least_libvips?(8, 9)
+  if Vips.at_least_libvips?(8, 9)
     attach_function :vips_target_custom_new, [], :pointer
   end
 
-  # A target you can attach action signal handlers to to implememt 
+  # A target you can attach action signal handlers to to implememt
   # custom output types.
   #
   # For example:
@@ -23,7 +23,7 @@ module Vips
   # image.write_to_target target, ".png"
   # ```
   #
-  # (just an example -- of course in practice you'd use {Target#new_to_file} 
+  # (just an example -- of course in practice you'd use {Target#new_to_file}
   # to write to a named file)
   class TargetCustom < Vips::Target
     module TargetCustomLayout
@@ -44,17 +44,17 @@ module Vips
     end
 
     def initialize
-      pointer = Vips::vips_target_custom_new
+      pointer = Vips.vips_target_custom_new
       raise Vips::Error if pointer.null?
 
       super pointer
     end
 
     # The block is executed to write data to the source. The interface is
-    # exactly as IO::write, ie. it should write the string and return the 
+    # exactly as IO::write, ie. it should write the string and return the
     # number of bytes written.
     #
-    # @yieldparam bytes [String] Write these bytes to the file 
+    # @yieldparam bytes [String] Write these bytes to the file
     # @yieldreturn [Integer] The number of bytes written, or -1 on error
     def on_write &block
       signal_connect "write" do |p, len|
@@ -69,10 +69,9 @@ module Vips
     # The block is executed at the end of write. It should do any necessary
     # finishing action, such as closing a file.
     def on_finish &block
-      signal_connect "finish" do 
-        block.call()
+      signal_connect "finish" do
+        block.call
       end
     end
-
   end
 end
