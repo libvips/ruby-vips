@@ -4,13 +4,13 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
+require "ffi"
 
 module Vips
   private
 
   attach_function :vips_image_new_matrix_from_array,
-      [:int, :int, :pointer, :int], :pointer
+    [:int, :int, :pointer, :int], :pointer
 
   attach_function :vips_image_copy_memory, [:pointer], :pointer
 
@@ -25,35 +25,35 @@ module Vips
   attach_function :vips_foreign_find_load_buffer, [:pointer, :size_t], :string
   attach_function :vips_foreign_find_save_buffer, [:string], :string
 
-  if Vips::at_least_libvips?(8, 9)
+  if Vips.at_least_libvips?(8, 9)
     attach_function :vips_foreign_find_load_source, [:pointer], :string
     attach_function :vips_foreign_find_save_target, [:string], :string
   end
 
   attach_function :vips_image_write_to_memory,
-      [:pointer, SizeStruct.ptr], :pointer
+    [:pointer, SizeStruct.ptr], :pointer
 
   attach_function :vips_image_get_typeof, [:pointer, :string], :GType
   attach_function :vips_image_get,
-      [:pointer, :string, GObject::GValue.ptr], :int
+    [:pointer, :string, GObject::GValue.ptr], :int
 
   attach_function :vips_image_get_width, [:pointer], :int
   attach_function :vips_image_get_height, [:pointer], :int
   attach_function :vips_image_get_bands, [:pointer], :int
 
-  if Vips::at_least_libvips?(8, 5)
+  if Vips.at_least_libvips?(8, 5)
     attach_function :vips_image_get_fields, [:pointer], :pointer
     attach_function :vips_image_hasalpha, [:pointer], :int
   end
 
-  if Vips::at_least_libvips?(8, 6)
+  if Vips.at_least_libvips?(8, 6)
     attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
   end
 
   # move these three lines to mutableimage when we finally remove set and
   # remove in this class
   attach_function :vips_image_set,
-      [:pointer, :string, GObject::GValue.ptr], :void
+    [:pointer, :string, GObject::GValue.ptr], :void
   attach_function :vips_image_remove, [:pointer, :string], :void
 
   attach_function :vips_band_format_iscomplex, [:int], :int
@@ -105,17 +105,17 @@ module Vips
     # handy for overloads ... want to be able to apply a function to an
     # array or to a scalar
     def self.smap x, &block
-      x.is_a?(Array) ? x.map { |y| smap(y, &block) } : block.(x)
+      x.is_a?(Array) ? x.map { |y| smap(y, &block) } : block.call(x)
     end
 
     def self.complex? format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      Vips::vips_band_format_iscomplex(format_number) != 0
+      Vips.vips_band_format_iscomplex(format_number) != 0
     end
 
     def self.float? format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      Vips::vips_band_format_isfloat(format_number) != 0
+      Vips.vips_band_format_isfloat(format_number) != 0
     end
 
     # run a complex operation on a complex image, or an image with an even
@@ -124,12 +124,12 @@ module Vips
     def self.run_cmplx image, &block
       original_format = image.format
 
-      unless Image::complex? image.format
+      unless Image.complex? image.format
         if image.bands % 2 != 0
           raise Vips::Error, "not an even number of bands"
         end
 
-        unless Image::float? image.format
+        unless Image.float? image.format
           image = image.cast :float
         end
 
@@ -137,9 +137,9 @@ module Vips
         image = image.copy format: new_format, bands: image.bands / 2
       end
 
-      image = block.(image)
+      image = block.call(image)
 
-      unless Image::complex? original_format
+      unless Image.complex? original_format
         new_format = image.format == :dpcomplex ? :double : :float
         image = image.copy format: new_format, bands: image.bands * 2
       end
@@ -203,14 +203,14 @@ module Vips
 
     def respond_to_missing? name, include_all = false
       # respond to all vips operations by nickname
-      return true if Vips::type_find("VipsOperation", name.to_s) != 0
+      return true if Vips.type_find("VipsOperation", name.to_s) != 0
 
       super
     end
 
     def self.respond_to_missing? name, include_all = false
       # respond to all vips operations by nickname
-      return true if Vips::type_find("VipsOperation", name.to_s) != 0
+      return true if Vips.type_find("VipsOperation", name.to_s) != 0
 
       super
     end
@@ -270,9 +270,9 @@ module Vips
       # pass this
       raise Vips::Error, "filename is nil" if name.nil?
 
-      filename = Vips::p2str(Vips::vips_filename_get_filename name)
-      option_string = Vips::p2str(Vips::vips_filename_get_options name)
-      loader = Vips::vips_foreign_find_load filename
+      filename = Vips.p2str(Vips.vips_filename_get_filename(name))
+      option_string = Vips.p2str(Vips.vips_filename_get_options(name))
+      loader = Vips.vips_foreign_find_load filename
       raise Vips::Error if loader.nil?
 
       Operation.call loader, [filename], opts, option_string
@@ -310,7 +310,7 @@ module Vips
     # @macro vips.loadopts
     # @return [Image] the loaded image
     def self.new_from_buffer data, option_string, **opts
-      loader = Vips::vips_foreign_find_load_buffer data, data.bytesize
+      loader = Vips.vips_foreign_find_load_buffer data, data.bytesize
       raise Vips::Error if loader.nil?
 
       Vips::Operation.call loader, [data], opts, option_string
@@ -321,8 +321,8 @@ module Vips
     # ```
     # image = Vips::Image.black(16, 16) + 128
     # data = image.write_to_memory
-    # 
-    # x = Vips::Image.new_from_memory data, 
+    #
+    # x = Vips::Image.new_from_memory data,
     #   image.width, image.height, image.bands, image.format
     # ```
     #
@@ -348,7 +348,7 @@ module Vips
       end
 
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      vi = Vips::vips_image_new_from_memory data, size, 
+      vi = Vips.vips_image_new_from_memory data, size,
         width, height, bands, format_number
       raise Vips::Error if vi.null?
       image = new(vi)
@@ -373,7 +373,7 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_memory_copy data, width, height, bands, format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      vi = Vips::vips_image_new_from_memory_copy data, data.bytesize, 
+      vi = Vips.vips_image_new_from_memory_copy data, data.bytesize,
         width, height, bands, format_number
       raise Vips::Error if vi.null?
       new(vi)
@@ -404,7 +404,7 @@ module Vips
     # TIFF images will work.
     #
     # Loading is fast: only enough data is read to be able to fill
-    # out the header. Pixels will only be read and decompressed when they are 
+    # out the header. Pixels will only be read and decompressed when they are
     # needed.
     #
     # @param source [Vips::Source] the source to load from
@@ -412,7 +412,7 @@ module Vips
     # @macro vips.loadopts
     # @return [Image] the loaded image
     def self.new_from_source source, option_string, **opts
-      loader = Vips::vips_foreign_find_load_source source
+      loader = Vips.vips_foreign_find_load_source source
       raise Vips::Error if loader.nil?
 
       Vips::Operation.call loader, [source], opts, option_string
@@ -421,8 +421,8 @@ module Vips
     def self.matrix_from_array width, height, array
       ptr = FFI::MemoryPointer.new :double, array.length
       ptr.write_array_of_double array
-      image = Vips::vips_image_new_matrix_from_array width, height,
-          ptr, array.length
+      image = Vips.vips_image_new_matrix_from_array width, height,
+        ptr, array.length
       Vips::Image.new image
     end
 
@@ -486,13 +486,11 @@ module Vips
       image = Vips::Image.matrix_from_array width, height, array
       raise Vips::Error if image.nil?
 
-      image = image.mutate do |mutable|
+      image.mutate do |mutable|
         # be careful to set them as double
-        mutable.set_type! GObject::GDOUBLE_TYPE, 'scale', scale.to_f
-        mutable.set_type! GObject::GDOUBLE_TYPE, 'offset', offset.to_f
+        mutable.set_type! GObject::GDOUBLE_TYPE, "scale", scale.to_f
+        mutable.set_type! GObject::GDOUBLE_TYPE, "offset", offset.to_f
       end
-
-      return image
     end
 
     # A new image is created with the same width, height, format,
@@ -508,7 +506,7 @@ module Vips
       pixel = (Vips::Image.black(1, 1) + value).cast(format)
       image = pixel.embed 0, 0, width, height, extend: :copy
       image.copy interpretation: interpretation, xres: xres, yres: yres,
-        xoffset: xoffset, yoffset: yoffset
+                 xoffset: xoffset, yoffset: yoffset
     end
 
     # Write this image to a file. Save options may be encoded in the
@@ -543,9 +541,9 @@ module Vips
     def write_to_file name, **opts
       raise Vips::Error, "filename is nil" if name.nil?
 
-      filename = Vips::p2str(Vips::vips_filename_get_filename name)
-      option_string = Vips::p2str(Vips::vips_filename_get_options name)
-      saver = Vips::vips_foreign_find_save filename
+      filename = Vips.p2str(Vips.vips_filename_get_filename(name))
+      option_string = Vips.p2str(Vips.vips_filename_get_options(name))
+      saver = Vips.vips_foreign_find_save filename
       raise Vips::Error if saver.nil?
 
       Vips::Operation.call saver, [self, filename], opts, option_string
@@ -580,9 +578,9 @@ module Vips
     # @return [String] the image saved in the specified format
     def write_to_buffer format_string, **opts
       raise Vips::Error, "filename is nil" if format_string.nil?
-      filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
-      option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
-      saver = Vips::vips_foreign_find_save_buffer filename
+      filename = Vips.p2str(Vips.vips_filename_get_filename(format_string))
+      option_string = Vips.p2str(Vips.vips_filename_get_options(format_string))
+      saver = Vips.vips_foreign_find_save_buffer filename
       raise Vips::Error if saver.nil?
 
       buffer = Vips::Operation.call saver, [self], opts, option_string
@@ -590,7 +588,7 @@ module Vips
 
       write_gc
 
-      return buffer
+      buffer
     end
 
     # Write this image to a target. Save options may be encoded in
@@ -621,9 +619,9 @@ module Vips
     # @macro vips.saveopts
     def write_to_target target, format_string, **opts
       raise Vips::Error, "filename is nil" if format_string.nil?
-      filename = Vips::p2str(Vips::vips_filename_get_filename format_string)
-      option_string = Vips::p2str(Vips::vips_filename_get_options format_string)
-      saver = Vips::vips_foreign_find_save_target filename
+      filename = Vips.p2str(Vips.vips_filename_get_filename(format_string))
+      option_string = Vips.p2str(Vips.vips_filename_get_options(format_string))
+      saver = Vips.vips_foreign_find_save_target filename
       raise Vips::Error if saver.nil?
 
       Vips::Operation.call saver, [self, target], opts, option_string
@@ -635,7 +633,7 @@ module Vips
     # @return [String] the pixels as a huge binary string
     def write_to_memory
       len = Vips::SizeStruct.new
-      ptr = Vips::vips_image_write_to_memory self, len
+      ptr = Vips.vips_image_write_to_memory self, len
       raise Vips::Error if ptr.nil?
 
       # wrap up as an autopointer
@@ -644,15 +642,15 @@ module Vips
       ptr.get_bytes 0, len[:value]
     end
 
-    # Turn progress signalling on and off. 
+    # Turn progress signalling on and off.
     #
     # If this is on, the most-downstream image from this image will issue
-    # progress signals. 
+    # progress signals.
     #
     # @see Object#signal_connect
     # @param state [Boolean] progress signalling state
     def set_progress state
-      Vips::vips_image_set_progress self, state
+      Vips.vips_image_set_progress self, state
     end
 
     # Kill computation of this time.
@@ -663,7 +661,7 @@ module Vips
     # @see Object#signal_connect
     # @param kill [Boolean] stop computation
     def set_kill kill
-      Vips::vips_image_set_kill self, kill
+      Vips.vips_image_set_kill self, kill
     end
 
     # Get the `GType` of a metadata field. The result is 0 if no such field
@@ -675,12 +673,12 @@ module Vips
     def get_typeof name
       # on libvips before 8.5, property types must be searched first,
       # since vips_image_get_typeof returned built-in enums as int
-      unless Vips::at_least_libvips?(8, 5)
+      unless Vips.at_least_libvips?(8, 5)
         gtype = parent_get_typeof name
         return gtype if gtype != 0
       end
 
-      Vips::vips_image_get_typeof self, name
+      Vips.vips_image_get_typeof self, name
     end
 
     # Get a metadata item from an image. Ruby types are constructed
@@ -699,12 +697,12 @@ module Vips
     def get name
       # with old libvips, we must fetch properties (as opposed to
       # metadata) via VipsObject
-      unless Vips::at_least_libvips?(8, 5)
+      unless Vips.at_least_libvips?(8, 5)
         return super if parent_get_typeof(name) != 0
       end
 
       gvalue = GObject::GValue.alloc
-      raise Vips::Error if Vips::vips_image_get(self, name, gvalue) != 0
+      raise Vips::Error if Vips.vips_image_get(self, name, gvalue) != 0
       result = gvalue.get
       gvalue.unset
 
@@ -719,22 +717,22 @@ module Vips
       # vips_image_get_fields() was added in libvips 8.5
       return [] unless Vips.respond_to? :vips_image_get_fields
 
-      array = Vips::vips_image_get_fields self
+      array = Vips.vips_image_get_fields self
 
       names = []
       p = array
       until (q = p.read_pointer).null?
         names << q.read_string
-        GLib::g_free q
+        GLib.g_free q
         p += FFI::Type::POINTER.size
       end
-      GLib::g_free array
+      GLib.g_free array
 
       names
     end
 
-    # Mutate an image with a block. Inside the block, you can call methods 
-    # which modify the image, such as setting or removing metadata, or 
+    # Mutate an image with a block. Inside the block, you can call methods
+    # which modify the image, such as setting or removing metadata, or
     # modifying pixels.
     #
     # For example:
@@ -754,29 +752,29 @@ module Vips
       mutable.image
     end
 
-    # This method is deprecated. 
+    # This method is deprecated.
     #
-    # Please use {MutableImage#set_type!} instead. 
+    # Please use {MutableImage#set_type!} instead.
     def set_type gtype, name, value
       gvalue = GObject::GValue.alloc
       gvalue.init gtype
       gvalue.set value
-      Vips::vips_image_set self, name, gvalue
+      Vips.vips_image_set self, name, gvalue
       gvalue.unset
     end
 
-    # This method is deprecated. 
+    # This method is deprecated.
     #
-    # Please use {MutableImage#set!} instead. 
+    # Please use {MutableImage#set!} instead.
     def set name, value
       set_type get_typeof(name), name, value
     end
 
-    # This method is deprecated. 
+    # This method is deprecated.
     #
-    # Please use {MutableImage#remove!} instead. 
+    # Please use {MutableImage#remove!} instead.
     def remove name
-      Vips::vips_image_remove self, name
+      Vips.vips_image_remove self, name
     end
 
     # compatibility: old name for get
@@ -784,9 +782,9 @@ module Vips
       get name
     end
 
-    # This method is deprecated. 
+    # This method is deprecated.
     #
-    # Please use {MutableImage#set!} instead. 
+    # Please use {MutableImage#set!} instead.
     def set_value name, value
       set name, value
     end
@@ -795,21 +793,21 @@ module Vips
     #
     # @return [Integer] image width, in pixels
     def width
-      Vips::vips_image_get_width self
+      Vips.vips_image_get_width self
     end
 
     # Get image height, in pixels.
     #
     # @return [Integer] image height, in pixels
     def height
-      Vips::vips_image_get_height self
+      Vips.vips_image_get_height self
     end
 
     # Get number of image bands.
     #
     # @return [Integer] number of image bands
     def bands
-      Vips::vips_image_get_bands self
+      Vips.vips_image_get_bands self
     end
 
     # Get image format.
@@ -893,23 +891,23 @@ module Vips
       [width, height]
     end
 
-    if Vips::at_least_libvips?(8, 5)
+    if Vips.at_least_libvips?(8, 5)
       # Detect if image has an alpha channel
       #
       # @return [Boolean] true if image has an alpha channel.
       def has_alpha?
-        return Vips::vips_image_hasalpha(self) != 0
+        Vips.vips_image_hasalpha(self) != 0
       end
     end
 
     # vips_addalpha was added in libvips 8.6
-    if Vips::at_least_libvips?(8, 6)
+    if Vips.at_least_libvips?(8, 6)
       # Append an alpha channel to an image.
       #
       # @return [Image] new image
       def add_alpha
         ptr = GenericPtr.new
-        result = Vips::vips_addalpha self, ptr
+        result = Vips.vips_addalpha self, ptr
         raise Vips::Error if result != 0
 
         Vips::Image.new ptr[:value]
@@ -924,7 +922,7 @@ module Vips
     #
     # @return [Image] new memory image
     def copy_memory
-      new_image = Vips::vips_image_copy_memory self
+      new_image = Vips.vips_image_copy_memory self
       Vips::Image.new new_image
     end
 
@@ -952,7 +950,7 @@ module Vips
     # @return [Image] result of subtraction
     def - other
       other.is_a?(Vips::Image) ?
-          subtract(other) : linear(1, Image::smap(other) { |x| x * -1 })
+          subtract(other) : linear(1, Image.smap(other) { |x| x * -1 })
     end
 
     # Multiply an image, constant or array.
@@ -970,7 +968,7 @@ module Vips
     # @return [Image] result of division
     def / other
       other.is_a?(Vips::Image) ?
-          divide(other) : linear(Image::smap(other) { |x| 1.0 / x }, 0)
+          divide(other) : linear(Image.smap(other) { |x| 1.0 / x }, 0)
     end
 
     # Remainder after integer division with an image, constant or array.
@@ -1141,17 +1139,17 @@ module Vips
 
       # make the template for unpack
       template = {
-        char: 'c',
-        uchar: 'C',
-        short: 's_',
-        ushort: 'S_',
-        int: 'i_',
-        uint: 'I_',
-        float: 'f',
-        double: 'd',
-        complex: 'f',
-        dpcomplex: 'd'
-      }[format] + '*'
+        char: "c",
+        uchar: "C",
+        short: "s_",
+        ushort: "S_",
+        int: "i_",
+        uint: "I_",
+        float: "f",
+        double: "d",
+        complex: "f",
+        dpcomplex: "d"
+      }[format] + "*"
 
       # and unpack into something like [1, 2, 3, 4 ..]
       array = memory.unpack(template)
@@ -1160,9 +1158,7 @@ module Vips
       pixel_array = array.each_slice(bands).to_a
 
       # build rows
-      row_array = pixel_array.each_slice(width).to_a
-
-      return row_array
+      pixel_array.each_slice(width).to_a
     end
 
     # Return the largest integral value not greater than the argument.
@@ -1240,7 +1236,7 @@ module Vips
     # @param opts [Hash] Set of options
     # @option opts [Array<Integer>] :x x positions of overlay
     # @option opts [Array<Integer>] :y y positions of overlay
-    # @option opts [Vips::Interpretation] :compositing_space Composite images 
+    # @option opts [Vips::Interpretation] :compositing_space Composite images
     #     in this colour space
     # @option opts [Boolean] :premultiplied Images have premultiplied alpha
     # @return [Image] blended image
@@ -1265,9 +1261,9 @@ module Vips
     #   coordinate of maximum
     def maxpos
       v, opts = max x: true, y: true
-      x = opts['x']
-      y = opts['y']
-      return v, x, y
+      x = opts["x"]
+      y = opts["y"]
+      [v, x, y]
     end
 
     # Return the coordinates of the image minimum.
@@ -1276,9 +1272,9 @@ module Vips
     #   coordinate of minimum
     def minpos
       v, opts = min x: true, y: true
-      x = opts['x']
-      y = opts['y']
-      return v, x, y
+      x = opts["x"]
+      y = opts["y"]
+      [v, x, y]
     end
 
     # a median filter
@@ -1286,7 +1282,7 @@ module Vips
     # @param size [Integer] size of filter window
     # @return [Image] result of median filter
     def median size = 3
-      rank size, size, (size * size) / 2
+      rank size, size, size**2 / 2
     end
 
     # Return the real part of a complex image.
@@ -1313,7 +1309,7 @@ module Vips
     # @see xyz
     # @return [Image] image converted to polar coordinates
     def polar
-      Image::run_cmplx(self) { |x| x.complex :polar }
+      Image.run_cmplx(self) { |x| x.complex :polar }
     end
 
     # Return an image with polar pixels converted to rectangular.
@@ -1326,7 +1322,7 @@ module Vips
     # @see xyz
     # @return [Image] image converted to rectangular coordinates
     def rect
-      Image::run_cmplx(self) { |x| x.complex :rect }
+      Image.run_cmplx(self) { |x| x.complex :rect }
     end
 
     # Return the complex conjugate of an image.
@@ -1338,7 +1334,7 @@ module Vips
     #
     # @return [Image] complex conjugate
     def conj
-      Image::run_cmplx(self) { |x| x.complex :conj }
+      Image.run_cmplx(self) { |x| x.complex :conj }
     end
 
     # Calculate the cross phase of two images.
@@ -1541,7 +1537,7 @@ module Vips
       "VipsArrayDouble" => "Array<Double>",
       "VipsArrayInt" => "Array<Integer>",
       "VipsArrayImage" => "Array<Image>",
-      "VipsArrayString" => "Array<String>",
+      "VipsArrayString" => "Array<String>"
     }
 
     # these have hand-written methods, see above
@@ -1552,15 +1548,15 @@ module Vips
 
     # turn a gtype into a ruby type name
     def self.gtype_to_ruby gtype
-      fundamental = GObject::g_type_fundamental gtype
-      type_name = GObject::g_type_name gtype
+      fundamental = GObject.g_type_fundamental gtype
+      type_name = GObject.g_type_name gtype
 
       if MAP_GO_TO_RUBY.include? type_name
         type_name = MAP_GO_TO_RUBY[type_name]
       end
 
       if fundamental == GObject::GFLAGS_TYPE ||
-         fundamental == GObject::GENUM_TYPE
+          fundamental == GObject::GENUM_TYPE
         type_name = "Vips::" + type_name[/Vips(.*)/, 1]
       end
 
@@ -1579,7 +1575,7 @@ module Vips
       print "# @!method "
       print "self." unless introspect.member_x
       print "#{introspect.name}("
-      print method_args.map{ |x| x[:yard_name] }.join(", ")
+      print method_args.map { |x| x[:yard_name] }.join(", ")
       print ", " if method_args.length > 0
       puts "**opts)"
 
@@ -1599,8 +1595,7 @@ module Vips
         gtype = details[:gtype]
         blurb = details[:blurb]
 
-        puts "#   @option opts [#{gtype_to_ruby(gtype)}] :#{yard_name} " +
-             "#{blurb}"
+        puts "#   @option opts [#{gtype_to_ruby(gtype)}] :#{yard_name} #{blurb}"
       end
       optional_output.each do |arg_name, details|
         yard_name = details[:yard_name]
@@ -1618,14 +1613,14 @@ module Vips
         print gtype_to_ruby(required_output.first[:gtype])
       else
         print "Array<"
-        print required_output.map{ |x| gtype_to_ruby(x[:gtype]) }.join(", ")
+        print required_output.map { |x| gtype_to_ruby(x[:gtype]) }.join(", ")
         print ">"
       end
       if optional_output.length > 0
         print ", Hash<Symbol => Object>"
       end
       print "] "
-      print required_output.map{ |x| x[:blurb] }.join(", ")
+      print required_output.map { |x| x[:blurb] }.join(", ")
       if optional_output.length > 0
         print ", " if required_output.length > 0
         print "Hash of optional output items"
@@ -1637,16 +1632,16 @@ module Vips
 
     def self.generate
       alias_gtypes = {}
-      ALIAS.each do |name| 
-        gtype = Vips::type_find "VipsOperation", name
-        alias_gtypes[gtype] = name 
+      ALIAS.each do |name|
+        gtype = Vips.type_find "VipsOperation", name
+        alias_gtypes[gtype] = name
       end
 
       generate_class = lambda do |gtype, _|
-        if alias_gtypes.key? gtype
-          name = alias_gtypes[gtype]
+        name = if alias_gtypes.key? gtype
+          alias_gtypes[gtype]
         else
-          name = Vips::nickname_find gtype
+          Vips.nickname_find gtype
         end
 
         if name
@@ -1660,14 +1655,14 @@ module Vips
           generate_operation(introspect) if introspect
         end
 
-        Vips::vips_type_map gtype, generate_class, nil
+        Vips.vips_type_map gtype, generate_class, nil
       end
 
       puts "module Vips"
       puts "  class Image"
       puts ""
 
-      generate_class.(GObject::g_type_from_name("VipsOperation"), nil)
+      generate_class.call(GObject.g_type_from_name("VipsOperation"), nil)
 
       puts "  end"
       puts "end"

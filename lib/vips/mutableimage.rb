@@ -4,8 +4,8 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
-require 'forwardable'
+require "ffi"
+require "forwardable"
 
 module Vips
   # This class represents a libvips image which can be modified. See
@@ -13,8 +13,8 @@ module Vips
   class MutableImage < Vips::Object
     extend Forwardable
     alias_method :parent_get_typeof, :get_typeof
-    def_instance_delegators :@image, :width, :height, :bands, :format, 
-      :interpretation, :filename, :xoffset, :yoffset, :xres, :yres, :size, 
+    def_instance_delegators :@image, :width, :height, :bands, :format,
+      :interpretation, :filename, :xoffset, :yoffset, :xres, :yres, :size,
       :get, :get_typeof, :get_fields
 
     # layout is exactly as {Image} (since we are also wrapping a VipsImage
@@ -41,24 +41,22 @@ module Vips
     #
     # This is for internal use only. See {Vips::Image#mutate} for the
     # user-facing interface.
-    def image 
-      @image
-    end
+    attr_reader :image
 
-    # Make a {MutableImage} from a regular {Image}. 
+    # Make a {MutableImage} from a regular {Image}.
     #
     # This is for internal use only. See {Vips::Image#mutate} for the
     # user-facing interface.
     def initialize(image)
-      # We take a copy of the regular Image to ensure we have an unshared 
-      # (unique) object. We forward things like #width and #height to this, and 
+      # We take a copy of the regular Image to ensure we have an unshared
+      # (unique) object. We forward things like #width and #height to this, and
       # it's the thing we return at the end of the mutate block.
       copy_image = image.copy
 
       # use ptr since we need the raw unwrapped pointer inside the image ...
       # and make the ref that gobject will unref when it finishes
       pointer = copy_image.ptr
-      ::GObject::g_object_ref pointer
+      ::GObject.g_object_ref pointer
       super pointer
 
       # and save the copy ready for when we finish mutating
@@ -82,7 +80,7 @@ module Vips
 
     def respond_to_missing? name, include_all = false
       # respond to all vips operations by nickname
-      return true if Vips::type_find("VipsOperation", name.to_s) != 0
+      return true if Vips.type_find("VipsOperation", name.to_s) != 0
 
       super
     end
@@ -99,7 +97,7 @@ module Vips
 
     # Create a metadata item on an image of the specifed type. Ruby types
     # are automatically transformed into the matching glib type (eg.
-    # {GObject::GINT_TYPE}), if possible. 
+    # {GObject::GINT_TYPE}), if possible.
     #
     # For example, you can use this to set an image's ICC profile:
     #
@@ -117,7 +115,7 @@ module Vips
       gvalue = GObject::GValue.alloc
       gvalue.init gtype
       gvalue.set value
-      Vips::vips_image_set self, name, gvalue
+      Vips.vips_image_set self, name, gvalue
       gvalue.unset
     end
 
@@ -150,8 +148,7 @@ module Vips
     #
     # @param name [String] Metadata field to remove
     def remove! name
-      Vips::vips_image_remove self, name
+      Vips.vips_image_remove self, name
     end
-
   end
 end

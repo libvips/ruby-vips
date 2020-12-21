@@ -7,7 +7,7 @@
 # non-zero row or column is the object edge. We make the mask image with an
 # amount-different-from-background image plus a threshold.
 
-require 'vips'
+require "vips"
 
 im = Vips::Image.new_from_file ARGV[0]
 

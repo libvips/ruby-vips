@@ -1,11 +1,11 @@
 #!/usr/bin/ruby
 
-require 'vips'
+require "vips"
 
 im = Vips::Image.new_from_file ARGV[0], access: :sequential
 
 # make the text mask
-text = Vips::Image.text ARGV[2], width: 200, dpi: 200, font: 'sans bold'
+text = Vips::Image.text ARGV[2], width: 200, dpi: 200, font: "sans bold"
 text = text.rotate(-45)
 # make the text transparent
 text = (text * 0.3).cast(:uchar)

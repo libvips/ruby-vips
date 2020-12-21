@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-require 'vips'
+require "vips"
 
 image = Vips::Image.new_from_file ARGV[0]
 

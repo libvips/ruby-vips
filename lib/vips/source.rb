@@ -4,10 +4,10 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
+require "ffi"
 
 module Vips
-  if Vips::at_least_libvips?(8, 9)
+  if Vips.at_least_libvips?(8, 9)
     attach_function :vips_source_new_from_descriptor, [:int], :pointer
     attach_function :vips_source_new_from_file, [:pointer], :pointer
     attach_function :vips_source_new_from_memory, [:pointer, :size_t], :pointer
@@ -42,26 +42,26 @@ module Vips
     #
     # Pass sources to {Image.new_from_source} to load images from
     # them.
-    # 
+    #
     # @param descriptor [Integer] the file descriptor
     # @return [Source] the new Vips::Source
     def self.new_from_descriptor(descriptor)
-      ptr = Vips::vips_source_new_from_descriptor descriptor
+      ptr = Vips.vips_source_new_from_descriptor descriptor
       raise Vips::Error if ptr.null?
 
       Vips::Source.new ptr
     end
 
-    # Create a new source from a file name. 
+    # Create a new source from a file name.
     #
     # Pass sources to {Image.new_from_source} to load images from
     # them.
-    # 
+    #
     # @param filename [String] the name of the file
     # @return [Source] the new Vips::Source
     def self.new_from_file(filename)
       raise Vips::Error, "filename is nil" if filename.nil?
-      ptr = Vips::vips_source_new_from_file filename
+      ptr = Vips.vips_source_new_from_file filename
       raise Vips::Error if ptr.null?
 
       Vips::Source.new ptr
@@ -72,18 +72,17 @@ module Vips
     #
     # Pass sources to {Image.new_from_source} to load images from
     # them.
-    # 
-    # @param data [String] memory area 
+    #
+    # @param data [String] memory area
     # @return [Source] the new Vips::Source
     def self.new_from_memory(data)
-      ptr = Vips::vips_source_new_from_memory data, data.bytesize
+      ptr = Vips.vips_source_new_from_memory data, data.bytesize
       raise Vips::Error if ptr.null?
 
-      # FIXME do we need to keep a ref to the underlying memory area? what 
+      # FIXME do we need to keep a ref to the underlying memory area? what
       # about Image.new_from_buffer? Does that need a secret ref too?
 
       Vips::Source.new ptr
     end
-
   end
 end

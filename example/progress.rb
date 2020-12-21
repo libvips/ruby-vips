@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-require 'vips'
+require "vips"
 
 image = Vips::Image.black 1, 100000
 image.set_progress true
@@ -12,11 +12,11 @@ def progress_to_s(name, progress)
   puts "    progress.tpels = #{progress[:tpels]}"
   puts "    progress.npels = #{progress[:npels]}"
   puts "    progress.percent = #{progress[:percent]}"
-end 
+end
 
 image.signal_connect :preeval do |progress|
   progress_to_s("preeval", progress)
-end 
+end
 
 image.signal_connect :eval do |progress|
   progress_to_s("eval", progress)

@@ -4,8 +4,8 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
-require 'forwardable'
+require "ffi"
+require "forwardable"
 
 module GObject
   # we have a number of things we need to inherit in different ways:
@@ -44,8 +44,8 @@ module GObject
       def self.included base
         base.class_eval do
           layout :g_type_instance, :pointer,
-                 :ref_count, :uint,
-                 :qdata, :pointer
+            :ref_count, :uint,
+            :qdata, :pointer
         end
       end
     end
@@ -58,7 +58,7 @@ module GObject
         # GLib::logger.debug("GObject::GObject::ManagedStruct.release") {
         #     "unreffing #{ptr}"
         # }
-        ::GObject::g_object_unref ptr
+        ::GObject.g_object_unref ptr
       end
     end
 
@@ -88,13 +88,11 @@ module GObject
 
     # get the pointer we were built from ... #to_ptr gets the pointer after we
     # have wrapped it up with an auto unref
-    def ptr
-      @ptr
-    end
+    attr_reader :ptr
 
     class << self
       def ffi_struct
-        self.const_get :Struct
+        const_get :Struct
       end
     end
 
@@ -105,7 +103,7 @@ module GObject
 
     class << self
       def ffi_managed_struct
-        self.const_get :ManagedStruct
+        const_get :ManagedStruct
       end
     end
   end
@@ -113,10 +111,10 @@ module GObject
   class GParamSpec < FFI::Struct
     # the first few public fields
     layout :g_type_instance, :pointer,
-           :name, :string,
-           :flags, :uint,
-           :value_type, :GType,
-           :owner_type, :GType
+      :name, :string,
+      :flags, :uint,
+      :value_type, :GType,
+      :owner_type, :GType
   end
 
   class GParamSpecPtr < FFI::Struct

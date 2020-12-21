@@ -7,7 +7,7 @@
 # http://libvips.blogspot.co.uk/2013/05/daltonize-in-ruby-vips-carrierwave-and.html
 # for a discussion of this code
 
-require 'vips'
+require "vips"
 
 # Vips.set_debug true
 
@@ -29,13 +29,13 @@ im = Vips::Image.new_from_file ARGV[0]
 alpha = nil
 if im.bands == 4
   alpha = im[3]
-  im = im.extract_band 0, :n => 3
+  im = im.extract_band 0, n: 3
 end
 
 begin
   # import to XYZ with lcms
   # if there's no profile there, we'll fall back to the thing below
-  xyz = im.icc_import :embedded => true, :pcs => :xyz
+  xyz = im.icc_import embedded: true, pcs: :xyz
 rescue Vips::Error
   # nope .. use the built-in converter instead
   xyz = im.colourspace :xyz
@@ -61,9 +61,9 @@ rgb = xyz.colourspace :srgb
 err = im - rgb
 
 # add the error back to other channels to make a compensated image
-im = im + err.recomb([[0, 0, 0],
-                      [0.7, 1, 0],
-                      [0.7, 0, 1]])
+im += err.recomb([[0, 0, 0],
+  [0.7, 1, 0],
+  [0.7, 0, 1]])
 
 # reattach any alpha we saved above
 if alpha

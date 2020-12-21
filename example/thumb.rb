@@ -4,22 +4,22 @@
 #
 # this should run in constant memory -- if it doesn't, something has broken
 
-require 'vips'
+require "vips"
 
 # benchmark thumbnail via a memory buffer
 def via_memory(filename, thumbnail_width)
   data = IO.binread(filename)
 
-  thumb = Vips::Image.thumbnail_buffer data, thumbnail_width, crop: 'centre'
+  thumb = Vips::Image.thumbnail_buffer data, thumbnail_width, crop: "centre"
 
-  thumb.write_to_buffer '.jpg'
+  thumb.write_to_buffer ".jpg"
 end
 
 # benchmark thumbnail via files
 def via_files(filename, thumbnail_width)
-  thumb = Vips::Image.thumbnail filename, thumbnail_width, crop: 'centre'
+  thumb = Vips::Image.thumbnail filename, thumbnail_width, crop: "centre"
 
-  thumb.write_to_buffer '.jpg'
+  thumb.write_to_buffer ".jpg"
 end
 
 ARGV.each do |filename|

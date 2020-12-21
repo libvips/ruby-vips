@@ -3,14 +3,14 @@ module Vips
   #
   # * `:clear` where the second object is drawn, the first is removed
   # * `:source` the second object is drawn as if nothing were below
-  # * `:over` the image shows what you would expect if you held two 
+  # * `:over` the image shows what you would expect if you held two
   #    semi-transparent slides on top of each other
-  # * `:in` the first object is removed completely, the second is only 
+  # * `:in` the first object is removed completely, the second is only
   #    drawn where the first was
   # * `:out` the second is drawn only where the first isn't
-  # * `:atop` this leaves the first object mostly intact, but mixes both 
+  # * `:atop` this leaves the first object mostly intact, but mixes both
   #    objects in the overlapping area
-  # * `:dest` leaves the first object untouched, the second is discarded 
+  # * `:dest` leaves the first object untouched, the second is discarded
   #    completely
   # * `:dest_over` like `:over`, but swaps the arguments
   # * `:dest_in` like `:in`, but swaps the arguments

@@ -26,7 +26,6 @@ jobs:
 
       - name: Run Standard Ruby linter
         run: bundle exec standardrb --no-fix --fail-fast
-        continue-on-error: true
 
   test:
     name: Functional Testing

@@ -4,12 +4,12 @@
 # Author::    John Cupitt  (mailto:jcupitt@gmail.com)
 # License::   MIT
 
-require 'ffi'
+require "ffi"
 
 module Vips
   attach_function :vips_region_new, [:pointer], :pointer
 
-  if Vips::at_least_libvips?(8, 8)
+  if Vips.at_least_libvips?(8, 8)
     attach_function :vips_region_fetch, [:pointer, :int, :int, :int, :int, SizeStruct.ptr], :pointer
     attach_function :vips_region_width, [:pointer], :int
     attach_function :vips_region_height, [:pointer], :int
@@ -44,24 +44,24 @@ module Vips
     end
 
     def initialize(name)
-      ptr = Vips::vips_region_new name
+      ptr = Vips.vips_region_new name
       raise Vips::Error if ptr.null?
 
       super ptr
     end
 
     def width
-      Vips::vips_region_width self
+      Vips.vips_region_width self
     end
 
     def height
-      Vips::vips_region_height self
+      Vips.vips_region_height self
     end
 
     # Fetch a region filled with pixel data.
     def fetch(left, top, width, height)
       len = Vips::SizeStruct.new
-      ptr = Vips::vips_region_fetch self, left, top, width, height, len
+      ptr = Vips.vips_region_fetch self, left, top, width, height, len
       raise Vips::Error if ptr.null?
 
       # wrap up as an autopointer
