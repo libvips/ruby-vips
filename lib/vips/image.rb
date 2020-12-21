@@ -1515,7 +1515,7 @@ module Vips
   #
   # ```
   # $ ruby > methods.rb
-  # require 'vips'; Vips::Yard.generate
+  # require "vips"; Vips::Yard.generate
   # ^D
   # ```
 

@@ -2,6 +2,11 @@
 
 ## master
 
+## Version 2.0.19 (2020-12-21)
+
+* switch to github actions for CI [pftg]
+* remove rubocop, revise formatting for standardrb [pftg]
+
 ## Version 2.0.18 (2020-04-05)
 
 * better behaviour with some nil parameters [jcupitt]

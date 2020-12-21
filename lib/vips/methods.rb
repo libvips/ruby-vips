@@ -587,6 +587,7 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :sigma Standard deviation of pixels in generated image
 #   @option opts [Float] :mean Mean of pixels in generated image
+#   @option opts [Integer] :seed Random number seed
 #   @return [Vips::Image] Output image
 
 # @!method self.text(text, **opts)
@@ -855,6 +856,7 @@ module Vips
 #   @param height [Integer] Image height in pixels
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :cell_size Size of Worley cells
+#   @option opts [Integer] :seed Random number seed
 #   @return [Vips::Image] Output image
 
 # @!method self.perlin(width, height, **opts)
@@ -864,6 +866,7 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :cell_size Size of Perlin cells
 #   @option opts [Boolean] :uchar Output an unsigned char image
+#   @option opts [Integer] :seed Random number seed
 #   @return [Vips::Image] Output image
 
 # @!method self.switch(tests, **opts)
@@ -1073,21 +1076,6 @@ module Vips
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
 #   @option opts [Array<Double>] :background Background value
-#   @option opts [Boolean] :memory Force open via memory
-#   @option opts [Vips::Access] :access Required access pattern for this file
-#   @option opts [Boolean] :sequential Sequential read only
-#   @option opts [Boolean] :fail Fail on first error
-#   @option opts [Boolean] :disc Open to disc
-#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
-#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
-
-# @!method self.svgload(filename, **opts)
-#   Load svg with rsvg.
-#   @param filename [String] Filename to load from
-#   @param opts [Hash] Set of options
-#   @option opts [Float] :dpi Render at this DPI
-#   @option opts [Float] :scale Scale output by this factor
-#   @option opts [Boolean] :unlimited Allow SVG of any size
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Boolean] :sequential Sequential read only
@@ -1580,7 +1568,7 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Boolean] :ascii save as ascii
 #   @option opts [Boolean] :squash save as one bit
-#   @option opts [Integer] :bitdepth Write as a 1 bit image
+#   @option opts [Integer] :bitdepth set to 1 to write as a 1 bit image
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1592,7 +1580,7 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Boolean] :ascii save as ascii
 #   @option opts [Boolean] :squash save as one bit
-#   @option opts [Integer] :bitdepth Write as a 1 bit image
+#   @option opts [Integer] :bitdepth set to 1 to write as a 1 bit image
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1818,6 +1806,7 @@ module Vips
 #   @option opts [Integer] :kmin Minimum number of frames between key frames
 #   @option opts [Integer] :kmax Maximum number of frames between key frames
 #   @option opts [Integer] :reduction_effort Level of CPU effort to reduce file size
+#   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1836,6 +1825,7 @@ module Vips
 #   @option opts [Integer] :kmin Minimum number of frames between key frames
 #   @option opts [Integer] :kmax Maximum number of frames between key frames
 #   @option opts [Integer] :reduction_effort Level of CPU effort to reduce file size
+#   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1855,6 +1845,7 @@ module Vips
 #   @option opts [Integer] :kmin Minimum number of frames between key frames
 #   @option opts [Integer] :kmax Maximum number of frames between key frames
 #   @option opts [Integer] :reduction_effort Level of CPU effort to reduce file size
+#   @option opts [String] :profile ICC profile to embed
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1971,6 +1962,7 @@ module Vips
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Vips::ForeignHeifCompression] :compression Compression format
+#   @option opts [Integer] :speed CPU effort
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1982,6 +1974,7 @@ module Vips
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Vips::ForeignHeifCompression] :compression Compression format
+#   @option opts [Integer] :speed CPU effort
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1994,6 +1987,7 @@ module Vips
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Vips::ForeignHeifCompression] :compression Compression format
+#   @option opts [Integer] :speed CPU effort
 #   @option opts [Boolean] :strip Strip all metadata from image
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -2688,7 +2682,7 @@ module Vips
 # @!method merge(sec, direction, dx, dy, **opts)
 #   Merge two images.
 #   @param sec [Vips::Image] Secondary image
-#   @param direction [Vips::Direction] Horizontal or vertcial merge
+#   @param direction [Vips::Direction] Horizontal or vertical merge
 #   @param dx [Integer] Horizontal displacement from sec to ref
 #   @param dy [Integer] Vertical displacement from sec to ref
 #   @param opts [Hash] Set of options
@@ -2698,7 +2692,7 @@ module Vips
 # @!method mosaic(sec, direction, xref, yref, xsec, ysec, **opts)
 #   Mosaic two images.
 #   @param sec [Vips::Image] Secondary image
-#   @param direction [Vips::Direction] Horizontal or vertcial mosaic
+#   @param direction [Vips::Direction] Horizontal or vertical mosaic
 #   @param xref [Integer] Position of reference tie-point
 #   @param yref [Integer] Position of reference tie-point
 #   @param xsec [Integer] Position of secondary tie-point
@@ -2719,7 +2713,7 @@ module Vips
 # @!method mosaic1(sec, direction, xr1, yr1, xs1, ys1, xr2, yr2, xs2, ys2, **opts)
 #   First-order mosaic of two images.
 #   @param sec [Vips::Image] Secondary image
-#   @param direction [Vips::Direction] Horizontal or vertcial mosaic
+#   @param direction [Vips::Direction] Horizontal or vertical mosaic
 #   @param xr1 [Integer] Position of first reference tie-point
 #   @param yr1 [Integer] Position of first reference tie-point
 #   @param xs1 [Integer] Position of first secondary tie-point

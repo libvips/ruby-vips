@@ -2,6 +2,7 @@
 *.swp
 doc
 pkg/*.gem
+spec/tmp
 
 # skip Gemfile.lock since this is a gem
 Gemfile.lock

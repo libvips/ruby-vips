@@ -42,7 +42,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "yard", ["~> 0.9.11"]
   spec.add_development_dependency "bundler", [">= 1.0", "< 3"]
 
-  # RuboCop requires Ruby >= 2.2
   if Gem.ruby_version >= Gem::Version.new("2.2")
     spec.add_development_dependency "standard"
   end
