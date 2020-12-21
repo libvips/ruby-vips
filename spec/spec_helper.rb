@@ -6,46 +6,18 @@ require "pathname"
 Vips.set_debug ENV["DEBUG"]
 # Vips.leak_set true
 
-module Spec
-  module Path
-    def set_root(path)
-      @root = Pathname.new(path).expand_path
-    end
-
-    def sample(*path)
-      root.join "samples", *path
-    end
-
-    def tmp(*path)
-      root.join "tmp", "working", *path
-    end
-
-    extend self
-
-    private
-
-    def root
-      @root ||= set_root(File.expand_path("..", __FILE__))
-    end
-  end
-end
-
 def simg(name)
-  Spec::Path.sample(name).to_s
+  File.join(File.expand_path("..", __FILE__), "samples", name)
 end
 
 def timg(name)
-  Spec::Path.tmp(name).to_s
+  File.join(@temp_dir, name)
 end
 
 RSpec.configure do |config|
-  config.include Spec::Path
-
   config.around do |example|
-    Dir.mktmpdir do |dir|
-      set_root(dir)
-      FileUtils.mkdir_p(Spec::Path.sample)
-      FileUtils.mkdir_p(Spec::Path.tmp)
+    Dir.mktmpdir("ruby-vips-spec-") do |dir|
+      @temp_dir = dir
       example.run
     end
   end
