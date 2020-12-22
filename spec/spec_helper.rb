@@ -7,7 +7,7 @@ Vips.set_debug ENV["DEBUG"]
 # Vips.leak_set true
 
 def simg(name)
-  File.join(File.expand_path("..", __FILE__), "samples", name)
+  File.join(__dir__, "samples", name)
 end
 
 def timg(name)
