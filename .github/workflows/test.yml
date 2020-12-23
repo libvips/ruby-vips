@@ -2,11 +2,9 @@ name: Test
 
 on:
   push:
-    branches:
-      - master
+    branches: [ $default-branch ]
   pull_request:
-    branches:
-      - master
+    branches: [ $default-branch ]
 
 env:
   NOKOGIRI_USE_SYSTEM_LIBRARIES: true
@@ -37,6 +35,7 @@ jobs:
       matrix:
         os-version: [ 'ubuntu-20.04' ]
         ruby-version:
+          - 2.0
           - 2.1
           - 2.2
           - 2.3
@@ -45,6 +44,7 @@ jobs:
           - 2.6
           - 2.7
           - jruby
+          - truffleruby
       fail-fast: true
 
     runs-on: ${{ matrix.os-version }}
