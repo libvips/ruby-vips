@@ -2,8 +2,11 @@ name: Test
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches:
+      - master
   pull_request:
+    branches:
+      - master
 
 env:
   NOKOGIRI_USE_SYSTEM_LIBRARIES: true
@@ -56,7 +59,7 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
-      - name: Updates apt
+      - name: Update apt
         env:
           DEBIAN_FRONTEND: noninteractive
         run: sudo apt-get update -qq -o Acquire::Retries=3
@@ -66,7 +69,7 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run:
           sudo apt install --fix-missing -qq -o Acquire::Retries=3
-            libvips libvips-dev libvips-tools
+            libvips 
 
       - name: Run Tests
         run: bundle exec rake spec
