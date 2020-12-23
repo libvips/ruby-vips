@@ -1,7 +1,7 @@
 # ruby-vips
 
 [![Gem Version](https://badge.fury.io/rb/ruby-vips.svg)](https://badge.fury.io/rb/ruby-vips)
-![Test](https://github.com/libvips/ruby-vips/workflows/Test/badge.svg)
+[![Test](https://github.com/libvips/ruby-vips/workflows/Test/badge.svg)](https://github.com/libvips/ruby-vips/actions?query=workflow%3ATest)
 
 This gem is a Ruby binding for the [libvips image processing
 library](https://libvips.github.io/libvips).
@@ -21,7 +21,7 @@ and because it doesn't need to keep entire images in memory, it's light.
 
   * [ruby-ffi](https://github.com/ffi/ffi) 1.9 or later 
 
-  * Ruby 2.0+, JRuby should work
+  * Ruby 2.0+, JRuby
 
 ## Install
 
@@ -34,7 +34,7 @@ $ gem install ruby-vips
 or include it in `Gemfile`:
 
 ```ruby
-gem 'ruby-vips'
+gem "ruby-vips"
 ```
 
 On Windows, you'll need to set the `RUBY_DLL_PATH` environment variable to 
@@ -43,7 +43,7 @@ point to the libvips bin directory.
 # Example
 
 ```ruby
-require 'vips'
+require "vips"
 
 im = Vips::Image.new_from_file filename
 

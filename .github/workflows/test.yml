@@ -27,11 +27,11 @@ jobs:
           ruby-version: '2.7'
           bundler-cache: true
 
-      - name: Run Standard Ruby linter
+      - name: Run standard Ruby linter
         run: bundle exec standardrb --no-fix --fail-fast
 
   test:
-    name: Functional Testing
+    name: Functional testing
 
     strategy:
       matrix:
