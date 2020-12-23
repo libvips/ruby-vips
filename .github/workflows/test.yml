@@ -46,7 +46,6 @@ jobs:
           - 2.6
           - 2.7
           - jruby
-          - truffleruby
       fail-fast: true
 
     runs-on: ${{ matrix.os-version }}
