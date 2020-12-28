@@ -2,11 +2,6 @@
 
 ## master
 
-## Version 2.0.19 (2020-12-21)
-
-* switch to github actions for CI [pftg]
-* remove rubocop, revise formatting for standardrb [pftg]
-
 ## Version 2.0.18 (2020-04-05)
 
 * better behaviour with some nil parameters [jcupitt]
@@ -17,6 +12,8 @@
 * `new_from_array` checks array argument more carefully [dkam]
 * add `new_from_memory` and `new_from_memory_copy` [ankane]
 * jruby added to CI testing [pftg]
+* switch to github actions for CI [pftg]
+* remove rubocop, revise formatting for standardrb [pftg]
 
 ## Version 2.0.17 (2019-10-29)
 
