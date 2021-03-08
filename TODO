@@ -37,9 +37,8 @@
 
 - Push new gem to rubygems, tag repository with version.
 
-	gem2.5 signin --otp 111111 / enter username and passwd
+	gem signin --otp 111111 
 	bundle exec rake release
 
-  There's an invisible prompt for the authenticator code. Enter eg. 123456, 
-  press return and the upload should work.
+  The otp is from authy / google authenticator / etc. 
 
