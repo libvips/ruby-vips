@@ -2,13 +2,13 @@
 
 ## master
 
-## Version 2.0.18 (2020-04-05)
+## Version 2.1.0 (2021-3-8)
 
+* add "mutate" system [jcupitt]
 * better behaviour with some nil parameters [jcupitt]
 * revise gemspec [jcupitt]
 * allow symbols for Interpolate.new [noraj]
 * update docs for 8.10, fix minor doc formatting issues [jcupitt]
-* add "mutate" method [jcupitt]
 * `new_from_array` checks array argument more carefully [dkam]
 * add `new_from_memory` and `new_from_memory_copy` [ankane]
 * jruby added to CI testing [pftg]
