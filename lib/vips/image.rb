@@ -1129,14 +1129,10 @@ module Vips
       end
     end
 
-    # Convert to an Array. This will be slow for large images.
+    # Convert to an Enumerator. Similar to `#to_a` but lazier.
     #
-    # @return [Array] array of Fixnum
-    def to_a
-      # we render the image to a big string, then unpack
-      # as a Ruby array of the correct type
-      memory = write_to_memory
-
+    # @return [Enumerator] Enumerator of Enumerators of Arrays of Numerics
+    def to_enum
       # make the template for unpack
       template = {
         char: "c",
@@ -1151,14 +1147,22 @@ module Vips
         dpcomplex: "d"
       }[format] + "*"
 
-      # and unpack into something like [1, 2, 3, 4 ..]
-      array = memory.unpack(template)
+      # we render the image to a big string, then unpack into
+      # one-dimensional array as a Ruby array of the correct type
+      array = write_to_memory.unpack template
 
-      # gather band elements together
-      pixel_array = array.each_slice(bands).to_a
+      # gather bands of a pixel together
+      pixel_array = array.each_slice bands
 
-      # build rows
-      pixel_array.each_slice(width).to_a
+      # gather pixels of a row together
+      pixel_array.each_slice width
+    end
+
+    # Convert to an Array. This will be slow for large images.
+    #
+    # @return [Array] Array of Arrays of Arrays of Numerics
+    def to_a
+      to_enum.to_a
     end
 
     # Return the largest integral value not greater than the argument.
