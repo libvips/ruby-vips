@@ -44,6 +44,45 @@ RSpec.describe Vips::Image do
     expect(x.avg).to eq(128)
   end
 
+  it "can load an image from memory by memory pointer" do
+    data = FFI::MemoryPointer.new(:uchar, 16*16)
+    data.put_array_of_uchar(0, Array.new(16*16, 128))
+
+    x = Vips::Image.new_from_memory data, 16, 16, 1, :uchar
+
+    # GC to try to trigger a segv if data hasn't been reffed by
+    # new_from_memory
+    GC.start
+
+    expect(x.width).to eq(16)
+    expect(x.height).to eq(16)
+    expect(x.bands).to eq(1)
+    expect(x.avg).to eq(128)
+  end
+
+  it "can load an image from memory by size aware address pointer" do
+    memory = FFI::MemoryPointer.new(:uchar, 16*16)
+    memory.put_array_of_uchar(0, Array.new(16*16, 128))
+
+    data = FFI::Pointer.new(memory)
+
+    x = Vips::Image.new_from_memory data, 16, 16, 1, :uchar
+
+    # GC to try to trigger a segv if data hasn't been reffed by
+    # new_from_memory
+    GC.start
+
+    expect(x.width).to eq(16)
+    expect(x.height).to eq(16)
+    expect(x.bands).to eq(1)
+    expect(x.avg).to eq(128)
+  end
+
+  it "throws an error when trying to load an image from memory with unknown size" do
+    data = FFI::Pointer.new(1)
+    expect { Vips::Image.new_from_memory(data, 16, 16, 1, :uchar) }.to raise_error(Vips::Error)
+  end
+
   it "can load an image from memory and copy" do
     image = Vips::Image.black(16, 16) + 128
     data = image.write_to_memory
@@ -55,6 +94,36 @@ RSpec.describe Vips::Image do
     expect(x.height).to eq(16)
     expect(x.bands).to eq(1)
     expect(x.avg).to eq(128)
+  end
+
+  it "can load and copy an image from memory by memory pointer" do
+    data = FFI::MemoryPointer.new(:uchar, 16*16)
+    data.put_array_of_uchar(0, Array.new(16*16, 128))
+
+    x = Vips::Image.new_from_memory_copy data, 16, 16, 1, :uchar
+
+    expect(x.width).to eq(16)
+    expect(x.height).to eq(16)
+    expect(x.bands).to eq(1)
+    expect(x.avg).to eq(128)
+  end
+
+  it "can load and copy an image from memory by size aware address pointer" do
+    memory = FFI::MemoryPointer.new(:uchar, 16*16)
+    memory.put_array_of_uchar(0, Array.new(16*16, 128))
+
+    data = FFI::Pointer.new(memory)
+    x = Vips::Image.new_from_memory_copy data, 16, 16, 1, :uchar
+
+    expect(x.width).to eq(16)
+    expect(x.height).to eq(16)
+    expect(x.bands).to eq(1)
+    expect(x.avg).to eq(128)
+  end
+
+  it "throws an error when trying to load and copy from memory with unknown size" do
+    data = FFI::Pointer.new(1)
+    expect { Vips::Image.new_from_memory_copy(data, 16, 16, 1, :uchar) }.to raise_error(Vips::Error)
   end
 
   if has_jpeg?
