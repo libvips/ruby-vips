@@ -45,8 +45,8 @@ RSpec.describe Vips::Image do
   end
 
   it "can load an image from memory by memory pointer" do
-    data = FFI::MemoryPointer.new(:uchar, 16*16)
-    data.put_array_of_uchar(0, Array.new(16*16, 128))
+    data = FFI::MemoryPointer.new(:uchar, 16 * 16)
+    data.put_array_of_uchar(0, Array.new(16 * 16, 128))
 
     x = Vips::Image.new_from_memory data, 16, 16, 1, :uchar
 
@@ -61,8 +61,8 @@ RSpec.describe Vips::Image do
   end
 
   it "can load an image from memory by size aware address pointer" do
-    memory = FFI::MemoryPointer.new(:uchar, 16*16)
-    memory.put_array_of_uchar(0, Array.new(16*16, 128))
+    memory = FFI::MemoryPointer.new(:uchar, 16 * 16)
+    memory.put_array_of_uchar(0, Array.new(16 * 16, 128))
 
     data = FFI::Pointer.new(memory)
 
@@ -97,8 +97,8 @@ RSpec.describe Vips::Image do
   end
 
   it "can load and copy an image from memory by memory pointer" do
-    data = FFI::MemoryPointer.new(:uchar, 16*16)
-    data.put_array_of_uchar(0, Array.new(16*16, 128))
+    data = FFI::MemoryPointer.new(:uchar, 16 * 16)
+    data.put_array_of_uchar(0, Array.new(16 * 16, 128))
 
     x = Vips::Image.new_from_memory_copy data, 16, 16, 1, :uchar
 
@@ -109,8 +109,8 @@ RSpec.describe Vips::Image do
   end
 
   it "can load and copy an image from memory by size aware address pointer" do
-    memory = FFI::MemoryPointer.new(:uchar, 16*16)
-    memory.put_array_of_uchar(0, Array.new(16*16, 128))
+    memory = FFI::MemoryPointer.new(:uchar, 16 * 16)
+    memory.put_array_of_uchar(0, Array.new(16 * 16, 128))
 
     data = FFI::Pointer.new(memory)
     x = Vips::Image.new_from_memory_copy data, 16, 16, 1, :uchar
