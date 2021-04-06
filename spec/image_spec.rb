@@ -65,6 +65,8 @@ RSpec.describe Vips::Image do
     memory.put_array_of_uchar(0, Array.new(16 * 16, 128))
 
     data = FFI::Pointer.new(memory)
+    # JRuby's FFI implementation looses the size information
+    data = data.slice(0, 16 * 16) if defined?(JRUBY_VERSION)
 
     x = Vips::Image.new_from_memory data, 16, 16, 1, :uchar
 
@@ -113,6 +115,9 @@ RSpec.describe Vips::Image do
     memory.put_array_of_uchar(0, Array.new(16 * 16, 128))
 
     data = FFI::Pointer.new(memory)
+    # JRuby's FFI implementation looses the size information
+    data = data.slice(0, 16 * 16) if defined?(JRUBY_VERSION)
+
     x = Vips::Image.new_from_memory_copy data, 16, 16, 1, :uchar
 
     expect(x.width).to eq(16)
