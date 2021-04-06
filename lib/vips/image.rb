@@ -78,6 +78,11 @@ module Vips
   class Image < Vips::Object
     alias_method :parent_get_typeof, :get_typeof
 
+    # FFI sets a pointer's size to this magic value if the size of the memory
+    # chunk the pointer points to is unknown to FFI.
+    UNKNOWN_POINTER_SIZE = FFI::Pointer.new(1).size
+    private_constant :UNKNOWN_POINTER_SIZE
+
     private
 
     # the layout of the VipsImage struct
@@ -367,7 +372,9 @@ module Vips
         # A pointer needs to know about the size of the memory it points to.
         # If you have an address-only pointer, use the .slice method to wrap
         # the pointer in a size aware pointer.
-        raise Vips::Error, "pointer has no size limit" unless data.size_limit?
+        if data.size == UNKNOWN_POINTER_SIZE
+          raise Vips::Error, "size of memory is unknown"
+        end
         size = data.size
       else
         size = data.bytesize
@@ -401,7 +408,9 @@ module Vips
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
 
       if data.is_a?(FFI::Pointer)
-        raise Vips::Error, "pointer has no size limit" unless data.size_limit?
+        if data.size == UNKNOWN_POINTER_SIZE
+          raise Vips::Error, "size of memory is unknown"
+        end
         size = data.size
       else
         size = data.bytesize
