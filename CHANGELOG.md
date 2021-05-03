@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.1.1 (2021-5-3)
+
+* fix "mutate" with libvips 8.9 [jcupitt]
+
 ## Version 2.1.0 (2021-3-8)
 
 * add "mutate" system [jcupitt]

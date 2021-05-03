@@ -115,7 +115,7 @@ RSpec.describe Vips::Image do
     expect(im.bands).to eq(3)
   end
 
-  it "can set scale and offset on a convolution mask", version: [8, 10] do
+  it "can set scale and offset on a convolution mask" do
     image = Vips::Image.new_from_array [1, 2], 8, 2
     expect(image.width).to eq(2)
     expect(image.height).to eq(1)
