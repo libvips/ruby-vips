@@ -53,8 +53,9 @@ module Vips
       # it's the thing we return at the end of the mutate block.
       copy_image = image.copy
 
-      # use ptr since we need the raw unwrapped pointer inside the image ...
-      # and make the ref that gobject will unref when it finishes
+      # Use ptr since we need the raw unwrapped pointer inside the image ...
+      # and make the ref that gobject will unref when it finishes.
+      # See also the comment on set_type! before changing this.
       pointer = copy_image.ptr
       ::GObject.g_object_ref pointer
       super pointer
@@ -79,7 +80,7 @@ module Vips
     end
 
     def respond_to_missing? name, include_all = false
-      # respond to all vips operations by nickname
+      # Respond to all vips operations by nickname.
       return true if Vips.type_find("VipsOperation", name.to_s) != 0
 
       super
@@ -162,7 +163,7 @@ module Vips
     #
     # @param name [String] Metadata field to remove
     def remove! name
-      # see set_type! for an explanation
+      # See set_type! for an explanation.
       begin
         ::GObject.g_object_unref self.ptr
         Vips.vips_image_remove self, name
