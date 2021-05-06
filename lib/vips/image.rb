@@ -78,6 +78,11 @@ module Vips
   class Image < Vips::Object
     alias_method :parent_get_typeof, :get_typeof
 
+    # FFI sets a pointer's size to this magic value if the size of the memory
+    # chunk the pointer points to is unknown to FFI.
+    UNKNOWN_POINTER_SIZE = FFI::Pointer.new(1).size
+    private_constant :UNKNOWN_POINTER_SIZE
+
     private
 
     # the layout of the VipsImage struct
@@ -326,6 +331,24 @@ module Vips
     #   image.width, image.height, image.bands, image.format
     # ```
     #
+    # Creating a new image from a memory pointer:
+    #
+    # ```
+    # ptr = FFI::MemoryPointer.new(:uchar, 10*10)
+    # # => #<FFI::MemoryPointer address=0x00007fc236db31d0 size=100>
+    # x = Vips::Image.new_from_memory(ptr, 10, 10, 1, :uchar)
+    # ```
+    #
+    # Creating a new image from an address only pointer:
+    #
+    # ```
+    # ptr = call_to_external_c_library(w: 10, h: 10)
+    # # => #<FFI::Pointer address=0x00007f9780813a00>
+    # ptr_slice = ptr.slice(0, 10*10)
+    # # => #<FFI::Pointer address=0x00007f9780813a00 size=100>
+    # x = Vips::Image.new_from_memory(ptr_slice, 10, 10, 1, :uchar)
+    # ```
+    #
     # {new_from_memory} keeps a reference to the array of pixels you pass in
     # to try to prevent that memory from being freed by the Ruby GC while it
     # is being used.
@@ -340,11 +363,21 @@ module Vips
     # @param format [Symbol] band format
     # @return [Image] the loaded image
     def self.new_from_memory data, width, height, bands, format
-      size = data.bytesize
-
       # prevent data from being freed with JRuby FFI
       if defined?(JRUBY_VERSION) && !data.is_a?(FFI::Pointer)
         data = ::FFI::MemoryPointer.new(:char, data.bytesize).write_bytes data
+      end
+
+      if data.is_a?(FFI::Pointer)
+        # A pointer needs to know about the size of the memory it points to.
+        # If you have an address-only pointer, use the .slice method to wrap
+        # the pointer in a size aware pointer.
+        if data.size == UNKNOWN_POINTER_SIZE
+          raise Vips::Error, "size of memory is unknown"
+        end
+        size = data.size
+      else
+        size = data.bytesize
       end
 
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
@@ -373,7 +406,17 @@ module Vips
     # @return [Image] the loaded image
     def self.new_from_memory_copy data, width, height, bands, format
       format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
-      vi = Vips.vips_image_new_from_memory_copy data, data.bytesize,
+
+      if data.is_a?(FFI::Pointer)
+        if data.size == UNKNOWN_POINTER_SIZE
+          raise Vips::Error, "size of memory is unknown"
+        end
+        size = data.size
+      else
+        size = data.bytesize
+      end
+
+      vi = Vips.vips_image_new_from_memory_copy data, size,
         width, height, bands, format_number
       raise Vips::Error if vi.null?
       new(vi)
