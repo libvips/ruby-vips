@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.1.2 (2021-5-3)
+
+* allow `FFI::Pointer` as an argument to `new_from_memory` etc. [sled]
+
 ## Version 2.1.1 (2021-5-3)
 
 * fix "mutate" with libvips 8.9 [jcupitt]
