@@ -119,16 +119,16 @@ module Vips
 
       # libvips 8.9.1 had a terrible misfeature which would block metadata
       # modification unless the object had a ref_count of 1. MutableImage
-      # will always have a ref_count of at least 2 (the parent gobject keeps a 
-      # ref, and we keep a ref to the copy ready to return to our caller), 
+      # will always have a ref_count of at least 2 (the parent gobject keeps a
+      # ref, and we keep a ref to the copy ready to return to our caller),
       # so we must temporarily drop the refs to 1 around metadata changes.
       #
       # See https://github.com/libvips/ruby-vips/issues/291
       begin
-        ::GObject.g_object_unref self.ptr 
+        ::GObject.g_object_unref ptr
         Vips.vips_image_set self, name, gvalue
       ensure
-        ::GObject.g_object_ref self.ptr 
+        ::GObject.g_object_ref ptr
       end
 
       gvalue.unset
@@ -163,13 +163,11 @@ module Vips
     #
     # @param name [String] Metadata field to remove
     def remove! name
-      # See set_type! for an explanation.
-      begin
-        ::GObject.g_object_unref self.ptr
-        Vips.vips_image_remove self, name
-      ensure
-        ::GObject.g_object_ref self.ptr
-      end
+      # See set_type! for an explanation. Image#remove can't throw an
+      # exception, so there's no need to ensure we unref.
+      ::GObject.g_object_unref ptr
+      Vips.vips_image_remove self, name
+      ::GObject.g_object_ref ptr
     end
   end
 end
