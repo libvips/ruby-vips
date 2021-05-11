@@ -110,11 +110,8 @@ module Vips
 
   MARSHAL_FINISH = proc do |handler|
     FFI::Function.new(:void, [:pointer, :pointer]) do |i, cb|
-      begin
-        handler.call
-      rescue Exception => e
-        puts "finish: #{e}"
-      end
+      # this can't throw an exception, so no catch is necessary
+      handler.call
     end
   end
 
