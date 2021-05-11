@@ -64,11 +64,8 @@ module Vips
 
   MARSHAL_PROGRESS = proc do |handler|
     FFI::Function.new(:void, [:pointer, :pointer, :pointer]) do |vi, prog, cb|
-      begin
-        handler.call(Progress.new(prog))
-      rescue Exception => e
-        puts "progress: #{e}"
-      end
+      # this can't throw an exception, so no catch is necessary
+      handler.call(Progress.new(prog))
     end
   end
 
