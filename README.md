@@ -6,12 +6,13 @@
 This gem is a Ruby binding for the [libvips image processing
 library](https://libvips.github.io/libvips).
 
-Programs that use `ruby-vips` don't manipulate images directly, instead
-they create pipelines of image processing operations building on a source
-image. When the end of the pipe is connected to a destination, the whole
-pipeline executes at once, streaming the image in parallel from source to
-destination a section at a time.  Because `ruby-vips` is parallel, it's quick,
-and because it doesn't need to keep entire images in memory, it's light.
+libvips is a [demand-driven, horizontally
+threaded](https://github.com/libvips/libvips/wiki/Why-is-libvips-quick)
+image processing library. Compared to similar
+libraries, [libvips runs quickly and uses little
+memory](https://github.com/libvips/libvips/wiki/Speed-and-memory-use).
+libvips is licensed under the [LGPL
+2.1+](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html).
 
 ## Requirements
 
@@ -25,7 +26,7 @@ and because it doesn't need to keep entire images in memory, it's light.
 
 ## Install
 
-It's just:
+[Install libvips](https://libvips.github.io/libvips/install.html), then:
 
 ```
 $ gem install ruby-vips
