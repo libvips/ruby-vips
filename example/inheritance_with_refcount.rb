@@ -132,8 +132,12 @@ module GLib
     end
   end
 
-  # :gtype will usually be 64-bit, but will be 32-bit on 32-bit Windows
-  typedef :ulong, :GType
+  # we can't just use ulong, windows has different int sizing rules
+  if FFI::Platform::ADDRESS_SIZE == 64
+    typedef :uint64, :GType
+  else
+    typedef :uint32, :GType
+  end
 end
 
 module Vips
@@ -144,7 +148,11 @@ module Vips
   GLib.set_log_domain(LOG_DOMAIN)
 
   # need to repeat this
-  typedef :ulong, :GType
+  if FFI::Platform::ADDRESS_SIZE == 64
+    typedef :uint64, :GType
+  else
+    typedef :uint32, :GType
+  end
 
   attach_function :vips_init, [:string], :int
   attach_function :vips_shutdown, [], :void
