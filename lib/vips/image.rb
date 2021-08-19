@@ -549,7 +549,7 @@ module Vips
       pixel = (Vips::Image.black(1, 1) + value).cast(format)
       image = pixel.embed 0, 0, width, height, extend: :copy
       image.copy interpretation: interpretation, xres: xres, yres: yres,
-                 xoffset: xoffset, yoffset: yoffset
+        xoffset: xoffset, yoffset: yoffset
     end
 
     # Write this image to a file. Save options may be encoded in the
