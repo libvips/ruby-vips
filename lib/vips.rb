@@ -575,7 +575,12 @@ module Vips
   LOG_DOMAIN = "VIPS"
   GLib.set_log_domain LOG_DOMAIN
 
-  typedef :ulong, :GType
+  # we can't just use ulong, windows has different int sizing rules
+  if FFI::Platform::ADDRESS_SIZE == 64
+    typedef :uint64, :GType
+  else
+    typedef :uint32, :GType
+  end
 
   attach_function :vips_error_buffer, [], :string
   attach_function :vips_error_clear, [], :void
