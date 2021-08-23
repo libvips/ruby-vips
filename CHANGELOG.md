@@ -2,6 +2,10 @@
 
 ## master
 
+## Version 2.1.3 (2021-8-23)
+
+* fix a gtype size error on win64 [danini-the-panini]
+
 ## Version 2.1.2 (2021-5-3)
 
 * allow `FFI::Pointer` as an argument to `new_from_memory` etc. [sled]
