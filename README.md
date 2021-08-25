@@ -68,16 +68,21 @@ im = im.conv mask, precision: :integer
 im.write_to_file output_filename
 ```
 
-The `Vips` section in the API docs has a [tutorial introduction with
+# Documentation
+
+There are [full API docs for ruby-vips on
+rubydoc](https://www.rubydoc.info/gems/ruby-vips). This sometimes has issues
+updating, so we have a [copy on the gh-pages for this site as
+well](http://libvips.github.io/ruby-vips), which
+should always work.
+
+See the `Vips` section in the docs for a [tutorial introduction with
 examples](https://www.rubydoc.info/gems/ruby-vips/Vips).
 
-ruby-vips has [API
- documentation](http://www.rubydoc.info/gems/ruby-vips). The [libvips
- reference manual](https://libvips.github.io/libvips/API/current/) has a
- complete explanation of every method.
+The [libvips reference manual](https://libvips.github.io/libvips/API/current/)
+has a complete explanation of every method.
 
-The 
-[`example/`](https://github.com/libvips/ruby-vips/tree/master/example)
+The [`example/`](https://github.com/libvips/ruby-vips/tree/master/example)
 directory has some simple example programs.
 
 # Benchmarks
