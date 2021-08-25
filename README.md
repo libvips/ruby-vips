@@ -41,7 +41,7 @@ gem "ruby-vips"
 On Windows, you'll need to set the `RUBY_DLL_PATH` environment variable to 
 point to the libvips bin directory.
 
-# Example
+## Example
 
 ```ruby
 require "vips"
@@ -68,7 +68,7 @@ im = im.conv mask, precision: :integer
 im.write_to_file output_filename
 ```
 
-# Documentation
+## Documentation
 
 There are [full API docs for ruby-vips on
 rubydoc](https://www.rubydoc.info/gems/ruby-vips). This sometimes has issues
@@ -85,7 +85,7 @@ has a complete explanation of every method.
 The [`example/`](https://github.com/libvips/ruby-vips/tree/master/example)
 directory has some simple example programs.
 
-# Benchmarks
+## Benchmarks
 
 The benchmark at [vips-benchmarks](https://github.com/jcupitt/vips-benchmarks)
 loads a large image, crops, shrinks, sharpens and saves again, and repeats
