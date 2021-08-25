@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Vips::MutableImage
+  
+    &mdash; Documentation by YARD 0.9.25
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Vips::MutableImage";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (M)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span>
+     &raquo; 
+    <span class="title">MutableImage</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Vips::MutableImage
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></li>
+          
+            <li class="next"><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></li>
+          
+            <li class="next">Vips::MutableImage</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  <dl>
+      <dt>Extended by:</dt>
+      <dd>Forwardable</dd>
+  </dl>
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/vips/mutableimage.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>This class represents a libvips image which can be modified. See <span class='object_link'><a href="Image.html#mutate-instance_method" title="Vips::Image#mutate (method)">Image#mutate</a></span>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="MutableImage/MutableImageLayout.html" title="Vips::MutableImage::MutableImageLayout (module)">MutableImageLayout</a></span>
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="MutableImage/ManagedStruct.html" title="Vips::MutableImage::ManagedStruct (class)">ManagedStruct</a></span>, <span class='object_link'><a href="MutableImage/Struct.html" title="Vips::MutableImage::Struct (class)">Struct</a></span>
+    
+  
+</p>
+
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#image-instance_method" title="#image (instance method)">#<strong>image</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get the <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span> this <span class='object_link'><a href="" title="Vips::MutableImage (class)">MutableImage</a></span> is modifying.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ptr-instance_method" title="GObject::GObject#ptr (method)">#ptr</a></span>, <span class='object_link'><a href="../GObject/GObject.html#references-instance_method" title="GObject::GObject#references (method)">#references</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(image)  &#x21d2; MutableImage </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Make a <span class='object_link'><a href="" title="Vips::MutableImage (class)">MutableImage</a></span> from a regular <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span>.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#method_missing-instance_method" title="#method_missing (instance method)">#<strong>method_missing</strong>(name, *args, **options)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Invoke a vips operation with Operation#call, using self as the first input argument.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove!-instance_method" title="#remove! (instance method)">#<strong>remove!</strong>(name)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Remove a metadata item from an image.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#respond_to%3F-instance_method" title="#respond_to? (instance method)">#<strong>respond_to?</strong>(name, include_all = false)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#respond_to_missing%3F-instance_method" title="#respond_to_missing? (instance method)">#<strong>respond_to_missing?</strong>(name, include_all = false)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set!-instance_method" title="#set! (instance method)">#<strong>set!</strong>(name, value)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Set the value of a metadata item on an image.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_type!-instance_method" title="#set_type! (instance method)">#<strong>set_type!</strong>(gtype, name, value)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Create a metadata item on an image of the specifed type.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Object.html#get-instance_method" title="Vips::Object#get (method)">#get</a></span>, <span class='object_link'><a href="Object.html#get_pspec-instance_method" title="Vips::Object#get_pspec (method)">#get_pspec</a></span>, <span class='object_link'><a href="Object.html#get_typeof-instance_method" title="Vips::Object#get_typeof (method)">#get_typeof</a></span>, <span class='object_link'><a href="Object.html#get_typeof_error-instance_method" title="Vips::Object#get_typeof_error (method)">#get_typeof_error</a></span>, <span class='object_link'><a href="Object.html#print_all-class_method" title="Vips::Object.print_all (method)">print_all</a></span>, <span class='object_link'><a href="Object.html#set-instance_method" title="Vips::Object#set (method)">#set</a></span>, <span class='object_link'><a href="Object.html#signal_connect-instance_method" title="Vips::Object#signal_connect (method)">#signal_connect</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-instance_method" title="GObject::GObject#ffi_managed_struct (method)">#ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-class_method" title="GObject::GObject.ffi_managed_struct (method)">ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-instance_method" title="GObject::GObject#ffi_struct (method)">#ffi_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-class_method" title="GObject::GObject.ffi_struct (method)">ffi_struct</a></span></p>
+
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(image)  &#x21d2; <tt><span class='object_link'><a href="" title="Vips::MutableImage (class)">MutableImage</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Make a <span class='object_link'><a href="" title="Vips::MutableImage (class)">Vips::MutableImage</a></span> from a regular <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span>.</p>
+
+<p>This is for internal use only. See <span class='object_link'><a href="Image.html#mutate-instance_method" title="Vips::Image#mutate (method)">Image#mutate</a></span> for the user-facing interface.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 50</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_image'>image</span><span class='rparen'>)</span>
+  <span class='comment'># We take a copy of the regular Image to ensure we have an unshared
+</span>  <span class='comment'># (unique) object. We forward things like #width and #height to this, and
+</span>  <span class='comment'># it&#39;s the thing we return at the end of the mutate block.
+</span>  <span class='id identifier rubyid_copy_image'>copy_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_copy'>copy</span>
+
+  <span class='comment'># Use ptr since we need the raw unwrapped pointer inside the image ...
+</span>  <span class='comment'># and make the ref that gobject will unref when it finishes.
+</span>  <span class='comment'># See also the comment on set_type! before changing this.
+</span>  <span class='id identifier rubyid_pointer'>pointer</span> <span class='op'>=</span> <span class='id identifier rubyid_copy_image'>copy_image</span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_object_ref'>g_object_ref</span> <span class='id identifier rubyid_pointer'>pointer</span>
+  <span class='kw'>super</span> <span class='id identifier rubyid_pointer'>pointer</span>
+
+  <span class='comment'># and save the copy ready for when we finish mutating
+</span>  <span class='ivar'>@image</span> <span class='op'>=</span> <span class='id identifier rubyid_copy_image'>copy_image</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+<div id="method_missing_details" class="method_details_list">
+  <h2>Dynamic Method Handling</h2>
+  <p class="notice this">
+    This class handles dynamic methods through the <tt>method_missing</tt> method
+    
+  </p>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="method_missing-instance_method">
+  
+    #<strong>method_missing</strong>(name, *args, **options)  &#x21d2; <tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Invoke a vips operation with Operation#call, using self as the first input argument. Operation#call will only allow operations that modify self when passed a <span class='object_link'><a href="" title="Vips::MutableImage (class)">Vips::MutableImage</a></span>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>vips operation to call</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>
+<p>result of vips operation</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+95
+96
+97</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 95</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_options'>options</span>
+  <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Operation.html" title="Vips::Operation (class)">Operation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_call'><span class='object_link'><a href="Operation.html#call-class_method" title="Vips::Operation.call (method)">call</a></span></span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="image-instance_method">
+  
+    #<strong>image</strong>  &#x21d2; <tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get the <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span> this <span class='object_link'><a href="" title="Vips::MutableImage (class)">Vips::MutableImage</a></span> is modifying. Only use this once you have finished all modifications.</p>
+
+<p>This is for internal use only. See <span class='object_link'><a href="Image.html#mutate-instance_method" title="Vips::Image#mutate (method)">Image#mutate</a></span> for the user-facing interface.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+44
+45
+46</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 44</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_image'>image</span>
+  <span class='ivar'>@image</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="inspect-instance_method">
+  
+    #<strong>inspect</strong>  &#x21d2; <tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+67
+68
+69</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 67</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#&lt;MutableImage </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_width'>width</span><span class='embexpr_end'>}</span><span class='tstring_content'>x</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_height'>height</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format'>format</span><span class='embexpr_end'>}</span><span class='tstring_content'>, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_bands'>bands</span><span class='embexpr_end'>}</span><span class='tstring_content'> bands, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_interpretation'>interpretation</span><span class='embexpr_end'>}</span><span class='tstring_content'>&gt;</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="remove!-instance_method">
+  
+    #<strong>remove!</strong>(name)  &#x21d2; <tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Remove a metadata item from an image.</p>
+
+<p>For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_remove!'>remove!</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>icc-profile-data</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Metadata field to remove</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+165
+166
+167
+168
+169
+170
+171</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 165</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_remove!'>remove!</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='comment'># See set_type! for an explanation. Image#remove can&#39;t throw an
+</span>  <span class='comment'># exception, so there&#39;s no need to ensure we unref.
+</span>  <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_object_unref'>g_object_unref</span> <span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_image_remove'>vips_image_remove</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_object_ref'>g_object_ref</span> <span class='id identifier rubyid_ptr'>ptr</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="respond_to?-instance_method">
+  
+    #<strong>respond_to?</strong>(name, include_all = false)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 71</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_respond_to?'>respond_to?</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_include_all'>include_all</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='comment'># To support keyword args, we need to tell Ruby that final image
+</span>  <span class='comment'># arguments cannot be hashes of keywords.
+</span>  <span class='comment'>#
+</span>  <span class='comment'># https://makandracards.com/makandra/
+</span>  <span class='comment'>#   36013-heads-up-ruby-implicitly-converts-a-hash-to-keyword-arguments
+</span>  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='symbol'>:to_hash</span>
+
+  <span class='kw'>super</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="respond_to_missing?-instance_method">
+  
+    #<strong>respond_to_missing?</strong>(name, include_all = false)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+82
+83
+84
+85
+86
+87</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 82</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_respond_to_missing?'>respond_to_missing?</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_include_all'>include_all</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='comment'># Respond to all vips operations by nickname.
+</span>  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_type_find'>type_find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VipsOperation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='op'>!=</span> <span class='int'>0</span>
+
+  <span class='kw'>super</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set!-instance_method">
+  
+    #<strong>set!</strong>(name, value)  &#x21d2; <tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Set the value of a metadata item on an image. The metadata item must already exist. Ruby types are automatically transformed into the matching <span class='object_link'><a href="../GObject/GValue.html" title="GObject::GValue (class)">GObject::GValue</a></span>, if possible.</p>
+
+<p>For example, you can use this to set an image&#39;s ICC profile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_set!'>set!</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>icc-profile-data</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_profile'>profile</span>
+</code></pre>
+
+<p>where <code>profile</code> is an ICC profile held as a binary string object.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Metadata field to set</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Value to set</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="#set_type!-instance_method" title="Vips::MutableImage#set_type! (method)">#set_type!</a></span></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+152
+153
+154</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 152</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set!'>set!</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='id identifier rubyid_set_type!'>set_type!</span> <span class='id identifier rubyid_get_typeof'>get_typeof</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_type!-instance_method">
+  
+    #<strong>set_type!</strong>(gtype, name, value)  &#x21d2; <tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Create a metadata item on an image of the specifed type. Ruby types are automatically transformed into the matching glib type (eg. <span class='object_link'><a href="../GObject.html#GINT_TYPE-constant" title="GObject::GINT_TYPE (constant)">GObject::GINT_TYPE</a></span>), if possible.</p>
+
+<p>For example, you can use this to set an image&#39;s ICC profile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_set_type!'>set_type!</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips.html#BLOB_TYPE-constant" title="Vips::BLOB_TYPE (constant)">BLOB_TYPE</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>icc-profile-data</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_profile'>profile</span>
+</code></pre>
+
+<p>where <code>profile</code> is an ICC profile held as a binary string object.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>gtype</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>GType of item</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Metadata field to set</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Value to set</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="#set!-instance_method" title="Vips::MutableImage#set! (method)">#set!</a></span></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/mutableimage.rb', line 115</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_type!'>set_type!</span> <span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='id identifier rubyid_gvalue'>gvalue</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject/GValue.html" title="GObject::GValue (class)">GValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_alloc'><span class='object_link'><a href="../GObject/GValue.html#alloc-class_method" title="GObject::GValue.alloc (method)">alloc</a></span></span>
+  <span class='id identifier rubyid_gvalue'>gvalue</span><span class='period'>.</span><span class='id identifier rubyid_init'>init</span> <span class='id identifier rubyid_gtype'>gtype</span>
+  <span class='id identifier rubyid_gvalue'>gvalue</span><span class='period'>.</span><span class='id identifier rubyid_set'>set</span> <span class='id identifier rubyid_value'>value</span>
+
+  <span class='comment'># libvips 8.9.1 had a terrible misfeature which would block metadata
+</span>  <span class='comment'># modification unless the object had a ref_count of 1. MutableImage
+</span>  <span class='comment'># will always have a ref_count of at least 2 (the parent gobject keeps a
+</span>  <span class='comment'># ref, and we keep a ref to the copy ready to return to our caller),
+</span>  <span class='comment'># so we must temporarily drop the refs to 1 around metadata changes.
+</span>  <span class='comment'>#
+</span>  <span class='comment'># See https://github.com/libvips/ruby-vips/issues/291
+</span>  <span class='kw'>begin</span>
+    <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_object_unref'>g_object_unref</span> <span class='id identifier rubyid_ptr'>ptr</span>
+    <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_image_set'>vips_image_set</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_gvalue'>gvalue</span>
+  <span class='kw'>ensure</span>
+    <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_object_ref'>g_object_ref</span> <span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_gvalue'>gvalue</span><span class='period'>.</span><span class='id identifier rubyid_unset'>unset</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Wed Aug 25 12:14:53 2021 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.25 (ruby-2.7.2).
+</div>
+
+    </div>
+  </body>
+</html>

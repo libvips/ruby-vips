@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Vips::Kernel
+  
+    &mdash; Documentation by YARD 0.9.25
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Vips::Kernel";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (K)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span>
+     &raquo; 
+    <span class="title">Kernel</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Vips::Kernel
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Symbol</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Symbol</li>
+          
+            <li class="next">Vips::Kernel</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/vips/kernel.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>A resizing kernel. One of these can be given to operations like <span class='object_link'><a href="Image.html#reduceh-instance_method" title="Vips::Image#reduceh (method)">Image#reduceh</a></span> or <span class='object_link'><a href="Image.html#resize-instance_method" title="Vips::Image#resize (method)">Image#resize</a></span> to select the resizing kernel to use.</p>
+
+<p>At least these should be available:</p>
+<ul><li>
+<p><code>:nearest</code> Nearest-neighbour interpolation.</p>
+</li><li>
+<p><code>:linear</code> Linear interpolation.</p>
+</li><li>
+<p><code>:cubic</code> Cubic interpolation.</p>
+</li><li>
+<p><code>:lanczos2</code> Two-lobe Lanczos</p>
+</li><li>
+<p><code>:lanczos3</code> Three-lobe Lanczos</p>
+</li></ul>
+
+<p>For example:</p>
+
+<p><code>ruby  im = im.resize 3, :kernel =&gt; :lanczos2 </code></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+
+
+
+  
+
+</div>
+
+      <div id="footer">
+  Generated on Wed Aug 25 12:14:52 2021 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.25 (ruby-2.7.2).
+</div>
+
+    </div>
+  </body>
+</html>

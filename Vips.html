@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: Vips
+  
+    &mdash; Documentation by YARD 0.9.25
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Vips";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (V)</a> &raquo;
+    
+    
+    <span class="title">Vips</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: Vips
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  <dl>
+      <dt>Extended by:</dt>
+      <dd>FFI::Library</dd>
+  </dl>
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/vips.rb<span class="defines">,<br />
+  lib/vips/size.rb,<br /> lib/vips/align.rb,<br /> lib/vips/angle.rb,<br /> lib/vips/image.rb,<br /> lib/vips/image.rb,<br /> lib/vips/access.rb,<br /> lib/vips/coding.rb,<br /> lib/vips/extend.rb,<br /> lib/vips/kernel.rb,<br /> lib/vips/object.rb,<br /> lib/vips/region.rb,<br /> lib/vips/source.rb,<br /> lib/vips/target.rb,<br /> lib/vips/angle45.rb,<br /> lib/vips/methods.rb,<br /> lib/vips/version.rb,<br /> lib/vips/direction.rb,<br /> lib/vips/operation.rb,<br /> lib/vips/bandformat.rb,<br /> lib/vips/blend_mode.rb,<br /> lib/vips/connection.rb,<br /> lib/vips/interesting.rb,<br /> lib/vips/interpolate.rb,<br /> lib/vips/mutableimage.rb,<br /> lib/vips/sourcecustom.rb,<br /> lib/vips/targetcustom.rb,<br /> lib/vips/operationmath.rb,<br /> lib/vips/interpretation.rb,<br /> lib/vips/operationmath2.rb,<br /> lib/vips/operationround.rb,<br /> lib/vips/operationboolean.rb,<br /> lib/vips/operationcomplex.rb,<br /> lib/vips/compass_direction.rb,<br /> lib/vips/operationcomplex2.rb,<br /> lib/vips/operationcomplexget.rb,<br /> lib/vips/operationrelational.rb</span>
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>This module provides a binding for the <a href="https://libvips.github.io/libvips/">libvips image processing library</a>.</p>
+
+<h1 id="label-Example">Example</h1>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>vips</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='kw'>if</span> <span class='const'>ARGV</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&lt;</span> <span class='int'>2</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>usage: </span><span class='embexpr_beg'>#{</span><span class='gvar'>$PROGRAM_NAME</span><span class='embexpr_end'>}</span><span class='tstring_content'>: input-file output-file</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_im'>im</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_from_file'><span class='object_link'><a href="Vips/Image.html#new_from_file-class_method" title="Vips::Image.new_from_file (method)">new_from_file</a></span></span> <span class='const'>ARGV</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>access:</span> <span class='symbol'>:sequential</span>
+
+<span class='id identifier rubyid_im'>im</span> <span class='op'>*=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_mask'>mask</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_from_array'><span class='object_link'><a href="Vips/Image.html#new_from_array-class_method" title="Vips::Image.new_from_array (method)">new_from_array</a></span></span> <span class='lbracket'>[</span>
+        <span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span>
+        <span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>16</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span>
+        <span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span>
+       <span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>8</span>
+<span class='id identifier rubyid_im'>im</span> <span class='op'>=</span> <span class='id identifier rubyid_im'>im</span><span class='period'>.</span><span class='id identifier rubyid_conv'>conv</span> <span class='id identifier rubyid_mask'>mask</span><span class='comma'>,</span> <span class='label'>precision:</span> <span class='symbol'>:integer</span>
+
+<span class='id identifier rubyid_im'>im</span><span class='period'>.</span><span class='id identifier rubyid_write_to_file'>write_to_file</span> <span class='const'>ARGV</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>This example loads a file, boosts the green channel (I&#39;m not sure why), sharpens the image, and saves it back to disc again.</p>
+
+<p>Reading this example line by line, we have:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_im'>im</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_from_file'><span class='object_link'><a href="Vips/Image.html#new_from_file-class_method" title="Vips::Image.new_from_file (method)">new_from_file</a></span></span> <span class='const'>ARGV</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>access:</span> <span class='symbol'>:sequential</span>
+</code></pre>
+
+<p><span class='object_link'><a href="Vips/Image.html#new_from_file-class_method" title="Vips::Image.new_from_file (method)">Image.new_from_file</a></span> can load any image file supported by vips. In this example, we will be accessing pixels top-to-bottom as we sweep through the image reading and writing, so <code>:sequential</code> access mode is best for us. The default mode is <code>:random</code>: this allows for full random access to image pixels, but is slower and needs more memory. See <span class='object_link'><a href="Vips/Access.html" title="Vips::Access (class)">Access</a></span> for full details on the various modes available.</p>
+
+<p>You can also load formatted images from memory buffers, create images that wrap C-style memory arrays, or make images from constants. Use <span class='object_link'><a href="Vips/Source.html" title="Vips::Source (class)">Source</a></span> and <span class='object_link'><a href="Vips/Image.html#new_from_source-class_method" title="Vips::Image.new_from_source (method)">Image.new_from_source</a></span> to load images from any data source, for example URIs.</p>
+
+<p>The next line:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_im'>im</span> <span class='op'>*=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Multiplying the image by an array constant uses one array element for each image band. This line assumes that the input image has three bands and will double the middle band. For RGB images, that&#39;s doubling green.</p>
+
+<p>Next we have:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_mask'>mask</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_from_array'><span class='object_link'><a href="Vips/Image.html#new_from_array-class_method" title="Vips::Image.new_from_array (method)">new_from_array</a></span></span> <span class='lbracket'>[</span>
+        <span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span>
+        <span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>16</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span>
+        <span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span>
+       <span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>8</span>
+<span class='id identifier rubyid_im'>im</span> <span class='op'>=</span> <span class='id identifier rubyid_im'>im</span><span class='period'>.</span><span class='id identifier rubyid_conv'>conv</span> <span class='id identifier rubyid_mask'>mask</span><span class='comma'>,</span> <span class='label'>precision:</span> <span class='symbol'>:integer</span>
+</code></pre>
+
+<p><span class='object_link'><a href="Vips/Image.html#new_from_array-class_method" title="Vips::Image.new_from_array (method)">Image.new_from_array</a></span> creates an image from an array constant. The 8 at the end sets the scale: the amount to divide the image by after integer convolution.</p>
+
+<p>See the libvips API docs for <code>vips_conv()</code> (the operation invoked by <span class='object_link'><a href="Vips/Image.html#conv-instance_method" title="Vips::Image#conv (method)">Image#conv</a></span>) for details on the convolution operator. By default, it computes with a float mask, but <code>:integer</code> is fine for this case, and is much faster.</p>
+
+<p>Finally:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_im'>im</span><span class='period'>.</span><span class='id identifier rubyid_write_to_file'>write_to_file</span> <span class='const'>ARGV</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p><span class='object_link'><a href="Vips/Image.html#write_to_file-instance_method" title="Vips::Image#write_to_file (method)">Image#write_to_file</a></span> writes an image back to the filesystem. It can write any format supported by vips: the file type is set from the filename suffix. You can also write formatted images to memory buffers, or dump image data to a raw memory array.</p>
+
+<p>Use <span class='object_link'><a href="Vips/Target.html" title="Vips::Target (class)">Target</a></span> and <span class='object_link'><a href="Vips/Image.html#write_to_target-instance_method" title="Vips::Image#write_to_target (method)">Image#write_to_target</a></span> to write formatted images to any data sink, for example URIs.</p>
+
+<h1 id="label-How+it+works">How it works</h1>
+
+<p>The binding uses <a href="https://github.com/ffi/ffi">ruby-ffi</a> to open the libvips shared library. When you call a method on the image class, it uses libvips introspection system (based on GObject) to search the library for an operation of that name, transforms the arguments to a form libvips can digest, and runs the operation.</p>
+
+<p>This means ruby-vips always presents the API implemented by the libvips shared library. It should update itself as new features are added.</p>
+
+<h1 id="label-Automatic+wrapping">Automatic wrapping</h1>
+
+<p><code>ruby-vips</code> adds a <span class='object_link'><a href="Vips/Image.html#method_missing-class_method" title="Vips::Image.method_missing (method)">Image.method_missing</a></span> handler to <span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span> and uses it to look up vips operations. For example, the libvips operation <code>add</code>, which appears in C as <code>vips_add()</code>, appears in Ruby as <span class='object_link'><a href="Vips/Image.html#add-instance_method" title="Vips::Image#add (method)">Image#add</a></span>.</p>
+
+<p>The operation&#39;s list of required arguments is searched and the first input image is set to the value of <code>self</code>. Operations which do not take an input image, such as <span class='object_link'><a href="Vips/Image.html#black-class_method" title="Vips::Image.black (method)">Image.black</a></span>, appear as class methods. The remainder of the arguments you supply in the function call are used to set the other required input arguments. Any trailing keyword arguments are used to set options on the operation.</p>
+
+<p>The result is the required output argument if there is only one result, or an array of values if the operation produces several results. If the operation has optional output objects, they are returned as a final hash.</p>
+
+<p>For example, <span class='object_link'><a href="Vips/Image.html#min-instance_method" title="Vips::Image#min (method)">Image#min</a></span>, the vips operation that searches an image for the minimum value, has a large number of optional arguments. You can use it to find the minimum value like this:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_min_value'>min_value</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span>
+</code></pre>
+
+<p>You can ask it to return the position of the minimum with <code>:x</code> and <code>:y</code>.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_min_value'>min_value</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='id identifier rubyid_min'>min</span> <span class='label'>x:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>y:</span> <span class='kw'>true</span>
+<span class='id identifier rubyid_x_pos'>x_pos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>x</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_y_pos'>y_pos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>y</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Now <code>x_pos</code> and <code>y_pos</code> will have the coordinates of the minimum value. There&#39;s actually a convenience method for this, <span class='object_link'><a href="Vips/Image.html#minpos-instance_method" title="Vips::Image#minpos (method)">Image#minpos</a></span>.</p>
+
+<p>You can also ask for the top <em>n</em> minimum, for example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_min_value'>min_value</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='id identifier rubyid_min'>min</span> <span class='label'>size:</span> <span class='int'>10</span><span class='comma'>,</span> <span class='label'>x_array:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>y_array:</span> <span class='kw'>true</span>
+<span class='id identifier rubyid_x_pos'>x_pos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>x_array</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_y_pos'>y_pos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>y_array</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Now <code>x_pos</code> and <code>y_pos</code> will be 10-element arrays.</p>
+
+<p>Because operations are member functions and return the result image, you can chain them. For example, you can write:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_real'>real</span><span class='period'>.</span><span class='id identifier rubyid_cos'>cos</span>
+</code></pre>
+
+<p>to calculate the cosine of the real part of a complex image. There are also a full set of arithmetic operator overloads, see below.</p>
+
+<p>libvips types are also automatically wrapped. The override looks at the type of argument required by the operation and converts the value you supply, when it can. For example, <span class='object_link'><a href="Vips/Image.html#linear-instance_method" title="Vips::Image#linear (method)">Image#linear</a></span> takes a <code>VipsArrayDouble</code> as an argument for the set of constants to use for multiplication. You can supply this value as an integer, a float, or some kind of compound object and it will be converted for you. You can write:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_linear'>linear</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>3</span>
+<span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_linear'>linear</span> <span class='float'>12.4</span><span class='comma'>,</span> <span class='float'>13.9</span>
+<span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_linear'>linear</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='int'>6</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_linear'>linear</span> <span class='int'>1</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='int'>6</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>And so on. A set of overloads are defined for <span class='object_link'><a href="Vips/Image.html#linear-instance_method" title="Vips::Image#linear (method)">Image#linear</a></span>, see below.</p>
+
+<p>It does a couple of more ambitious conversions. It will automatically convert to and from the various vips types, like <code>VipsBlob</code> and <code>VipsArrayImage</code>. For example, you can read the ICC profile out of an image like this:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_profile'>profile</span> <span class='op'>=</span> <span class='id identifier rubyid_im'>im</span><span class='period'>.</span><span class='id identifier rubyid_get_value'>get_value</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>icc-profile-data</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+<p>and profile will be a byte array.</p>
+
+<p>If an operation takes several input images, you can use a constant for all but one of them and the wrapper will expand the constant to an image for you. For example, <span class='object_link'><a href="Vips/Image.html#ifthenelse-instance_method" title="Vips::Image#ifthenelse (method)">Image#ifthenelse</a></span> uses a condition image to pick pixels between a then and an else image:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_condition_image'>condition_image</span><span class='period'>.</span><span class='id identifier rubyid_ifthenelse'>ifthenelse</span> <span class='id identifier rubyid_then_image'>then_image</span><span class='comma'>,</span> <span class='id identifier rubyid_else_image'>else_image</span>
+</code></pre>
+
+<p>You can use a constant instead of either the then or the else parts and it will be expanded to an image for you. If you use a constant for both then and else, it will be expanded to match the condition image. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_condition_image'>condition_image</span><span class='period'>.</span><span class='id identifier rubyid_ifthenelse'>ifthenelse</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>255</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>255</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Will make an image where true pixels are green and false pixels are red.</p>
+
+<p>This is useful for <span class='object_link'><a href="Vips/Image.html#bandjoin-instance_method" title="Vips::Image#bandjoin (method)">Image#bandjoin</a></span>, the thing to join two or more images up bandwise. You can write:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_rgba'>rgba</span> <span class='op'>=</span> <span class='id identifier rubyid_rgb'>rgb</span><span class='period'>.</span><span class='id identifier rubyid_bandjoin'>bandjoin</span> <span class='int'>255</span>
+</code></pre>
+
+<p>to append a constant 255 band to an image, perhaps to add an alpha channel. Of course you can also write:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image1'>image1</span><span class='period'>.</span><span class='id identifier rubyid_bandjoin'>bandjoin</span> <span class='id identifier rubyid_image2'>image2</span>
+<span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image1'>image1</span><span class='period'>.</span><span class='id identifier rubyid_bandjoin'>bandjoin</span> <span class='lbracket'>[</span><span class='id identifier rubyid_image2'>image2</span><span class='comma'>,</span> <span class='id identifier rubyid_image3'>image3</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_bandjoin'><span class='object_link'><a href="Vips/Image.html#bandjoin-instance_method" title="Vips::Image#bandjoin (method)">bandjoin</a></span></span> <span class='lbracket'>[</span><span class='id identifier rubyid_image1'>image1</span><span class='comma'>,</span> <span class='id identifier rubyid_image2'>image2</span><span class='comma'>,</span> <span class='id identifier rubyid_image3'>image3</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image1'>image1</span><span class='period'>.</span><span class='id identifier rubyid_bandjoin'>bandjoin</span> <span class='lbracket'>[</span><span class='id identifier rubyid_image2'>image2</span><span class='comma'>,</span> <span class='int'>255</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>and so on.</p>
+
+<h1 id="label-Logging">Logging</h1>
+
+<p>Libvips uses g_log() to log warning, debug, info and (some) error messages.</p>
+
+<p><a href="https://developer.gnome.org/glib/stable/glib-Message-Logging.html">developer.gnome.org/glib/stable/glib-Message-Logging.html</a></p>
+
+<p>You can disable warnings by defining the <code>VIPS_WARNING</code> environment variable. You can enable info output by defining <code>VIPS_INFO</code>.</p>
+
+<h1 id="label-Exceptions">Exceptions</h1>
+
+<p>The wrapper spots errors from vips operations and raises the <span class='object_link'><a href="Vips/Error.html" title="Vips::Error (class)">Error</a></span> exception. You can catch it in the usual way.</p>
+
+<h1 id="label-Automatic+YARD+documentation">Automatic YARD documentation</h1>
+
+<p>The bulk of these API docs are generated automatically by <span class='object_link'><a href="Vips/Yard.html#generate-class_method" title="Vips::Yard.generate (method)">Yard.generate</a></span>. It examines libvips and writes a summary of each operation and the arguments and options that that operation expects.</p>
+
+<p>Use the <a href="https://libvips.github.io/libvips/API/current">C API # docs</a> for more detail.</p>
+
+<h1 id="label-Enums">Enums</h1>
+
+<p>The libvips enums, such as <code>VipsBandFormat</code> appear in ruby-vips as Symbols like <code>:uchar</code>. They are documented as a set of classes for convenience, see <span class='object_link'><a href="Vips/BandFormat.html" title="Vips::BandFormat (class)">BandFormat</a></span>, for example.</p>
+
+<h1 id="label-Draw+operations">Draw operations</h1>
+
+<p>There are two ways of calling the libvips draw operations, like <span class='object_link'><a href="Vips/Image.html#draw_circle-instance_method" title="Vips::Image#draw_circle (method)">Image#draw_circle</a></span> and <span class='object_link'><a href="Vips/Image.html#draw_line-instance_method" title="Vips::Image#draw_line (method)">Image#draw_line</a></span>.</p>
+
+<p>First, you can use them like functions. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_draw_line'>draw_line</span> <span class='int'>255</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_width'>width</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_height'>height</span>
+</code></pre>
+
+<p>This will make a new image, <code>y</code>, which is a copy of <code>x</code> but with a line drawn across it. <code>x</code> is unchanged.</p>
+
+<p>This is simple, but will be slow if you want to draw many lines, since ruby-vips will make a copy of the whole image each time.</p>
+
+<p>You can use <span class='object_link'><a href="Vips/Image.html#mutate-instance_method" title="Vips::Image#mutate (method)">Image#mutate</a></span> to make a <span class='object_link'><a href="Vips/MutableImage.html" title="Vips::MutableImage (class)">MutableImage</a></span>. This is an image which is unshared and is only available inside the <span class='object_link'><a href="Vips/Image.html#mutate-instance_method" title="Vips::Image#mutate (method)">Image#mutate</a></span> block. Within this block, you can use <code>!</code> versions of the draw operations to modify images and avoid the copy. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_image'>image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_mutate'>mutate</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_mutable'>mutable</span><span class='op'>|</span>
+  <span class='lparen'>(</span><span class='int'>0</span> <span class='op'>...</span> <span class='int'>1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_step'>step</span><span class='lparen'>(</span><span class='float'>0.01</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+    <span class='id identifier rubyid_mutable'>mutable</span><span class='period'>.</span><span class='id identifier rubyid_draw_line!'>draw_line!</span> <span class='int'>255</span><span class='comma'>,</span> <span class='id identifier rubyid_mutable'>mutable</span><span class='period'>.</span><span class='id identifier rubyid_width'>width</span> <span class='op'>*</span> <span class='id identifier rubyid_i'>i</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_mutable'>mutable</span><span class='period'>.</span><span class='id identifier rubyid_height'>height</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='int'>1</span> <span class='op'>-</span> <span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>Now each <span class='object_link'><a href="Vips/Image.html#draw_line-instance_method" title="Vips::Image#draw_line (method)">Image#draw_line</a></span> will directly modify the mutable image, saving the copy. This is much faster and needs much less memory.</p>
+
+<h1 id="label-Metadata+read">Metadata read</h1>
+
+<p>Use <span class='object_link'><a href="Vips/Image.html#get_fields-instance_method" title="Vips::Image#get_fields (method)">Image#get_fields</a></span> to get a list of the metadata fields that an image supports. ICC profiles, for example, are in a field called <code>icc-profile-data</code>. Use <code>vipsheader -a something.jpg</code> at the command-line to see all the fields on an image.</p>
+
+<p>Use <span class='object_link'><a href="Vips/Image.html#get_typeof-instance_method" title="Vips::Image#get_typeof (method)">Image#get_typeof</a></span> to get the type of a field. Types are integers, with 0 meaning “no such field”. Constants like <span class='object_link'><a href="GObject.html#GINT_TYPE-constant" title="GObject::GINT_TYPE (constant)">GObject::GINT_TYPE</a></span> are useful for testing field types.</p>
+
+<p>You can read image metadata using <span class='object_link'><a href="Vips/Image.html#get-instance_method" title="Vips::Image#get (method)">Image#get</a></span>. The field value is converted to a Ruby value in the obvious way.</p>
+
+<h1 id="label-Metadata+write">Metadata write</h1>
+
+<p>You can also set and remove image metadata fields. Images are immutable, so you must make any changes inside a <span class='object_link'><a href="Vips/Image.html#mutate-instance_method" title="Vips::Image#mutate (method)">Image#mutate</a></span> block. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_image'>image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_mutate'>mutate</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_mutable'>mutable</span><span class='op'>|</span>
+  <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_get_fields'>get_fields</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_field'>field</span><span class='op'>|</span>
+    <span class='id identifier rubyid_mutable'>mutable</span><span class='period'>.</span><span class='id identifier rubyid_remove!'>remove!</span> <span class='id identifier rubyid_field'>field</span> <span class='kw'>unless</span> <span class='id identifier rubyid_field'>field</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>icc-profile-data</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>To remove all metadata except the icc profile.</p>
+
+<p>You can use <span class='object_link'><a href="Vips/MutableImage.html#set!-instance_method" title="Vips::MutableImage#set! (method)">MutableImage#set!</a></span> to change the value of an existing field, and <span class='object_link'><a href="Vips/MutableImage.html#set_type!-instance_method" title="Vips::MutableImage#set_type! (method)">MutableImage#set_type!</a></span> to create a new field with a specified type.</p>
+
+<h1 id="label-Progress">Progress</h1>
+
+<p>You can attach signal handlers to images to watch computation progress. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_image'>image</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_black'><span class='object_link'><a href="Vips/Image.html#black-class_method" title="Vips::Image.black (method)">black</a></span></span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>100000</span>
+<span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_set_progress'>set_progress</span> <span class='kw'>true</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_progress_to_s'>progress_to_s</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_progress'>progress</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    run = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_progress'>progress</span><span class='lbracket'>[</span><span class='symbol'>:run</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    eta = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_progress'>progress</span><span class='lbracket'>[</span><span class='symbol'>:eta</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    tpels = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_progress'>progress</span><span class='lbracket'>[</span><span class='symbol'>:tpels</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    npels = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_progress'>progress</span><span class='lbracket'>[</span><span class='symbol'>:npels</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    percent = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_progress'>progress</span><span class='lbracket'>[</span><span class='symbol'>:percent</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_signal_connect'>signal_connect</span> <span class='symbol'>:preeval</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_progress'>progress</span><span class='op'>|</span>
+  <span class='id identifier rubyid_progress_to_s'>progress_to_s</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>preeval</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_progress'>progress</span><span class='rparen'>)</span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_signal_connect'>signal_connect</span> <span class='symbol'>:eval</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_progress'>progress</span><span class='op'>|</span>
+  <span class='id identifier rubyid_progress_to_s'>progress_to_s</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>eval</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_progress'>progress</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_set_kill'>set_kill</span><span class='lparen'>(</span><span class='kw'>true</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_progress'>progress</span><span class='lbracket'>[</span><span class='symbol'>:percent</span><span class='rbracket'>]</span> <span class='op'>&gt;</span> <span class='int'>50</span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_signal_connect'>signal_connect</span> <span class='symbol'>:posteval</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_progress'>progress</span><span class='op'>|</span>
+  <span class='id identifier rubyid_progress_to_s'>progress_to_s</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>posteval</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_progress'>progress</span><span class='rparen'>)</span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_avg'>avg</span>
+</code></pre>
+
+<p>The <code>:eval</code> signal will fire for every tile that is processed. You can stop progress with <span class='object_link'><a href="Vips/Image.html#set_kill-instance_method" title="Vips::Image#set_kill (method)">Image#set_kill</a></span> and processing will end with an exception.</p>
+
+<p>User streams</p>
+
+<p>You can make your own input and output stream objects with <span class='object_link'><a href="Vips/SourceCustom.html" title="Vips::SourceCustom (class)">SourceCustom</a></span> and <span class='object_link'><a href="Vips/TargetCustom.html" title="Vips::TargetCustom (class)">TargetCustom</a></span>. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_file'>file</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>some/file</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rb</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_source'>source</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/SourceCustom.html" title="Vips::SourceCustom (class)">SourceCustom</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vips/SourceCustom.html#initialize-instance_method" title="Vips::SourceCustom#initialize (method)">new</a></span></span>
+<span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_on_read'>on_read</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_length'>length</span><span class='op'>|</span> <span class='id identifier rubyid_file'>file</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span> <span class='id identifier rubyid_length'>length</span> <span class='rbrace'>}</span>
+<span class='id identifier rubyid_image'>image</span> <span class='op'>=</span> <span class='const'>Vips</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_from_source'><span class='object_link'><a href="Vips/Image.html#new_from_source-class_method" title="Vips::Image.new_from_source (method)">new_from_source</a></span></span> <span class='id identifier rubyid_source'>source</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>access:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sequential</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+<h1 id="label-Overloads">Overloads</h1>
+
+<p>The wrapper defines the usual set of arithmetic, boolean and relational overloads on image. You can mix images, constants and lists of constants (almost) freely. For example, you can write:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_image'>image</span> <span class='op'>*</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span> <span class='op'>&lt;</span> <span class='int'>128</span><span class='rparen'>)</span> <span class='op'>|</span> <span class='int'>4</span>
+</code></pre>
+
+<h1 id="label-Expansions">Expansions</h1>
+
+<p>Some vips operators take an enum to select an action, for example <span class='object_link'><a href="Vips/Image.html#math-instance_method" title="Vips::Image#math (method)">Image#math</a></span> can be used to calculate sine of every pixel like this:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_math'>math</span> <span class='symbol'>:sin</span>
+</code></pre>
+
+<p>This is annoying, so the wrapper expands all these enums into separate members named after the enum. So you can write:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_result_image'>result_image</span> <span class='op'>=</span> <span class='id identifier rubyid_image'>image</span><span class='period'>.</span><span class='id identifier rubyid_sin'>sin</span>
+</code></pre>
+
+<h1 id="label-Convenience+functions">Convenience functions</h1>
+
+<p>The wrapper defines a few extra useful utility functions: <span class='object_link'><a href="Vips/Image.html#get_value-instance_method" title="Vips::Image#get_value (method)">Image#get_value</a></span>, <span class='object_link'><a href="Vips/Image.html#set_value-instance_method" title="Vips::Image#set_value (method)">Image#set_value</a></span>, <span class='object_link'><a href="Vips/Image.html#bandsplit-instance_method" title="Vips::Image#bandsplit (method)">Image#bandsplit</a></span>, <span class='object_link'><a href="Vips/Image.html#maxpos-instance_method" title="Vips::Image#maxpos (method)">Image#maxpos</a></span>, <span class='object_link'><a href="Vips/Image.html#minpos-instance_method" title="Vips::Image#minpos (method)">Image#minpos</a></span>, <span class='object_link'><a href="Vips/Image.html#median-instance_method" title="Vips::Image#median (method)">Image#median</a></span>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Vips/Yard.html" title="Vips::Yard (module)">Yard</a></span>
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Vips/Access.html" title="Vips::Access (class)">Access</a></span>, <span class='object_link'><a href="Vips/Align.html" title="Vips::Align (class)">Align</a></span>, <span class='object_link'><a href="Vips/Angle.html" title="Vips::Angle (class)">Angle</a></span>, <span class='object_link'><a href="Vips/Angle45.html" title="Vips::Angle45 (class)">Angle45</a></span>, <span class='object_link'><a href="Vips/Argument.html" title="Vips::Argument (class)">Argument</a></span>, <span class='object_link'><a href="Vips/ArgumentClass.html" title="Vips::ArgumentClass (class)">ArgumentClass</a></span>, <span class='object_link'><a href="Vips/ArgumentClassPtr.html" title="Vips::ArgumentClassPtr (class)">ArgumentClassPtr</a></span>, <span class='object_link'><a href="Vips/ArgumentInstance.html" title="Vips::ArgumentInstance (class)">ArgumentInstance</a></span>, <span class='object_link'><a href="Vips/ArgumentInstancePtr.html" title="Vips::ArgumentInstancePtr (class)">ArgumentInstancePtr</a></span>, <span class='object_link'><a href="Vips/BandFormat.html" title="Vips::BandFormat (class)">BandFormat</a></span>, <span class='object_link'><a href="Vips/BlendMode.html" title="Vips::BlendMode (class)">BlendMode</a></span>, <span class='object_link'><a href="Vips/Coding.html" title="Vips::Coding (class)">Coding</a></span>, <span class='object_link'><a href="Vips/CompassDirection.html" title="Vips::CompassDirection (class)">CompassDirection</a></span>, <span class='object_link'><a href="Vips/Connection.html" title="Vips::Connection (class)">Connection</a></span>, <span class='object_link'><a href="Vips/Direction.html" title="Vips::Direction (class)">Direction</a></span>, <span class='object_link'><a href="Vips/Error.html" title="Vips::Error (class)">Error</a></span>, <span class='object_link'><a href="Vips/Extend.html" title="Vips::Extend (class)">Extend</a></span>, <span class='object_link'><a href="Vips/Image.html" title="Vips::Image (class)">Image</a></span>, <span class='object_link'><a href="Vips/IntStruct.html" title="Vips::IntStruct (class)">IntStruct</a></span>, <span class='object_link'><a href="Vips/Interesting.html" title="Vips::Interesting (class)">Interesting</a></span>, <span class='object_link'><a href="Vips/Interpolate.html" title="Vips::Interpolate (class)">Interpolate</a></span>, <span class='object_link'><a href="Vips/Interpretation.html" title="Vips::Interpretation (class)">Interpretation</a></span>, <span class='object_link'><a href="Vips/Introspect.html" title="Vips::Introspect (class)">Introspect</a></span>, <span class='object_link'><a href="Vips/Kernel.html" title="Vips::Kernel (class)">Kernel</a></span>, <span class='object_link'><a href="Vips/MutableImage.html" title="Vips::MutableImage (class)">MutableImage</a></span>, <span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span>, <span class='object_link'><a href="Vips/ObjectClass.html" title="Vips::ObjectClass (class)">ObjectClass</a></span>, <span class='object_link'><a href="Vips/Operation.html" title="Vips::Operation (class)">Operation</a></span>, <span class='object_link'><a href="Vips/OperationBoolean.html" title="Vips::OperationBoolean (class)">OperationBoolean</a></span>, <span class='object_link'><a href="Vips/OperationComplex.html" title="Vips::OperationComplex (class)">OperationComplex</a></span>, <span class='object_link'><a href="Vips/OperationComplex2.html" title="Vips::OperationComplex2 (class)">OperationComplex2</a></span>, <span class='object_link'><a href="Vips/OperationComplexget.html" title="Vips::OperationComplexget (class)">OperationComplexget</a></span>, <span class='object_link'><a href="Vips/OperationMath.html" title="Vips::OperationMath (class)">OperationMath</a></span>, <span class='object_link'><a href="Vips/OperationMath2.html" title="Vips::OperationMath2 (class)">OperationMath2</a></span>, <span class='object_link'><a href="Vips/OperationRelational.html" title="Vips::OperationRelational (class)">OperationRelational</a></span>, <span class='object_link'><a href="Vips/OperationRound.html" title="Vips::OperationRound (class)">OperationRound</a></span>, <span class='object_link'><a href="Vips/Progress.html" title="Vips::Progress (class)">Progress</a></span>, <span class='object_link'><a href="Vips/Region.html" title="Vips::Region (class)">Region</a></span>, <span class='object_link'><a href="Vips/Size.html" title="Vips::Size (class)">Size</a></span>, <span class='object_link'><a href="Vips/SizeStruct.html" title="Vips::SizeStruct (class)">SizeStruct</a></span>, <span class='object_link'><a href="Vips/Source.html" title="Vips::Source (class)">Source</a></span>, <span class='object_link'><a href="Vips/SourceCustom.html" title="Vips::SourceCustom (class)">SourceCustom</a></span>, <span class='object_link'><a href="Vips/Target.html" title="Vips::Target (class)">Target</a></span>, <span class='object_link'><a href="Vips/TargetCustom.html" title="Vips::TargetCustom (class)">TargetCustom</a></span>
+    
+  
+</p>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="LOG_DOMAIN-constant" class="">LOG_DOMAIN =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VIPS</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="LIBRARY_VERSION-constant" class="">LIBRARY_VERSION =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Vips</span><span class='period'>.</span><span class='id identifier rubyid_version_string'>version_string</span></pre></dd>
+      
+        <dt id="MAX_COORD-constant" class="">MAX_COORD =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>libvips has this arbitrary number as a sanity-check upper bound on image size. It&#39;s sometimes useful to know when calculating scale factors.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='int'>10000000</span></pre></dd>
+      
+        <dt id="IMAGE_TYPE-constant" class="">IMAGE_TYPE =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>some handy gtypes</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_type_from_name'>g_type_from_name</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VipsImage</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="ARRAY_INT_TYPE-constant" class="">ARRAY_INT_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_type_from_name'>g_type_from_name</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VipsArrayInt</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="ARRAY_DOUBLE_TYPE-constant" class="">ARRAY_DOUBLE_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_type_from_name'>g_type_from_name</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VipsArrayDouble</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="ARRAY_IMAGE_TYPE-constant" class="">ARRAY_IMAGE_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_type_from_name'>g_type_from_name</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VipsArrayImage</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="REFSTR_TYPE-constant" class="">REFSTR_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_type_from_name'>g_type_from_name</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VipsRefString</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="BLOB_TYPE-constant" class="">BLOB_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_type_from_name'>g_type_from_name</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>VipsBlob</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="BAND_FORMAT_TYPE-constant" class="">BAND_FORMAT_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Vips</span><span class='period'>.</span><span class='id identifier rubyid_vips_band_format_get_type'>vips_band_format_get_type</span></pre></dd>
+      
+        <dt id="INTERPRETATION_TYPE-constant" class="">INTERPRETATION_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Vips</span><span class='period'>.</span><span class='id identifier rubyid_vips_interpretation_get_type'>vips_interpretation_get_type</span></pre></dd>
+      
+        <dt id="CODING_TYPE-constant" class="">CODING_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Vips</span><span class='period'>.</span><span class='id identifier rubyid_vips_coding_get_type'>vips_coding_get_type</span></pre></dd>
+      
+        <dt id="BLEND_MODE_TYPE-constant" class="">BLEND_MODE_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='kw'>nil</span></pre></dd>
+      
+        <dt id="VERSION-constant" class="">VERSION =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>2.1.3</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#at_least_libvips%3F-class_method" title="at_least_libvips? (class method)">.<strong>at_least_libvips?</strong>(x, y)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>True if this is at least libvips x.y.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cache_set_max-class_method" title="cache_set_max (class method)">.<strong>cache_set_max</strong>(size)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Set the maximum number of operations that libvips should cache.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cache_set_max_files-class_method" title="cache_set_max_files (class method)">.<strong>cache_set_max_files</strong>(size)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Set the maximum number of files libvips should keep open in the operation cache.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cache_set_max_mem-class_method" title="cache_set_max_mem (class method)">.<strong>cache_set_max_mem</strong>(size)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Set the maximum amount of memory that libvips should use for the operation cache.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#concurrency_set-class_method" title="concurrency_set (class method)">.<strong>concurrency_set</strong>(n)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Set the size of the libvips worker pool.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_suffixes-class_method" title="get_suffixes (class method)">.<strong>get_suffixes</strong>  &#x21d2; [String] </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get a list of all supported file suffixes.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#leak_set-class_method" title="leak_set (class method)">.<strong>leak_set</strong>(leak)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Turn libvips leak testing on and off.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_debug-class_method" title="set_debug (class method)">.<strong>set_debug</strong>(debug)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Deprecated compatibility function.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#vector_set-class_method" title="vector_set (class method)">.<strong>vector_set</strong>(enabled)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Enable or disable SIMD and the run-time compiler.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="at_least_libvips?-class_method">
+  
+    .<strong>at_least_libvips?</strong>(x, y)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>True if this is at least libvips x.y</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+690
+691
+692
+693
+694
+695</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 690</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_at_least_libvips?'>at_least_libvips?</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_y'>y</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_major'>major</span> <span class='op'>=</span> <span class='id identifier rubyid_version'>version</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_minor'>minor</span> <span class='op'>=</span> <span class='id identifier rubyid_version'>version</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_major'>major</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='id identifier rubyid_major'>major</span> <span class='op'>==</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_minor'>minor</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_y'>y</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cache_set_max-class_method">
+  
+    .<strong>cache_set_max</strong>(size)  &#x21d2; <tt><span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Set the maximum number of operations that libvips should cache. Set 0 to disable the operation cache. The default is 1000.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+647
+648
+649</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 647</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_cache_set_max'>cache_set_max</span> <span class='id identifier rubyid_size'>size</span>
+  <span class='id identifier rubyid_vips_cache_set_max'>vips_cache_set_max</span> <span class='id identifier rubyid_size'>size</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cache_set_max_files-class_method">
+  
+    .<strong>cache_set_max_files</strong>(size)  &#x21d2; <tt><span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Set the maximum number of files libvips should keep open in the operation cache. Set 0 to disable the operation cache. The default is 100.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+660
+661
+662</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 660</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_cache_set_max_files'>cache_set_max_files</span> <span class='id identifier rubyid_size'>size</span>
+  <span class='id identifier rubyid_vips_cache_set_max_files'>vips_cache_set_max_files</span> <span class='id identifier rubyid_size'>size</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cache_set_max_mem-class_method">
+  
+    .<strong>cache_set_max_mem</strong>(size)  &#x21d2; <tt><span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Set the maximum amount of memory that libvips should use for the operation cache. Set 0 to disable the operation cache. The default is 100mb.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+653
+654
+655</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 653</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_cache_set_max_mem'>cache_set_max_mem</span> <span class='id identifier rubyid_size'>size</span>
+  <span class='id identifier rubyid_vips_cache_set_max_mem'>vips_cache_set_max_mem</span> <span class='id identifier rubyid_size'>size</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="concurrency_set-class_method">
+  
+    .<strong>concurrency_set</strong>(n)  &#x21d2; <tt><span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Set the size of the libvips worker pool. This defaults to the number of hardware threads on your computer. Set to 1 to disable threading.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+666
+667
+668</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 666</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_concurrency_set'>concurrency_set</span> <span class='id identifier rubyid_n'>n</span>
+  <span class='id identifier rubyid_vips_concurrency_set'>vips_concurrency_set</span> <span class='id identifier rubyid_n'>n</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_suffixes-class_method">
+  
+    .<strong>get_suffixes</strong>  &#x21d2; <tt>[String]</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get a list of all supported file suffixes.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>[String]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>array of supported suffixes</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 700</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_suffixes'>get_suffixes</span>
+  <span class='comment'># vips_foreign_get_suffixes() was added in libvips 8.8
+</span>  <span class='kw'>return</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span> <span class='symbol'>:vips_foreign_get_suffixes</span>
+
+  <span class='id identifier rubyid_array'>array</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_foreign_get_suffixes'>vips_foreign_get_suffixes</span>
+
+  <span class='id identifier rubyid_names'>names</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='id identifier rubyid_array'>array</span>
+  <span class='kw'>until</span> <span class='lparen'>(</span><span class='id identifier rubyid_q'>q</span> <span class='op'>=</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_read_pointer'>read_pointer</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_null?'>null?</span>
+    <span class='id identifier rubyid_suff'>suff</span> <span class='op'>=</span> <span class='id identifier rubyid_q'>q</span><span class='period'>.</span><span class='id identifier rubyid_read_string'>read_string</span>
+    <span class='const'><span class='object_link'><a href="GLib.html" title="GLib (module)">GLib</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_free'>g_free</span> <span class='id identifier rubyid_q'>q</span>
+    <span class='id identifier rubyid_names'>names</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_suff'>suff</span> <span class='kw'>unless</span> <span class='id identifier rubyid_names'>names</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_suff'>suff</span>
+    <span class='id identifier rubyid_p'>p</span> <span class='op'>+=</span> <span class='const'>FFI</span><span class='op'>::</span><span class='const'>Type</span><span class='op'>::</span><span class='const'>POINTER</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+  <span class='kw'>end</span>
+  <span class='const'><span class='object_link'><a href="GLib.html" title="GLib (module)">GLib</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_free'>g_free</span> <span class='id identifier rubyid_array'>array</span>
+
+  <span class='id identifier rubyid_names'>names</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="leak_set-class_method">
+  
+    .<strong>leak_set</strong>(leak)  &#x21d2; <tt><span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Turn libvips leak testing on and off. Handy for debugging ruby-vips, not very useful for user code.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+637
+638
+639</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 637</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_leak_set'>leak_set</span> <span class='id identifier rubyid_leak'>leak</span>
+  <span class='id identifier rubyid_vips_leak_set'>vips_leak_set</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_leak'>leak</span> <span class='op'>?</span> <span class='int'>1</span> <span class='op'>:</span> <span class='int'>0</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_debug-class_method">
+  
+    .<strong>set_debug</strong>(debug)  &#x21d2; <tt><span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Deprecated compatibility function.</p>
+
+<p>Don&#39;t use this, instead change GLib::logger.level.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+680
+681
+682
+683
+684</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 680</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_set_debug'>set_debug</span> <span class='id identifier rubyid_debug'>debug</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_debug'>debug</span>
+    <span class='const'><span class='object_link'><a href="GLib.html" title="GLib (module)">GLib</a></span></span><span class='period'>.</span><span class='id identifier rubyid_logger'><span class='object_link'><a href="GLib.html#logger-class_method" title="GLib.logger (method)">logger</a></span></span><span class='period'>.</span><span class='id identifier rubyid_level'>level</span> <span class='op'>=</span> <span class='const'>Logger</span><span class='op'>::</span><span class='const'>DEBUG</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="vector_set-class_method">
+  
+    .<strong>vector_set</strong>(enabled)  &#x21d2; <tt><span class='object_link'><a href="Vips/Object.html" title="Vips::Object (class)">Object</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Enable or disable SIMD and the run-time compiler. This can give a nice speed-up, but can also be unstable on some systems or with some versions of the run-time compiler.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+673
+674
+675</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 673</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_vector_set'>vector_set</span> <span class='id identifier rubyid_enabled'>enabled</span>
+  <span class='id identifier rubyid_vips_vector_set_enabled'>vips_vector_set_enabled</span><span class='lparen'>(</span><span class='id identifier rubyid_enabled'>enabled</span> <span class='op'>?</span> <span class='int'>1</span> <span class='op'>:</span> <span class='int'>0</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Wed Aug 25 12:14:44 2021 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.25 (ruby-2.7.2).
+</div>
+
+    </div>
+  </body>
+</html>
