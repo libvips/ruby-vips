@@ -2,6 +2,11 @@
 
 ## master
 
+## Version 2.1.4 (2021-10-27)
+
+* add support for `format_string`, so buffer and target savers are better at
+  writing the correct format [jcupitt]
+
 ## Version 2.1.3 (2021-8-23)
 
 * fix a gtype size error on win64 [danini-the-panini]

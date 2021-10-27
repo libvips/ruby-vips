@@ -626,7 +626,12 @@ module Vips
       saver = Vips.vips_foreign_find_save_buffer filename
       raise Vips::Error if saver.nil?
 
-      buffer = Vips::Operation.call saver, [self], opts, option_string
+      # note the format_string for savers
+      image = self.mutate do |x|
+        x.set_type! Vips::REFSTR_TYPE, "format_string", format_string
+      end
+
+      buffer = Vips::Operation.call saver, [image], opts, option_string
       raise Vips::Error if buffer.nil?
 
       write_gc
@@ -667,7 +672,12 @@ module Vips
       saver = Vips.vips_foreign_find_save_target filename
       raise Vips::Error if saver.nil?
 
-      Vips::Operation.call saver, [self, target], opts, option_string
+      # note the format_string for savers
+      image = self.mutate do |x|
+        x.set_type! Vips::REFSTR_TYPE, "format_string", format_string
+      end
+
+      Vips::Operation.call saver, [image, target], opts, option_string
       write_gc
     end
 
