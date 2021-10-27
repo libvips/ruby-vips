@@ -628,7 +628,7 @@ module Vips
 
       # note the format_string for savers
       image = self.mutate do |x|
-        x.set_type! Vips::REFSTR_TYPE, "format_string", format_string
+        x.set_type! Vips::REFSTR_TYPE, "format-string", format_string
       end
 
       buffer = Vips::Operation.call saver, [image], opts, option_string
@@ -674,7 +674,7 @@ module Vips
 
       # note the format_string for savers
       image = self.mutate do |x|
-        x.set_type! Vips::REFSTR_TYPE, "format_string", format_string
+        x.set_type! Vips::REFSTR_TYPE, "format-string", format_string
       end
 
       Vips::Operation.call saver, [image, target], opts, option_string
