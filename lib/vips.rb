@@ -584,6 +584,8 @@ module Vips
 
   attach_function :vips_error_buffer, [], :string
   attach_function :vips_error_clear, [], :void
+  attach_function :vips_error_freeze, [], :void
+  attach_function :vips_error_thaw, [], :void
 
   # The ruby-vips error class.
   class Error < RuntimeError

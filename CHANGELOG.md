@@ -2,6 +2,11 @@
 
 ## master
 
+## Version 2.1.4 (2021-10-28)
+
+* `write_to_buffer` tries to use the new target API, then falls back to the old 
+  buffer system [jcupitt]
+
 ## Version 2.1.3 (2021-8-23)
 
 * fix a gtype size error on win64 [danini-the-panini]

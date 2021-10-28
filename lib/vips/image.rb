@@ -623,11 +623,27 @@ module Vips
       raise Vips::Error, "filename is nil" if format_string.nil?
       filename = Vips.p2str(Vips.vips_filename_get_filename(format_string))
       option_string = Vips.p2str(Vips.vips_filename_get_options(format_string))
-      saver = Vips.vips_foreign_find_save_buffer filename
-      raise Vips::Error if saver.nil?
 
-      buffer = Vips::Operation.call saver, [self], opts, option_string
-      raise Vips::Error if buffer.nil?
+      # try to save with the new target API first, only fall back to the old
+      # buffer API if there's no target save for this filetype
+      saver = nil
+      if Vips.at_least_libvips?(8, 9)
+        Vips.vips_error_freeze
+        saver = Vips.vips_foreign_find_save_target filename
+        Vips.vips_error_thaw
+      end
+
+      if !saver.nil?
+        target = Vips::Target::new_to_memory
+        Vips::Operation.call saver, [self, target], opts, option_string
+        buffer = target.get("blob")
+      else
+        saver = Vips.vips_foreign_find_save_buffer filename
+        raise Vips::Error if saver.nil?
+
+        buffer = Vips::Operation.call saver, [self], opts, option_string
+        raise Vips::Error if buffer.nil?
+      end
 
       write_gc
 
