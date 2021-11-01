@@ -1632,8 +1632,8 @@ module Vips
 
       method_args = introspect.method_args
       required_output = introspect.required_output
-      optional_input = introspect.optional_input
-      optional_output = introspect.optional_output
+      optional_input = introspect.doc_optional_input
+      optional_output = introspect.doc_optional_output
 
       print "# @!method "
       print "self." unless introspect.member_x
@@ -1654,8 +1654,6 @@ module Vips
 
       puts "#   @param opts [Hash] Set of options"
       optional_input.each do |arg_name, details|
-        next if (details[:flags] & ARGUMENT_DEPRECATED) != 0
-
         yard_name = details[:yard_name]
         gtype = details[:gtype]
         rtype = gtype_to_ruby gtype
@@ -1664,8 +1662,6 @@ module Vips
         puts "#   @option opts [#{rtype}] :#{yard_name} #{blurb}"
       end
       optional_output.each do |arg_name, details|
-        next if (details[:flags] & ARGUMENT_DEPRECATED) != 0
-
         yard_name = details[:yard_name]
         gtype = details[:gtype]
         rtype = gtype_to_ruby gtype

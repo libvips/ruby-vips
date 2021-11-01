@@ -48,7 +48,8 @@ module Vips
   class Introspect
     attr_reader :name, :description, :flags, :args, :required_input,
       :optional_input, :required_output, :optional_output, :member_x,
-      :method_args, :vips_name, :destructive
+      :method_args, :vips_name, :destructive, :doc_optional_input, 
+      :doc_optional_output
 
     @@introspect_cache = {}
 
@@ -142,6 +143,8 @@ module Vips
       @flags = Vips.vips_operation_get_flags @op
       @member_x = nil
       @method_args = []
+      @doc_optional_input = {}
+      @doc_optional_output = {}
 
       @args.each do |details|
         arg_name = details[:arg_name]
@@ -163,6 +166,17 @@ module Vips
             @method_args << details
           end
         end
+      end
+
+      # and make the arg sets to document by filtering out deprecated args 
+      @optional_input.each do |arg_name, details|
+        next if (details[:flags] & ARGUMENT_DEPRECATED) != 0
+        @doc_optional_input[details[:arg_name]] = details
+      end
+
+      @optional_output.each do |arg_name, details|
+        next if (details[:flags] & ARGUMENT_DEPRECATED) != 0
+        @doc_optional_output[details[:arg_name]] = details
       end
     end
 
