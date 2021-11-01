@@ -1654,19 +1654,24 @@ module Vips
 
       puts "#   @param opts [Hash] Set of options"
       optional_input.each do |arg_name, details|
+        next if (details[:flags] & ARGUMENT_DEPRECATED) != 0
+
         yard_name = details[:yard_name]
         gtype = details[:gtype]
+        rtype = gtype_to_ruby gtype
         blurb = details[:blurb]
 
-        puts "#   @option opts [#{gtype_to_ruby(gtype)}] :#{yard_name} #{blurb}"
+        puts "#   @option opts [#{rtype}] :#{yard_name} #{blurb}"
       end
       optional_output.each do |arg_name, details|
+        next if (details[:flags] & ARGUMENT_DEPRECATED) != 0
+
         yard_name = details[:yard_name]
         gtype = details[:gtype]
+        rtype = gtype_to_ruby gtype
         blurb = details[:blurb]
 
-        print "#   @option opts [#{gtype_to_ruby(gtype)}] :#{yard_name}"
-        puts " Output #{blurb}"
+        puts "#   @option opts [#{rtype}] :#{yard_name} Output #{blurb}"
       end
 
       print "#   @return ["

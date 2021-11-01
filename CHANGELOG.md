@@ -6,6 +6,7 @@
 
 * `write_to_buffer` tries to use the new target API, then falls back to the old 
   buffer system [jcupitt]
+* don't generate yard docs for deprecated args [jcupitt]
 
 ## Version 2.1.3 (2021-8-23)
 
