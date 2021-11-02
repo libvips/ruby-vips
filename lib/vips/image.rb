@@ -634,7 +634,7 @@ module Vips
       end
 
       if !saver.nil?
-        target = Vips::Target::new_to_memory
+        target = Vips::Target.new_to_memory
         Vips::Operation.call saver, [self, target], opts, option_string
         buffer = target.get("blob")
       else
@@ -1448,6 +1448,48 @@ module Vips
     # @return [Image] inverse tangent of each pixel
     def atan
       math :atan
+    end
+
+    # Return the hyperbolic sine of an image in radians.
+    #
+    # @return [Image] sine of each pixel
+    def sinh
+      math :sinh
+    end
+
+    # Return the hyperbolic cosine of an image in radians.
+    #
+    # @return [Image] cosine of each pixel
+    def cosh
+      math :cosh
+    end
+
+    # Return the hyperbolic tangent of an image in radians.
+    #
+    # @return [Image] tangent of each pixel
+    def tanh
+      math :tanh
+    end
+
+    # Return the inverse hyperbolic sine of an image in radians.
+    #
+    # @return [Image] inverse sine of each pixel
+    def asinh
+      math :asinh
+    end
+
+    # Return the inverse hyperbolic cosine of an image in radians.
+    #
+    # @return [Image] inverse cosine of each pixel
+    def acosh
+      math :acosh
+    end
+
+    # Return the inverse hyperbolic tangent of an image in radians.
+    #
+    # @return [Image] inverse tangent of each pixel
+    def atanh
+      math :atanh
     end
 
     # Return the natural log of an image.
