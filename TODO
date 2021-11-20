@@ -37,8 +37,7 @@
 
 - Push new gem to rubygems, tag repository with version.
 
-	gem signin --otp 111111 
 	bundle exec rake release
 
-  The otp is from authy / google authenticator / etc. 
+  You'll be asked for a otp from authy / google authenticator / etc. 
 
