@@ -5,7 +5,7 @@
 
 This gem is a Ruby binding for the [libvips image processing
 library](https://libvips.github.io/libvips). It has been tested on Linux,
-macOs and Windows, and with ruby 2, ruby 3 and jruby. It uses [ruby-ffi](https://github.com/ffi/ffi) to call
+macOS and Windows, and with ruby 2, ruby 3 and jruby. It uses [ruby-ffi](https://github.com/ffi/ffi) to call
 functions in the libvips library.
 
 libvips is a [demand-driven, horizontally
