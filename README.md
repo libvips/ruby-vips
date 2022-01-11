@@ -4,7 +4,9 @@
 [![Test](https://github.com/libvips/ruby-vips/workflows/Test/badge.svg)](https://github.com/libvips/ruby-vips/actions?query=workflow%3ATest)
 
 This gem is a Ruby binding for the [libvips image processing
-library](https://libvips.github.io/libvips).
+library](https://libvips.github.io/libvips). It has been tested on Linux,
+macOs and Windows, and with ruby 2, ruby 3 and jruby. It uses [ruby-ffi](https://github.com/ffi/ffi) to call
+functions in the libvips library.
 
 libvips is a [demand-driven, horizontally
 threaded](https://github.com/libvips/libvips/wiki/Why-is-libvips-quick)
@@ -14,32 +16,30 @@ memory](https://github.com/libvips/libvips/wiki/Speed-and-memory-use).
 libvips is licensed under the [LGPL
 2.1+](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html).
 
-## Requirements
+## Install on linux and macOS
 
-  * macOS, Linux, and Windows tested
-
-  * libvips 8.2 or later, see the [libvips install instructions](https://libvips.github.io/libvips/install.html)
-
-  * [ruby-ffi](https://github.com/ffi/ffi) 1.9 or later 
-
-  * Ruby 2.0+, JRuby
-
-## Install
-
-[Install libvips](https://libvips.github.io/libvips/install.html), then:
+Install the libvips binary with your package manager (eg. `apt install
+libvips42` or perhaps `brew install vips`, see the [libvips install
+instructions](https://libvips.github.io/libvips/install.html)) then install
+this gem with:
 
 ```
-$ gem install ruby-vips
+gem install ruby-vips
 ```
 
-or include it in `Gemfile`:
+Or include `gem "ruby-vips"` in your gemfile.
 
-```ruby
-gem "ruby-vips"
+## Install on Windows
+
+The gemspec will pull in the msys libvips for you, so all you need is:
+
+```
+gem install ruby-vips
 ```
 
-On Windows, you'll need to set the `RUBY_DLL_PATH` environment variable to 
-point to the libvips bin directory.
+Or include `gem "ruby-vips"` in your gemfile.
+
+Tested with the ruby and msys from choco.
 
 ## Example
 
