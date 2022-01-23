@@ -20,7 +20,7 @@ RSpec.describe Vips::Source, version: [8, 9] do
   end
 
   it "can create a source from an area of memory" do
-    str = File.open(simg("wagon.jpg"), "rb").read
+    str = File.binread(simg("wagon.jpg"))
     source = Vips::Source.new_from_memory str
 
     expect(source)
