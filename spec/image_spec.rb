@@ -220,7 +220,7 @@ RSpec.describe Vips::Image do
 
   if has_jpeg?
     it "can load a sample jpg image buffer" do
-      str = File.open(simg("wagon.jpg"), "rb").read
+      str = File.binread(simg("wagon.jpg"))
       x = Vips::Image.new_from_buffer str, ""
       expect(x.width).to eq(685)
       expect(x.height).to eq(478)
@@ -231,7 +231,7 @@ RSpec.describe Vips::Image do
 
   if has_jpeg?
     it "can load a sample jpg image utf-8 buffer" do
-      str = File.open(simg("wagon.jpg"), "r").read
+      str = File.read(simg("wagon.jpg"))
       x = Vips::Image.new_from_buffer str, ""
       expect(x.width).to eq(685)
       expect(x.height).to eq(478)
@@ -257,7 +257,7 @@ RSpec.describe Vips::Image do
   if has_jpeg?
     it "can set an ICC profile on a jpg image" do
       x = Vips::Image.new_from_file simg("icc.jpg")
-      profile = File.open(simg("lcd.icc"), "rb").read
+      profile = File.binread(simg("lcd.icc"))
       x = x.copy
       x.set_value "icc-profile-data", profile
       x.write_to_file(timg("x.jpg"))
