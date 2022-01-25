@@ -4,9 +4,10 @@
 [![Test](https://github.com/libvips/ruby-vips/workflows/Test/badge.svg)](https://github.com/libvips/ruby-vips/actions?query=workflow%3ATest)
 
 This gem is a Ruby binding for the [libvips image processing
-library](https://libvips.github.io/libvips). It has been tested on Linux,
-macOS and Windows, and with ruby 2, ruby 3 and jruby. It uses [ruby-ffi](https://github.com/ffi/ffi) to call
-functions in the libvips library.
+library](https://libvips.github.io/libvips). It has been tested on
+Linux, macOS and Windows, and with ruby 2, ruby 3 and jruby. It uses
+[ruby-ffi](https://github.com/ffi/ffi) to call functions in the libvips
+library.
 
 libvips is a [demand-driven, horizontally
 threaded](https://github.com/libvips/libvips/wiki/Why-is-libvips-quick)
@@ -39,7 +40,7 @@ gem install ruby-vips
 
 Or include `gem "ruby-vips"` in your gemfile.
 
-Tested with the ruby and msys from choco.
+Tested with the ruby and msys from choco, but others may work.
 
 ## Example
 
@@ -106,4 +107,3 @@ rmagick.rb	788768
 
 See also [benchmarks at the official libvips
 website](https://github.com/libvips/libvips/wiki/Speed-and-memory-use).
-
