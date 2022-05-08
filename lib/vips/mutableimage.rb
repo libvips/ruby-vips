@@ -96,6 +96,13 @@ module Vips
       Vips::Operation.call name.to_s, [self, *args], options
     end
 
+    # Draw a point on an image.
+    #
+    # See {Image#draw_rect}.
+    def draw_point! ink, left, top, **opts
+      draw_rect! ink, left, top, 1, 1, **opts
+    end
+
     # Create a metadata item on an image of the specifed type. Ruby types
     # are automatically transformed into the matching glib type (eg.
     # {GObject::GINT_TYPE}), if possible.

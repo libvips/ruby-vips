@@ -2,6 +2,8 @@
 
 ## master
 
+* add `draw_point!` [jcupitt]
+
 ## Version 2.1.4 (2021-10-28)
 
 * `write_to_buffer` tries to use the new target API, then falls back to the old 
