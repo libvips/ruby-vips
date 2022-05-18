@@ -2,8 +2,31 @@ require "spec_helper"
 
 RSpec.describe Vips do
   describe "Vips" do
+    it "can get default concurrency" do
+      expect(Vips.concurrency_default).to eq DEFAULT_VIPS_CONCURRENCY
+    end
+
+    it "can get concurrency" do
+      expect(Vips.concurrency).to eq Vips.concurrency_default
+    end
+
     it "can set concurrency" do
-      Vips.concurrency_set 12
+      expect(Vips.concurrency_set(12)).to eq 12
+      expect(Vips.concurrency).to eq 12
+    end
+
+    it "clips concurrency to 1024" do
+      expect(Vips.concurrency_set(1025)).to eq 1024
+    end
+
+    it "can set concurrency to 0 to reset to default" do
+      Vips.concurrency_set(rand(100))
+      expect(Vips.concurrency_set(0)).to eq Vips.concurrency_default
+    end
+
+    it "can set concurrency to nil to reset to default" do
+      Vips.concurrency_set(rand(100))
+      expect(Vips.concurrency_set(nil)).to eq Vips.concurrency_default
     end
 
     it "can set SIMD" do

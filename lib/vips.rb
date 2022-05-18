@@ -626,6 +626,10 @@ module Vips
   attach_function :vips_leak_set, [:int], :void
   attach_function :vips_vector_set_enabled, [:int], :void
   attach_function :vips_concurrency_set, [:int], :void
+  attach_function :vips_concurrency_get, [], :int
+
+  # Track the original default concurrency so we can reset to it.
+  DEFAULT_CONCURRENCY = vips_concurrency_get
 
   # vips_foreign_get_suffixes was added in libvips 8.8
   begin
@@ -663,10 +667,23 @@ module Vips
     vips_cache_set_max_files size
   end
 
-  # Set the size of the libvips worker pool. This defaults to the number of
-  # hardware threads on your computer. Set to 1 to disable threading.
+  # Get the size of libvips worker pools. Defaults to the VIPS_CONCURRENCY env
+  # var or the number of hardware threads on your computer.
+  def self.concurrency
+    vips_concurrency_get
+  end
+
+  # Get the default size of libvips worker pools.
+  def self.concurrency_default
+    DEFAULT_CONCURRENCY
+  end
+
+  # Set the size of each libvips worker pool. Max 1024 threads. Set to 1 to
+  # disable threading. Set to 0 or nil to reset to default.
   def self.concurrency_set n
+    n = DEFAULT_CONCURRENCY if n.to_i == 0
     vips_concurrency_set n
+    concurrency
   end
 
   # Enable or disable SIMD and the run-time compiler. This can give a nice
