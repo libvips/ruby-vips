@@ -3,6 +3,9 @@
 ## master
 
 * add `draw_point!` [jcupitt]
+* add `Vips.tracked_*` for getting file and memory metrics [jeremy]
+* add `Vips.cache_*` for getting cache settings [jeremy]
+* add `Vips.vector?` to get/set SIMD status [jeremy]
 
 ## Version 2.1.4 (2021-10-28)
 
