@@ -1,3 +1,11 @@
+# Set default concurrency so we can check against it later. Must be set
+# before Vips.init sets concurrency to the default.
+DEFAULT_VIPS_CONCURRENCY = 5
+ENV["VIPS_CONCURRENCY"] = DEFAULT_VIPS_CONCURRENCY.to_s
+
+# Disable stderr output since we purposefully trigger warn-able behavior.
+ENV["VIPS_WARNING"] = "1"
+
 require "vips"
 
 require "tempfile"
