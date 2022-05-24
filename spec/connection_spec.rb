@@ -36,12 +36,13 @@ RSpec.describe Vips::Source, version: [8, 9] do
   it "can load an image from filename source" do
     source = Vips::Source.new_from_file simg("wagon.jpg")
     image = Vips::Image.new_from_source source, ""
+    real = Vips::Image.new_from_file simg("wagon.jpg")
 
     expect(image)
-    expect(image.width).to eq(685)
-    expect(image.height).to eq(478)
-    expect(image.bands).to eq(3)
-    expect(image.avg).to be_within(0.001).of(109.789)
+    expect(image.width).to eq(real.width)
+    expect(image.height).to eq(real.height)
+    expect(image.bands).to eq(real.bands)
+    expect(image.avg).to eq(real.avg)
   end
 end
 
@@ -76,13 +77,14 @@ RSpec.describe Vips::Target, version: [8, 9] do
     filename = timg("x4.png")
     target = Vips::Target.new_to_file filename
     image.write_to_target target, ".png"
+    real = Vips::Image.new_from_file simg("wagon.jpg")
 
     image = Vips::Image.new_from_file filename
     expect(image)
-    expect(image.width).to eq(685)
-    expect(image.height).to eq(478)
-    expect(image.bands).to eq(3)
-    expect(image.avg).to be_within(0.001).of(109.789)
+    expect(image.width).to eq(real.width)
+    expect(image.height).to eq(real.height)
+    expect(image.bands).to eq(real.bands)
+    expect(image.avg).to eq(real.avg)
   end
 
   it "can save an image to a memory target" do
@@ -114,12 +116,13 @@ RSpec.describe Vips::SourceCustom, version: [8, 9] do
     source.on_read { |length| file.read length }
     source.on_seek { |offset, whence| file.seek(offset, whence) }
     image = Vips::Image.new_from_source source, ""
+    real = Vips::Image.new_from_file simg("wagon.jpg")
 
     expect(image)
-    expect(image.width).to eq(685)
-    expect(image.height).to eq(478)
-    expect(image.bands).to eq(3)
-    expect(image.avg).to be_within(0.001).of(109.789)
+    expect(image.width).to eq(real.width)
+    expect(image.height).to eq(real.height)
+    expect(image.bands).to eq(real.bands)
+    expect(image.avg).to eq(real.avg)
   end
 
   it "on_seek is optional" do
@@ -127,34 +130,58 @@ RSpec.describe Vips::SourceCustom, version: [8, 9] do
     source = Vips::SourceCustom.new
     source.on_read { |length| file.read length }
     image = Vips::Image.new_from_source source, ""
+    real = Vips::Image.new_from_file simg("wagon.jpg")
 
     expect(image)
-    expect(image.width).to eq(685)
-    expect(image.height).to eq(478)
-    expect(image.bands).to eq(3)
-    expect(image.avg).to be_within(0.001).of(109.789)
+    expect(image.width).to eq(real.width)
+    expect(image.height).to eq(real.height)
+    expect(image.bands).to eq(real.bands)
+    expect(image.avg).to eq(real.avg)
   end
 
-  it "can create a user output stream" do
+  it "can create a custom target" do
     target = Vips::TargetCustom.new
 
     expect(target)
   end
 
-  it "can write an image to a user output stream" do
+  it "can write an image to a custom target" do
     filename = timg("x5.png")
     file = File.open filename, "wb"
     target = Vips::TargetCustom.new
     target.on_write { |chunk| file.write(chunk) }
-    target.on_finish { file.close }
+    target.on_end { file.close }
     image = Vips::Image.new_from_file simg("wagon.jpg")
     image.write_to_target target, ".png"
 
     image = Vips::Image.new_from_file filename
+    real = Vips::Image.new_from_file simg("wagon.jpg")
     expect(image)
-    expect(image.width).to eq(685)
-    expect(image.height).to eq(478)
-    expect(image.bands).to eq(3)
-    expect(image.avg).to be_within(0.001).of(109.789)
+    expect(image.width).to eq(real.width)
+    expect(image.height).to eq(real.height)
+    expect(image.bands).to eq(real.bands)
+    expect(image.avg).to eq(real.avg)
+  end
+end
+
+RSpec.describe Vips::TargetCustom, version: [8, 13] do
+  it "can write to a custom target as TIFF" do
+    filename = timg("x6.tif")
+    file = File.open filename, "w+b"
+    target = Vips::TargetCustom.new
+    target.on_write { |chunk| file.write(chunk) }
+    target.on_read { |length| file.read length }
+    target.on_seek { |offset, whence| file.seek(offset, whence) }
+    target.on_end { file.close; 0 }
+    image = Vips::Image.new_from_file simg("wagon.jpg")
+    image.write_to_target target, ".tif"
+
+    image = Vips::Image.new_from_file filename
+    real = Vips::Image.new_from_file simg("wagon.jpg")
+    expect(image)
+    expect(image.width).to eq(real.width)
+    expect(image.height).to eq(real.height)
+    expect(image.bands).to eq(real.bands)
+    expect(image.avg).to eq(real.avg)
   end
 end

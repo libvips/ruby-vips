@@ -108,6 +108,13 @@ module Vips
     end
   end
 
+  MARSHAL_END = proc do |handler|
+    FFI::Function.new(:int, [:pointer, :pointer]) do |i, cb|
+      # this can't throw an exception, so no catch is necessary
+      handler.call
+    end
+  end
+
   MARSHAL_FINISH = proc do |handler|
     FFI::Function.new(:void, [:pointer, :pointer]) do |i, cb|
       # this can't throw an exception, so no catch is necessary
@@ -123,6 +130,7 @@ module Vips
     read: MARSHAL_READ,
     seek: MARSHAL_SEEK,
     write: MARSHAL_WRITE,
+    end: MARSHAL_END,
     finish: MARSHAL_FINISH
   }
 
