@@ -6,6 +6,8 @@
 * add `Vips.tracked_*` for getting file and memory metrics [jeremy]
 * add `Vips.cache_*` for getting cache settings [jeremy]
 * add `Vips.vector?` to get/set SIMD status [jeremy]
+* add `Vips.concurrency` to get/set threadpool size [jeremy]
+* add `Vips.concurrency_default` to get the default threadpool size [jeremy]
 
 ## Version 2.1.4 (2021-10-28)
 
