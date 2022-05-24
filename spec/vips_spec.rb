@@ -6,8 +6,16 @@ RSpec.describe Vips do
       Vips.concurrency_set 12
     end
 
-    it "can set SIMD" do
-      Vips.vector_set true
+    it "sets SIMD" do
+      default = Vips.vector?
+
+      expect(Vips.vector_set(true)).to be true
+      expect(Vips.vector?).to be true
+
+      expect(Vips.vector_set(false)).to be false
+      expect(Vips.vector?).to be false
+
+      Vips.vector_set default
     end
 
     it "can enable leak testing" do
@@ -15,24 +23,59 @@ RSpec.describe Vips do
       Vips.leak_set false
     end
 
-    it "can set the operation cache size" do
-      Vips.cache_set_max 0
-      Vips.cache_set_max 100
-    end
-
-    it "can set the operation cache memory limit" do
-      Vips.cache_set_max_mem 0
-      Vips.cache_set_max_mem 10000000
-    end
-
-    it "can set the operation cache file limit" do
-      Vips.cache_set_max_files 0
-      Vips.cache_set_max_files 100
-    end
-
     it "can get a set of filename suffixes" do
       suffs = Vips.get_suffixes
       expect(suffs.length > 10).to be true unless suffs.empty?
+    end
+  end
+
+  describe "cache" do
+    it "can get and set the operation cache size" do
+      default = Vips.cache_max
+
+      expect(Vips.cache_set_max(0)).to be 0
+      expect(Vips.cache_max).to be 0
+
+      expect(Vips.cache_set_max(default)).to be default
+      expect(Vips.cache_max).to be default
+    end
+
+    it "can set the operation cache memory limit" do
+      default = Vips.cache_max_mem
+
+      expect(Vips.cache_set_max_mem(0)).to be 0
+      expect(Vips.cache_max_mem).to be 0
+
+      expect(Vips.cache_set_max_mem(default)).to be default
+      expect(Vips.cache_max_mem).to be default
+    end
+
+    it "can set the operation cache file limit" do
+      default = Vips.cache_max_files
+
+      expect(Vips.cache_set_max_files(0)).to be 0
+      expect(Vips.cache_max_files).to be 0
+
+      expect(Vips.cache_set_max_files(default)).to be default
+      expect(Vips.cache_max_files).to be default
+    end
+  end
+
+  describe "#tracked_*" do
+    it "can get allocated bytes" do
+      expect(Vips.tracked_mem).to be >= 0
+    end
+
+    it "can get allocated bytes high-water mark" do
+      expect(Vips.tracked_mem_highwater).to be >= 0
+    end
+
+    it "can get allocation count" do
+      expect(Vips.tracked_allocs).to be >= 0
+    end
+
+    it "can get open file count" do
+      expect(Vips.tracked_files).to be >= 0
     end
   end
 
