@@ -140,21 +140,46 @@ RSpec.describe Vips::SourceCustom, version: [8, 9] do
 
     expect(target)
   end
+end
 
+# 8.13 had a broken on_finish, so close ourselves before 8.14
+RSpec.describe Vips::SourceCustom, version: [8, 9] do
+  it "can write an image to a user output stream with explicit close" do
+    image = Vips::Image.new_from_file simg("wagon.jpg")
+
+    filename = timg("x5.png")
+    file = File.open filename, "wb"
+    target = Vips::TargetCustom.new
+    target.on_write { |chunk| file.write(chunk) }
+    image.write_to_target target, ".png"
+    file.close
+
+    image2 = Vips::Image.new_from_file filename
+    expect(image2)
+    expect(image2.width).to eq(685)
+    expect(image2.height).to eq(478)
+    expect(image2.bands).to eq(3)
+    expect(image2.avg).to eq(image.avg)
+  end
+end
+
+# on_finish started working again in 8.14 (and 8.13.4+, and 8.12 and earlier)
+RSpec.describe Vips::SourceCustom, version: [8, 14] do
   it "can write an image to a user output stream" do
+    image = Vips::Image.new_from_file simg("wagon.jpg")
+
     filename = timg("x5.png")
     file = File.open filename, "wb"
     target = Vips::TargetCustom.new
     target.on_write { |chunk| file.write(chunk) }
     target.on_finish { file.close }
-    image = Vips::Image.new_from_file simg("wagon.jpg")
-    image.write_to_target target, ".png"
+    image.write_to_target target, filename
 
-    image = Vips::Image.new_from_file filename
-    expect(image)
-    expect(image.width).to eq(685)
-    expect(image.height).to eq(478)
-    expect(image.bands).to eq(3)
-    expect(image.avg).to be_within(0.001).of(109.789)
+    image2 = Vips::Image.new_from_file filename
+    expect(image2)
+    expect(image2.width).to eq(685)
+    expect(image2.height).to eq(478)
+    expect(image2.bands).to eq(3)
+    expect(image2.avg).to eq(image.avg)
   end
 end
