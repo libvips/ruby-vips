@@ -151,7 +151,7 @@ module Vips
         flags = details[:flags]
         gtype = details[:gtype]
 
-        details[:yard_name] = arg_name == "in" ? "im" : arg_name
+        details[:yard_name] = (arg_name == "in") ? "im" : arg_name
         pspec = @op.get_pspec arg_name
         details[:blurb] = GObject.g_param_spec_get_blurb pspec
 
