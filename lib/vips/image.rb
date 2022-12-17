@@ -138,14 +138,14 @@ module Vips
           image = image.cast :float
         end
 
-        new_format = image.format == :double ? :dpcomplex : :complex
+        new_format = (image.format == :double) ? :dpcomplex : :complex
         image = image.copy format: new_format, bands: image.bands / 2
       end
 
       image = block.call(image)
 
       unless Image.complex? original_format
-        new_format = image.format == :dpcomplex ? :double : :float
+        new_format = (image.format == :dpcomplex) ? :double : :float
         image = image.copy format: new_format, bands: image.bands * 2
       end
 
