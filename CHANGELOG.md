@@ -9,6 +9,7 @@
 * add `Vips.concurrency` to get/set threadpool size [jeremy]
 * add `Vips.concurrency_default` to get the default threadpool size [jeremy]
 * fix targetcustom spec test with libvips 8.13 [lucaskanashiro]
+* add ruby 3.2 to CI [petergoldstein]
 
 ## Version 2.1.4 (2021-10-28)
 
