@@ -32,5 +32,9 @@ puts "opening with revalidate ..."
 image2 = Vips::Image.new_from_file("fred", revalidate: true)
 puts "fred.width = #{image2.width}"
 
+puts "opening again, should get cached entry ..."
+image2 = Vips::Image.new_from_file("fred")
+puts "fred.width = #{image2.width}"
+
 File.delete("fred")
 
