@@ -10,7 +10,7 @@ if ARGV.length != 2
   exit 1
 end
 
-if File.exists?("fred")
+if File.exist?("fred")
   puts "file 'fred' exists, delete it first"
   exit 1
 end
@@ -37,4 +37,3 @@ image2 = Vips::Image.new_from_file("fred")
 puts "fred.width = #{image2.width}"
 
 File.delete("fred")
-
