@@ -2,6 +2,8 @@
 
 ## master
 
+## Version 2.2.0 (2023-10-18)
+
 * add `draw_point!` [jcupitt]
 * add `Vips.tracked_*` for getting file and memory metrics [jeremy]
 * add `Vips.cache_*` for getting cache settings [jeremy]
@@ -10,6 +12,7 @@
 * add `Vips.concurrency_default` to get the default threadpool size [jeremy]
 * fix targetcustom spec test with libvips 8.13 [lucaskanashiro]
 * add ruby 3.2 to CI [petergoldstein]
+* update docs for libvips 8.15 [jcupitt]
 
 ## Version 2.1.4 (2021-10-28)
 
