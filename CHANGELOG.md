@@ -2,6 +2,8 @@
 
 ## master
 
+* add `Vips.block_untrusted` method to block all untrusted operations. Only for libvips >= 8.13. [Docs](https://www.libvips.org/API/current/libvips-vips.html#vips-block-untrusted-set). [#382](https://github.com/libvips/ruby-vips/pull/382) [aglushkov](https://github.com/aglushkov)
+* add `Vips.block` method to block specific operation. Only for libvips >= 8.13. [Docs](https://www.libvips.org/API/current/VipsOperation.html#vips-operation-block-set). [#382](https://github.com/libvips/ruby-vips/pull/382) [aglushkov](https://github.com/aglushkov)
 * `new_from_source` keeps a ref to the source object [taylorthurlow]
 * some fixes to object references system
 

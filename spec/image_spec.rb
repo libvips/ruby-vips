@@ -1,9 +1,5 @@
 require "spec_helper"
 
-def has_jpeg?
-  Vips.type_find("VipsOperation", "jpegload") != nil
-end
-
 RSpec.describe Vips::Image do
   it "can save an image to a file" do
     filename = timg "x.v"

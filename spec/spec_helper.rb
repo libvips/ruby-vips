@@ -22,6 +22,14 @@ def timg(name)
   File.join(@temp_dir, name)
 end
 
+def has_jpeg?
+  Vips.type_find("VipsOperation", "jpegload") != nil
+end
+
+def has_svg?
+  Vips.type_find("VipsOperation", "svgload") != nil
+end
+
 RSpec.configure do |config|
   config.around do |example|
     Dir.mktmpdir("ruby-vips-spec-") do |dir|
