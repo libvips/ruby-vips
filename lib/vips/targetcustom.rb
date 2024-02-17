@@ -47,7 +47,7 @@ module Vips
       pointer = Vips.vips_target_custom_new
       raise Vips::Error if pointer.null?
 
-      super pointer
+      super(pointer)
     end
 
     # The block is executed to write data to the source. The interface is
