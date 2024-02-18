@@ -58,7 +58,7 @@ module Vips
       # See also the comment on set_type! before changing this.
       pointer = copy_image.ptr
       ::GObject.g_object_ref pointer
-      super pointer
+      super(pointer)
 
       # and save the copy ready for when we finish mutating
       @image = copy_image

@@ -458,7 +458,14 @@ module Vips
       loader = Vips.vips_foreign_find_load_source source
       raise Vips::Error if loader.nil?
 
-      Vips::Operation.call loader, [source], opts, option_string
+      image = Vips::Operation.call loader, [source], opts, option_string
+
+      # keep a secret ref to the source object ... the libvips loader will
+      # keep a ref to the C source object, but we need the ruby wrapper object
+      # to stay alive too
+      image.references << source
+
+      image
     end
 
     def self.matrix_from_array width, height, array

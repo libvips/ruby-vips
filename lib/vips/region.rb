@@ -44,10 +44,10 @@ module Vips
     end
 
     def initialize(name)
-      ptr = Vips.vips_region_new name
-      raise Vips::Error if ptr.null?
+      pointer = Vips.vips_region_new name
+      raise Vips::Error if pointer.null?
 
-      super ptr
+      super(pointer)
     end
 
     def width

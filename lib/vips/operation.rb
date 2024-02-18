@@ -218,7 +218,7 @@ module Vips
         raise Vips::Error if value.null?
       end
 
-      super value
+      super(value)
     end
 
     def build
@@ -283,7 +283,7 @@ module Vips
         value = value.map { |x| Operation.imageize match_image, x }
       end
 
-      super name, value
+      super(name, value)
     end
 
     public
@@ -440,14 +440,12 @@ module Vips
         end
       end
 
-      # collect a list of all input references here
-      references = Set.new
+      # dedupe all input references here
+      deduped_references = Set.new
 
       add_reference = lambda do |x|
         if x.is_a?(Vips::Image)
-          x.references.each do |i|
-            references << i
-          end
+          deduped_references.merge x.references
         end
         false
       end
@@ -482,20 +480,27 @@ module Vips
 
       op = op.build
 
+      # we need an array of references for output objects
+      references = deduped_references.to_a
+
       # attach all input refs to output x
       set_reference = lambda do |x|
+        # stop early if there are no refs to attach
+        return true if references == []
+
         if x.is_a? Vips::Image
-          x.references += references
+          references.each { |i| x.references << i }
         end
+
         false
       end
 
       # get all required results
       result = []
       required_output.each do |details|
-        value = details[:arg_name]
+        value = op.get(details[:arg_name])
         flat_find value, &set_reference
-        result << op.get(value)
+        result << value
       end
 
       # fetch all optional ones

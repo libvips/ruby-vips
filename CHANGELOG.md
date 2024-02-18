@@ -2,6 +2,9 @@
 
 ## master
 
+* `new_from_source` keeps a ref to the source object [taylorthurlow]
+* some fixes to object references system
+
 ## Version 2.2.0 (2023-10-18)
 
 * add `draw_point!` [jcupitt]
