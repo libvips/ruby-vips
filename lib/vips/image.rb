@@ -463,7 +463,7 @@ module Vips
       # keep a secret ref to the source object ... the libvips loader will
       # keep a ref to the C source object, but we need the ruby wrapper object
       # to stay alive too
-      result.references << source if result.is_a?(Vips::Image)
+      result.references << source 
 
       result
     end
