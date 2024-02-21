@@ -779,6 +779,31 @@ module Vips
     major > x || (major == x && minor >= y)
   end
 
+  if at_least_libvips?(8, 13)
+    attach_function :vips_block_untrusted_set, [:bool], :void
+    attach_function :vips_operation_block_set, %i[string bool], :void
+
+    # Block/unblock all untrusted operations from running.
+    # Use `vips -l` at the command-line to see the class hierarchy and which operations are marked as untrusted.
+    def self.block_untrusted(enabled)
+      vips_block_untrusted_set(enabled)
+    end
+
+    # Block/unblock all operations in the libvips class hierarchy at specified *operation_name* and below.
+    #
+    # For example this will block all loaders except JPEG
+    #
+    #   Vips.block("VipsForeignLoad", true);
+    #   Vips.block("VipsForeignLoadJpeg", false)
+    #
+    # Use `vips -l` at the command-line to see the class hierarchy.
+    # This call does nothing if the named operation is not found.
+    #
+    def self.block(operation_name, enabled)
+      vips_operation_block_set(operation_name, enabled)
+    end
+  end
+
   # Get a list of all supported file suffixes.
   #
   # @return [[String]] array of supported suffixes
