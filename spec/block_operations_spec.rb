@@ -10,7 +10,7 @@ RSpec.describe Vips, version: [8, 13] do
 
       # Block
       Vips.block_untrusted(true)
-      expect { Vips::Image.new_from_file(untrusted_image) }.to raise_error Vips::Error, /svgload/
+      expect { Vips::Image.new_from_file(untrusted_image) }.to raise_error Vips::Error, /not a known/
 
       # Unblock
       Vips.block_untrusted(false)
@@ -23,7 +23,7 @@ RSpec.describe Vips, version: [8, 13] do
       # Block all loaders except jpeg
       Vips.block("VipsForeignLoad", true)
       Vips.block("VipsForeignLoadJpeg", false)
-      expect { Vips::Image.new_from_file(svg_image) }.to raise_error Vips::Error, /svgload/
+      expect { Vips::Image.new_from_file(svg_image) }.to raise_error Vips::Error, /not a known/
       expect { Vips::Image.new_from_file(jpg_image) }.not_to raise_error
 
       # Unblock all loaders
