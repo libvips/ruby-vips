@@ -9,9 +9,6 @@ require "ffi"
 module Vips
   private
 
-  # debugging support
-  attach_function :vips_object_print_all, [], :void
-
   # we must init these by hand, since they are usually made on first image
   # create
   attach_function :vips_band_format_get_type, [], :GType
@@ -337,6 +334,7 @@ module Vips
       ArgumentClassPtr.ptr, ArgumentInstancePtr.ptr],
     :int
 
+  # debugging support
   attach_function :vips_object_print_all, [], :void
 
   attach_function :vips_object_set_from_string, [:pointer, :string], :int
