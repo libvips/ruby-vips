@@ -42,7 +42,19 @@ module GLib
 
   extend FFI::Library
 
-  ffi_lib library_name("glib-2.0", 0)
+  if FFI::Platform.windows?
+    # On Windows, `GetProcAddress()` can only search in a specified DLL and
+    # doesn't look into its dependent libraries for symbols. Therefore, we
+    # check if the GLib DLLs are available. If these can not be found, we
+    # assume that GLib is statically linked into libvips.
+    ffi_lib ["libglib-2.0-0.dll", "libvips-42.dll"]
+  else
+    # macOS and *nix uses `dlsym()`, which also searches for named symbols
+    # in the dependencies of the shared library. Therefore, we can support
+    # a single shared libvips library with all dependencies statically
+    # linked.
+    ffi_lib library_name("vips", 42)
+  end
 
   attach_function :g_malloc, [:size_t], :pointer
 
@@ -134,7 +146,11 @@ end
 module GObject
   extend FFI::Library
 
-  ffi_lib library_name("gobject-2.0", 0)
+  if FFI::Platform.windows?
+    ffi_lib ["libgobject-2.0-0.dll", "libvips-42.dll"]
+  else
+    ffi_lib library_name("vips", 42)
+  end
 
   # we can't just use ulong, windows has different int sizing rules
   if FFI::Platform::ADDRESS_SIZE == 64
