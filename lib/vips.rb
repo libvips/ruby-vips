@@ -33,6 +33,30 @@ def library_name(name, abi_number)
   end
 end
 
+# we can sometimes get dependent libraries from libvips -- either the platform
+# will open dependencies for us automatically, or the libvips binary has been
+# built to includes all main dependencies (common on windows, can happen
+# elsewhere)
+#
+# we must get glib functions from libvips if we can, since it will be the
+# one that libvips itself is using, and they will share runtime types
+module Vips
+  extend FFI::Library
+
+  ffi_lib library_name("vips", 42)
+
+  begin
+    attach_function :g_malloc, [:size_t], :pointer
+    @@is_unified = true
+  rescue => e
+    @@is_unified = false
+  end
+
+  def self.unified?
+    @@is_unified
+  end
+end
+
 module GLib
   class << self
     attr_accessor :logger
@@ -42,18 +66,10 @@ module GLib
 
   extend FFI::Library
 
-  if FFI::Platform.windows?
-    # On Windows, `GetProcAddress()` can only search in a specified DLL and
-    # doesn't look into its dependent libraries for symbols. Therefore, we
-    # check if the GLib DLLs are available. If these can not be found, we
-    # assume that GLib is statically linked into libvips.
-    ffi_lib ["libglib-2.0-0.dll", "libvips-42.dll"]
-  else
-    # macOS and *nix uses `dlsym()`, which also searches for named symbols
-    # in the dependencies of the shared library. Therefore, we can support
-    # a single shared libvips library with all dependencies statically
-    # linked.
+  if Vips::unified?
     ffi_lib library_name("vips", 42)
+  else
+    ffi_lib library_name("glib-2.0", 0)
   end
 
   attach_function :g_malloc, [:size_t], :pointer
@@ -146,10 +162,10 @@ end
 module GObject
   extend FFI::Library
 
-  if FFI::Platform.windows?
-    ffi_lib ["libgobject-2.0-0.dll", "libvips-42.dll"]
-  else
+  if Vips::unified?
     ffi_lib library_name("vips", 42)
+  else
+    ffi_lib library_name("gobject-2.0", 0)
   end
 
   # we can't just use ulong, windows has different int sizing rules
@@ -584,10 +600,8 @@ require "vips/gvalue"
 # {Image#median}.
 
 module Vips
-  extend FFI::Library
-
-  ffi_lib library_name("vips", 42)
-
+  # we've already opened the libvips library
+ 
   LOG_DOMAIN = "VIPS"
   GLib.set_log_domain LOG_DOMAIN
 
