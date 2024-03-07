@@ -33,6 +33,30 @@ def library_name(name, abi_number)
   end
 end
 
+# we can sometimes get dependent libraries from libvips -- either the platform
+# will open dependencies for us automatically, or the libvips binary has been
+# built to includes all main dependencies (common on windows, can happen
+# elsewhere)
+#
+# we must get glib functions from libvips if we can, since it will be the
+# one that libvips itself is using, and they will share runtime types
+module Vips
+  extend FFI::Library
+
+  ffi_lib library_name("vips", 42)
+
+  begin
+    attach_function :g_malloc, [:size_t], :pointer
+    @@is_unified = true
+  rescue FFI::NotFoundError
+    @@is_unified = false
+  end
+
+  def self.unified?
+    @@is_unified
+  end
+end
+
 module GLib
   class << self
     attr_accessor :logger
@@ -42,7 +66,11 @@ module GLib
 
   extend FFI::Library
 
-  ffi_lib library_name("glib-2.0", 0)
+  if Vips.unified?
+    ffi_lib library_name("vips", 42)
+  else
+    ffi_lib library_name("glib-2.0", 0)
+  end
 
   attach_function :g_malloc, [:size_t], :pointer
 
@@ -134,7 +162,11 @@ end
 module GObject
   extend FFI::Library
 
-  ffi_lib library_name("gobject-2.0", 0)
+  if Vips.unified?
+    ffi_lib library_name("vips", 42)
+  else
+    ffi_lib library_name("gobject-2.0", 0)
+  end
 
   # we can't just use ulong, windows has different int sizing rules
   if FFI::Platform::ADDRESS_SIZE == 64
@@ -568,9 +600,7 @@ require "vips/gvalue"
 # {Image#median}.
 
 module Vips
-  extend FFI::Library
-
-  ffi_lib library_name("vips", 42)
+  # we've already opened the libvips library
 
   LOG_DOMAIN = "VIPS"
   GLib.set_log_domain LOG_DOMAIN

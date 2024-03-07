@@ -2,6 +2,8 @@
 
 ## master
 
+* fix compat with unified (semistatic) libvips binaries [kleisauke]
+
 ## Version 2.2.1 (2024-02-21)
 
 * add `Vips.block_untrusted` method to block all untrusted operations. Only for libvips >= 8.13. [Docs](https://www.libvips.org/API/current/libvips-vips.html#vips-block-untrusted-set). [#382](https://github.com/libvips/ruby-vips/pull/382) [aglushkov](https://github.com/aglushkov)
