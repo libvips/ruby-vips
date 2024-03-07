@@ -66,7 +66,7 @@ module GLib
 
   extend FFI::Library
 
-  if Vips::unified?
+  if Vips.unified?
     ffi_lib library_name("vips", 42)
   else
     ffi_lib library_name("glib-2.0", 0)
@@ -162,7 +162,7 @@ end
 module GObject
   extend FFI::Library
 
-  if Vips::unified?
+  if Vips.unified?
     ffi_lib library_name("vips", 42)
   else
     ffi_lib library_name("gobject-2.0", 0)
@@ -601,7 +601,7 @@ require "vips/gvalue"
 
 module Vips
   # we've already opened the libvips library
- 
+
   LOG_DOMAIN = "VIPS"
   GLib.set_log_domain LOG_DOMAIN
 
