@@ -48,7 +48,7 @@ module Vips
   begin
     attach_function :g_malloc, [:size_t], :pointer
     @@is_unified = true
-  rescue => e
+  rescue FFI::NotFoundError
     @@is_unified = false
   end
 
