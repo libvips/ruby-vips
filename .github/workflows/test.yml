@@ -38,7 +38,6 @@ jobs:
       matrix:
         os-version: [ 'ubuntu-20.04' ]
         ruby-version:
-          - '2.2'
           - '2.3'
           - '2.4'
           - '2.5'
