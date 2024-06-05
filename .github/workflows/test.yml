@@ -38,7 +38,6 @@ jobs:
       matrix:
         os-version: [ 'ubuntu-20.04' ]
         ruby-version:
-          - '2.1'
           - '2.2'
           - '2.3'
           - '2.4'
@@ -75,7 +74,7 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run:
           # we only need the library
-          sudo apt-get install --fix-missing -qq -o Acquire::Retries=3
+          sudo apt-get install --no-install-recommends --fix-missing -qq -o Acquire::Retries=3
             libvips 
 
       - name: Run Tests
