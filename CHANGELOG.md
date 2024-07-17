@@ -2,6 +2,8 @@
 
 ## master
 
+## Version 2.2.2 (2024-07-17)
+
 * fix compat with unified (semistatic) libvips binaries [kleisauke]
 
 ## Version 2.2.1 (2024-02-21)
