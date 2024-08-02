@@ -1,13 +1,6 @@
 name: Test
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-  pull_request_target:
-    branches:
-      - master
+on: [push, pull_request]
 
 env:
   NOKOGIRI_USE_SYSTEM_LIBRARIES: true
@@ -36,7 +29,7 @@ jobs:
 
     strategy:
       matrix:
-        os-version: [ 'ubuntu-20.04' ]
+        os-version: [ 'ubuntu-24.04' ]
         ruby-version:
           - '2.3'
           - '2.4'
@@ -62,19 +55,11 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
-      - name: Update apt
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: 
-          sudo apt-get update -qq -o Acquire::Retries=3
-
       - name: Install libvips
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run:
+        run: |
+          sudo apt-get update
           # we only need the library
-          sudo apt-get install --no-install-recommends --fix-missing -qq -o Acquire::Retries=3
-            libvips 
+          sudo apt-get install --no-install-recommends libvips
 
       - name: Run Tests
         run: bundle exec rake spec
