@@ -56,8 +56,6 @@ jobs:
           bundler-cache: true
 
       - name: Install libvips
-        env:
-          DEBIAN_FRONTEND: noninteractive
         run: |
           sudo apt-get update
           # we only need the library
