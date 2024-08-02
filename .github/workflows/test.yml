@@ -55,19 +55,13 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
-      - name: Update apt
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: 
-          sudo apt-get update -qq -o Acquire::Retries=3
-
       - name: Install libvips
         env:
           DEBIAN_FRONTEND: noninteractive
-        run:
+        run: |
+          sudo apt-get update
           # we only need the library
-          sudo apt-get install --no-install-recommends --fix-missing -qq -o Acquire::Retries=3
-            libvips 
+          sudo apt-get install --no-install-recommends libvips
 
       - name: Run Tests
         run: bundle exec rake spec
