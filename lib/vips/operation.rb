@@ -218,7 +218,7 @@ module Vips
         raise Vips::Error if value.null?
       end
 
-      super(value)
+      super
     end
 
     def build
