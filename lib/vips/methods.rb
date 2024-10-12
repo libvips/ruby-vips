@@ -18,6 +18,18 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
+# @!method minpair(right, **opts)
+#   Minimum of a pair of images.
+#   @param right [Vips::Image] Right-hand image argument
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
+# @!method maxpair(right, **opts)
+#   Maximum of a pair of images.
+#   @param right [Vips::Image] Right-hand image argument
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
 # @!method subtract(right, **opts)
 #   Subtract two images.
 #   @param right [Vips::Image] Right-hand image argument
@@ -76,10 +88,11 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
-# @!method self.sum(im, **opts)
-#   Sum an array of images.
-#   @param im [Array<Image>] Array of input images
+# @!method clamp(**opts)
+#   Clamp values of an image.
 #   @param opts [Hash] Set of options
+#   @option opts [Float] :min Minimum value
+#   @option opts [Float] :max Maximum value
 #   @return [Vips::Image] Output image
 
 # @!method invert(**opts)
@@ -153,6 +166,12 @@ module Vips
 # @!method complexget(get, **opts)
 #   Get a component from a complex image.
 #   @param get [Vips::OperationComplexget] Complex to perform
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
+# @!method self.sum(im, **opts)
+#   Sum an array of images.
+#   @param im [Array<Image>] Array of input images
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
@@ -253,6 +272,7 @@ module Vips
 #   @param x [Integer] Point to read
 #   @param y [Integer] Point to read
 #   @param opts [Hash] Set of options
+#   @option opts [Boolean] :unpack_complex Complex pixels should be unpacked
 #   @return [Array<Double>] Array of output values
 
 # @!method find_trim(**opts)
@@ -302,14 +322,6 @@ module Vips
 #   Check sequential access.
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :tile_height Tile height in pixels
-#   @return [Vips::Image] Output image
-
-# @!method cache(**opts)
-#   Cache an image.
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :max_tiles Maximum number of tiles to cache
-#   @option opts [Integer] :tile_height Tile height in pixels
-#   @option opts [Integer] :tile_width Tile width in pixels
 #   @return [Vips::Image] Output image
 
 # @!method embed(x, y, width, height, **opts)
@@ -573,6 +585,11 @@ module Vips
 #   @option opts [Boolean] :premultiplied Images have premultiplied alpha
 #   @return [Vips::Image] Output image
 
+# @!method addalpha(**opts)
+#   Append an alpha channel.
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
 # @!method self.black(width, height, **opts)
 #   Make a black image.
 #   @param width [Integer] Image width in pixels
@@ -635,6 +652,18 @@ module Vips
 #   @option opts [Vips::TextWrap] :wrap Wrap lines on word or character boundaries
 #   @option opts [Integer] :autofit_dpi Output DPI selected by autofit
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
+# @!method self.sdf(width, height, shape, **opts)
+#   Create an sdf image.
+#   @param width [Integer] Image width in pixels
+#   @param height [Integer] Image height in pixels
+#   @param shape [Vips::SdfShape] SDF shape to create
+#   @param opts [Hash] Set of options
+#   @option opts [Float] :r Radius
+#   @option opts [Array<Double>] :a Point a
+#   @option opts [Array<Double>] :b Point b
+#   @option opts [Array<Double>] :corners Corner radii
+#   @return [Vips::Image] Output image
 
 # @!method self.eye(width, height, **opts)
 #   Make an image showing the eye's spatial response.
@@ -1462,6 +1491,8 @@ module Vips
 #   Load jpeg-xl image.
 #   @param filename [String] Filename to load from
 #   @param opts [Hash] Set of options
+#   @option opts [Integer] :page First page to load
+#   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1473,6 +1504,8 @@ module Vips
 #   Load jpeg-xl image.
 #   @param buffer [VipsBlob] Buffer to load from
 #   @param opts [Hash] Set of options
+#   @option opts [Integer] :page First page to load
+#   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1484,6 +1517,8 @@ module Vips
 #   Load jpeg-xl image.
 #   @param source [Vips::Source] Source to load from
 #   @param opts [Hash] Set of options
+#   @option opts [Integer] :page First page to load
+#   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1574,91 +1609,100 @@ module Vips
 #   Save image to csv.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [String] :separator Separator characters
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method csvsave_target(target, **opts)
 #   Save image to csv.
 #   @param target [Vips::Target] Target to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [String] :separator Separator characters
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method matrixsave(filename, **opts)
 #   Save image to matrix.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method matrixsave_target(target, **opts)
 #   Save image to matrix.
 #   @param target [Vips::Target] Target to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method matrixprint(**opts)
 #   Print matrix.
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method rawsave(filename, **opts)
 #   Save image to raw file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
-# @!method rawsave_fd(fd, **opts)
-#   Write raw image to file descriptor.
-#   @param fd [Integer] File descriptor to write to
+# @!method rawsave_buffer(**opts)
+#   Write raw image to buffer.
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
+#   @return [VipsBlob] Buffer to save to
+
+# @!method rawsave_target(target, **opts)
+#   Write raw image to target.
+#   @param target [Vips::Target] Target to save to
+#   @param opts [Hash] Set of options
+#   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
+#   @option opts [Array<Double>] :background Background value
+#   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method vipssave(filename, **opts)
 #   Save image to file in vips format.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method vipssave_target(target, **opts)
 #   Save image to target in vips format.
 #   @param target [Vips::Target] Target to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method ppmsave(filename, **opts)
@@ -1667,11 +1711,11 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Vips::ForeignPpmFormat] :format Format to save in
 #   @option opts [Boolean] :ascii Save as ascii
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :bitdepth Set to 1 to write as a 1 bit image
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method ppmsave_target(target, **opts)
@@ -1680,48 +1724,47 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Vips::ForeignPpmFormat] :format Format to save in
 #   @option opts [Boolean] :ascii Save as ascii
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :bitdepth Set to 1 to write as a 1 bit image
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method radsave(filename, **opts)
 #   Save image to radiance file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method radsave_buffer(**opts)
 #   Save image to radiance buffer.
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method radsave_target(target, **opts)
 #   Save image to radiance target.
 #   @param target [Vips::Target] Target to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method jp2ksave(filename, **opts)
 #   Save image in jpeg2000 format.
-#   @param filename [String] Filename to load from
+#   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :tile_width Tile width in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :tile_height Tile height in pixels
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Integer] :Q Q factor
@@ -1729,13 +1772,13 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method jp2ksave_buffer(**opts)
 #   Save image in jpeg2000 format.
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :tile_width Tile width in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :tile_height Tile height in pixels
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Integer] :Q Q factor
@@ -1743,6 +1786,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method jp2ksave_target(target, **opts)
@@ -1750,7 +1794,6 @@ module Vips
 #   @param target [Vips::Target] Target to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :tile_width Tile width in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :tile_height Tile height in pixels
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Integer] :Q Q factor
@@ -1758,6 +1801,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method gifsave(filename, **opts)
@@ -1766,7 +1810,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :dither Amount of dithering
 #   @option opts [Integer] :effort Quantisation effort
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :bitdepth Number of bits per pixel
 #   @option opts [Float] :interframe_maxerror Maximum inter-frame error for transparency
 #   @option opts [Boolean] :reuse Reuse palette from input
@@ -1775,6 +1818,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method gifsave_buffer(**opts)
@@ -1782,7 +1826,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :dither Amount of dithering
 #   @option opts [Integer] :effort Quantisation effort
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :bitdepth Number of bits per pixel
 #   @option opts [Float] :interframe_maxerror Maximum inter-frame error for transparency
 #   @option opts [Boolean] :reuse Reuse palette from input
@@ -1791,6 +1834,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method gifsave_target(target, **opts)
@@ -1799,7 +1843,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :dither Amount of dithering
 #   @option opts [Integer] :effort Quantisation effort
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :bitdepth Number of bits per pixel
 #   @option opts [Float] :interframe_maxerror Maximum inter-frame error for transparency
 #   @option opts [Boolean] :reuse Reuse palette from input
@@ -1808,6 +1851,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method dzsave(filename, **opts)
@@ -1819,7 +1863,6 @@ module Vips
 #   @option opts [String] :suffix Filename suffix for tiles
 #   @option opts [Integer] :overlap Tile overlap in pixels
 #   @option opts [Integer] :tile_size Tile size in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :centre Center image in tile
 #   @option opts [Vips::ForeignDzDepth] :depth Pyramid depth
 #   @option opts [Vips::Angle] :angle Rotate image during save
@@ -1832,6 +1875,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method dzsave_buffer(**opts)
@@ -1842,7 +1886,6 @@ module Vips
 #   @option opts [String] :suffix Filename suffix for tiles
 #   @option opts [Integer] :overlap Tile overlap in pixels
 #   @option opts [Integer] :tile_size Tile size in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :centre Center image in tile
 #   @option opts [Vips::ForeignDzDepth] :depth Pyramid depth
 #   @option opts [Vips::Angle] :angle Rotate image during save
@@ -1855,6 +1898,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method dzsave_target(target, **opts)
@@ -1866,7 +1910,6 @@ module Vips
 #   @option opts [String] :suffix Filename suffix for tiles
 #   @option opts [Integer] :overlap Tile overlap in pixels
 #   @option opts [Integer] :tile_size Tile size in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :centre Center image in tile
 #   @option opts [Vips::ForeignDzDepth] :depth Pyramid depth
 #   @option opts [Vips::Angle] :angle Rotate image during save
@@ -1879,16 +1922,16 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method pngsave(filename, **opts)
-#   Save image to png file.
+#   Save image to file as png.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :compression Compression factor
 #   @option opts [Boolean] :interlace Interlace image
-#   @option opts [String] :profile Filename of ICC profile to embed
-#   @option opts [Vips::ForeignPngFilter] :filter libpng row filter flag(s)
+#   @option opts [Vips::ForeignPngFilter] :filter libspng row filter flag(s)
 #   @option opts [Boolean] :palette Quantise to 8bpp palette
 #   @option opts [Integer] :Q Quantisation quality
 #   @option opts [Float] :dither Amount of dithering
@@ -1897,15 +1940,15 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method pngsave_buffer(**opts)
-#   Save image to png buffer.
+#   Save image to buffer as png.
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :compression Compression factor
 #   @option opts [Boolean] :interlace Interlace image
-#   @option opts [String] :profile Filename of ICC profile to embed
-#   @option opts [Vips::ForeignPngFilter] :filter libpng row filter flag(s)
+#   @option opts [Vips::ForeignPngFilter] :filter libspng row filter flag(s)
 #   @option opts [Boolean] :palette Quantise to 8bpp palette
 #   @option opts [Integer] :Q Quantisation quality
 #   @option opts [Float] :dither Amount of dithering
@@ -1914,6 +1957,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method pngsave_target(target, **opts)
@@ -1922,8 +1966,7 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :compression Compression factor
 #   @option opts [Boolean] :interlace Interlace image
-#   @option opts [String] :profile Filename of ICC profile to embed
-#   @option opts [Vips::ForeignPngFilter] :filter libpng row filter flag(s)
+#   @option opts [Vips::ForeignPngFilter] :filter libspng row filter flag(s)
 #   @option opts [Boolean] :palette Quantise to 8bpp palette
 #   @option opts [Integer] :Q Quantisation quality
 #   @option opts [Float] :dither Amount of dithering
@@ -1932,6 +1975,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method jpegsave(filename, **opts)
@@ -1939,7 +1983,6 @@ module Vips
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :optimize_coding Compute optimal Huffman coding tables
 #   @option opts [Boolean] :interlace Generate an interlaced (progressive) jpeg
 #   @option opts [Boolean] :trellis_quant Apply trellis quantisation to each 8x8 block
@@ -1951,13 +1994,13 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method jpegsave_buffer(**opts)
 #   Save image to jpeg buffer.
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :optimize_coding Compute optimal Huffman coding tables
 #   @option opts [Boolean] :interlace Generate an interlaced (progressive) jpeg
 #   @option opts [Boolean] :trellis_quant Apply trellis quantisation to each 8x8 block
@@ -1969,6 +2012,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method jpegsave_target(target, **opts)
@@ -1976,7 +2020,6 @@ module Vips
 #   @param target [Vips::Target] Target to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :optimize_coding Compute optimal Huffman coding tables
 #   @option opts [Boolean] :interlace Generate an interlaced (progressive) jpeg
 #   @option opts [Boolean] :trellis_quant Apply trellis quantisation to each 8x8 block
@@ -1988,13 +2031,13 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method jpegsave_mime(**opts)
 #   Save image to jpeg mime.
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :optimize_coding Compute optimal Huffman coding tables
 #   @option opts [Boolean] :interlace Generate an interlaced (progressive) jpeg
 #   @option opts [Boolean] :trellis_quant Apply trellis quantisation to each 8x8 block
@@ -2006,6 +2049,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method webpsave(filename, **opts)
@@ -2014,7 +2058,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless Enable lossless compression
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignWebpPreset] :preset Preset for lossy compression
 #   @option opts [Boolean] :smart_subsample Enable high quality chroma subsampling
 #   @option opts [Boolean] :near_lossless Enable preprocessing in lossless mode (uses Q)
@@ -2023,10 +2066,14 @@ module Vips
 #   @option opts [Integer] :kmin Minimum number of frames between key frames
 #   @option opts [Integer] :kmax Maximum number of frames between key frames
 #   @option opts [Integer] :effort Level of CPU effort to reduce file size
+#   @option opts [Integer] :target_size Desired target size in bytes
 #   @option opts [Boolean] :mixed Allow mixed encoding (might reduce file size)
+#   @option opts [Boolean] :smart_deblock Enable auto-adjusting of the deblocking filter
+#   @option opts [Integer] :passes Number of entropy-analysis passes (in [1..10])
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method webpsave_buffer(**opts)
@@ -2034,7 +2081,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless Enable lossless compression
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignWebpPreset] :preset Preset for lossy compression
 #   @option opts [Boolean] :smart_subsample Enable high quality chroma subsampling
 #   @option opts [Boolean] :near_lossless Enable preprocessing in lossless mode (uses Q)
@@ -2043,10 +2089,14 @@ module Vips
 #   @option opts [Integer] :kmin Minimum number of frames between key frames
 #   @option opts [Integer] :kmax Maximum number of frames between key frames
 #   @option opts [Integer] :effort Level of CPU effort to reduce file size
+#   @option opts [Integer] :target_size Desired target size in bytes
 #   @option opts [Boolean] :mixed Allow mixed encoding (might reduce file size)
+#   @option opts [Boolean] :smart_deblock Enable auto-adjusting of the deblocking filter
+#   @option opts [Integer] :passes Number of entropy-analysis passes (in [1..10])
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method webpsave_target(target, **opts)
@@ -2055,7 +2105,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless Enable lossless compression
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignWebpPreset] :preset Preset for lossy compression
 #   @option opts [Boolean] :smart_subsample Enable high quality chroma subsampling
 #   @option opts [Boolean] :near_lossless Enable preprocessing in lossless mode (uses Q)
@@ -2064,10 +2113,14 @@ module Vips
 #   @option opts [Integer] :kmin Minimum number of frames between key frames
 #   @option opts [Integer] :kmax Maximum number of frames between key frames
 #   @option opts [Integer] :effort Level of CPU effort to reduce file size
+#   @option opts [Integer] :target_size Desired target size in bytes
 #   @option opts [Boolean] :mixed Allow mixed encoding (might reduce file size)
+#   @option opts [Boolean] :smart_deblock Enable auto-adjusting of the deblocking filter
+#   @option opts [Integer] :passes Number of entropy-analysis passes (in [1..10])
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method webpsave_mime(**opts)
@@ -2075,7 +2128,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Boolean] :lossless Enable lossless compression
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignWebpPreset] :preset Preset for lossy compression
 #   @option opts [Boolean] :smart_subsample Enable high quality chroma subsampling
 #   @option opts [Boolean] :near_lossless Enable preprocessing in lossless mode (uses Q)
@@ -2084,10 +2136,14 @@ module Vips
 #   @option opts [Integer] :kmin Minimum number of frames between key frames
 #   @option opts [Integer] :kmax Maximum number of frames between key frames
 #   @option opts [Integer] :effort Level of CPU effort to reduce file size
+#   @option opts [Integer] :target_size Desired target size in bytes
 #   @option opts [Boolean] :mixed Allow mixed encoding (might reduce file size)
+#   @option opts [Boolean] :smart_deblock Enable auto-adjusting of the deblocking filter
+#   @option opts [Integer] :passes Number of entropy-analysis passes (in [1..10])
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method tiffsave(filename, **opts)
@@ -2099,7 +2155,6 @@ module Vips
 #   @option opts [Vips::ForeignTiffPredictor] :predictor Compression prediction
 #   @option opts [Boolean] :tile Write a tiled tiff
 #   @option opts [Integer] :tile_width Tile width in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :tile_height Tile height in pixels
 #   @option opts [Boolean] :pyramid Write a pyramidal tiff
 #   @option opts [Boolean] :miniswhite Use 0 for white in 1-bit images
@@ -2110,7 +2165,7 @@ module Vips
 #   @option opts [Boolean] :bigtiff Write a bigtiff image
 #   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
 #   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
-#   @option opts [Integer] :level ZSTD compression level
+#   @option opts [Integer] :level Deflate (1-9, default 6) or ZSTD (1-22, default 9) compression level
 #   @option opts [Boolean] :lossless Enable WEBP lossless mode
 #   @option opts [Vips::ForeignDzDepth] :depth Pyramid depth
 #   @option opts [Boolean] :subifd Save pyr layers as sub-IFDs
@@ -2118,6 +2173,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method tiffsave_buffer(**opts)
@@ -2128,7 +2184,6 @@ module Vips
 #   @option opts [Vips::ForeignTiffPredictor] :predictor Compression prediction
 #   @option opts [Boolean] :tile Write a tiled tiff
 #   @option opts [Integer] :tile_width Tile width in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :tile_height Tile height in pixels
 #   @option opts [Boolean] :pyramid Write a pyramidal tiff
 #   @option opts [Boolean] :miniswhite Use 0 for white in 1-bit images
@@ -2139,7 +2194,7 @@ module Vips
 #   @option opts [Boolean] :bigtiff Write a bigtiff image
 #   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
 #   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
-#   @option opts [Integer] :level ZSTD compression level
+#   @option opts [Integer] :level Deflate (1-9, default 6) or ZSTD (1-22, default 9) compression level
 #   @option opts [Boolean] :lossless Enable WEBP lossless mode
 #   @option opts [Vips::ForeignDzDepth] :depth Pyramid depth
 #   @option opts [Boolean] :subifd Save pyr layers as sub-IFDs
@@ -2147,6 +2202,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method tiffsave_target(target, **opts)
@@ -2158,7 +2214,6 @@ module Vips
 #   @option opts [Vips::ForeignTiffPredictor] :predictor Compression prediction
 #   @option opts [Boolean] :tile Write a tiled tiff
 #   @option opts [Integer] :tile_width Tile width in pixels
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :tile_height Tile height in pixels
 #   @option opts [Boolean] :pyramid Write a pyramidal tiff
 #   @option opts [Boolean] :miniswhite Use 0 for white in 1-bit images
@@ -2169,7 +2224,7 @@ module Vips
 #   @option opts [Boolean] :bigtiff Write a bigtiff image
 #   @option opts [Boolean] :properties Write a properties document to IMAGEDESCRIPTION
 #   @option opts [Vips::RegionShrink] :region_shrink Method to shrink regions
-#   @option opts [Integer] :level ZSTD compression level
+#   @option opts [Integer] :level Deflate (1-9, default 6) or ZSTD (1-22, default 9) compression level
 #   @option opts [Boolean] :lossless Enable WEBP lossless mode
 #   @option opts [Vips::ForeignDzDepth] :depth Pyramid depth
 #   @option opts [Boolean] :subifd Save pyr layers as sub-IFDs
@@ -2177,26 +2232,27 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method fitssave(filename, **opts)
 #   Save image to fits file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method niftisave(filename, **opts)
 #   Save image to nifti file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method heifsave(filename, **opts)
@@ -2205,7 +2261,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Integer] :bitdepth Number of bits per pixel
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Vips::ForeignHeifCompression] :compression Compression format
 #   @option opts [Integer] :effort CPU effort
@@ -2214,6 +2269,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method heifsave_buffer(**opts)
@@ -2221,7 +2277,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Integer] :bitdepth Number of bits per pixel
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Vips::ForeignHeifCompression] :compression Compression format
 #   @option opts [Integer] :effort CPU effort
@@ -2230,6 +2285,7 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method heifsave_target(target, **opts)
@@ -2238,7 +2294,6 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
 #   @option opts [Integer] :bitdepth Number of bits per pixel
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Vips::ForeignHeifCompression] :compression Compression format
 #   @option opts [Integer] :effort CPU effort
@@ -2247,21 +2302,22 @@ module Vips
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method jxlsave(filename, **opts)
 #   Save image in jpeg-xl format.
-#   @param filename [String] Filename to load from
+#   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :tier Decode speed tier
 #   @option opts [Float] :distance Target butteraugli distance
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :effort Encoding effort
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Integer] :Q Quality factor
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method jxlsave_buffer(**opts)
@@ -2269,13 +2325,13 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :tier Decode speed tier
 #   @option opts [Float] :distance Target butteraugli distance
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :effort Encoding effort
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Integer] :Q Quality factor
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method jxlsave_target(target, **opts)
@@ -2284,13 +2340,13 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :tier Decode speed tier
 #   @option opts [Float] :distance Target butteraugli distance
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Integer] :effort Encoding effort
 #   @option opts [Boolean] :lossless Enable lossless compression
 #   @option opts [Integer] :Q Quality factor
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method magicksave(filename, **opts)
@@ -2302,10 +2358,10 @@ module Vips
 #   @option opts [Boolean] :optimize_gif_frames Apply GIF frames optimization
 #   @option opts [Boolean] :optimize_gif_transparency Apply GIF transparency optimization
 #   @option opts [Integer] :bitdepth Number of bits per pixel
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
 # @!method magicksave_buffer(**opts)
@@ -2316,10 +2372,10 @@ module Vips
 #   @option opts [Boolean] :optimize_gif_frames Apply GIF frames optimization
 #   @option opts [Boolean] :optimize_gif_transparency Apply GIF transparency optimization
 #   @option opts [Integer] :bitdepth Number of bits per pixel
-#   @option opts [String] :profile Filename of ICC profile to embed
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [VipsBlob] Buffer to save to
 
 # @!method self.thumbnail(filename, width, **opts)
@@ -2470,7 +2526,7 @@ module Vips
 #   Similarity transform of an image.
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :scale Scale by this factor
-#   @option opts [Float] :angle Rotate anticlockwise by this many degrees
+#   @option opts [Float] :angle Rotate clockwise by this many degrees
 #   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Float] :odx Horizontal output displacement
@@ -2481,7 +2537,7 @@ module Vips
 
 # @!method rotate(angle, **opts)
 #   Rotate an image by a number of degrees.
-#   @param angle [Float] Rotate anticlockwise by this many degrees
+#   @param angle [Float] Rotate clockwise by this many degrees
 #   @param opts [Hash] Set of options
 #   @option opts [Vips::Interpolate] :interpolate Interpolate pixels with this
 #   @option opts [Array<Double>] :background Background value
