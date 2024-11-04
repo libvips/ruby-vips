@@ -973,7 +973,7 @@ module Vips
       # @return [Image] new image
       def add_alpha
         ptr = GenericPtr.new
-        result = Vips.vips_addalpha self, ptr
+        result = Vips.vips_addalpha self, ptr, :pointer, nil
         raise Vips::Error if result != 0
 
         Vips::Image.new ptr[:value]
