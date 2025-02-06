@@ -3,6 +3,7 @@
 ## master
 
 * fix `Image#add_alpha()` with libvips 8.16 [kleisauke]
+* fix FFI function definitions for `gboolean` parameters [kleisauke]
 
 ## Version 2.2.2 (2024-07-17)
 

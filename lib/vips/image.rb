@@ -14,8 +14,8 @@ module Vips
 
   attach_function :vips_image_copy_memory, [:pointer], :pointer
 
-  attach_function :vips_image_set_progress, [:pointer, :bool], :void
-  attach_function :vips_image_set_kill, [:pointer, :bool], :void
+  attach_function :vips_image_set_progress, [:pointer, :int], :void
+  attach_function :vips_image_set_kill, [:pointer, :int], :void
 
   attach_function :vips_filename_get_filename, [:string], :pointer
   attach_function :vips_filename_get_options, [:string], :pointer
@@ -716,7 +716,7 @@ module Vips
     # @see Object#signal_connect
     # @param state [Boolean] progress signalling state
     def set_progress state
-      Vips.vips_image_set_progress self, state
+      Vips.vips_image_set_progress(self, state ? 1 : 0)
     end
 
     # Kill computation of this time.
@@ -727,7 +727,7 @@ module Vips
     # @see Object#signal_connect
     # @param kill [Boolean] stop computation
     def set_kill kill
-      Vips.vips_image_set_kill self, kill
+      Vips.vips_image_set_kill(self, kill ? 1 : 0)
     end
 
     # Get the `GType` of a metadata field. The result is 0 if no such field
