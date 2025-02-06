@@ -810,13 +810,13 @@ module Vips
   end
 
   if at_least_libvips?(8, 13)
-    attach_function :vips_block_untrusted_set, [:bool], :void
-    attach_function :vips_operation_block_set, %i[string bool], :void
+    attach_function :vips_block_untrusted_set, [:int], :void
+    attach_function :vips_operation_block_set, [:string, :int], :void
 
     # Block/unblock all untrusted operations from running.
     # Use `vips -l` at the command-line to see the class hierarchy and which operations are marked as untrusted.
-    def self.block_untrusted(enabled)
-      vips_block_untrusted_set(enabled)
+    def self.block_untrusted(state)
+      vips_block_untrusted_set(state ? 1 : 0)
     end
 
     # Block/unblock all operations in the libvips class hierarchy at specified *operation_name* and below.
@@ -829,8 +829,8 @@ module Vips
     # Use `vips -l` at the command-line to see the class hierarchy.
     # This call does nothing if the named operation is not found.
     #
-    def self.block(operation_name, enabled)
-      vips_operation_block_set(operation_name, enabled)
+    def self.block(operation_name, state)
+      vips_operation_block_set(operation_name, state ? 1 : 0)
     end
   end
 
