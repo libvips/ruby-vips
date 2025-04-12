@@ -41,6 +41,10 @@ module Vips
   attach_function :vips_image_get_height, [:pointer], :int
   attach_function :vips_image_get_bands, [:pointer], :int
 
+  enum :vips_band_format, [:notset, -1, :uchar, :char, :ushort, :short, :uint, :int, :float, :complex, :double, :dpcomplex]
+  attach_function :vips_format_sizeof, [:vips_band_format], :int64
+  attach_function :vips_image_get_data, [:pointer], :pointer
+
   if Vips.at_least_libvips?(8, 5)
     attach_function :vips_image_get_fields, [:pointer], :pointer
     attach_function :vips_image_hasalpha, [:pointer], :int
@@ -1229,6 +1233,19 @@ module Vips
     # @return [Array] Array of Arrays of Arrays of Numerics
     def to_a
       to_enum.to_a
+    end
+
+    # Return a read-only pointer to the pixel data, if possible.
+    #
+    # @return [FFI::Pointer] pointer to the pixel data
+    def read_ptr
+      copy = copy_memory
+      ptr = Vips.vips_image_get_data copy
+      raise Vips::Error if ptr.null?
+
+      ptr.instance_variable_set(:@vips_reference, copy)
+
+      ptr.slice(0, width * height * bands * Vips.vips_format_sizeof(format))
     end
 
     # Return the largest integral value not greater than the argument.
