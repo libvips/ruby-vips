@@ -1018,8 +1018,19 @@ module Vips
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
+# @!method self.ppmload_buffer(buffer, **opts)
+#   Load ppm from buffer.
+#   @param buffer [VipsBlob] Buffer to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Vips::FailOn] :fail_on Error level to fail on
+#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
 # @!method self.ppmload_source(source, **opts)
-#   Load ppm base class.
+#   Load ppm from source.
 #   @param source [Vips::Source] Source to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Boolean] :memory Force open via memory
@@ -1069,6 +1080,8 @@ module Vips
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
 #   @option opts [Boolean] :unlimited Allow SVG of any size
+#   @option opts [String] :stylesheet Custom CSS
+#   @option opts [Boolean] :high_bitdepth Enable scRGB 128-bit output (32-bit per channel)
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1083,6 +1096,8 @@ module Vips
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
 #   @option opts [Boolean] :unlimited Allow SVG of any size
+#   @option opts [String] :stylesheet Custom CSS
+#   @option opts [Boolean] :high_bitdepth Enable scRGB 128-bit output (32-bit per channel)
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1097,6 +1112,8 @@ module Vips
 #   @option opts [Float] :dpi Render at this DPI
 #   @option opts [Float] :scale Scale output by this factor
 #   @option opts [Boolean] :unlimited Allow SVG of any size
+#   @option opts [String] :stylesheet Custom CSS
+#   @option opts [Boolean] :high_bitdepth Enable scRGB 128-bit output (32-bit per channel)
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1109,6 +1126,7 @@ module Vips
 #   @param filename [String] Filename to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page Load this page from the image
+#   @option opts [Boolean] :oneshot Load images a frame at a time
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1121,6 +1139,7 @@ module Vips
 #   @param buffer [VipsBlob] Buffer to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page Load this page from the image
+#   @option opts [Boolean] :oneshot Load images a frame at a time
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1133,6 +1152,7 @@ module Vips
 #   @param source [Vips::Source] Source to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page Load this page from the image
+#   @option opts [Boolean] :oneshot Load images a frame at a time
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1315,9 +1335,10 @@ module Vips
 #   @param filename [String] Filename to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page First page to load
-#   @option opts [Integer] :subifd Subifd index
 #   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :autorotate Rotate image using orientation tag
+#   @option opts [Integer] :subifd Subifd index
+#   @option opts [Boolean] :unlimited Remove all denial of service limits
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1330,9 +1351,10 @@ module Vips
 #   @param buffer [VipsBlob] Buffer to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page First page to load
-#   @option opts [Integer] :subifd Subifd index
 #   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :autorotate Rotate image using orientation tag
+#   @option opts [Integer] :subifd Subifd index
+#   @option opts [Boolean] :unlimited Remove all denial of service limits
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1345,9 +1367,10 @@ module Vips
 #   @param source [Vips::Source] Source to load from
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :page First page to load
-#   @option opts [Integer] :subifd Subifd index
 #   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :autorotate Rotate image using orientation tag
+#   @option opts [Integer] :subifd Subifd index
+#   @option opts [Boolean] :unlimited Remove all denial of service limits
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1578,7 +1601,7 @@ module Vips
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
 # @!method self.magickload(filename, **opts)
-#   Load file with imagemagick.
+#   Load file with imagemagick7.
 #   @param filename [String] Filename to load from
 #   @param opts [Hash] Set of options
 #   @option opts [String] :density Canvas resolution for rendering vector formats like SVG
@@ -1592,7 +1615,7 @@ module Vips
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
 # @!method self.magickload_buffer(buffer, **opts)
-#   Load buffer with imagemagick.
+#   Load buffer with imagemagick7.
 #   @param buffer [VipsBlob] Buffer to load from
 #   @param opts [Hash] Set of options
 #   @option opts [String] :density Canvas resolution for rendering vector formats like SVG
@@ -1815,6 +1838,7 @@ module Vips
 #   @option opts [Boolean] :reuse Reuse palette from input
 #   @option opts [Float] :interpalette_maxerror Maximum inter-palette error for palette reusage
 #   @option opts [Boolean] :interlace Generate an interlaced (progressive) GIF
+#   @option opts [Boolean] :keep_duplicate_frames Keep duplicate frames in the output instead of combining them
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1831,6 +1855,7 @@ module Vips
 #   @option opts [Boolean] :reuse Reuse palette from input
 #   @option opts [Float] :interpalette_maxerror Maximum inter-palette error for palette reusage
 #   @option opts [Boolean] :interlace Generate an interlaced (progressive) GIF
+#   @option opts [Boolean] :keep_duplicate_frames Keep duplicate frames in the output instead of combining them
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1848,6 +1873,7 @@ module Vips
 #   @option opts [Boolean] :reuse Reuse palette from input
 #   @option opts [Float] :interpalette_maxerror Maximum inter-palette error for palette reusage
 #   @option opts [Boolean] :interlace Generate an interlaced (progressive) GIF
+#   @option opts [Boolean] :keep_duplicate_frames Keep duplicate frames in the output instead of combining them
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -2388,8 +2414,8 @@ module Vips
 #   @option opts [Boolean] :no_rotate Don't use orientation tags to rotate image upright
 #   @option opts [Vips::Interesting] :crop Reduce to fill target rectangle, then crop
 #   @option opts [Boolean] :linear Reduce in linear light
-#   @option opts [String] :import_profile Fallback import profile
-#   @option opts [String] :export_profile Fallback export profile
+#   @option opts [String] :input_profile Fallback input profile
+#   @option opts [String] :output_profile Fallback output profile
 #   @option opts [Vips::Intent] :intent Rendering intent
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
 #   @return [Vips::Image] Output image
@@ -2405,8 +2431,8 @@ module Vips
 #   @option opts [Boolean] :no_rotate Don't use orientation tags to rotate image upright
 #   @option opts [Vips::Interesting] :crop Reduce to fill target rectangle, then crop
 #   @option opts [Boolean] :linear Reduce in linear light
-#   @option opts [String] :import_profile Fallback import profile
-#   @option opts [String] :export_profile Fallback export profile
+#   @option opts [String] :input_profile Fallback input profile
+#   @option opts [String] :output_profile Fallback output profile
 #   @option opts [Vips::Intent] :intent Rendering intent
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
 #   @return [Vips::Image] Output image
@@ -2420,8 +2446,8 @@ module Vips
 #   @option opts [Boolean] :no_rotate Don't use orientation tags to rotate image upright
 #   @option opts [Vips::Interesting] :crop Reduce to fill target rectangle, then crop
 #   @option opts [Boolean] :linear Reduce in linear light
-#   @option opts [String] :import_profile Fallback import profile
-#   @option opts [String] :export_profile Fallback export profile
+#   @option opts [String] :input_profile Fallback input profile
+#   @option opts [String] :output_profile Fallback output profile
 #   @option opts [Vips::Intent] :intent Rendering intent
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
 #   @return [Vips::Image] Output image
@@ -2437,8 +2463,8 @@ module Vips
 #   @option opts [Boolean] :no_rotate Don't use orientation tags to rotate image upright
 #   @option opts [Vips::Interesting] :crop Reduce to fill target rectangle, then crop
 #   @option opts [Boolean] :linear Reduce in linear light
-#   @option opts [String] :import_profile Fallback import profile
-#   @option opts [String] :export_profile Fallback export profile
+#   @option opts [String] :input_profile Fallback input profile
+#   @option opts [String] :output_profile Fallback output profile
 #   @option opts [Vips::Intent] :intent Rendering intent
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
 #   @return [Vips::Image] Output image
@@ -2605,6 +2631,16 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
+# @!method scRGB2XYZ(**opts)
+#   Transform scrgb to xyz.
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
+# @!method XYZ2scRGB(**opts)
+#   Transform xyz to scrgb.
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
 # @!method LabQ2Lab(**opts)
 #   Unpack a labq image to float lab.
 #   @param opts [Hash] Set of options
@@ -2650,6 +2686,17 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
+# @!method sRGB2scRGB(**opts)
+#   Convert an srgb image to scrgb.
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
+# @!method scRGB2BW(**opts)
+#   Convert scrgb to bw.
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :depth Output device space depth in bits
+#   @return [Vips::Image] Output image
+
 # @!method sRGB2HSV(**opts)
 #   Transform srgb to hsv.
 #   @param opts [Hash] Set of options
@@ -2658,6 +2705,12 @@ module Vips
 # @!method HSV2sRGB(**opts)
 #   Transform hsv to srgb.
 #   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output image
+
+# @!method scRGB2sRGB(**opts)
+#   Convert scrgb to srgb.
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :depth Output device space depth in bits
 #   @return [Vips::Image] Output image
 
 # @!method icc_import(**opts)
@@ -2708,33 +2761,6 @@ module Vips
 #   Calculate decmc.
 #   @param right [Vips::Image] Right-hand input image
 #   @param opts [Hash] Set of options
-#   @return [Vips::Image] Output image
-
-# @!method sRGB2scRGB(**opts)
-#   Convert an srgb image to scrgb.
-#   @param opts [Hash] Set of options
-#   @return [Vips::Image] Output image
-
-# @!method scRGB2XYZ(**opts)
-#   Transform scrgb to xyz.
-#   @param opts [Hash] Set of options
-#   @return [Vips::Image] Output image
-
-# @!method scRGB2BW(**opts)
-#   Convert scrgb to bw.
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :depth Output device space depth in bits
-#   @return [Vips::Image] Output image
-
-# @!method XYZ2scRGB(**opts)
-#   Transform xyz to scrgb.
-#   @param opts [Hash] Set of options
-#   @return [Vips::Image] Output image
-
-# @!method scRGB2sRGB(**opts)
-#   Convert an scrgb image to srgb.
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :depth Output device space depth in bits
 #   @return [Vips::Image] Output image
 
 # @!method CMYK2XYZ(**opts)
@@ -3123,7 +3149,13 @@ module Vips
 #   @return [Vips::Image] Output image
 
 # @!method matrixinvert(**opts)
-#   Invert an matrix.
+#   Invert a matrix.
+#   @param opts [Hash] Set of options
+#   @return [Vips::Image] Output matrix
+
+# @!method matrixmultiply(right, **opts)
+#   Multiply two matrices.
+#   @param right [Vips::Image] Second matrix to multiply
 #   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output matrix
 
@@ -3150,6 +3182,13 @@ module Vips
 #   @param opts [Hash] Set of options
 #   @option opts [Float] :gamma Image gamma
 #   @option opts [Boolean] :int_output Integer output
+#   @return [Vips::Image] Output image
+
+# @!method remosaic(old_str, new_str, **opts)
+#   Rebuild an mosaiced image.
+#   @param old_str [String] Search for this string
+#   @param new_str [String] And swap for this string
+#   @param opts [Hash] Set of options
 #   @return [Vips::Image] Output image
 
   end

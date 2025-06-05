@@ -5,6 +5,7 @@
 ## Version 2.2.4 (2025-06-05)
 
 * fix write to target test with libvips 8.17 [jcupitt]
+* update docs for libvips 8.17 [jcupitt]
 
 ## Version 2.2.3 (2025-02-06)
 
