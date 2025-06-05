@@ -66,7 +66,9 @@ RSpec.describe Vips::Target, version: [8, 9] do
 
   it "can't create a target to a bad filename" do
     expect {
-      Vips::Target.new_to_file "/banana/monkey"
+      target = Vips::Target.new_to_file "/banana/monkey"
+      image = Vips::Image.black 1, 1
+      image.write_to_target(target, "")
     }.to raise_exception(Vips::Error)
   end
 
