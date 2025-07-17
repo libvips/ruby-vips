@@ -534,7 +534,6 @@ module Vips
       end
 
       image = Vips::Image.matrix_from_array width, height, array
-      raise Vips::Error if image.nil?
 
       image.mutate do |mutable|
         # be careful to set them as double
@@ -700,7 +699,7 @@ module Vips
     def write_to_memory
       len = Vips::SizeStruct.new
       ptr = Vips.vips_image_write_to_memory self, len
-      raise Vips::Error if ptr.nil?
+      raise Vips::Error if ptr.null?
 
       # wrap up as an autopointer
       ptr = FFI::AutoPointer.new(ptr, GLib::G_FREE)

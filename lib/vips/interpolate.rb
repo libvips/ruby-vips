@@ -50,7 +50,7 @@ module Vips
     def initialize name
       name = name.to_s if name.is_a? Symbol
       pointer = Vips.vips_interpolate_new name
-      raise Vips::Error if pointer.nil?
+      raise Vips::Error if pointer.null?
 
       super(pointer)
     end
