@@ -471,9 +471,10 @@ module Vips
     def self.matrix_from_array width, height, array
       ptr = FFI::MemoryPointer.new :double, array.length
       ptr.write_array_of_double array
-      image = Vips.vips_image_new_matrix_from_array width, height,
+      img_ptr = Vips.vips_image_new_matrix_from_array width, height,
         ptr, array.length
-      Vips::Image.new image
+      raise Vips::Error if img_ptr.null?
+      Vips::Image.new img_ptr
     end
 
     # Create a new Image from a 1D or 2D array. A 1D array becomes an
