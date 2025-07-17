@@ -76,6 +76,11 @@ RSpec.describe Vips::Image do
     expect(x.avg).to eq(128)
   end
 
+  it "will raise VipsError for invalid image files" do
+    img = Vips::Image.new_from_file simg("coffee.gif")
+    expect { img.write_to_memory }.to raise_exception(Vips::Error)
+  end
+
   it "throws an error when trying to load an image from memory with unknown size" do
     data = FFI::Pointer.new(1)
     expect { Vips::Image.new_from_memory(data, 16, 16, 1, :uchar) }.to raise_error(Vips::Error)

@@ -2,6 +2,8 @@
 
 ## master
 
+* improve NULL pointer handling [dloebl]
+
 ## Version 2.2.4 (2025-06-05)
 
 * fix write to target test with libvips 8.17 [jcupitt]
