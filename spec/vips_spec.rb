@@ -197,6 +197,5 @@ RSpec.describe Vips do
     it "can throw errors for bad interpolations" do
       expect { Vips::Interpolate.new "banana" }.to raise_exception(Vips::Error)
     end
-
   end
 end
