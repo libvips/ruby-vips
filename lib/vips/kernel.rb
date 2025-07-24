@@ -4,16 +4,19 @@ module Vips
   #
   # At least these should be available:
   #
-  # *   `:nearest` Nearest-neighbour interpolation.
-  # *   `:linear` Linear interpolation.
-  # *   `:cubic` Cubic interpolation.
-  # *   `:lanczos2` Two-lobe Lanczos
-  # *   `:lanczos3` Three-lobe Lanczos
+  # *   `:nearest` nearest-neighbour interpolation
+  # *   `:linear` linear interpolation
+  # *   `:cubic` cubic interpolation
+  # *   `:mitchell` Mitchell interpolation
+  # *   `:lanczos2` two-lobe Lanczos
+  # *   `:lanczos3` three-lobe Lanczos
+  # *   `:mks2013` convolve with Magic Kernel Sharp 2013
+  # *   `:mks2021` convolve with Magic Kernel Sharp 2021
   #
   #  For example:
   #
   #  ```ruby
-  #  im = im.resize 3, :kernel => :lanczos2
+  #  im = im.resize 3, kernel: :lanczos2
   #  ```
 
   class Kernel < Symbol
