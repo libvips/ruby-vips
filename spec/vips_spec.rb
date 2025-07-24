@@ -166,6 +166,35 @@ RSpec.describe Vips do
       expect(rot.bands).to eq(1)
     end
 
+    it "can handle symbol flag arguments" do
+      black = Vips::Operation.call "black", [200, 200]
+      bytes = Vips::Operation.call "pngsave_buffer", [black], keep: :icc
+
+      expect(bytes.length).to be > 100
+    end
+
+    it "can handle int flag arguments" do
+      black = Vips::Operation.call "black", [200, 200]
+      bytes = Vips::Operation.call "pngsave_buffer", [black], keep: 1 << 3
+
+      expect(bytes.length).to be > 100
+    end
+
+    it "can handle string flag arguments" do
+      black = Vips::Operation.call "black", [200, 200]
+      bytes = Vips::Operation.call "pngsave_buffer", [black], keep: "icc"
+
+      expect(bytes.length).to be > 100
+    end
+
+    it "can handle array flag arguments" do
+      black = Vips::Operation.call "black", [200, 200]
+      bytes = Vips::Operation.call "pngsave_buffer", [black],
+        keep: [:icc, :xmp]
+
+      expect(bytes.length).to be > 100
+    end
+
     it "can return optional output args" do
       point = Vips::Operation.call "black", [1, 1]
       test = Vips::Operation.call "embed", [point, 20, 10, 100, 100],

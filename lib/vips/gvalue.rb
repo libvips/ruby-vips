@@ -25,7 +25,7 @@ module GObject
       :data, [:ulong_long, 2]
 
     # convert an enum value (str/symb/int) into an int ready for libvips
-    def self.from_nick(gtype, value)
+    def self.enum_from_nick(gtype, value)
       value = value.to_s if value.is_a? Symbol
 
       if value.is_a? String
@@ -35,6 +35,43 @@ module GObject
         if value == -1
           raise Vips::Error
         end
+      end
+
+      value
+    end
+
+    # compatibility ... we used to call it this, perhaps someone has used this
+    # internal method
+    def self.from_nick(gtype, value)
+      GValue.enum_from_nick(gtype, value)
+    end
+
+    # convert an flags value (array[str/symb/int] | str/symb/int) into an
+    # int ready for libvips
+    def self.flags_from_nick(gtype, value)
+      if value.is_a? String
+        # libvips will parse strings like "sub|up" etc.
+        name = value.tr("_", "-")
+        value = Vips.vips_flags_from_nick "ruby-vips", gtype, name
+      else
+        value = [value] if !value.is_a? Array
+
+        # convert each item to a set of bits, OR them together
+        result = 0
+        value.map do |item|
+          item = item.to_s if item.is_a? Symbol
+          if item.is_a? String
+            name = item.tr("_", "-")
+            item = Vips.vips_flags_from_nick "ruby-vips", gtype, name
+            if item == -1
+              raise Vips::Error
+            end
+          end
+
+          result |= item
+        end
+
+        value = result
       end
 
       value
@@ -148,10 +185,11 @@ module GObject
       else
         case fundamental
         when GFLAGS_TYPE
-          ::GObject.g_value_set_flags self, value
+          flags_value = GValue.flags_from_nick(self[:gtype], value)
+          ::GObject.g_value_set_flags self, flags_value
 
         when GENUM_TYPE
-          enum_value = GValue.from_nick(self[:gtype], value)
+          enum_value = GValue.enum_from_nick(self[:gtype], value)
           ::GObject.g_value_set_enum self, enum_value
 
         when GOBJECT_TYPE

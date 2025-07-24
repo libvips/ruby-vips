@@ -114,12 +114,12 @@ module Vips
     end
 
     def self.complex? format
-      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+      format_number = GObject::GValue.enum_from_nick BAND_FORMAT_TYPE, format
       Vips.vips_band_format_iscomplex(format_number) != 0
     end
 
     def self.float? format
-      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+      format_number = GObject::GValue.enum_from_nick BAND_FORMAT_TYPE, format
       Vips.vips_band_format_isfloat(format_number) != 0
     end
 
@@ -380,7 +380,7 @@ module Vips
         size = data.bytesize
       end
 
-      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+      format_number = GObject::GValue.enum_from_nick BAND_FORMAT_TYPE, format
       vi = Vips.vips_image_new_from_memory data, size,
         width, height, bands, format_number
       raise Vips::Error if vi.null?
@@ -405,7 +405,7 @@ module Vips
     # @param format [Symbol] band format
     # @return [Image] the loaded image
     def self.new_from_memory_copy data, width, height, bands, format
-      format_number = GObject::GValue.from_nick BAND_FORMAT_TYPE, format
+      format_number = GObject::GValue.enum_from_nick BAND_FORMAT_TYPE, format
 
       if data.is_a?(FFI::Pointer)
         if data.size == UNKNOWN_POINTER_SIZE
@@ -1319,7 +1319,7 @@ module Vips
       end
 
       mode = mode.map do |x|
-        GObject::GValue.from_nick Vips::BLEND_MODE_TYPE, x
+        GObject::GValue.enum_from_nick Vips::BLEND_MODE_TYPE, x
       end
 
       Vips::Image.composite([self] + overlay, mode, **opts)
