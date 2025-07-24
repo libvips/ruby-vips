@@ -189,7 +189,7 @@ RSpec.describe Vips do
 
     it "can handle array flag arguments" do
       black = Vips::Operation.call "black", [200, 200]
-      bytes = Vips::Operation.call "pngsave_buffer", [black], 
+      bytes = Vips::Operation.call "pngsave_buffer", [black],
         keep: [:icc, :xmp]
 
       expect(bytes.length).to be > 100
