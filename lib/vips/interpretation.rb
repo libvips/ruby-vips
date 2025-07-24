@@ -6,7 +6,6 @@ module Vips
   # * `:multiband` generic many-band image
   # * `:b_w` some kind of single-band image
   # * `:histogram` a 1D image, eg. histogram or lookup table
-  # * `:fourier` image is in fourier space
   # * `:xyz` the first three bands are CIE XYZ
   # * `:lab` pixels are in CIE Lab space
   # * `:cmyk` the first four bands are in CMYK space
@@ -16,12 +15,14 @@ module Vips
   # * `:lch` pixels are in CIE LCh space
   # * `:labs` CIE LAB coded as three signed 16-bit values
   # * `:srgb` pixels are sRGB
-  # * `:hsv` pixels are HSV
-  # * `:scrgb` pixels are scRGB
   # * `:yxy` pixels are CIE Yxy
+  # * `:fourier` image is in fourier space
   # * `:rgb16` generic 16-bit RGB
   # * `:grey16` generic 16-bit mono
   # * `:matrix` a matrix
+  # * `:scrgb` pixels are scRGB
+  # * `:hsv` pixels are HSV
+
   class Interpretation < Symbol
   end
 end
