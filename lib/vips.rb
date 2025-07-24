@@ -452,6 +452,19 @@ require "vips/gvalue"
 # like `:uchar`. They are documented as a set of classes for convenience, see
 # {Vips::BandFormat}, for example.
 #
+# # Flags
+#
+# Some operations take a set of flags as an argument, for example
+# {Image#pngsave} can be given a set of filters to use. These are documented
+# as a set of classes, see {Vips::ForeignPngFilter}, for
+# example.
+#
+# You can set flag arguments with an array of symbols, perhaps:
+#
+# ```ruby
+# image.pngsave "x.png", filter: [:sub, :up]
+# ```
+#
 # # Draw operations
 #
 # There are two ways of calling the libvips draw operations, like
