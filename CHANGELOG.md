@@ -3,6 +3,7 @@
 ## master
 
 * improve NULL pointer handling [dloebl]
+* improve GFlags argument handling [jcupitt]
 
 ## Version 2.2.4 (2025-06-05)
 
