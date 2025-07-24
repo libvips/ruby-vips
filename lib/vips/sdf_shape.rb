@@ -9,5 +9,3 @@ module Vips
   class SdfShape < Symbol
   end
 end
-
-

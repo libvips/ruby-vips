@@ -1,5 +1,5 @@
 module Vips
-  # The rendering intent. 
+  # The rendering intent.
   #
   # * `:perceptual` perceptual rendering intent
   # * `:relative` relative colorimetric rendering intent
@@ -10,4 +10,3 @@ module Vips
   class Intent < Symbol
   end
 end
-

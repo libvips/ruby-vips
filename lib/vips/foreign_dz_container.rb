@@ -8,9 +8,3 @@ module Vips
   class ForeignDzContainer < Symbol
   end
 end
-
-
-
-
-
-

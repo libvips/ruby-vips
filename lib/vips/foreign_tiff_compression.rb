@@ -14,5 +14,3 @@ module Vips
   class ForeignTiffCompression < Symbol
   end
 end
-
-

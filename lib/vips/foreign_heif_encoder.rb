@@ -9,9 +9,3 @@ module Vips
   class ForeignHeifEncoder < Symbol
   end
 end
-
-
-
-
-
-

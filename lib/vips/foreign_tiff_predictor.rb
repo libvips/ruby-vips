@@ -1,5 +1,5 @@
 module Vips
-  # The predictor can help deflate and lzw compression. 
+  # The predictor can help deflate and lzw compression.
   #
   # *   `:none` no prediction
   # *   `:horizontal` horizontal differencing
@@ -8,6 +8,3 @@ module Vips
   class ForeignTiffPredictor < Symbol
   end
 end
-
-
-

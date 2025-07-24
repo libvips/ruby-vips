@@ -1,5 +1,5 @@
 module Vips
-  # How to combine values, see for example {Image#compass}. 
+  # How to combine values, see for example {Image#compass}.
   #
   # * `:max` take the maximum of the possible values
   # * `:sum` sum all the values
@@ -8,5 +8,3 @@ module Vips
   class Combine < Symbol
   end
 end
-
-

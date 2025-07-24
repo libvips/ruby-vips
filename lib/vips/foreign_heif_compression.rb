@@ -9,8 +9,3 @@ module Vips
   class ForeignHeifCompression < Symbol
   end
 end
-
-
-
-
-

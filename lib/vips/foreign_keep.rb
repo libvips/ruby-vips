@@ -11,4 +11,3 @@ module Vips
   class ForeignKeep < Symbol
   end
 end
-

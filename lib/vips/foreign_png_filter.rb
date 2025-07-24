@@ -11,6 +11,3 @@ module Vips
   class ForeignPngFilter < Symbol
   end
 end
-
-
-

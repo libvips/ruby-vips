@@ -8,8 +8,3 @@ module Vips
   class ForeignDzDepth < Symbol
   end
 end
-
-
-
-
-

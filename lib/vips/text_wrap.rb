@@ -1,5 +1,5 @@
 module Vips
-  # Sets the word wrapping style for {Image#text} when used with a 
+  # Sets the word wrapping style for {Image#text} when used with a
   # maximum width.
   #
   # *   `:char` wrap at character boundaries

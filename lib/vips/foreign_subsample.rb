@@ -8,6 +8,3 @@ module Vips
   class ForeignSubsample < Symbol
   end
 end
-
-
-

@@ -10,5 +10,3 @@ module Vips
   class ForeignPpmFormat < Symbol
   end
 end
-
-

@@ -1,5 +1,5 @@
 module Vips
-  # How sensitive loaders are to errors, from never stop (very insensitive), 
+  # How sensitive loaders are to errors, from never stop (very insensitive),
   # to stop on the smallest warning (very sensitive).
   #
   # Each implies the ones before it, so `:error` implies `:truncated`, for
@@ -13,5 +13,3 @@ module Vips
   class FailOn < Symbol
   end
 end
-
-

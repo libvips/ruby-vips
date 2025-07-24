@@ -11,4 +11,3 @@ module Vips
   class ForeignWebpPreset < Symbol
   end
 end
-

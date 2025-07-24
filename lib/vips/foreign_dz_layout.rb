@@ -10,7 +10,3 @@ module Vips
   class ForeignDzLayout < Symbol
   end
 end
-
-
-
-

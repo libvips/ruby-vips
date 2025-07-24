@@ -7,7 +7,3 @@ module Vips
   class ForeignTiffResunit < Symbol
   end
 end
-
-
-
-
