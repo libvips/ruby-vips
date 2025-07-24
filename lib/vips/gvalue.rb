@@ -40,7 +40,13 @@ module GObject
       value
     end
 
-    # convert an flags value (array[str/symb/int] | str/symb/int) into an 
+    # compatibility ... we used to call it this, perhaps someone has used this
+    # internal method
+    def self.from_nick(gtype, value)
+      GValue.enum_from_nick(gtype, value)
+    end
+
+    # convert an flags value (array[str/symb/int] | str/symb/int) into an
     # int ready for libvips
     def self.flags_from_nick(gtype, value)
       if value.is_a? String
