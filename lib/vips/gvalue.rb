@@ -63,6 +63,9 @@ module GObject
           if item.is_a? String
             name = item.tr("_", "-")
             item = Vips.vips_flags_from_nick "ruby-vips", gtype, name
+            if item == -1
+              raise Vips::Error
+            end
           end
 
           result |= item
