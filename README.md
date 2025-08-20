@@ -52,7 +52,7 @@ im = Vips::Image.new_from_file filename
 # put im at position (100, 100) in a 3000 x 3000 pixel image, 
 # make the other pixels in the image by mirroring im up / down / 
 # left / right, see
-# https://libvips.github.io/libvips/API/current/libvips-conversion.html#vips-embed
+# https://www.libvips.org/API/current/method.Image.embed.html
 im = im.embed 100, 100, 3000, 3000, extend: :mirror
 
 # multiply the green (middle) band by 2, leave the other two alone
@@ -80,7 +80,7 @@ should always work.
 See the `Vips` section in the docs for a [tutorial introduction with
 examples](https://www.rubydoc.info/gems/ruby-vips/Vips).
 
-The [libvips reference manual](https://libvips.github.io/libvips/API/current/)
+The [libvips reference manual](https://www.libvips.org/API/current/)
 has a complete explanation of every method.
 
 The [`example/`](https://github.com/libvips/ruby-vips/tree/master/example)
