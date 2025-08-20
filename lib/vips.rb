@@ -443,7 +443,7 @@ require "vips/gvalue"
 # It examines libvips and writes a summary of each operation and the arguments
 # and options that that operation expects.
 #
-# Use the [C API # docs](https://libvips.github.io/libvips/API/current)
+# Use the [C API docs](https://www.libvips.org/API/current/)
 # for more detail.
 #
 # # Enums
