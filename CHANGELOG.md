@@ -2,6 +2,8 @@
 
 ## master
 
+## Version 2.2.5 (2025-08-20)
+
 * improve NULL pointer handling [dloebl]
 * improve GFlags argument handling [jcupitt]
 * add missing flag and enum docs [jcupitt]
