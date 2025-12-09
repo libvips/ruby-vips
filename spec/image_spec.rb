@@ -729,21 +729,26 @@ RSpec.describe Vips::Image do
   # added in 8.18
   if Vips.respond_to? :vips_image_get_gainmap
     it "can modify gainmaps" do
-      image = Vips::Image.new_from_file simg "ultra-hdr.jpg"
       # test the example code in image.rb doc comment for get_gainmap
-      gainmap = image.get_gainmap
-      unless gainmap.nil?
-        new_gainmap = gainmap.crop 0, 0, 10, 10
-        image = image.mutate do |x|
-          x.set_type! Vips::IMAGE_TYPE, "gainmap", new_gainmap
+      def modify_gainmap image
+        gainmap = image.get_gainmap
+        unless gainmap.nil?
+          new_gainmap = gainmap.crop 0, 0, 10, 10
+          image = image.mutate do |x|
+            x.set_type! Vips::IMAGE_TYPE, "gainmap", new_gainmap
+          end
         end
-  
-        buffer = image.write_to_buffer ".jpg"
-        image = Vips::Image.new_from_buffer buffer, ""
-        new_gainmap2 = image.get_gainmap
-  
-        expect(new_gainmap2.width).to eq(10)
+
+        image
       end
+
+      image = Vips::Image.new_from_file simg "ultra-hdr.jpg"
+      image = modify_gainmap image
+      buffer = image.write_to_buffer ".jpg"
+      image2 = Vips::Image.new_from_buffer buffer, ""
+      gainmap2 = image2.get_gainmap
+
+      expect(gainmap2.width).to eq(10)
     end
   end
 

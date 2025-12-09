@@ -21,6 +21,7 @@ end
 
 module Libc
   extend FFI::Library
+
   ffi_lib FFI::Library::LIBC
 
   attach_function :malloc, [:size_t], :pointer
@@ -29,6 +30,7 @@ end
 
 module GLib
   extend FFI::Library
+
   ffi_lib "gobject-2.0"
 
   def self.set_log_domain(_domain)
@@ -142,6 +144,7 @@ end
 
 module Vips
   extend FFI::Library
+
   ffi_lib "vips"
 
   LOG_DOMAIN = "VIPS"

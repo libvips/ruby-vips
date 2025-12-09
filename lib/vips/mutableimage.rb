@@ -12,6 +12,7 @@ module Vips
   # {Vips::Image#mutate}.
   class MutableImage < Vips::Object
     extend Forwardable
+
     alias_method :parent_get_typeof, :get_typeof
     def_instance_delegators :@image, :width, :height, :bands, :format,
       :interpretation, :filename, :xoffset, :yoffset, :xres, :yres, :size,

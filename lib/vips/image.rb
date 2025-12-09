@@ -822,10 +822,7 @@ module Vips
     def get_gainmap
       if Vips.at_least_libvips?(8, 18)
         vi = Vips.vips_image_get_gainmap self
-        return nil if vi.null?
-        Image.new(vi)
-      else
-        nil
+        Image.new(vi) unless vi.null?
       end
     end
 
