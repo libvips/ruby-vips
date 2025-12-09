@@ -2,6 +2,9 @@
 
 ## master
 
+- move library_name out of the global namespace and into FFI
+- version bump to 2.3 ready for upcoming gainmap API
+
 ## Version 2.2.5 (2025-08-20)
 
 * improve NULL pointer handling [dloebl]
