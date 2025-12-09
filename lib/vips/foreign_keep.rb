@@ -6,6 +6,7 @@ module Vips
   # *   `:xmp` keep XMP metadata
   # *   `:iptc` keep IPTC metadata
   # *   `:icc` keep ICC profiles
+  # *   `:gainmap` keep the gainmap metadata
   # *   `:other` keep other metadata
 
   class ForeignKeep < Symbol

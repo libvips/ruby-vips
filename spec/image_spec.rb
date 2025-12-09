@@ -726,6 +726,27 @@ RSpec.describe Vips::Image do
     end
   end
 
+  # added in 8.18
+  if Vips.respond_to? :vips_image_get_gainmap
+    it "can modify gainmaps" do
+      image = Vips::Image.new_from_file simg "ultra-hdr.jpg"
+      # test the example code in image.rb doc comment for get_gainmap
+      gainmap = image.get_gainmap
+      unless gainmap.nil?
+        new_gainmap = gainmap.crop 0, 0, 10, 10
+        image = image.mutate do |x|
+          x.set_type! Vips::IMAGE_TYPE, "gainmap", new_gainmap
+        end
+  
+        buffer = image.write_to_buffer ".jpg"
+        image = Vips::Image.new_from_buffer buffer, ""
+        new_gainmap2 = image.get_gainmap
+  
+        expect(new_gainmap2.width).to eq(10)
+      end
+    end
+  end
+
   it "can has_alpha?" do
     x = Vips::Image.new_from_file "./spec/samples/alpha.png"
     expect(x.has_alpha?).to be true

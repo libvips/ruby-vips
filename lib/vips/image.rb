@@ -50,6 +50,10 @@ module Vips
     attach_function :vips_addalpha, [:pointer, :pointer, :varargs], :int
   end
 
+  if Vips.at_least_libvips?(8, 18)
+    attach_function :vips_image_get_gainmap, [:pointer], :pointer
+  end
+
   # move these three lines to mutableimage when we finally remove set and
   # remove in this class
   attach_function :vips_image_set,
@@ -797,8 +801,36 @@ module Vips
       names
     end
 
+    # Get the gainmap (if any) from an image.
+    #
+    # After modifying the gainmap, you should write it back to the image in a
+    # mutable block, see [#mutate], in the field "gainmap".
+    #
+    # For example:
+    #
+    # ```ruby
+    # gainmap = image.get_gainmap
+    # unless gainmap.nil?
+    #   new_gainmap = gainmap.crop left, top, width, height
+    #   image = image.mutate do |x|
+    #     x.set_type! Vips::IMAGE_TYPE, "gainmap", new_gainmap
+    #   end
+    # end
+    # ```
+    #
+    # @return [Image] the gainmap image, or nil
+    def get_gainmap
+      if Vips.at_least_libvips?(8, 18)
+        vi = Vips.vips_image_get_gainmap self
+        return nil if vi.null?
+        Image.new(vi)
+      else
+        nil
+      end
+    end
+
     # Mutate an image with a block. Inside the block, you can call methods
-    # which modify the image, such as setting or removing metadata, or
+    # which modify the image, such as setting or removing metadata or
     # modifying pixels.
     #
     # For example:
