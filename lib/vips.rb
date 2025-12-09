@@ -23,13 +23,15 @@ require "logger"
 # windows:
 #   The ABI number must be included, but with a hyphen. ffi does not add a
 #   "lib" prefix or a ".dll" suffix.
-def library_name(name, abi_number)
-  if FFI::Platform.windows?
-    "lib#{name}-#{abi_number}.dll"
-  elsif FFI::Platform.mac?
-    "#{name}.#{abi_number}"
-  else
-    "#{name}.so.#{abi_number}"
+module FFI
+  def self.library_name(name, abi_number)
+    if Platform.windows?
+      "lib#{name}-#{abi_number}.dll"
+    elsif Platform.mac?
+      "#{name}.#{abi_number}"
+    else
+      "#{name}.so.#{abi_number}"
+    end
   end
 end
 
@@ -43,7 +45,7 @@ end
 module Vips
   extend FFI::Library
 
-  ffi_lib library_name("vips", 42)
+  ffi_lib FFI.library_name("vips", 42)
 
   begin
     attach_function :g_malloc, [:size_t], :pointer
@@ -67,9 +69,9 @@ module GLib
   extend FFI::Library
 
   if Vips.unified?
-    ffi_lib library_name("vips", 42)
+    ffi_lib FFI.library_name("vips", 42)
   else
-    ffi_lib library_name("glib-2.0", 0)
+    ffi_lib FFI.library_name("glib-2.0", 0)
   end
 
   attach_function :g_malloc, [:size_t], :pointer
@@ -163,9 +165,9 @@ module GObject
   extend FFI::Library
 
   if Vips.unified?
-    ffi_lib library_name("vips", 42)
+    ffi_lib FFI.library_name("vips", 42)
   else
-    ffi_lib library_name("gobject-2.0", 0)
+    ffi_lib FFI.library_name("gobject-2.0", 0)
   end
 
   # we can't just use ulong, windows has different int sizing rules

@@ -1173,11 +1173,7 @@ module Vips
     # @return [Image] result of inequality
     def != other
       # for equality, we must allow tests against nil
-      if other.nil?
-        true
-      else
-        call_enum "relational", other, :noteq
-      end
+      other.nil? || call_enum("relational", other, :noteq)
     end
 
     # Fetch bands using a number or a range
