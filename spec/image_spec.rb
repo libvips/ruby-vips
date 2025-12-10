@@ -727,7 +727,7 @@ RSpec.describe Vips::Image do
   end
 
   # added in 8.18
-  if Vips.respond_to? :vips_image_get_gainmap
+  if has_uhdr?
     it "can modify gainmaps" do
       # test the example code in image.rb doc comment for get_gainmap
       def modify_gainmap image
