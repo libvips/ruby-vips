@@ -23,11 +23,15 @@ def timg(name)
 end
 
 def has_jpeg?
-  Vips.type_find("VipsOperation", "jpegload") != nil
+  Vips.type_find("VipsOperation", "jpegload") != 0
 end
 
 def has_svg?
-  Vips.type_find("VipsOperation", "svgload") != nil
+  Vips.type_find("VipsOperation", "svgload") != 0
+end
+
+def has_uhdr?
+  Vips.type_find("VipsOperation", "uhdrload") != 0
 end
 
 RSpec.configure do |config|
