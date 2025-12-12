@@ -132,6 +132,21 @@ RSpec.describe Vips::Image do
     expect { Vips::Image.new_from_memory_copy(data, 16, 16, 1, :uchar) }.to raise_error(Vips::Error)
   end
 
+  it "can load an image from a read pointer" do
+    image = Vips::Image.black(16, 16) + 128
+    data = image.read_ptr
+    expect(data).to be_a(FFI::Pointer)
+    expect(data.size).to eq(1024)
+
+    x = Vips::Image.new_from_memory data,
+      image.width, image.height, image.bands, image.format
+
+    expect(x.width).to eq(16)
+    expect(x.height).to eq(16)
+    expect(x.bands).to eq(1)
+    expect(x.avg).to eq(128)
+  end
+
   if has_jpeg?
     it "can save an image to a buffer" do
       image = Vips::Image.black(16, 16) + 128
