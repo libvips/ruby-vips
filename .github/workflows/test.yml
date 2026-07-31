@@ -26,10 +26,10 @@ jobs:
 
   test:
     name: Functional testing
-
+    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        os-version: [ 'ubuntu-24.04' ]
         ruby-version:
           - '2.3'
           - '2.4'
@@ -41,9 +41,6 @@ jobs:
           - '3.2'
           - '3.3'
           - jruby
-      fail-fast: true
-
-    runs-on: ${{ matrix.os-version }}
 
     steps:
       - name: Checkout code
