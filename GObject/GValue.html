@@ -6,13 +6,13 @@
 <title>
   Class: GObject::GValue
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "GObject::GValue";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -96,16 +98,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/gvalue.rb</dd>
+    <dd>lib/vips/gvalue.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Represent a GValue. Example use:</p>
-
+    <p>Represent a GValue. Example use:</p>
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gvalue'>gvalue</span> <span class='op'>=</span> <span class='const'>GValue</span><span class='op'>::</span><span class='id identifier rubyid_alloc'><span class='object_link'><a href="#alloc-class_method" title="GObject::GValue.alloc (method)">alloc</a></span></span>
 <span class='id identifier rubyid_gvalue'>gvalue</span><span class='period'>.</span><span class='id identifier rubyid_init'>init</span> <span class='const'><span class='object_link'><a href="GObject.html" title="GObject::GObject (class)">GObject</a></span></span><span class='op'>::</span><span class='const'>GDOUBLE_TYPE</span>
 <span class='id identifier rubyid_gvalue'>gvalue</span><span class='period'>.</span><span class='id identifier rubyid_set'>set</span> <span class='float'>3.1415</span>
@@ -113,9 +114,8 @@
 <span class='comment'># optional -- drop any ref the gvalue had
 </span><span class='id identifier rubyid_gvalue'>gvalue</span><span class='period'>.</span><span class='id identifier rubyid_unset'>unset</span>
 </code></pre>
-
-<p>Lifetime is managed automatically. It doesn&#39;t know about all GType values, but it does know the ones that libvips uses.</p>
-
+<p>Lifetime is managed automatically. It doesn't know about all GType values,
+but it does know the ones that libvips uses.</p>
 
   </div>
 </div>
@@ -154,9 +154,51 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Allocate memory for a GValue and return a class wrapper.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Allocate memory for a GValue and return a class wrapper.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#enum_from_nick-class_method" title="enum_from_nick (class method)">.<strong>enum_from_nick</strong>(gtype, value)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>convert an enum value (str/symb/int) into an int ready for libvips.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#flags_from_nick-class_method" title="flags_from_nick (class method)">.<strong>flags_from_nick</strong>(gtype, value)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>convert an flags value (<a href="str/symb/int">array</a> | str/symb/int) into an int ready for libvips.</p></div></span>
   
 </li>
 
@@ -178,9 +220,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>convert an enum value (str/symb/int) into an int ready for libvips.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>compatibility ...</p></div></span>
   
 </li>
 
@@ -224,14 +264,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>convert an int enum back into a symbol.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>convert an int enum back into a symbol.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
     <h2>
       Instance Method Summary
@@ -257,9 +296,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get the value of a GValue.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get the value of a GValue.</p></div></span>
   
 </li>
 
@@ -281,9 +318,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Set the type of thing a gvalue can hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Set the type of thing a gvalue can hold.</p></div></span>
   
 </li>
 
@@ -305,9 +340,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Set the value of a GValue.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Set the value of a GValue.</p></div></span>
   
 </li>
 
@@ -329,14 +362,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Clear the thing held by a GValue.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Clear the thing held by a GValue.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -357,9 +389,9 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Allocate memory for a GValue and return a class wrapper. Memory will be freed automatically when it goes out of scope. The GValue is inited to 0, use <span class='object_link'><a href="#init-instance_method" title="GObject::GValue#init (method)">#init</a></span> to set a type.</p>
-
+    <p>Allocate memory for a GValue and return a class wrapper. Memory will
+be freed automatically when it goes out of scope. The GValue is inited
+to 0, use <span class='object_link'><a href="#init-instance_method" title="GObject::GValue#init (method)">#init</a></span> to set a type.</p>
 
   </div>
 </div>
@@ -376,9 +408,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>a new gvalue set to 0</p>
-</div>
+        <div class='inline'><p>a new gvalue set to 0</p></div>
       
     </li>
   
@@ -390,30 +420,30 @@
       <pre class="lines">
 
 
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74</pre>
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 100</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_alloc'>alloc</span>
   <span class='comment'># allocate memory
-</span>  <span class='id identifier rubyid_memory'>memory</span> <span class='op'>=</span> <span class='const'>FFI</span><span class='op'>::</span><span class='const'>MemoryPointer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span>
+</span>  <span class='id identifier rubyid_memory'>memory</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../FFI.html" title="FFI (module)">FFI</a></span></span><span class='op'>::</span><span class='const'>MemoryPointer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span>
 
   <span class='comment'># make this alloc autorelease ... we mustn&#39;t release in
 </span>  <span class='comment'># GValue::release, since we are used to wrap GValue pointers
 </span>  <span class='comment'># made by other people
-</span>  <span class='id identifier rubyid_pointer'>pointer</span> <span class='op'>=</span> <span class='const'>FFI</span><span class='op'>::</span><span class='const'>Pointer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span><span class='comma'>,</span> <span class='id identifier rubyid_memory'>memory</span>
+</span>  <span class='id identifier rubyid_pointer'>pointer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../FFI.html" title="FFI (module)">FFI</a></span></span><span class='op'>::</span><span class='const'>Pointer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span><span class='comma'>,</span> <span class='id identifier rubyid_memory'>memory</span>
 
   <span class='comment'># ... and wrap in a GValue
 </span>  <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='id identifier rubyid_pointer'>pointer</span>
@@ -424,9 +454,9 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="from_nick-class_method">
+  <h3 class="signature " id="enum_from_nick-class_method">
   
-    .<strong>from_nick</strong>(gtype, value)  &#x21d2; <tt>Object</tt> 
+    .<strong>enum_from_nick</strong>(gtype, value)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -434,9 +464,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>convert an enum value (str/symb/int) into an int ready for libvips</p>
-
+    <p>convert an enum value (str/symb/int) into an int ready for libvips</p>
 
   </div>
 </div>
@@ -467,7 +495,7 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 28</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_from_nick'>from_nick</span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_enum_from_nick'>enum_from_nick</span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Symbol</span>
 
   <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>String</span>
@@ -480,6 +508,136 @@
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="flags_from_nick-class_method">
+  
+    .<strong>flags_from_nick</strong>(gtype, value)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>convert an flags value (<a href="str/symb/int">array</a> | str/symb/int) into an
+int ready for libvips</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_flags_from_nick'>flags_from_nick</span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>String</span>
+    <span class='comment'># libvips will parse strings like &quot;sub|up&quot; etc.
+</span>    <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_flags_from_nick'>vips_flags_from_nick</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ruby-vips</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Array</span>
+
+    <span class='comment'># convert each item to a set of bits, OR them together
+</span>    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_item'>item</span><span class='op'>|</span>
+      <span class='id identifier rubyid_item'>item</span> <span class='op'>=</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='kw'>if</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Symbol</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>String</span>
+        <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_item'>item</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_flags_from_nick'>vips_flags_from_nick</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ruby-vips</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_item'>item</span> <span class='op'>==</span> <span class='op'>-</span><span class='int'>1</span>
+          <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips/Error.html" title="Vips::Error (class)">Error</a></span></span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+
+      <span class='id identifier rubyid_result'>result</span> <span class='op'>|=</span> <span class='id identifier rubyid_item'>item</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_result'>result</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="from_nick-class_method">
+  
+    .<strong>from_nick</strong>(gtype, value)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>compatibility ... we used to call it this, perhaps someone has used this
+internal method</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+45
+46
+47</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 45</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_from_nick'>from_nick</span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enum_from_nick'><span class='object_link'><a href="#enum_from_nick-class_method" title="GObject::GValue.enum_from_nick (method)">enum_from_nick</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -501,13 +659,13 @@
       <pre class="lines">
 
 
-53
-54
-55
-56</pre>
+90
+91
+92
+93</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 90</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_release'>release</span> <span class='id identifier rubyid_ptr'>ptr</span>
   <span class='comment'># GLib::logger.debug(&quot;GObject::GValue::release&quot;) {&quot;ptr = #{ptr}&quot;}
@@ -529,9 +687,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>convert an int enum back into a symbol</p>
-
+    <p>convert an int enum back into a symbol</p>
 
   </div>
 </div>
@@ -544,17 +700,17 @@
       <pre class="lines">
 
 
-44
-45
-46
-47
-48
-49
-50
-51</pre>
+81
+82
+83
+84
+85
+86
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 81</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_nick'>to_nick</span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_enum_value'>enum_value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_enum_name'>enum_name</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_enum_nick'>vips_enum_nick</span> <span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_enum_value'>enum_value</span>
@@ -586,9 +742,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get the value of a GValue. The value is converted to a Ruby type in the obvious way.</p>
-
+    <p>Get the value of a GValue. The value is converted to a Ruby type in
+the obvious way.</p>
 
   </div>
 </div>
@@ -605,9 +760,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the value held by the GValue</p>
-</div>
+        <div class='inline'><p>the value held by the GValue</p></div>
       
     </li>
   
@@ -619,44 +772,6 @@
       <pre class="lines">
 
 
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208
 209
 210
 211
@@ -695,10 +810,48 @@
 244
 245
 246
-247</pre>
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 171</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 209</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span>
   <span class='id identifier rubyid_gtype'>gtype</span> <span class='op'>=</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:gtype</span><span class='rbracket'>]</span>
@@ -741,7 +894,7 @@
     <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='id identifier rubyid_array'>array</span><span class='period'>.</span><span class='id identifier rubyid_get_array_of_pointer'>get_array_of_pointer</span> <span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_len'>len</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span>
     <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_map!'>map!</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_pointer'>pointer</span><span class='op'>|</span>
       <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_object_ref'>g_object_ref</span> <span class='id identifier rubyid_pointer'>pointer</span>
-      <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="GObject.html#initialize-instance_method" title="GObject::GObject#initialize (method)">new</a></span></span> <span class='id identifier rubyid_pointer'>pointer</span>
+      <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='id identifier rubyid_pointer'>pointer</span>
     <span class='kw'>end</span>
 
   <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips.html#BLOB_TYPE-constant" title="Vips::BLOB_TYPE (constant)">BLOB_TYPE</a></span></span>
@@ -763,7 +916,7 @@
       <span class='comment'># g_value_get_object() does not add a ref ... we need to add
 </span>      <span class='comment'># one to match the unref in gobject release
 </span>      <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_object_ref'>g_object_ref</span> <span class='id identifier rubyid_obj'>obj</span>
-      <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="GObject.html#initialize-instance_method" title="GObject::GObject#initialize (method)">new</a></span></span> <span class='id identifier rubyid_obj'>obj</span>
+      <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips/Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='id identifier rubyid_obj'>obj</span>
 
     <span class='kw'>else</span>
       <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Vips/Error.html" title="Vips::Error (class)">Error</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>unimplemented gtype for get: </span><span class='tstring_end'>&quot;</span></span> \
@@ -793,9 +946,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Set the type of thing a gvalue can hold.</p>
-
+    <p>Set the type of thing a gvalue can hold.</p>
 
   </div>
 </div>
@@ -813,9 +964,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the type of thing this GValue can hold.</p>
-</div>
+        <div class='inline'><p>the type of thing this GValue can hold.</p></div>
       
     </li>
   
@@ -828,12 +977,12 @@
       <pre class="lines">
 
 
-79
-80
-81</pre>
+116
+117
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_init'>init</span> <span class='id identifier rubyid_gtype'>gtype</span>
   <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_value_init'>g_value_init</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_gtype'>gtype</span>
@@ -854,9 +1003,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Set the value of a GValue. The value is converted to the type of the GValue, if possible.</p>
-
+    <p>Set the value of a GValue. The value is converted to the type of the
+GValue, if possible.</p>
 
   </div>
 </div>
@@ -874,9 +1022,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>The value to set</p>
-</div>
+        <div class='inline'><p>The value to set</p></div>
       
     </li>
   
@@ -889,43 +1035,6 @@
       <pre class="lines">
 
 
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
 124
 125
 126
@@ -967,10 +1076,48 @@
 162
 163
 164
-165</pre>
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 87</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 124</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span> <span class='id identifier rubyid_value'>value</span>
   <span class='comment'># GLib::logger.debug(&quot;GObject::GValue.set&quot;) {
@@ -1036,10 +1183,11 @@
   <span class='kw'>else</span>
     <span class='kw'>case</span> <span class='id identifier rubyid_fundamental'>fundamental</span>
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../GObject.html#GFLAGS_TYPE-constant" title="GObject::GFLAGS_TYPE (constant)">GFLAGS_TYPE</a></span></span>
-      <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_value_set_flags'>g_value_set_flags</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+      <span class='id identifier rubyid_flags_value'>flags_value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_flags_from_nick'><span class='object_link'><a href="#flags_from_nick-class_method" title="GObject::GValue.flags_from_nick (method)">flags_from_nick</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:gtype</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+      <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_value_set_flags'>g_value_set_flags</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_flags_value'>flags_value</span>
 
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../GObject.html#GENUM_TYPE-constant" title="GObject::GENUM_TYPE (constant)">GENUM_TYPE</a></span></span>
-      <span class='id identifier rubyid_enum_value'>enum_value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_from_nick'><span class='object_link'><a href="#from_nick-class_method" title="GObject::GValue.from_nick (method)">from_nick</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:gtype</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_enum_value'>enum_value</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="GObject::GValue (class)">GValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_enum_from_nick'><span class='object_link'><a href="#enum_from_nick-class_method" title="GObject::GValue.enum_from_nick (method)">enum_from_nick</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:gtype</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
       <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_value_set_enum'>g_value_set_enum</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_enum_value'>enum_value</span>
 
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="../GObject.html#GOBJECT_TYPE-constant" title="GObject::GOBJECT_TYPE (constant)">GOBJECT_TYPE</a></span></span>
@@ -1067,11 +1215,9 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Clear the thing held by a GValue.</p>
-
-<p>This happens automatically when a GValue is GCed, but this method can be handy if you need to drop a reference explicitly for some reason.</p>
-
+    <p>Clear the thing held by a GValue.</p>
+<p>This happens automatically when a GValue is GCed, but this method can be
+handy if you need to drop a reference explicitly for some reason.</p>
 
   </div>
 </div>
@@ -1084,12 +1230,12 @@
       <pre class="lines">
 
 
-253
-254
-255</pre>
+291
+292
+293</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 253</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/gvalue.rb', line 291</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unset'>unset</span>
   <span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_value_unset'>g_value_unset</span> <span class='kw'>self</span>
@@ -1104,9 +1250,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:33 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

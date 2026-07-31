@@ -6,13 +6,13 @@
 <title>
   Module: Vips::Yard
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Yard";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -78,23 +80,21 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/image.rb</dd>
+    <dd>lib/vips/image.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>This module generates yard comments for all the dynamically bound vips operations.</p>
-
+    <p>This module generates yard comments for all the dynamically bound
+vips operations.</p>
 <p>Regenerate with something like:</p>
-
 <pre class="code ruby"><code class="ruby">$ ruby &gt; methods.rb
 require &quot;vips&quot;; Vips::Yard.generate
 ^D
 </code></pre>
-
 
   </div>
 </div>
@@ -113,9 +113,7 @@ require &quot;vips&quot;; Vips::Yard.generate
         <dt id="MAP_GO_TO_RUBY-constant" class="">MAP_GO_TO_RUBY =
           <div class="docstring">
   <div class="discussion">
-    
-<p>map gobject&#39;s type names to Ruby</p>
-
+    <p>map gobject's type names to Ruby</p>
 
   </div>
 </div>
@@ -146,9 +144,7 @@ require &quot;vips&quot;; Vips::Yard.generate
         <dt id="NO_GENERATE-constant" class="">NO_GENERATE =
           <div class="docstring">
   <div class="discussion">
-    
-<p>these have hand-written methods, see above</p>
-
+    <p>these have hand-written methods, see above</p>
 
   </div>
 </div>
@@ -162,9 +158,7 @@ require &quot;vips&quot;; Vips::Yard.generate
         <dt id="ALIAS-constant" class="">ALIAS =
           <div class="docstring">
   <div class="discussion">
-    
-<p>these are aliased (appear under several names)</p>
-
+    <p>these are aliased (appear under several names)</p>
 
   </div>
 </div>
@@ -253,14 +247,13 @@ require &quot;vips&quot;; Vips::Yard.generate
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>turn a gtype into a ruby type name.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>turn a gtype into a ruby type name.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -284,46 +277,46 @@ require &quot;vips&quot;; Vips::Yard.generate
       <pre class="lines">
 
 
-1680
-1681
-1682
-1683
-1684
-1685
-1686
-1687
-1688
-1689
-1690
-1691
-1692
-1693
-1694
-1695
-1696
-1697
-1698
-1699
-1700
-1701
-1702
-1703
-1704
-1705
-1706
-1707
-1708
-1709
-1710
-1711
-1712
-1713
-1714
-1715
-1716</pre>
+1771
+1772
+1773
+1774
+1775
+1776
+1777
+1778
+1779
+1780
+1781
+1782
+1783
+1784
+1785
+1786
+1787
+1788
+1789
+1790
+1791
+1792
+1793
+1794
+1795
+1796
+1797
+1798
+1799
+1800
+1801
+1802
+1803
+1804
+1805
+1806
+1807</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/image.rb', line 1680</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/image.rb', line 1771</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_generate'>generate</span>
   <span class='id identifier rubyid_alias_gtypes'>alias_gtypes</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -382,75 +375,76 @@ require &quot;vips&quot;; Vips::Yard.generate
       <pre class="lines">
 
 
-1613
-1614
-1615
-1616
-1617
-1618
-1619
-1620
-1621
-1622
-1623
-1624
-1625
-1626
-1627
-1628
-1629
-1630
-1631
-1632
-1633
-1634
-1635
-1636
-1637
-1638
-1639
-1640
-1641
-1642
-1643
-1644
-1645
-1646
-1647
-1648
-1649
-1650
-1651
-1652
-1653
-1654
-1655
-1656
-1657
-1658
-1659
-1660
-1661
-1662
-1663
-1664
-1665
-1666
-1667
-1668
-1669
-1670
-1671
-1672
-1673
-1674
-1675
-1676
-1677
-1678</pre>
+1703
+1704
+1705
+1706
+1707
+1708
+1709
+1710
+1711
+1712
+1713
+1714
+1715
+1716
+1717
+1718
+1719
+1720
+1721
+1722
+1723
+1724
+1725
+1726
+1727
+1728
+1729
+1730
+1731
+1732
+1733
+1734
+1735
+1736
+1737
+1738
+1739
+1740
+1741
+1742
+1743
+1744
+1745
+1746
+1747
+1748
+1749
+1750
+1751
+1752
+1753
+1754
+1755
+1756
+1757
+1758
+1759
+1760
+1761
+1762
+1763
+1764
+1765
+1766
+1767
+1768
+1769</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/image.rb', line 1613</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/image.rb', line 1703</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_generate_operation'>generate_operation</span> <span class='id identifier rubyid_introspect'>introspect</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_flags'>flags</span> <span class='op'>&amp;</span> <span class='const'>OPERATION_DEPRECATED</span><span class='rparen'>)</span> <span class='op'>!=</span> <span class='int'>0</span>
@@ -458,8 +452,8 @@ require &quot;vips&quot;; Vips::Yard.generate
 
   <span class='id identifier rubyid_method_args'>method_args</span> <span class='op'>=</span> <span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_method_args'>method_args</span>
   <span class='id identifier rubyid_required_output'>required_output</span> <span class='op'>=</span> <span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_required_output'>required_output</span>
-  <span class='id identifier rubyid_optional_input'>optional_input</span> <span class='op'>=</span> <span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_optional_input'>optional_input</span>
-  <span class='id identifier rubyid_optional_output'>optional_output</span> <span class='op'>=</span> <span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_optional_output'>optional_output</span>
+  <span class='id identifier rubyid_optional_input'>optional_input</span> <span class='op'>=</span> <span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_doc_optional_input'>doc_optional_input</span>
+  <span class='id identifier rubyid_optional_output'>optional_output</span> <span class='op'>=</span> <span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_doc_optional_output'>doc_optional_output</span>
 
   <span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'># @!method </span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>self.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_introspect'>introspect</span><span class='period'>.</span><span class='id identifier rubyid_member_x'>member_x</span>
@@ -482,17 +476,18 @@ require &quot;vips&quot;; Vips::Yard.generate
   <span class='id identifier rubyid_optional_input'>optional_input</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_arg_name'>arg_name</span><span class='comma'>,</span> <span class='id identifier rubyid_details'>details</span><span class='op'>|</span>
     <span class='id identifier rubyid_yard_name'>yard_name</span> <span class='op'>=</span> <span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:yard_name</span><span class='rbracket'>]</span>
     <span class='id identifier rubyid_gtype'>gtype</span> <span class='op'>=</span> <span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:gtype</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_rtype'>rtype</span> <span class='op'>=</span> <span class='id identifier rubyid_gtype_to_ruby'>gtype_to_ruby</span> <span class='id identifier rubyid_gtype'>gtype</span>
     <span class='id identifier rubyid_blurb'>blurb</span> <span class='op'>=</span> <span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:blurb</span><span class='rbracket'>]</span>
 
-    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#   @option opts [</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_gtype_to_ruby'>gtype_to_ruby</span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>] :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_yard_name'>yard_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_blurb'>blurb</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#   @option opts [</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_rtype'>rtype</span><span class='embexpr_end'>}</span><span class='tstring_content'>] :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_yard_name'>yard_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_blurb'>blurb</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_optional_output'>optional_output</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_arg_name'>arg_name</span><span class='comma'>,</span> <span class='id identifier rubyid_details'>details</span><span class='op'>|</span>
     <span class='id identifier rubyid_yard_name'>yard_name</span> <span class='op'>=</span> <span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:yard_name</span><span class='rbracket'>]</span>
     <span class='id identifier rubyid_gtype'>gtype</span> <span class='op'>=</span> <span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:gtype</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_rtype'>rtype</span> <span class='op'>=</span> <span class='id identifier rubyid_gtype_to_ruby'>gtype_to_ruby</span> <span class='id identifier rubyid_gtype'>gtype</span>
     <span class='id identifier rubyid_blurb'>blurb</span> <span class='op'>=</span> <span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:blurb</span><span class='rbracket'>]</span>
 
-    <span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#   @option opts [</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_gtype_to_ruby'>gtype_to_ruby</span><span class='lparen'>(</span><span class='id identifier rubyid_gtype'>gtype</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>] :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_yard_name'>yard_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> Output </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_blurb'>blurb</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#   @option opts [</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_rtype'>rtype</span><span class='embexpr_end'>}</span><span class='tstring_content'>] :</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_yard_name'>yard_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> Output </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_blurb'>blurb</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#   @return [</span><span class='tstring_end'>&quot;</span></span>
@@ -534,9 +529,7 @@ require &quot;vips&quot;; Vips::Yard.generate
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>turn a gtype into a ruby type name</p>
-
+    <p>turn a gtype into a ruby type name</p>
 
   </div>
 </div>
@@ -549,24 +542,24 @@ require &quot;vips&quot;; Vips::Yard.generate
       <pre class="lines">
 
 
-1597
-1598
-1599
-1600
-1601
-1602
-1603
-1604
-1605
-1606
-1607
-1608
-1609
-1610
-1611</pre>
+1687
+1688
+1689
+1690
+1691
+1692
+1693
+1694
+1695
+1696
+1697
+1698
+1699
+1700
+1701</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/image.rb', line 1597</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/image.rb', line 1687</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gtype_to_ruby'>gtype_to_ruby</span> <span class='id identifier rubyid_gtype'>gtype</span>
   <span class='id identifier rubyid_fundamental'>fundamental</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='period'>.</span><span class='id identifier rubyid_g_type_fundamental'>g_type_fundamental</span> <span class='id identifier rubyid_gtype'>gtype</span>
@@ -593,9 +586,9 @@ require &quot;vips&quot;; Vips::Yard.generate
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:44 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:30 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

@@ -6,13 +6,13 @@
 <title>
   Class: Vips::SourceCustom
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::SourceCustom";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -69,18 +71,12 @@
   <dl>
     <dt>Inherits:</dt>
     <dd>
-      <span class="inheritName"><span class='object_link'><a href="Source.html" title="Vips::Source (class)">Source</a></span></span>
+      <span class="inheritName">Source</span>
       
         <ul class="fullTree">
           <li>Object</li>
           
-            <li class="next"><span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></li>
-          
-            <li class="next"><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></li>
-          
-            <li class="next"><span class='object_link'><a href="Connection.html" title="Vips::Connection (class)">Connection</a></span></li>
-          
-            <li class="next"><span class='object_link'><a href="Source.html" title="Vips::Source (class)">Source</a></span></li>
+            <li class="next">Source</li>
           
             <li class="next">Vips::SourceCustom</li>
           
@@ -102,26 +98,24 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/sourcecustom.rb</dd>
+    <dd>lib/vips/sourcecustom.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>A source you can attach action signal handlers to to implement custom input types.</p>
-
+    <p>A source you can attach action signal handlers to to implement
+custom input types.</p>
 <p>For example:</p>
-
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_file'>file</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>some/file/name</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>rb</span><span class='tstring_end'>&quot;</span></span>
 <span class='id identifier rubyid_source'>source</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'>SourceCustom</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="Vips::SourceCustom#initialize (method)">new</a></span></span>
 <span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_on_read'>on_read</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_length'>length</span><span class='op'>|</span> <span class='id identifier rubyid_file'>file</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span> <span class='id identifier rubyid_length'>length</span> <span class='rbrace'>}</span>
 <span class='id identifier rubyid_image'>image</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_from_source'><span class='object_link'><a href="Image.html#new_from_source-class_method" title="Vips::Image.new_from_source (method)">new_from_source</a></span></span> <span class='id identifier rubyid_source'>source</span>
 </code></pre>
-
-<p>(just an example – of course in practice you&#39;d use <span class='object_link'><a href="Source.html#new_from_file-class_method" title="Vips::Source.new_from_file (method)">Vips::Source.new_from_file</a></span> to read from a named file)</p>
-
+<p>(just an example -- of course in practice you'd use <span class='object_link'><a href="Source.html#new_from_file-class_method" title="Vips::Source.new_from_file (method)">Vips::Source.new_from_file</a></span>
+to read from a named file)</p>
 
   </div>
 </div>
@@ -145,11 +139,6 @@
 
 
 
-
-  <h2>Instance Attribute Summary</h2>
-  
-  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ptr-instance_method" title="GObject::GObject#ptr (method)">#ptr</a></span>, <span class='object_link'><a href="../GObject/GObject.html#references-instance_method" title="GObject::GObject#references (method)">#references</a></span></p>
 
 
   
@@ -179,9 +168,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of SourceCustom.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of SourceCustom.</p></div></span>
   
 </li>
 
@@ -203,9 +190,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The block is executed to read data from the source.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The block is executed to read data from the source.</p></div></span>
   
 </li>
 
@@ -227,62 +212,16 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The block is executed to seek the source.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The block is executed to seek the source.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
-  
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Source.html" title="Vips::Source (class)">Source</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Source.html#new_from_descriptor-class_method" title="Vips::Source.new_from_descriptor (method)">new_from_descriptor</a></span>, <span class='object_link'><a href="Source.html#new_from_file-class_method" title="Vips::Source.new_from_file (method)">new_from_file</a></span>, <span class='object_link'><a href="Source.html#new_from_memory-class_method" title="Vips::Source.new_from_memory (method)">new_from_memory</a></span></p>
-
-  
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Connection.html" title="Vips::Connection (class)">Connection</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Connection.html#filename-instance_method" title="Vips::Connection#filename (method)">#filename</a></span>, <span class='object_link'><a href="Connection.html#nick-instance_method" title="Vips::Connection#nick (method)">#nick</a></span></p>
-
-  
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Object.html#get-instance_method" title="Vips::Object#get (method)">#get</a></span>, <span class='object_link'><a href="Object.html#get_pspec-instance_method" title="Vips::Object#get_pspec (method)">#get_pspec</a></span>, <span class='object_link'><a href="Object.html#get_typeof-instance_method" title="Vips::Object#get_typeof (method)">#get_typeof</a></span>, <span class='object_link'><a href="Object.html#get_typeof_error-instance_method" title="Vips::Object#get_typeof_error (method)">#get_typeof_error</a></span>, <span class='object_link'><a href="Object.html#print_all-class_method" title="Vips::Object.print_all (method)">print_all</a></span>, <span class='object_link'><a href="Object.html#set-instance_method" title="Vips::Object#set (method)">#set</a></span>, <span class='object_link'><a href="Object.html#signal_connect-instance_method" title="Vips::Object#signal_connect (method)">#signal_connect</a></span></p>
-
-  
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-instance_method" title="GObject::GObject#ffi_managed_struct (method)">#ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-class_method" title="GObject::GObject.ffi_managed_struct (method)">ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-instance_method" title="GObject::GObject#ffi_struct (method)">#ffi_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-class_method" title="GObject::GObject.ffi_struct (method)">ffi_struct</a></span></p>
-
-  
   <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -297,9 +236,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of SourceCustom.</p>
-
+    <p>Returns a new instance of SourceCustom.</p>
 
   </div>
 </div>
@@ -339,7 +276,7 @@
   <span class='id identifier rubyid_pointer'>pointer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_source_custom_new'>vips_source_custom_new</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Error.html" title="Vips::Error (class)">Error</a></span></span> <span class='kw'>if</span> <span class='id identifier rubyid_pointer'>pointer</span><span class='period'>.</span><span class='id identifier rubyid_null?'>null?</span>
 
-  <span class='kw'>super</span> <span class='id identifier rubyid_pointer'>pointer</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_pointer'>pointer</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -364,9 +301,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The block is executed to read data from the source. The interface is exactly as IO::read, ie. it takes a maximum number of bytes to read and returns a string of bytes from the source, or nil if the source is already at end of file.</p>
-
+    <p>The block is executed to read data from the source. The interface is
+exactly as IO::read, ie. it takes a maximum number of bytes to read and
+returns a string of bytes from the source, or nil if the source is already
+at end of file.</p>
 
   </div>
 </div>
@@ -385,9 +323,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Read and return up to this many bytes</p>
-</div>
+        <div class='inline'><p>Read and return up to this many bytes</p></div>
       
     </li>
   
@@ -403,9 +339,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Up to length bytes of data, or nil for EOF</p>
-</div>
+        <div class='inline'><p>Up to length bytes of data, or nil for EOF</p></div>
       
     </li>
   
@@ -459,11 +393,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The block is executed to seek the source. The interface is exactly as IO::seek, ie. it should take an offset and whence, and return the new read position.</p>
-
-<p>This handler is optional – if you do not attach a seek handler, <span class='object_link'><a href="Source.html" title="Vips::Source (class)">Vips::Source</a></span> will treat your source like an unseekable pipe object and do extra caching.</p>
-
+    <p>The block is executed to seek the source. The interface is exactly as
+IO::seek, ie. it should take an offset and whence, and return the
+new read position.</p>
+<p>This handler is optional -- if you do not attach a seek handler,
+<span class='object_link'><a href="Source.html" title="Vips::Source (class)">Vips::Source</a></span> will treat your source like an unseekable pipe object and
+do extra caching.</p>
 
   </div>
 </div>
@@ -482,9 +417,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Seek offset</p>
-</div>
+        <div class='inline'><p>Seek offset</p></div>
       
     </li>
   
@@ -498,9 +431,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Seek whence</p>
-</div>
+        <div class='inline'><p>Seek whence</p></div>
       
     </li>
   
@@ -516,9 +447,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the new read position, or -1 on error</p>
-</div>
+        <div class='inline'><p>the new read position, or -1 on error</p></div>
       
     </li>
   
@@ -554,9 +483,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:53 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

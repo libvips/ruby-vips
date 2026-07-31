@@ -6,13 +6,13 @@
 <title>
   Class: Vips::Interpolate
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Interpolate";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -69,14 +71,12 @@
   <dl>
     <dt>Inherits:</dt>
     <dd>
-      <span class="inheritName"><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></span>
+      <span class="inheritName">Object</span>
       
         <ul class="fullTree">
           <li>Object</li>
           
-            <li class="next"><span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></li>
-          
-            <li class="next"><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></li>
+            <li class="next">Object</li>
           
             <li class="next">Vips::Interpolate</li>
           
@@ -98,40 +98,34 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/interpolate.rb</dd>
+    <dd>lib/vips/interpolate.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An interpolator. One of these can be given to operations like <span class='object_link'><a href="Image.html#affine-instance_method" title="Vips::Image#affine (method)">Vips::Image#affine</a></span> or <span class='object_link'><a href="Image.html#mapim-instance_method" title="Vips::Image#mapim (method)">Vips::Image#mapim</a></span> to select the type of pixel interpolation to use.</p>
-
-<p>To see all interpolators supported by your libvips, try</p>
-
+    <p>An interpolator. One of these can be given to operations like
+<span class='object_link'><a href="Image.html#affine-instance_method" title="Vips::Image#affine (method)">Vips::Image#affine</a></span> or <span class='object_link'><a href="Image.html#mapim-instance_method" title="Vips::Image#mapim (method)">Vips::Image#mapim</a></span> to select the type of pixel interpolation
+to use.</p>
+<p>To see all interpolators supported by your
+libvips, try</p>
 <pre class="code ruby"><code class="ruby">$ vips -l interpolate
 </code></pre>
-
 <p>But at least these should be available:</p>
-<ul><li>
-<p><code>:nearest</code> Nearest-neighbour interpolation.</p>
-</li><li>
-<p><code>:bilinear</code> Bilinear interpolation.</p>
-</li><li>
-<p><code>:bicubic</code> Bicubic interpolation.</p>
-</li><li>
-<p><code>:lbb</code> Reduced halo bicubic interpolation.</p>
-</li><li>
-<p><code>:nohalo</code> Edge sharpening resampler with halo reduction.</p>
-</li><li>
-<p><code>:vsqbs</code> B-Splines with antialiasing smoothing.</p>
-</li></ul>
-
+<ul>
+<li><code>:nearest</code> Nearest-neighbour interpolation.</li>
+<li><code>:bilinear</code> Bilinear interpolation.</li>
+<li><code>:bicubic</code> Bicubic interpolation.</li>
+<li><code>:lbb</code> Reduced halo bicubic interpolation.</li>
+<li><code>:nohalo</code> Edge sharpening resampler with halo reduction.</li>
+<li><code>:vsqbs</code> B-Splines with antialiasing smoothing.</li>
+</ul>
 <p>For example:</p>
-
-<p><code>ruby  im = im.affine [2, 0, 0, 2],      :interpolate =&gt; Vips::Interpolate.new(:bicubic) </code></p>
-
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_im'>im</span> <span class='op'>=</span> <span class='id identifier rubyid_im'>im</span><span class='period'>.</span><span class='id identifier rubyid_affine'>affine</span> <span class='lbracket'>[</span><span class='int'>2</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='symbol'>:interpolate</span> <span class='op'>=&gt;</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'>Interpolate</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="Vips::Interpolate#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='symbol'>:bicubic</span><span class='rparen'>)</span>
+</code></pre>
 
   </div>
 </div>
@@ -155,11 +149,6 @@
 
 
 
-
-  <h2>Instance Attribute Summary</h2>
-  
-  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ptr-instance_method" title="GObject::GObject#ptr (method)">#ptr</a></span>, <span class='object_link'><a href="../GObject/GObject.html#references-instance_method" title="GObject::GObject#references (method)">#references</a></span></p>
 
 
   
@@ -189,40 +178,16 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Interpolate.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Interpolate.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
-  
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Object.html#get-instance_method" title="Vips::Object#get (method)">#get</a></span>, <span class='object_link'><a href="Object.html#get_pspec-instance_method" title="Vips::Object#get_pspec (method)">#get_pspec</a></span>, <span class='object_link'><a href="Object.html#get_typeof-instance_method" title="Vips::Object#get_typeof (method)">#get_typeof</a></span>, <span class='object_link'><a href="Object.html#get_typeof_error-instance_method" title="Vips::Object#get_typeof_error (method)">#get_typeof_error</a></span>, <span class='object_link'><a href="Object.html#print_all-class_method" title="Vips::Object.print_all (method)">print_all</a></span>, <span class='object_link'><a href="Object.html#set-instance_method" title="Vips::Object#set (method)">#set</a></span>, <span class='object_link'><a href="Object.html#signal_connect-instance_method" title="Vips::Object#signal_connect (method)">#signal_connect</a></span></p>
-
-  
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-instance_method" title="GObject::GObject#ffi_managed_struct (method)">#ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-class_method" title="GObject::GObject.ffi_managed_struct (method)">ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-instance_method" title="GObject::GObject#ffi_struct (method)">#ffi_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-class_method" title="GObject::GObject.ffi_struct (method)">ffi_struct</a></span></p>
-
-  
   <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -237,9 +202,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Interpolate.</p>
-
+    <p>Returns a new instance of Interpolate.</p>
 
   </div>
 </div>
@@ -278,10 +241,10 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span> <span class='id identifier rubyid_name'>name</span>
   <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='kw'>if</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Symbol</span>
-  <span class='id identifier rubyid_ptr'>ptr</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_interpolate_new'>vips_interpolate_new</span> <span class='id identifier rubyid_name'>name</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Error.html" title="Vips::Error (class)">Error</a></span></span> <span class='kw'>if</span> <span class='id identifier rubyid_ptr'>ptr</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='id identifier rubyid_pointer'>pointer</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_interpolate_new'>vips_interpolate_new</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Error.html" title="Vips::Error (class)">Error</a></span></span> <span class='kw'>if</span> <span class='id identifier rubyid_pointer'>pointer</span><span class='period'>.</span><span class='id identifier rubyid_null?'>null?</span>
 
-  <span class='kw'>super</span> <span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_pointer'>pointer</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -294,9 +257,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

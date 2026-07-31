@@ -6,13 +6,13 @@
 <title>
   Module: GLib
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" />
+  <link rel="stylesheet" href="css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "GLib";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -83,7 +85,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips.rb</dd>
+    <dd>lib/vips.rb
+</dd>
   </dl>
   
 </div>
@@ -100,9 +103,8 @@
         <dt id="G_FREE-constant" class="">G_FREE =
           <div class="docstring">
   <div class="discussion">
-    
-<p>save the FFI::Function that attach will return … we can use it directly as a param for callbacks</p>
-
+    <p>save the FFI::Function that attach will return ... we can use it directly
+as a param for callbacks</p>
 
   </div>
 </div>
@@ -116,9 +118,7 @@
         <dt id="LOG_FLAG_RECURSION-constant" class="">LOG_FLAG_RECURSION =
           <div class="docstring">
   <div class="discussion">
-    
-<p>log flags</p>
-
+    <p>log flags</p>
 
   </div>
 </div>
@@ -137,9 +137,7 @@
         <dt id="LOG_LEVEL_ERROR-constant" class="">LOG_LEVEL_ERROR =
           <div class="docstring">
   <div class="discussion">
-    
-<p>GLib log levels</p>
-
+    <p>GLib log levels</p>
 
   </div>
 </div>
@@ -153,9 +151,7 @@
         <dt id="LOG_LEVEL_CRITICAL-constant" class="">LOG_LEVEL_CRITICAL =
           <div class="docstring">
   <div class="discussion">
-    
-<p>always fatal</p>
-
+    <p>always fatal</p>
 
   </div>
 </div>
@@ -189,9 +185,7 @@
         <dt id="GLIB_TO_SEVERITY-constant" class="">GLIB_TO_SEVERITY =
           <div class="docstring">
   <div class="discussion">
-    
-<p>map glib levels to Logger::Severity</p>
-
+    <p>map glib levels to Logger::Severity</p>
 
   </div>
 </div>
@@ -212,9 +206,7 @@
         <dt id="LOG_HANDLER-constant" class="">LOG_HANDLER =
           <div class="docstring">
   <div class="discussion">
-    
-<p>module-level, so it&#39;s not GCd away</p>
-
+    <p>module-level, so it's not GCd away</p>
 
   </div>
 </div>
@@ -256,9 +248,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute logger.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute logger.</p></div></span>
   
 </li>
 
@@ -321,6 +311,7 @@
 
       
     </ul>
+    
   
 
 
@@ -341,9 +332,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns the value of attribute logger.</p>
-
+    <p>Returns the value of attribute logger.</p>
 
   </div>
 </div>
@@ -356,12 +345,12 @@
       <pre class="lines">
 
 
-38
-39
-40</pre>
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_logger'>logger</span>
   <span class='ivar'>@logger</span>
@@ -393,15 +382,15 @@
       <pre class="lines">
 
 
-90
-91
-92
-93
-94
-95</pre>
+120
+121
+122
+123
+124
+125</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 90</span>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_remove_log_handler'>remove_log_handler</span>
   <span class='kw'>if</span> <span class='ivar'>@glib_log_handler_id</span> <span class='op'>!=</span> <span class='int'>0</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@glib_log_domain</span>
@@ -429,44 +418,44 @@
       <pre class="lines">
 
 
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
 127
 128
 129
 130
-131</pre>
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 97</span>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 127</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_set_log_domain'>set_log_domain</span> <span class='id identifier rubyid_domain'>domain</span>
   <span class='const'><span class='object_link'><a href="" title="GLib (module)">GLib</a></span></span><span class='period'>.</span><span class='id identifier rubyid_remove_log_handler'><span class='object_link'><a href="#remove_log_handler-class_method" title="GLib.remove_log_handler (method)">remove_log_handler</a></span></span>
@@ -513,9 +502,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:44 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:30 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

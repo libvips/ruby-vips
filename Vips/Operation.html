@@ -6,13 +6,13 @@
 <title>
   Class: Vips::Operation
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Operation";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -98,7 +100,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/operation.rb</dd>
+    <dd>lib/vips/operation.rb
+</dd>
   </dl>
   
 </div>
@@ -152,9 +155,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>This is the public entry point for the vips binding.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>This is the public entry point for the vips binding.</p></div></span>
   
 </li>
 
@@ -176,9 +177,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Search an object for the first element to match a predicate.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Search an object for the first element to match a predicate.</p></div></span>
   
 </li>
 
@@ -200,14 +199,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>expand a constant into an image.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>expand a constant into an image.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
     <h2>
       Instance Method Summary
@@ -279,9 +277,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Operation.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Operation.</p></div></span>
   
 </li>
 
@@ -303,17 +299,17 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>set an operation argument, expanding constants and copying images as required.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>set an operation argument, expanding constants and copying images as required.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
+  
   
   
   
@@ -325,6 +321,7 @@
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></h3>
   <p class="inherited"><span class='object_link'><a href="Object.html#get-instance_method" title="Vips::Object#get (method)">#get</a></span>, <span class='object_link'><a href="Object.html#get_pspec-instance_method" title="Vips::Object#get_pspec (method)">#get_pspec</a></span>, <span class='object_link'><a href="Object.html#get_typeof-instance_method" title="Vips::Object#get_typeof (method)">#get_typeof</a></span>, <span class='object_link'><a href="Object.html#get_typeof_error-instance_method" title="Vips::Object#get_typeof_error (method)">#get_typeof_error</a></span>, <span class='object_link'><a href="Object.html#print_all-class_method" title="Vips::Object.print_all (method)">print_all</a></span>, <span class='object_link'><a href="Object.html#signal_connect-instance_method" title="Vips::Object#signal_connect (method)">#signal_connect</a></span></p>
 
+  
   
   
   
@@ -351,9 +348,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Operation.</p>
-
+    <p>Returns a new instance of Operation.</p>
 
   </div>
 </div>
@@ -366,19 +361,19 @@
       <pre class="lines">
 
 
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208</pre>
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 199</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 213</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span> <span class='id identifier rubyid_value'>value</span>
   <span class='comment'># allow init with a pointer so we can wrap the return values from
@@ -388,7 +383,7 @@
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Error.html" title="Vips::Error (class)">Error</a></span></span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_null?'>null?</span>
   <span class='kw'>end</span>
 
-  <span class='kw'>super</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>super</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -413,56 +408,49 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>This is the public entry point for the vips binding. <span class='object_link'><a href="#call-class_method" title="Vips::Operation.call (method)">call</a></span> will run any vips operation, for example:</p>
-
+    <p>This is the public entry point for the vips binding. <span class='object_link'><a href="#call-class_method" title="Vips::Operation.call (method)">call</a></span> will run
+any vips operation, for example:</p>
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_out'>out</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="Vips::Operation (class)">Operation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>black</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>100</span><span class='comma'>,</span> <span class='int'>100</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='symbol'>:bands</span> <span class='op'>=&gt;</span> <span class='int'>12</span><span class='rbrace'>}</span>
 </code></pre>
-
 <p>will call the C function</p>
-
-<pre class="code ruby"><code class="ruby">vips_black( &amp;out, 100, 100, &quot;bands&quot;, 12, NULL );
+<pre class="code C"><code class="C">vips_black( &amp;out, 100, 100, &quot;bands&quot;, 12, NULL );
 </code></pre>
-
-<p>There are <span class='object_link'><a href="Image.html#method_missing-instance_method" title="Vips::Image#method_missing (method)">Image#method_missing</a></span> hooks which will run <span class='object_link'><a href="#call-class_method" title="Vips::Operation.call (method)">call</a></span> for you on <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span> for undefined instance or class methods. So you can also write:</p>
-
+<p>There are <span class='object_link'><a href="Image.html#method_missing-instance_method" title="Vips::Image#method_missing (method)">Image#method_missing</a></span> hooks which will run <span class='object_link'><a href="#call-class_method" title="Vips::Operation.call (method)">call</a></span> for you
+on <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span> for undefined instance or class methods. So you can also
+write:</p>
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_out'>out</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_black'><span class='object_link'><a href="Image.html#black-class_method" title="Vips::Image.black (method)">black</a></span></span> <span class='int'>100</span><span class='comma'>,</span> <span class='int'>100</span><span class='comma'>,</span> <span class='label'>bands:</span> <span class='int'>12</span>
 </code></pre>
-
 <p>Or perhaps:</p>
-
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_black'><span class='object_link'><a href="Image.html#black-class_method" title="Vips::Image.black (method)">black</a></span></span> <span class='int'>100</span><span class='comma'>,</span> <span class='int'>100</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_invert'>invert</span>
 </code></pre>
-
 <p>to run the <code>vips_invert()</code> operator.</p>
-
-<p>There are also a set of operator overloads and some convenience functions, see <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span>.</p>
-
-<p>If the operator needs a vector constant, <span class='object_link'><a href="#call-class_method" title="Vips::Operation.call (method)">call</a></span> will turn a scalar into a vector for you. So for <code>x.linear a, b</code>, which calculates <code>x * a + b</code> where <code>a</code> and <code>b</code> are vector constants, you can write:</p>
-
+<p>There are also a set of operator overloads and some convenience
+functions, see <span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span>.</p>
+<p>If the operator needs a vector constant, <span class='object_link'><a href="#call-class_method" title="Vips::Operation.call (method)">call</a></span> will turn a scalar
+into a
+vector for you. So for <code>x.linear a, b</code>, which calculates
+<code>x * a + b</code> where <code>a</code> and <code>b</code> are vector constants, you can write:</p>
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_black'><span class='object_link'><a href="Image.html#black-class_method" title="Vips::Image.black (method)">black</a></span></span> <span class='int'>100</span><span class='comma'>,</span> <span class='int'>100</span><span class='comma'>,</span> <span class='label'>bands:</span> <span class='int'>3</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_linear'>linear</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_linear'>linear</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>4</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_linear'>linear</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>4</span>
 </code></pre>
-
-<p>or any other combination. The operator overloads use this facility to support all the variations on:</p>
-
+<p>or any other combination. The operator overloads use this facility to
+support all the variations on:</p>
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_black'><span class='object_link'><a href="Image.html#black-class_method" title="Vips::Image.black (method)">black</a></span></span> <span class='int'>100</span><span class='comma'>,</span> <span class='int'>100</span><span class='comma'>,</span> <span class='label'>bands:</span> <span class='int'>3</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>*</span> <span class='int'>2</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>+</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>2</span><span class='comma'>,</span><span class='int'>3</span><span class='rbracket'>]</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>%</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
 </code></pre>
-
-<p>Similarly, wherever an image is required, you can use a constant. The constant will be expanded to an image matching the first input image argument. For example, you can write:</p>
-
+<p>Similarly, wherever an image is required, you can use a constant. The
+constant will be expanded to an image matching the first input image
+argument. For example, you can write:</p>
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='period'>.</span><span class='id identifier rubyid_black'><span class='object_link'><a href="Image.html#black-class_method" title="Vips::Image.black (method)">black</a></span></span> <span class='int'>100</span><span class='comma'>,</span> <span class='int'>100</span><span class='comma'>,</span> <span class='label'>bands:</span> <span class='int'>3</span>
 <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_bandjoin'>bandjoin</span> <span class='int'>255</span>
 </code></pre>
-
-<p>to add an extra band to the image where each pixel in the new band has the constant value 255.</p>
-
+<p>to add an extra band to the image where each pixel in the new band has
+the constant value 255.</p>
 
   </div>
 </div>
@@ -475,20 +463,6 @@
       <pre class="lines">
 
 
-344
-345
-346
-347
-348
-349
-350
-351
-352
-353
-354
-355
-356
-357
 358
 359
 360
@@ -643,10 +617,29 @@
 509
 510
 511
-512</pre>
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 344</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 358</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_supplied'>supplied</span><span class='comma'>,</span> <span class='id identifier rubyid_optional'>optional</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='id identifier rubyid_option_string'>option_string</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
   <span class='const'><span class='object_link'><a href="../GLib.html" title="GLib (module)">GLib</a></span></span><span class='period'>.</span><span class='id identifier rubyid_logger'><span class='object_link'><a href="../GLib.html#logger-class_method" title="GLib.logger (method)">logger</a></span></span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vips::VipsOperation.call</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span>
@@ -733,14 +726,12 @@
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 
-  <span class='comment'># collect a list of all input references here
-</span>  <span class='id identifier rubyid_references'>references</span> <span class='op'>=</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='comment'># dedupe all input references here
+</span>  <span class='id identifier rubyid_deduped_references'>deduped_references</span> <span class='op'>=</span> <span class='const'>Set</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
 
   <span class='id identifier rubyid_add_reference'>add_reference</span> <span class='op'>=</span> <span class='id identifier rubyid_lambda'>lambda</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_references'>references</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
-        <span class='id identifier rubyid_references'>references</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_i'>i</span>
-      <span class='kw'>end</span>
+      <span class='id identifier rubyid_deduped_references'>deduped_references</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_references'>references</span>
     <span class='kw'>end</span>
     <span class='kw'>false</span>
   <span class='kw'>end</span>
@@ -775,20 +766,27 @@
 
   <span class='id identifier rubyid_op'>op</span> <span class='op'>=</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_build'>build</span>
 
+  <span class='comment'># we need an array of references for output objects
+</span>  <span class='id identifier rubyid_references'>references</span> <span class='op'>=</span> <span class='id identifier rubyid_deduped_references'>deduped_references</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+
   <span class='comment'># attach all input refs to output x
 </span>  <span class='id identifier rubyid_set_reference'>set_reference</span> <span class='op'>=</span> <span class='id identifier rubyid_lambda'>lambda</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span>
+    <span class='comment'># stop early if there are no refs to attach
+</span>    <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_references'>references</span> <span class='op'>==</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
     <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span>
-      <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_references'>references</span> <span class='op'>+=</span> <span class='id identifier rubyid_references'>references</span>
+      <span class='id identifier rubyid_references'>references</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_references'>references</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_i'>i</span> <span class='rbrace'>}</span>
     <span class='kw'>end</span>
+
     <span class='kw'>false</span>
   <span class='kw'>end</span>
 
   <span class='comment'># get all required results
 </span>  <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_required_output'>required_output</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_details'>details</span><span class='op'>|</span>
-    <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:arg_name</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_details'>details</span><span class='lbracket'>[</span><span class='symbol'>:arg_name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_flat_find'>flat_find</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_set_reference'>set_reference</span>
-    <span class='id identifier rubyid_result'>result</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_result'>result</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_value'>value</span>
   <span class='kw'>end</span>
 
   <span class='comment'># fetch all optional ones
@@ -833,9 +831,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Search an object for the first element to match a predicate. Search inside subarrays and sub-hashes. Equlvalent to x.flatten.find{}.</p>
-
+    <p>Search an object for the first element to match a predicate. Search
+inside subarrays and sub-hashes. Equlvalent to x.flatten.find{}.</p>
 
   </div>
 </div>
@@ -848,21 +845,21 @@
       <pre class="lines">
 
 
-229
-230
-231
-232
-233
-234
-235
-236
-237
-238
-239
-240</pre>
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 229</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 243</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_flat_find'>flat_find</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span> <span class='symbol'>:each</span>
@@ -892,9 +889,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>expand a constant into an image</p>
-
+    <p>expand a constant into an image</p>
 
   </div>
 </div>
@@ -907,22 +902,22 @@
       <pre class="lines">
 
 
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253
-254
-255</pre>
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 243</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 257</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_imageize'>imageize</span> <span class='id identifier rubyid_match_image'>match_image</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="Image.html" title="Vips::Image (class)">Image</a></span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="MutableImage.html" title="Vips::MutableImage (class)">MutableImage</a></span></span><span class='rparen'>)</span>
@@ -963,15 +958,15 @@
       <pre class="lines">
 
 
-220
-221
-222
-223
-224
-225</pre>
+234
+235
+236
+237
+238
+239</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 220</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 234</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_argument_map'>argument_map</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span>
   <span class='id identifier rubyid_fn'>fn</span> <span class='op'>=</span> <span class='id identifier rubyid_proc'>proc</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid__op'>_op</span><span class='comma'>,</span> <span class='id identifier rubyid_pspec'>pspec</span><span class='comma'>,</span> <span class='id identifier rubyid_argument_class'>argument_class</span><span class='comma'>,</span> <span class='id identifier rubyid_argument_instance'>argument_instance</span><span class='comma'>,</span> <span class='id identifier rubyid__a'>_a</span><span class='comma'>,</span> <span class='id identifier rubyid__b'>_b</span><span class='op'>|</span>
@@ -999,18 +994,18 @@
       <pre class="lines">
 
 
-210
-211
-212
-213
-214
-215
-216
-217
-218</pre>
+224
+225
+226
+227
+228
+229
+230
+231
+232</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 210</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 224</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_build'>build</span>
   <span class='id identifier rubyid_op'>op</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Vips.html" title="Vips (module)">Vips</a></span></span><span class='period'>.</span><span class='id identifier rubyid_vips_cache_operation_build'>vips_cache_operation_build</span> <span class='kw'>self</span>
@@ -1037,9 +1032,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>set an operation argument, expanding constants and copying images as required</p>
-
+    <p>set an operation argument, expanding constants and copying images as
+required</p>
 
   </div>
 </div>
@@ -1052,24 +1046,24 @@
       <pre class="lines">
 
 
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268
-269
-270
-271
-272
-273</pre>
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 259</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/operation.rb', line 273</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_match_image'>match_image</span><span class='comma'>,</span> <span class='id identifier rubyid_flags'>flags</span><span class='comma'>,</span> <span class='id identifier rubyid_gtype'>gtype</span><span class='comma'>,</span> <span class='id identifier rubyid_destructive'>destructive</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_gtype'>gtype</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="../Vips.html#IMAGE_TYPE-constant" title="Vips::IMAGE_TYPE (constant)">IMAGE_TYPE</a></span></span>
@@ -1084,7 +1078,7 @@
     <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="" title="Vips::Operation (class)">Operation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_imageize'><span class='object_link'><a href="#imageize-class_method" title="Vips::Operation.imageize (method)">imageize</a></span></span> <span class='id identifier rubyid_match_image'>match_image</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span> <span class='rbrace'>}</span>
   <span class='kw'>end</span>
 
-  <span class='kw'>super</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1096,9 +1090,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

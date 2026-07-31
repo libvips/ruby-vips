@@ -6,13 +6,13 @@
 <title>
   Class: Vips::BlendMode
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::BlendMode";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -96,67 +98,46 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/blend_mode.rb</dd>
+    <dd>lib/vips/blend_mode.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Blend mode to use when compositing images. See <span class='object_link'><a href="Image.html#composite-instance_method" title="Vips::Image#composite (method)">Image#composite</a></span>.</p>
-<ul><li>
-<p><code>:clear</code> where the second object is drawn, the first is removed</p>
-</li><li>
-<p><code>:source</code> the second object is drawn as if nothing were below</p>
-</li><li>
-<p><code>:over</code> the image shows what you would expect if you held two  semi-transparent slides on top of each other</p>
-</li><li>
-<p><code>:in</code> the first object is removed completely, the second is only  drawn where the first was</p>
-</li><li>
-<p><code>:out</code> the second is drawn only where the first isn&#39;t</p>
-</li><li>
-<p><code>:atop</code> this leaves the first object mostly intact, but mixes both  objects in the overlapping area</p>
-</li><li>
-<p><code>:dest</code> leaves the first object untouched, the second is discarded  completely</p>
-</li><li>
-<p><code>:dest_over</code> like <code>:over</code>, but swaps the arguments</p>
-</li><li>
-<p><code>:dest_in</code> like <code>:in</code>, but swaps the arguments</p>
-</li><li>
-<p><code>:dest_out</code> like <code>:out</code>, but swaps the arguments</p>
-</li><li>
-<p><code>:dest_atop</code> like <code>:atop</code>, but swaps the arguments</p>
-</li><li>
-<p><code>:xor</code> something like a difference operator</p>
-</li><li>
-<p><code>:add</code> a bit like adding the two images</p>
-</li><li>
-<p><code>:saturate</code> a bit like the darker of the two</p>
-</li><li>
-<p><code>:multiply</code> at least as dark as the darker of the two inputs</p>
-</li><li>
-<p><code>:screen</code> at least as light as the lighter of the inputs</p>
-</li><li>
-<p><code>:overlay</code> multiplies or screens colors, depending on the lightness</p>
-</li><li>
-<p><code>:darken</code> the darker of each component</p>
-</li><li>
-<p><code>:lighten</code> the lighter of each component</p>
-</li><li>
-<p><code>:colour_dodge</code> brighten first by a factor second</p>
-</li><li>
-<p><code>:colour_burn</code> darken first by a factor of second</p>
-</li><li>
-<p><code>:hard_light</code> multiply or screen, depending on lightness</p>
-</li><li>
-<p><code>:soft_light</code> darken or lighten, depending on lightness</p>
-</li><li>
-<p><code>:difference</code> difference of the two</p>
-</li><li>
-<p><code>:exclusion</code> somewhat like <code>:difference</code>, but lower-contrast</p>
-</li></ul>
-
+    <p>Blend mode to use when compositing images. See <span class='object_link'><a href="Image.html#composite-instance_method" title="Vips::Image#composite (method)">Image#composite</a></span>.</p>
+<ul>
+<li><code>:clear</code> where the second object is drawn, the first is removed</li>
+<li><code>:source</code> the second object is drawn as if nothing were below</li>
+<li><code>:over</code> the image shows what you would expect if you held two
+semi-transparent slides on top of each other</li>
+<li><code>:in</code> the first object is removed completely, the second is only
+drawn where the first was</li>
+<li><code>:out</code> the second is drawn only where the first isn't</li>
+<li><code>:atop</code> this leaves the first object mostly intact, but mixes both
+objects in the overlapping area</li>
+<li><code>:dest</code> leaves the first object untouched, the second is discarded
+completely</li>
+<li><code>:dest_over</code> like <code>:over</code>, but swaps the arguments</li>
+<li><code>:dest_in</code> like <code>:in</code>, but swaps the arguments</li>
+<li><code>:dest_out</code> like <code>:out</code>, but swaps the arguments</li>
+<li><code>:dest_atop</code> like <code>:atop</code>, but swaps the arguments</li>
+<li><code>:xor</code> something like a difference operator</li>
+<li><code>:add</code> a bit like adding the two images</li>
+<li><code>:saturate</code> a bit like the darker of the two</li>
+<li><code>:multiply</code> at least as dark as the darker of the two inputs</li>
+<li><code>:screen</code> at least as light as the lighter of the inputs</li>
+<li><code>:overlay</code> multiplies or screens colors, depending on the lightness</li>
+<li><code>:darken</code> the darker of each component</li>
+<li><code>:lighten</code> the lighter of each component</li>
+<li><code>:colour_dodge</code> brighten first by a factor second</li>
+<li><code>:colour_burn</code> darken first by a factor of second</li>
+<li><code>:hard_light</code> multiply or screen, depending on lightness</li>
+<li><code>:soft_light</code> darken or lighten, depending on lightness</li>
+<li><code>:difference</code> difference of the two</li>
+<li><code>:exclusion</code> somewhat like <code>:difference</code>, but lower-contrast</li>
+</ul>
 
   </div>
 </div>
@@ -176,9 +157,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

@@ -6,13 +6,13 @@
 <title>
   Class: Vips::Connection
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Connection";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -69,14 +71,12 @@
   <dl>
     <dt>Inherits:</dt>
     <dd>
-      <span class="inheritName"><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></span>
+      <span class="inheritName">Object</span>
       
         <ul class="fullTree">
           <li>Object</li>
           
-            <li class="next"><span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></li>
-          
-            <li class="next"><span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></li>
+            <li class="next">Object</li>
           
             <li class="next">Vips::Connection</li>
           
@@ -98,16 +98,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/connection.rb</dd>
+    <dd>lib/vips/connection.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Abstract base class for connections.</p>
-
+    <p>Abstract base class for connections.</p>
 
   </div>
 </div>
@@ -136,11 +135,6 @@
 
 
 
-  <h2>Instance Attribute Summary</h2>
-  
-  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ptr-instance_method" title="GObject::GObject#ptr (method)">#ptr</a></span>, <span class='object_link'><a href="../GObject/GObject.html#references-instance_method" title="GObject::GObject#references (method)">#references</a></span></p>
-
 
   
     <h2>
@@ -167,9 +161,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get any filename associated with a connection, or nil.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get any filename associated with a connection, or nil.</p></div></span>
   
 </li>
 
@@ -191,47 +183,17 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get a nickname (short description) of a connection that could be shown to the user.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get a nickname (short description) of a connection that could be shown to the user.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
   
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Object.html" title="Vips::Object (class)">Object</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Object.html#get-instance_method" title="Vips::Object#get (method)">#get</a></span>, <span class='object_link'><a href="Object.html#get_pspec-instance_method" title="Vips::Object#get_pspec (method)">#get_pspec</a></span>, <span class='object_link'><a href="Object.html#get_typeof-instance_method" title="Vips::Object#get_typeof (method)">#get_typeof</a></span>, <span class='object_link'><a href="Object.html#get_typeof_error-instance_method" title="Vips::Object#get_typeof_error (method)">#get_typeof_error</a></span>, <span class='object_link'><a href="Object.html#print_all-class_method" title="Vips::Object.print_all (method)">print_all</a></span>, <span class='object_link'><a href="Object.html#set-instance_method" title="Vips::Object#set (method)">#set</a></span>, <span class='object_link'><a href="Object.html#signal_connect-instance_method" title="Vips::Object#signal_connect (method)">#signal_connect</a></span></p>
-
-  
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../GObject/GObject.html" title="GObject::GObject (class)">GObject::GObject</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-instance_method" title="GObject::GObject#ffi_managed_struct (method)">#ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_managed_struct-class_method" title="GObject::GObject.ffi_managed_struct (method)">ffi_managed_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-instance_method" title="GObject::GObject#ffi_struct (method)">#ffi_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#ffi_struct-class_method" title="GObject::GObject.ffi_struct (method)">ffi_struct</a></span>, <span class='object_link'><a href="../GObject/GObject.html#initialize-instance_method" title="GObject::GObject#initialize (method)">#initialize</a></span></p>
-
-  
-  <div id="constructor_details" class="method_details_list">
-  <h2>Constructor Details</h2>
-  
-    <p class="notice">This class inherits a constructor from <span class='object_link'><a href="../GObject/GObject.html#initialize-instance_method" title="GObject::GObject#initialize (method)">GObject::GObject</a></span></p>
-  
-</div>
-
 
   <div id="instance_method_details" class="method_details_list">
     <h2>Instance Method Details</h2>
@@ -248,9 +210,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get any filename associated with a connection, or nil.</p>
-
+    <p>Get any filename associated with a connection, or nil.</p>
 
   </div>
 </div>
@@ -289,9 +249,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get a nickname (short description) of a connection that could be shown to the user.</p>
-
+    <p>Get a nickname (short description) of a connection that could be shown to
+the user.</p>
 
   </div>
 </div>
@@ -324,9 +283,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

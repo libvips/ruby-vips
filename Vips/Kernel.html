@@ -6,13 +6,13 @@
 <title>
   Class: Vips::Kernel
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Kernel";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -96,33 +98,30 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/kernel.rb</dd>
+    <dd>lib/vips/kernel.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>A resizing kernel. One of these can be given to operations like <span class='object_link'><a href="Image.html#reduceh-instance_method" title="Vips::Image#reduceh (method)">Image#reduceh</a></span> or <span class='object_link'><a href="Image.html#resize-instance_method" title="Vips::Image#resize (method)">Image#resize</a></span> to select the resizing kernel to use.</p>
-
+    <p>A resizing kernel. One of these can be given to operations like
+<span class='object_link'><a href="Image.html#reduceh-instance_method" title="Vips::Image#reduceh (method)">Image#reduceh</a></span> or <span class='object_link'><a href="Image.html#resize-instance_method" title="Vips::Image#resize (method)">Image#resize</a></span> to select the resizing kernel to use.</p>
 <p>At least these should be available:</p>
-<ul><li>
-<p><code>:nearest</code> Nearest-neighbour interpolation.</p>
-</li><li>
-<p><code>:linear</code> Linear interpolation.</p>
-</li><li>
-<p><code>:cubic</code> Cubic interpolation.</p>
-</li><li>
-<p><code>:lanczos2</code> Two-lobe Lanczos</p>
-</li><li>
-<p><code>:lanczos3</code> Three-lobe Lanczos</p>
-</li></ul>
-
+<ul>
+<li><code>:nearest</code> nearest-neighbour interpolation</li>
+<li><code>:linear</code> linear interpolation</li>
+<li><code>:cubic</code> cubic interpolation</li>
+<li><code>:mitchell</code> Mitchell interpolation</li>
+<li><code>:lanczos2</code> two-lobe Lanczos</li>
+<li><code>:lanczos3</code> three-lobe Lanczos</li>
+<li><code>:mks2013</code> convolve with Magic Kernel Sharp 2013</li>
+<li><code>:mks2021</code> convolve with Magic Kernel Sharp 2021</li>
+</ul>
 <p>For example:</p>
-
-<p><code>ruby  im = im.resize 3, :kernel =&gt; :lanczos2 </code></p>
-
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_im'>im</span> <span class='op'>=</span> <span class='id identifier rubyid_im'>im</span><span class='period'>.</span><span class='id identifier rubyid_resize'>resize</span> <span class='int'>3</span><span class='comma'>,</span> <span class='label'>kernel:</span> <span class='symbol'>:lanczos2</span>
+</code></pre>
 
   </div>
 </div>
@@ -142,9 +141,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:33 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

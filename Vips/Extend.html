@@ -6,13 +6,13 @@
 <title>
   Class: Vips::Extend
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Extend";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -96,29 +98,26 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/extend.rb</dd>
+    <dd>lib/vips/extend.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>When the edges of an image are extended, you can specify how you want the extension done. See <span class='object_link'><a href="Image.html#embed-instance_method" title="Vips::Image#embed (method)">Image#embed</a></span>, <span class='object_link'><a href="Image.html#conv-instance_method" title="Vips::Image#conv (method)">Image#conv</a></span>, <span class='object_link'><a href="Image.html#affine-instance_method" title="Vips::Image#affine (method)">Image#affine</a></span> and so on.</p>
-<ul><li>
-<p><code>:black</code> new pixels are black, ie. all bits are zero.</p>
-</li><li>
-<p><code>:copy</code> each new pixel takes the value of the nearest edge pixel</p>
-</li><li>
-<p><code>:repeat</code> the image is tiled to fill the new area</p>
-</li><li>
-<p><code>:mirror</code> the image is reflected and tiled to reduce hash edges</p>
-</li><li>
-<p><code>:white</code> new pixels are white, ie. all bits are set</p>
-</li><li>
-<p><code>:background</code> colour set from the @background property</p>
-</li></ul>
-
+    <p>When the edges of an image are extended, you can specify
+how you want the extension done.
+See <span class='object_link'><a href="Image.html#embed-instance_method" title="Vips::Image#embed (method)">Image#embed</a></span>, <span class='object_link'><a href="Image.html#conv-instance_method" title="Vips::Image#conv (method)">Image#conv</a></span>, <span class='object_link'><a href="Image.html#affine-instance_method" title="Vips::Image#affine (method)">Image#affine</a></span> and
+so on.</p>
+<ul>
+<li><code>:black</code> new pixels are black, ie. all bits are zero.</li>
+<li><code>:copy</code> each new pixel takes the value of the nearest edge pixel</li>
+<li><code>:repeat</code> the image is tiled to fill the new area</li>
+<li><code>:mirror</code> the image is reflected and tiled to reduce hash edges</li>
+<li><code>:white</code> new pixels are white, ie. all bits are set</li>
+<li><code>:background</code> colour set from the @background property</li>
+</ul>
 
   </div>
 </div>
@@ -138,9 +137,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:33 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

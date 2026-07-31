@@ -6,13 +6,13 @@
 <title>
   Class: Vips::Object
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Object";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -96,7 +98,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/object.rb</dd>
+    <dd>lib/vips/object.rb
+</dd>
   </dl>
   
 </div>
@@ -154,14 +157,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>print all active VipsObjects, with their reference counts.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>print all active VipsObjects, with their reference counts.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
     <h2>
       Instance Method Summary
@@ -209,9 +211,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>return a pspec, or nil …</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>return a pspec, or nil ...</p></div></span>
   
 </li>
 
@@ -233,9 +233,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>return a gtype, 0 on not found.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>return a gtype, 0 on not found.</p></div></span>
   
 </li>
 
@@ -257,9 +255,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>return a gtype, raise an error on not found.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>return a gtype, raise an error on not found.</p></div></span>
   
 </li>
 
@@ -309,9 +305,11 @@
 
       
     </ul>
+    
   
 
 
+  
   
   
   
@@ -347,9 +345,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>print all active VipsObjects, with their reference counts. Handy for debugging ruby-vips.</p>
-
+    <p>print all active VipsObjects, with their reference counts. Handy for
+debugging ruby-vips.</p>
 
   </div>
 </div>
@@ -362,13 +359,13 @@
       <pre class="lines">
 
 
+166
+167
 168
-169
-170
-171</pre>
+169</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 168</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 166</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_print_all'>print_all</span>
   <span class='const'>GC</span><span class='period'>.</span><span class='id identifier rubyid_start'>start</span>
@@ -400,6 +397,8 @@
       <pre class="lines">
 
 
+231
+232
 233
 234
 235
@@ -409,12 +408,10 @@
 239
 240
 241
-242
-243
-244</pre>
+242</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 233</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 231</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span> <span class='id identifier rubyid_name'>name</span>
   <span class='id identifier rubyid_gtype'>gtype</span> <span class='op'>=</span> <span class='id identifier rubyid_get_typeof_error'>get_typeof_error</span> <span class='id identifier rubyid_name'>name</span>
@@ -444,9 +441,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>return a pspec, or nil … nil wil leave a message in the error log which you must clear</p>
-
+    <p>return a pspec, or nil ... nil wil leave a message in the error log
+which you must clear</p>
 
   </div>
 </div>
@@ -459,6 +455,8 @@
       <pre class="lines">
 
 
+200
+201
 202
 203
 204
@@ -467,12 +465,10 @@
 207
 208
 209
-210
-211
-212</pre>
+210</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 202</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 200</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_pspec'>get_pspec</span> <span class='id identifier rubyid_name'>name</span>
   <span class='id identifier rubyid_ppspec'>ppspec</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../GObject.html" title="GObject (module)">GObject</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../GObject/GParamSpecPtr.html" title="GObject::GParamSpecPtr (class)">GParamSpecPtr</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -501,9 +497,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>return a gtype, 0 on not found</p>
-
+    <p>return a gtype, 0 on not found</p>
 
   </div>
 </div>
@@ -516,18 +510,18 @@
       <pre class="lines">
 
 
+221
+222
 223
 224
 225
 226
 227
 228
-229
-230
-231</pre>
+229</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 223</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 221</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_typeof'>get_typeof</span> <span class='id identifier rubyid_name'>name</span>
   <span class='id identifier rubyid_pspec'>pspec</span> <span class='op'>=</span> <span class='id identifier rubyid_get_pspec'>get_pspec</span> <span class='id identifier rubyid_name'>name</span>
@@ -554,9 +548,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>return a gtype, raise an error on not found</p>
-
+    <p>return a gtype, raise an error on not found</p>
 
   </div>
 </div>
@@ -582,15 +574,15 @@
       <pre class="lines">
 
 
+213
+214
 215
 216
 217
-218
-219
-220</pre>
+218</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 215</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 213</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_typeof_error'>get_typeof_error</span> <span class='id identifier rubyid_name'>name</span>
   <span class='id identifier rubyid_pspec'>pspec</span> <span class='op'>=</span> <span class='id identifier rubyid_get_pspec'>get_pspec</span> <span class='id identifier rubyid_name'>name</span>
@@ -618,6 +610,8 @@
       <pre class="lines">
 
 
+244
+245
 246
 247
 248
@@ -625,12 +619,10 @@
 250
 251
 252
-253
-254
-255</pre>
+253</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 246</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 244</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
   <span class='const'><span class='object_link'><a href="../GLib.html" title="GLib (module)">GLib</a></span></span><span class='period'>.</span><span class='id identifier rubyid_logger'><span class='object_link'><a href="../GLib.html#logger-class_method" title="GLib.logger (method)">logger</a></span></span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Vips::Object.set</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span>
@@ -684,6 +676,8 @@
       <pre class="lines">
 
 
+255
+256
 257
 258
 259
@@ -704,12 +698,10 @@
 274
 275
 276
-277
-278
-279</pre>
+277</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 257</span>
+      <pre class="code"><span class="info file"># File 'lib/vips/object.rb', line 255</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_signal_connect'>signal_connect</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_handler'>handler</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span>
   <span class='id identifier rubyid_marshal'>marshal</span> <span class='op'>=</span> <span class='const'>MARSHAL_ALL</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span>
@@ -744,9 +736,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

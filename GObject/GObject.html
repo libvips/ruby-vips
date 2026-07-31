@@ -6,13 +6,13 @@
 <title>
   Class: GObject::GObject
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "GObject::GObject";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -99,38 +101,36 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/gobject.rb</dd>
+    <dd>lib/vips/gobject.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>we have a number of things we need to inherit in different ways:</p>
-<ul><li>
-<p>we want to be able to subclass GObject in Ruby in a simple way</p>
-</li><li>
-<p>the layouts of the nested structs need to inherit</p>
-</li><li>
-<p>we need to be able to cast between structs which share a base struct  without creating new wrappers or messing up refcounting</p>
-</li><li>
-<p>we need automatic gobject refcounting</p>
-</li></ul>
-
-<p>the solution is to split the class into four areas which we treat differently:</p>
-<ul><li>
-<p>we have a “wrapper” Ruby class to allow easy subclassing … this has a  @struct member which holds the actual pointer</p>
-</li><li>
-<p>we use “forwardable” to forward the various ffi methods on to the  @struct member … we arrange things so that subclasses do not need to  do the forwarding themselves</p>
-</li><li>
-<p>we have two versions of the struct: a plain one which we can use for  casting that will not change the refcounts</p>
-</li><li>
-<p>and a managed one with an unref which we just use for .new</p>
-</li><li>
-<p>we separate the struct layout into a separate module to avoid repeating  ourselves</p>
-</li></ul>
-
+    <p>we have a number of things we need to inherit in different ways:</p>
+<ul>
+<li>we want to be able to subclass GObject in Ruby in a simple way</li>
+<li>the layouts of the nested structs need to inherit</li>
+<li>we need to be able to cast between structs which share a base struct
+without creating new wrappers or messing up refcounting</li>
+<li>we need automatic gobject refcounting</li>
+</ul>
+<p>the solution is to split the class into four areas which we treat
+differently:</p>
+<ul>
+<li>we have a &quot;wrapper&quot; Ruby class to allow easy subclassing ... this has a
+@struct member which holds the actual pointer</li>
+<li>we use &quot;forwardable&quot; to forward the various ffi methods on to the
+@struct member ... we arrange things so that subclasses do not need to
+do the forwarding themselves</li>
+<li>we have two versions of the struct: a plain one which we can use for
+casting that will not change the refcounts</li>
+<li>and a managed one with an unref which we just use for .new</li>
+<li>we separate the struct layout into a separate module to avoid repeating
+ourselves</li>
+</ul>
 
   </div>
 </div>
@@ -182,9 +182,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>get the pointer we were built from …</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>get the pointer we were built from ...</p></div></span>
   
 </li>
 
@@ -211,9 +209,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute references.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute references.</p></div></span>
   
 </li>
 
@@ -276,6 +272,7 @@
 
       
     </ul>
+    
   
     <h2>
       Instance Method Summary
@@ -301,9 +298,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>access to the managed struct for this class.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>access to the managed struct for this class.</p></div></span>
   
 </li>
 
@@ -325,9 +320,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>access to the casting struct for this class.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>access to the casting struct for this class.</p></div></span>
   
 </li>
 
@@ -351,14 +344,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>don&#39;t allow ptr == nil, we never want to allocate a GObject struct ourselves, we just want to wrap GLib-allocated GObjects.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>don't allow ptr == nil, we never want to allocate a GObject struct ourselves, we just want to wrap GLib-allocated GObjects.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -377,11 +369,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>don&#39;t allow ptr == nil, we never want to allocate a GObject struct ourselves, we just want to wrap GLib-allocated GObjects</p>
-
-<p>here we use ManagedStruct, not Struct, since this is the ref that will need the unref</p>
-
+    <p>don't allow ptr == nil, we never want to allocate a GObject struct
+ourselves, we just want to wrap GLib-allocated GObjects</p>
+<p>here we use ManagedStruct, not Struct, since this is the ref that will
+need the unref</p>
 
   </div>
 </div>
@@ -437,9 +428,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>get the pointer we were built from … #to_ptr gets the pointer after we have wrapped it up with an auto unref</p>
-
+    <p>get the pointer we were built from ... #to_ptr gets the pointer after we
+have wrapped it up with an auto unref</p>
 
   </div>
 </div>
@@ -480,9 +470,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns the value of attribute references.</p>
-
+    <p>Returns the value of attribute references.</p>
 
   </div>
 </div>
@@ -594,9 +582,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>access to the managed struct for this class</p>
-
+    <p>access to the managed struct for this class</p>
 
   </div>
 </div>
@@ -635,9 +621,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>access to the casting struct for this class</p>
-
+    <p>access to the casting struct for this class</p>
 
   </div>
 </div>
@@ -670,9 +654,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:52 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

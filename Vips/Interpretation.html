@@ -6,13 +6,13 @@
 <title>
   Class: Vips::Interpretation
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Interpretation";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -96,55 +98,38 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips/interpretation.rb</dd>
+    <dd>lib/vips/interpretation.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>How the values in an image should be interpreted. For example, a three-band float image of type :lab should have its pixels interpreted as coordinates in CIE Lab space.</p>
-<ul><li>
-<p><code>:multiband</code> generic many-band image</p>
-</li><li>
-<p><code>:b_w</code> some kind of single-band image</p>
-</li><li>
-<p><code>:histogram</code> a 1D image, eg. histogram or lookup table</p>
-</li><li>
-<p><code>:fourier</code> image is in fourier space</p>
-</li><li>
-<p><code>:xyz</code> the first three bands are CIE XYZ</p>
-</li><li>
-<p><code>:lab</code> pixels are in CIE Lab space</p>
-</li><li>
-<p><code>:cmyk</code> the first four bands are in CMYK space</p>
-</li><li>
-<p><code>:labq</code> implies #VIPS_CODING_LABQ</p>
-</li><li>
-<p><code>:rgb</code> generic RGB space</p>
-</li><li>
-<p><code>:cmc</code> a uniform colourspace based on CMC(1:1)</p>
-</li><li>
-<p><code>:lch</code> pixels are in CIE LCh space</p>
-</li><li>
-<p><code>:labs</code> CIE LAB coded as three signed 16-bit values</p>
-</li><li>
-<p><code>:srgb</code> pixels are sRGB</p>
-</li><li>
-<p><code>:hsv</code> pixels are HSV</p>
-</li><li>
-<p><code>:scrgb</code> pixels are scRGB</p>
-</li><li>
-<p><code>:yxy</code> pixels are CIE Yxy</p>
-</li><li>
-<p><code>:rgb16</code> generic 16-bit RGB</p>
-</li><li>
-<p><code>:grey16</code> generic 16-bit mono</p>
-</li><li>
-<p><code>:matrix</code> a matrix</p>
-</li></ul>
-
+    <p>How the values in an image should be interpreted. For example, a
+three-band float image of type :lab should have its
+pixels interpreted as coordinates in CIE Lab space.</p>
+<ul>
+<li><code>:multiband</code> generic many-band image</li>
+<li><code>:b_w</code> some kind of single-band image</li>
+<li><code>:histogram</code> a 1D image, eg. histogram or lookup table</li>
+<li><code>:xyz</code> the first three bands are CIE XYZ</li>
+<li><code>:lab</code> pixels are in CIE Lab space</li>
+<li><code>:cmyk</code> the first four bands are in CMYK space</li>
+<li><code>:labq</code> implies #VIPS_CODING_LABQ</li>
+<li><code>:rgb</code> generic RGB space</li>
+<li><code>:cmc</code> a uniform colourspace based on CMC(1:1)</li>
+<li><code>:lch</code> pixels are in CIE LCh space</li>
+<li><code>:labs</code> CIE LAB coded as three signed 16-bit values</li>
+<li><code>:srgb</code> pixels are sRGB</li>
+<li><code>:yxy</code> pixels are CIE Yxy</li>
+<li><code>:fourier</code> image is in fourier space</li>
+<li><code>:rgb16</code> generic 16-bit RGB</li>
+<li><code>:grey16</code> generic 16-bit mono</li>
+<li><code>:matrix</code> a matrix</li>
+<li><code>:scrgb</code> pixels are scRGB</li>
+<li><code>:hsv</code> pixels are HSV</li>
+</ul>
 
   </div>
 </div>
@@ -164,9 +149,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:53 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:34 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>

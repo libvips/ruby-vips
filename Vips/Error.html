@@ -6,13 +6,13 @@
 <title>
   Exception: Vips::Error
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.45
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "Vips::Error";
@@ -27,6 +27,8 @@
 
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="../class_list.html?1"></iframe>
       <div id="resizer"></div>
@@ -96,16 +98,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/vips.rb</dd>
+    <dd>lib/vips.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>The ruby-vips error class.</p>
-
+    <p>The ruby-vips error class.</p>
 
   </div>
 </div>
@@ -146,9 +147,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Error.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Error.</p></div></span>
   
 </li>
 
@@ -170,14 +169,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Pretty-print a <span class='object_link'><a href="" title="Vips::Error (class)">Error</a></span>.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Pretty-print a <span class='object_link'><a href="" title="Vips::Error (class)">Error</a></span>.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -195,9 +193,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Error.</p>
-
+    <p>Returns a new instance of Error.</p>
 
   </div>
 </div>
@@ -217,9 +213,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>The error message. If this is not supplied, grab and clear the vips error buffer and use that.</p>
-</div>
+        <div class='inline'><p>The error message. If this is not supplied, grab
+and clear the vips error buffer and use that.</p></div>
       
     </li>
   
@@ -232,19 +227,19 @@
       <pre class="lines">
 
 
-592
-593
-594
-595
-596
-597
-598
-599
-600
-601</pre>
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 592</span>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 639</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span> <span class='id identifier rubyid_msg'>msg</span> <span class='op'>=</span> <span class='kw'>nil</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_msg'>msg</span>
@@ -279,9 +274,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Pretty-print a <span class='object_link'><a href="" title="Vips::Error (class)">Vips::Error</a></span>.</p>
-
+    <p>Pretty-print a <span class='object_link'><a href="" title="Vips::Error (class)">Vips::Error</a></span>.</p>
 
   </div>
 </div>
@@ -298,9 +291,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>The error message</p>
-</div>
+        <div class='inline'><p>The error message</p></div>
       
     </li>
   
@@ -312,16 +303,16 @@
       <pre class="lines">
 
 
-606
-607
-608
-609
-610
-611
-612</pre>
+653
+654
+655
+656
+657
+658
+659</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 606</span>
+      <pre class="code"><span class="info file"># File 'lib/vips.rb', line 653</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='ivar'>@details</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -340,9 +331,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 25 12:14:44 2021 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.7.2).
+  Generated on Fri Jul 31 18:44:30 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.3.8).
 </div>
 
     </div>
