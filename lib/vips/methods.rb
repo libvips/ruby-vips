@@ -1484,12 +1484,10 @@ module Vips
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
-# @!method self.jxlload(filename, **opts)
-#   Load jpeg-xl image.
+# @!method self.niftiload(filename, **opts)
+#   Load nifti volume.
 #   @param filename [String] Filename to load from
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page First page to load
-#   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1497,25 +1495,42 @@ module Vips
 #   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
 #   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
 
-# @!method self.jxlload_buffer(buffer, **opts)
-#   Load jpeg-xl image.
-#   @param buffer [VipsBlob] Buffer to load from
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :page First page to load
-#   @option opts [Integer] :n Number of pages to load, -1 for all
-#   @option opts [Boolean] :memory Force open via memory
-#   @option opts [Vips::Access] :access Required access pattern for this file
-#   @option opts [Vips::FailOn] :fail_on Error level to fail on
-#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
-#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
-#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
-
-# @!method self.jxlload_source(source, **opts)
-#   Load jpeg-xl image.
+# @!method self.niftiload_source(source, **opts)
+#   Load nifti volumes.
 #   @param source [Vips::Source] Source to load from
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :page First page to load
-#   @option opts [Integer] :n Number of pages to load, -1 for all
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Vips::FailOn] :fail_on Error level to fail on
+#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
+# @!method self.openslideload(filename, **opts)
+#   Load file with openslide.
+#   @param filename [String] Filename to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :level Load this level from the file
+#   @option opts [Boolean] :autocrop Crop to image bounds
+#   @option opts [String] :associated Load this associated image
+#   @option opts [Boolean] :attach_associated Attach all associated images
+#   @option opts [Boolean] :rgb Output RGB (not RGBA)
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Vips::FailOn] :fail_on Error level to fail on
+#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
+# @!method self.openslideload_source(source, **opts)
+#   Load source with openslide.
+#   @param source [Vips::Source] Source to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :level Load this level from the file
+#   @option opts [Boolean] :autocrop Crop to image bounds
+#   @option opts [String] :associated Load this associated image
+#   @option opts [Boolean] :attach_associated Attach all associated images
+#   @option opts [Boolean] :rgb Output RGB (not RGBA)
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1561,6 +1576,45 @@ module Vips
 #   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :thumbnail Fetch thumbnail image
 #   @option opts [Boolean] :unlimited Remove all denial of service limits
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Vips::FailOn] :fail_on Error level to fail on
+#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
+# @!method self.jxlload(filename, **opts)
+#   Load jpeg-xl image.
+#   @param filename [String] Filename to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :page First page to load
+#   @option opts [Integer] :n Number of pages to load, -1 for all
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Vips::FailOn] :fail_on Error level to fail on
+#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
+# @!method self.jxlload_buffer(buffer, **opts)
+#   Load jpeg-xl image.
+#   @param buffer [VipsBlob] Buffer to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :page First page to load
+#   @option opts [Integer] :n Number of pages to load, -1 for all
+#   @option opts [Boolean] :memory Force open via memory
+#   @option opts [Vips::Access] :access Required access pattern for this file
+#   @option opts [Vips::FailOn] :fail_on Error level to fail on
+#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
+#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
+#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
+
+# @!method self.jxlload_source(source, **opts)
+#   Load jpeg-xl image.
+#   @param source [Vips::Source] Source to load from
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :page First page to load
+#   @option opts [Integer] :n Number of pages to load, -1 for all
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1657,38 +1711,6 @@ module Vips
 #   @option opts [String] :density Canvas resolution for rendering vector formats like SVG
 #   @option opts [Integer] :page First page to load
 #   @option opts [Integer] :n Number of pages to load, -1 for all
-#   @option opts [Boolean] :memory Force open via memory
-#   @option opts [Vips::Access] :access Required access pattern for this file
-#   @option opts [Vips::FailOn] :fail_on Error level to fail on
-#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
-#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
-#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
-
-# @!method self.openslideload(filename, **opts)
-#   Load file with openslide.
-#   @param filename [String] Filename to load from
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :level Load this level from the file
-#   @option opts [Boolean] :autocrop Crop to image bounds
-#   @option opts [String] :associated Load this associated image
-#   @option opts [Boolean] :attach_associated Attach all associated images
-#   @option opts [Boolean] :rgb Output RGB (not RGBA)
-#   @option opts [Boolean] :memory Force open via memory
-#   @option opts [Vips::Access] :access Required access pattern for this file
-#   @option opts [Vips::FailOn] :fail_on Error level to fail on
-#   @option opts [Boolean] :revalidate Don't use a cached result for this operation
-#   @option opts [Vips::ForeignFlags] :flags Output Flags for this file
-#   @return [Vips::Image, Hash<Symbol => Object>] Output image, Hash of optional output items
-
-# @!method self.openslideload_source(source, **opts)
-#   Load source with openslide.
-#   @param source [Vips::Source] Source to load from
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :level Load this level from the file
-#   @option opts [Boolean] :autocrop Crop to image bounds
-#   @option opts [String] :associated Load this associated image
-#   @option opts [Boolean] :attach_associated Attach all associated images
-#   @option opts [Boolean] :rgb Output RGB (not RGBA)
 #   @option opts [Boolean] :memory Force open via memory
 #   @option opts [Vips::Access] :access Required access pattern for this file
 #   @option opts [Vips::FailOn] :fail_on Error level to fail on
@@ -1900,6 +1922,7 @@ module Vips
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
+#   @option opts [Integer] :gainmap_scale_factor The scale factor of base image to gainmap image
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1910,6 +1933,7 @@ module Vips
 #   Save image in ultrahdr format.
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
+#   @option opts [Integer] :gainmap_scale_factor The scale factor of base image to gainmap image
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -1921,6 +1945,7 @@ module Vips
 #   @param target [Vips::Target] Target to save to
 #   @param opts [Hash] Set of options
 #   @option opts [Integer] :Q Q factor
+#   @option opts [Integer] :gainmap_scale_factor The scale factor of base image to gainmap image
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -2375,47 +2400,10 @@ module Vips
 #   @option opts [String] :profile Filename of ICC profile to embed
 #   @return [nil] 
 
-# @!method jxlsave(filename, **opts)
-#   Save image in jpeg-xl format.
+# @!method niftisave(filename, **opts)
+#   Save image to nifti file.
 #   @param filename [String] Filename to save to
 #   @param opts [Hash] Set of options
-#   @option opts [Integer] :tier Decode speed tier
-#   @option opts [Float] :distance Target butteraugli distance
-#   @option opts [Integer] :effort Encoding effort
-#   @option opts [Boolean] :lossless Enable lossless compression
-#   @option opts [Integer] :Q Quality factor
-#   @option opts [Integer] :bitdepth Bit depth
-#   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
-#   @option opts [Array<Double>] :background Background value
-#   @option opts [Integer] :page_height Set page height for multipage save
-#   @option opts [String] :profile Filename of ICC profile to embed
-#   @return [nil] 
-
-# @!method jxlsave_buffer(**opts)
-#   Save image in jpeg-xl format.
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :tier Decode speed tier
-#   @option opts [Float] :distance Target butteraugli distance
-#   @option opts [Integer] :effort Encoding effort
-#   @option opts [Boolean] :lossless Enable lossless compression
-#   @option opts [Integer] :Q Quality factor
-#   @option opts [Integer] :bitdepth Bit depth
-#   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
-#   @option opts [Array<Double>] :background Background value
-#   @option opts [Integer] :page_height Set page height for multipage save
-#   @option opts [String] :profile Filename of ICC profile to embed
-#   @return [VipsBlob] Buffer to save to
-
-# @!method jxlsave_target(target, **opts)
-#   Save image in jpeg-xl format.
-#   @param target [Vips::Target] Target to save to
-#   @param opts [Hash] Set of options
-#   @option opts [Integer] :tier Decode speed tier
-#   @option opts [Float] :distance Target butteraugli distance
-#   @option opts [Integer] :effort Encoding effort
-#   @option opts [Boolean] :lossless Enable lossless compression
-#   @option opts [Integer] :Q Quality factor
-#   @option opts [Integer] :bitdepth Bit depth
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
@@ -2469,6 +2457,53 @@ module Vips
 #   @option opts [Vips::ForeignSubsample] :subsample_mode Select chroma subsample operation mode
 #   @option opts [Vips::ForeignHeifEncoder] :encoder Select encoder to use
 #   @option opts [String] :tune Tuning parameters
+#   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
+#   @option opts [Array<Double>] :background Background value
+#   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
+#   @return [nil] 
+
+# @!method jxlsave(filename, **opts)
+#   Save image in jpeg-xl format.
+#   @param filename [String] Filename to save to
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :tier Decode speed tier
+#   @option opts [Float] :distance Target butteraugli distance
+#   @option opts [Integer] :effort Encoding effort
+#   @option opts [Boolean] :lossless Enable lossless compression
+#   @option opts [Integer] :Q Quality factor
+#   @option opts [Integer] :bitdepth Bit depth
+#   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
+#   @option opts [Array<Double>] :background Background value
+#   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
+#   @return [nil] 
+
+# @!method jxlsave_buffer(**opts)
+#   Save image in jpeg-xl format.
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :tier Decode speed tier
+#   @option opts [Float] :distance Target butteraugli distance
+#   @option opts [Integer] :effort Encoding effort
+#   @option opts [Boolean] :lossless Enable lossless compression
+#   @option opts [Integer] :Q Quality factor
+#   @option opts [Integer] :bitdepth Bit depth
+#   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
+#   @option opts [Array<Double>] :background Background value
+#   @option opts [Integer] :page_height Set page height for multipage save
+#   @option opts [String] :profile Filename of ICC profile to embed
+#   @return [VipsBlob] Buffer to save to
+
+# @!method jxlsave_target(target, **opts)
+#   Save image in jpeg-xl format.
+#   @param target [Vips::Target] Target to save to
+#   @param opts [Hash] Set of options
+#   @option opts [Integer] :tier Decode speed tier
+#   @option opts [Float] :distance Target butteraugli distance
+#   @option opts [Integer] :effort Encoding effort
+#   @option opts [Boolean] :lossless Enable lossless compression
+#   @option opts [Integer] :Q Quality factor
+#   @option opts [Integer] :bitdepth Bit depth
 #   @option opts [Vips::ForeignKeep] :keep Which metadata to retain
 #   @option opts [Array<Double>] :background Background value
 #   @option opts [Integer] :page_height Set page height for multipage save
