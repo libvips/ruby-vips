@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
-  
-require 'vips'
+
+require "vips"
 
 image = Vips::Image.new_from_file ARGV[0]
 
@@ -26,6 +26,6 @@ y = (i[0] * T[3] + i[1] * T[4] + T[5]) / (i[0] * T[6] + i[1] * T[7] + 1)
 m = x.bandjoin y
 
 # and use it to transform our original image
-image = image.mapim m 
+image = image.mapim m
 
 image.write_to_file ARGV[1]
