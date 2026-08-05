@@ -2,6 +2,9 @@
 
 ## master
 
+* `Source.new_from_memory` keeps a reference to the memory area, which libvips
+  aliases rather than copies
+
 ## Version 2.3.0 (2025-12-10)
 
 * move library_name out of the global namespace and into FFI [jcupitt]
