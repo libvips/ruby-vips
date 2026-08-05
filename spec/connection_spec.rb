@@ -26,6 +26,21 @@ RSpec.describe Vips::Source, version: [8, 9] do
     expect(source)
   end
 
+  it "can load an image from a memory source after the caller drops its ref" do
+    source = Vips::Source.new_from_memory File.binread(simg("wagon.jpg"))
+
+    # the secret ref inside source is now the only thing keeping the string
+    # alive ... GC to try to trigger a segv if new_from_memory didn't take one
+    GC.start
+
+    image = Vips::Image.new_from_source source, ""
+
+    expect(image.width).to eq(685)
+    expect(image.height).to eq(478)
+    expect(image.bands).to eq(3)
+    expect(image.avg).to be_within(0.001).of(109.789)
+  end
+
   it "sources have filenames and nicks" do
     source = Vips::Source.new_from_file simg("wagon.jpg")
 

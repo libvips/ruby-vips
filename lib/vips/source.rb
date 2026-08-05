@@ -70,6 +70,9 @@ module Vips
     # Create a new source from an area of memory. Memory areas can be
     # strings, arrays and so forth -- anything that supports bytesize.
     #
+    # libvips does not copy the memory area, so the source keeps a reference
+    # to it and will hold it alive for as long as the source is alive.
+    #
     # Pass sources to {Image.new_from_source} to load images from
     # them.
     #
@@ -79,10 +82,14 @@ module Vips
       ptr = Vips.vips_source_new_from_memory data, data.bytesize
       raise Vips::Error if ptr.null?
 
-      # FIXME do we need to keep a ref to the underlying memory area? what
-      # about Image.new_from_buffer? Does that need a secret ref too?
+      source = Vips::Source.new ptr
 
-      Vips::Source.new ptr
+      # vips_source_new_from_memory() aliases the memory area rather than
+      # copying it, so we must keep a secret ref to stop it being freed while
+      # the source is alive. See {Image.new_from_memory}.
+      source.references << data
+
+      source
     end
   end
 end
