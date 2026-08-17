@@ -52,6 +52,14 @@ module Vips
     @@is_unified = true
   rescue FFI::NotFoundError
     @@is_unified = false
+  rescue RuntimeError
+    $stderr.puts "ruby-vips RuntimeError"
+    $stderr.puts "\tFFI has been able to load a library, but unable to call"
+    $stderr.puts "\ta known function in that library. You may have"
+    $stderr.puts "\twrite-execute protection enabled, preventing FFI from"
+    $stderr.puts "\tmaking wrappers for function dispatch."
+    $stderr.puts "\tSee https://github.com/libvips/ruby-vips/issues/439"
+    raise
   end
 
   def self.unified?
