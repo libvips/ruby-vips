@@ -30,6 +30,11 @@ gem install ruby-vips
 
 Or include `gem "ruby-vips"` in your gemfile.
 
+ruby-vips uses FFI to call into the libvips binary, and this needs
+write-execute permission to construct function wrappers. If ruby-vips fails to
+start, check your systemd settings and make sure `MemoryDenyWriteExecute` is not
+enabled, see https://github.com/libvips/ruby-vips/issues/439.
+
 ## Install on Windows
 
 The gemspec will pull in the msys libvips for you, so all you need is:
