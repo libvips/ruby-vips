@@ -53,12 +53,12 @@ module Vips
   rescue FFI::NotFoundError
     @@is_unified = false
   rescue RuntimeError
-    STDERR.puts "ruby-vips RuntimeError"
-    STDERR.puts "\tFFI has been able to load a library, but unable to call"
-    STDERR.puts "\ta known function in that library. You may have write-execute"
-    STDERR.puts "\tprotection enabled, preventing FFI from making twrappers for"
-    STDERR.puts "\tfunction dispatch."
-    STDERR.puts "\tSee https://github.com/libvips/ruby-vips/issues/439"
+    $stderr.puts "ruby-vips RuntimeError"
+    $stderr.puts "\tFFI has been able to load a library, but unable to call"
+    $stderr.puts "\ta known function in that library. You may have"
+    $stderr.puts "\twrite-execute protection enabled, preventing FFI from"
+    $stderr.puts "\tmaking wrappers for function dispatch."
+    $stderr.puts "\tSee https://github.com/libvips/ruby-vips/issues/439"
     raise
   end
 
