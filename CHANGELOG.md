@@ -2,6 +2,8 @@
 
 ## master
 
+* raise Vips::Error if `copy_memory` fails [VitaliiLazebnyi]
+
 ## Version 2.3.0 (2025-12-10)
 
 * move library_name out of the global namespace and into FFI [jcupitt]

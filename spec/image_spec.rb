@@ -81,6 +81,19 @@ RSpec.describe Vips::Image do
     expect { img.write_to_memory }.to raise_exception(Vips::Error)
   end
 
+  it "can copy an image to memory" do
+    image = (Vips::Image.black(16, 16) + 128).copy_memory
+
+    expect(image.width).to eq(16)
+    expect(image.height).to eq(16)
+    expect(image.avg).to eq(128)
+  end
+
+  it "will raise VipsError if copy_memory fails" do
+    img = Vips::Image.new_from_file simg("coffee.gif")
+    expect { img.copy_memory }.to raise_exception(Vips::Error)
+  end
+
   it "throws an error when trying to load an image from memory with unknown size" do
     data = FFI::Pointer.new(1)
     expect { Vips::Image.new_from_memory(data, 16, 16, 1, :uchar) }.to raise_error(Vips::Error)

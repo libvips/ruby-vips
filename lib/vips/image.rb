@@ -1018,6 +1018,8 @@ module Vips
     # @return [Image] new memory image
     def copy_memory
       new_image = Vips.vips_image_copy_memory self
+      raise Vips::Error if new_image.null?
+
       Vips::Image.new new_image
     end
 
