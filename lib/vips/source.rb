@@ -78,11 +78,14 @@ module Vips
     def self.new_from_memory(data)
       ptr = Vips.vips_source_new_from_memory data, data.bytesize
       raise Vips::Error if ptr.null?
+      source = Vips::Source.new ptr
 
-      # FIXME do we need to keep a ref to the underlying memory area? what
-      # about Image.new_from_buffer? Does that need a secret ref too?
+      # keep a secret ref to the underlying object .. this reference will be
+      # inherited by things that in turn depend on us, so the memory we are
+      # using will not be freed
+      source.references << data
 
-      Vips::Source.new ptr
+      source
     end
   end
 end
