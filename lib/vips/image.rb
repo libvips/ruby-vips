@@ -1017,10 +1017,10 @@ module Vips
     #
     # @return [Image] new memory image
     def copy_memory
-      new_image = Vips.vips_image_copy_memory self
-      raise Vips::Error if new_image.null?
+      ptr = Vips.vips_image_copy_memory self
+      raise Vips::Error if ptr.null?
 
-      Vips::Image.new new_image
+      Vips::Image.new ptr
     end
 
     # Draw a point on an image.
@@ -1037,8 +1037,7 @@ module Vips
     # @param other [Image, Real, Array<Real>] Thing to add to self
     # @return [Image] result of addition
     def + other
-      other.is_a?(Vips::Image) ?
-          add(other) : linear(1, other)
+      other.is_a?(Vips::Image) ? add(other) : linear(1, other)
     end
 
     # Subtract an image, constant or array.
@@ -1055,8 +1054,7 @@ module Vips
     # @param other [Image, Real, Array<Real>] Thing to multiply by self
     # @return [Image] result of multiplication
     def * other
-      other.is_a?(Vips::Image) ?
-          multiply(other) : linear(other, 0)
+      other.is_a?(Vips::Image) ? multiply(other) : linear(other, 0)
     end
 
     # Divide an image, constant or array.
@@ -1073,8 +1071,7 @@ module Vips
     # @param other [Image, Real, Array<Real>] self modulo this
     # @return [Image] result of modulo
     def % other
-      other.is_a?(Vips::Image) ?
-          remainder(other) : remainder_const(other)
+      other.is_a?(Vips::Image) ? remainder(other) : remainder_const(other)
     end
 
     # Raise to power of an image, constant or array.
