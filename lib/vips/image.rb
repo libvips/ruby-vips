@@ -87,6 +87,11 @@ module Vips
     UNKNOWN_POINTER_SIZE = FFI::Pointer.new(1).size
     private_constant :UNKNOWN_POINTER_SIZE
 
+    # Close and free all resources associated with this image.
+    def close
+      Vips.vips_image_invalidate_all(self)
+    end
+
     private
 
     # the layout of the VipsImage struct
