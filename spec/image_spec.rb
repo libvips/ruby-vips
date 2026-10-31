@@ -94,6 +94,36 @@ RSpec.describe Vips::Image do
     expect { img.copy_memory }.to raise_exception(Vips::Error)
   end
 
+  # copy_memory and write_to_memory evaluate the whole pipeline, so they must
+  # release the GVL, or every other Ruby thread stalls until they return
+  def ticks_during
+    ticks = 0
+    running = true
+    ticker = Thread.new do
+      while running
+        ticks += 1
+        sleep 0.001
+      end
+    end
+    sleep 0.01 until ticks > 0
+    before = ticks
+    yield
+    during = ticks - before
+    running = false
+    ticker.join
+    during
+  end
+
+  it "lets other threads run during copy_memory" do
+    image = Vips::Image.gaussnoise(2000, 2000).gaussblur(4)
+    expect(ticks_during { image.copy_memory }).to be > 0
+  end
+
+  it "lets other threads run during write_to_memory" do
+    image = Vips::Image.gaussnoise(2000, 2000).gaussblur(4)
+    expect(ticks_during { image.write_to_memory }).to be > 0
+  end
+
   it "throws an error when trying to load an image from memory with unknown size" do
     data = FFI::Pointer.new(1)
     expect { Vips::Image.new_from_memory(data, 16, 16, 1, :uchar) }.to raise_error(Vips::Error)

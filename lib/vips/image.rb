@@ -12,7 +12,9 @@ module Vips
   attach_function :vips_image_new_matrix_from_array,
     [:int, :int, :pointer, :int], :pointer
 
-  attach_function :vips_image_copy_memory, [:pointer], :pointer
+  # these two evaluate the whole pipeline, so release the GVL while they run
+  attach_function :vips_image_copy_memory, [:pointer], :pointer,
+    blocking: true
 
   attach_function :vips_image_set_progress, [:pointer, :int], :void
   attach_function :vips_image_set_kill, [:pointer, :int], :void
@@ -31,7 +33,7 @@ module Vips
   end
 
   attach_function :vips_image_write_to_memory,
-    [:pointer, SizeStruct.ptr], :pointer
+    [:pointer, SizeStruct.ptr], :pointer, blocking: true
 
   attach_function :vips_image_get_typeof, [:pointer, :string], :GType
   attach_function :vips_image_get,
