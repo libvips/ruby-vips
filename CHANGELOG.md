@@ -4,6 +4,7 @@
 
 * raise Vips::Error if `copy_memory` fails [VitaliiLazebnyi]
 * `Source.new_from_memory` keeps a reference to the memory area [jeremy]
+* release the GVL during `copy_memory` and `write_to_memory` [andrewfader]
 
 ## Version 2.3.0 (2025-12-10)
 
