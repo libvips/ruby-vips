@@ -10,7 +10,9 @@ module Vips
   attach_function :vips_region_new, [:pointer], :pointer
 
   if Vips.at_least_libvips?(8, 8)
-    attach_function :vips_region_fetch, [:pointer, :int, :int, :int, :int, SizeStruct.ptr], :pointer
+    # fetch evaluates the pipeline, so release the GVL while it runs
+    attach_function :vips_region_fetch, [:pointer, :int, :int, :int, :int, SizeStruct.ptr], :pointer,
+      blocking: true
     attach_function :vips_region_width, [:pointer], :int
     attach_function :vips_region_height, [:pointer], :int
   end
