@@ -185,3 +185,78 @@ RSpec.describe Vips::SourceCustom, version: [8, 14] do
     expect(image2.avg).to eq(image.avg)
   end
 end
+
+RSpec.describe Vips::SourceCustom, version: [8, 9] do
+  it "doesn't print anything when on_read reaches the end" do
+    file = File.open simg("wagon.jpg"), "rb"
+    source = Vips::SourceCustom.new
+    source.on_read { |length| file.read length }
+
+    expect {
+      image = Vips::Image.new_from_source source, ""
+      image.avg
+    }.not_to output.to_stdout
+  end
+
+  it "accepts frozen strings from on_read" do
+    file = File.open simg("wagon.jpg"), "rb"
+    source = Vips::SourceCustom.new
+    source.on_read do |length|
+      chunk = file.read length
+      chunk.freeze if chunk
+    end
+    image = Vips::Image.new_from_source source, ""
+
+    expect(image.avg).to be_within(0.001).of(109.789)
+  end
+
+  # with the default fail_on, the jpeg and png loaders treat read errors as a
+  # truncated file, so use a loader that doesn't
+  it "fails when on_read raises" do
+    tiff = Vips::Image.new_from_file(simg("wagon.jpg")).write_to_buffer(".tif")
+    file = StringIO.new(tiff)
+    source = Vips::SourceCustom.new
+    source.on_read do |length|
+      raise IOError, "connection reset" if file.pos > 10_000
+      file.read length
+    end
+
+    expect {
+      image = Vips::Image.new_from_source source, "", access: :sequential
+      image.avg
+    }.to raise_error(Vips::Error).and output(/read: connection reset/).to_stderr
+  end
+
+  it "fails when on_read raises and fail_on is set", version: [8, 12] do
+    file = File.open simg("wagon.jpg"), "rb"
+    source = Vips::SourceCustom.new
+    source.on_read do |length|
+      raise IOError, "connection reset" if file.pos > 10_000
+      file.read length
+    end
+
+    expect {
+      image = Vips::Image.new_from_source source, "", access: :sequential, fail_on: :truncated
+      image.avg
+    }.to raise_error(Vips::Error).and output(/read: connection reset/).to_stderr
+  end
+
+  it "fails when on_read returns more bytes than requested" do
+    source = Vips::SourceCustom.new
+    source.on_read { |length| "x" * (length + 1) }
+
+    expect {
+      Vips::Image.new_from_source source, ""
+    }.to raise_error(Vips::Error).and output(/only \d+ were requested/).to_stderr
+  end
+
+  it "fails with the exception raised in on_write" do
+    image = Vips::Image.new_from_file simg("wagon.jpg")
+    target = Vips::TargetCustom.new
+    target.on_write { |chunk| raise IOError, "disk full" }
+
+    expect {
+      image.write_to_target target, ".png"
+    }.to raise_error(Vips::Error).and output(/write: disk full/).to_stderr
+  end
+end

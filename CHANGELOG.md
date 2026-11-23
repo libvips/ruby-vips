@@ -5,6 +5,8 @@
 * raise Vips::Error if `copy_memory` fails [VitaliiLazebnyi]
 * `Source.new_from_memory` keeps a reference to the memory area [jeremy]
 * release the GVL during `copy_memory` and `write_to_memory` [andrewfader]
+* exceptions in custom source and target callbacks are reported to libvips as errors rather than as end of file, and printed to stderr rather than stdout [janko]
+* fix `SourceCustom#on_read` printing "read: unexpected return" at end of file, failing on frozen strings, and overflowing the buffer when the block returns more bytes than requested [janko]
 
 ## Version 2.3.0 (2025-12-10)
 

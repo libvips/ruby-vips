@@ -57,7 +57,10 @@ module Vips
   # ruby-ffi makes it hard to use the g_signal_connect user data param
   # to pass the function pointer through, unfortunately.
   #
-  # We can't throw exceptions across C, so we must catch everything.
+  # We can't throw exceptions across C, so we must catch everything. Read and
+  # write callbacks then report an error to libvips, rather than EOF or a
+  # zero-length write, so that the operation can fail instead of silently
+  # producing a truncated image.
 
   MARSHAL_PROGRESS = proc do |handler|
     FFI::Function.new(:void, [:pointer, :pointer, :pointer]) do |vi, prog, cb|
@@ -71,8 +74,8 @@ module Vips
       begin
         result = handler.call(p, len)
       rescue Exception => e
-        puts "read: #{e}"
-        result = 0
+        warn "read: #{e}"
+        result = -1
       end
 
       result
@@ -84,7 +87,7 @@ module Vips
       begin
         result = handler.call(off, whence)
       rescue Exception => e
-        puts "seek: #{e}"
+        warn "seek: #{e}"
         result = -1
       end
 
@@ -97,8 +100,8 @@ module Vips
       begin
         result = handler.call(p, len)
       rescue Exception => e
-        puts "write: #{e}"
-        result = 0
+        warn "write: #{e}"
+        result = -1
       end
 
       result

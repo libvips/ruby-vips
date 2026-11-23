@@ -60,10 +60,13 @@ module Vips
     def on_read &block
       signal_connect "read" do |buf, len|
         chunk = block.call len
-        return 0 if chunk.nil?
+        next 0 if chunk.nil?
         bytes_read = chunk.bytesize
+        if bytes_read > len
+          raise Vips::Error, "on_read returned #{bytes_read} bytes, but only #{len} were requested"
+        end
         buf.put_bytes(0, chunk, 0, bytes_read)
-        chunk.clear
+        chunk.clear unless chunk.frozen?
 
         bytes_read
       end
