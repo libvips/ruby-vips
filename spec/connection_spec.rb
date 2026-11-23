@@ -124,6 +124,17 @@ RSpec.describe Vips::SourceCustom, version: [8, 9] do
     expect(image.avg).to be_within(0.001).of(109.789)
   end
 
+  it "doesn't print anything when on_read reaches the end" do
+    file = File.open simg("alpha.png"), "rb"
+    source = Vips::SourceCustom.new
+    source.on_read { |length| file.read length }
+
+    expect {
+      image = Vips::Image.new_from_source source, ""
+      image.avg
+    }.not_to output.to_stdout
+  end
+
   it "on_seek is optional" do
     file = File.open simg("wagon.jpg"), "rb"
     source = Vips::SourceCustom.new
