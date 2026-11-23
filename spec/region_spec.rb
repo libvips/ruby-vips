@@ -26,4 +26,29 @@ RSpec.describe Vips::Region do
     expect(region.width == 30)
     expect(region.height == 40)
   end
+
+  # fetch evaluates the pipeline, so it must release the GVL, or every other
+  # Ruby thread stalls until it returns
+  it "lets other threads run during fetch", version: [8, 8] do
+    image = Vips::Image.gaussnoise(2000, 2000).gaussblur(4)
+    region = Vips::Region.new image
+
+    ticks = 0
+    running = true
+    ticker = Thread.new do
+      while running
+        ticks += 1
+        sleep 0.001
+      end
+    end
+    sleep 0.01 until ticks > 0
+
+    before = ticks
+    region.fetch(0, 0, 2000, 2000)
+    during = ticks - before
+    running = false
+    ticker.join
+
+    expect(during).to be > 0
+  end
 end
